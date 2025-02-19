@@ -1,0 +1,17 @@
+//
+//  Dating_SideApp.swift
+//  Dating_Side
+//
+//  Created by 김라영 on 2025/02/10.
+//
+
+import SwiftUI
+
+@main
+struct Dating_SideApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
