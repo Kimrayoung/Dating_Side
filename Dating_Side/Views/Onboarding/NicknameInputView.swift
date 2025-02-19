@@ -38,12 +38,12 @@ struct NicknameInputView: View {
                 .frame(width: 207)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 20)
-            Picker("", selection: $selection) {
-                ForEach(2000...2020, id: \.self) {
-                    Text(String($0))
-                }
-            }
-            .pickerStyle(InlinePickerStyle())
+//            Picker("", selection: $selection) {
+//                ForEach(2000...2020, id: \.self) {
+//                    Text(String($0))
+//                }
+//            }
+//            .pickerStyle(InlinePickerStyle())
             Spacer()
             Button(action: {}, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .blackColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0)
