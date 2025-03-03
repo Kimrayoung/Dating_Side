@@ -8,11 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject private var appState: AppState
+    
     var body: some View {
-        VStack {
-            Text("Hello, world!")
+        Group {
+            switch appState.currentScreen {
+            case .onboarding:
+                OnboardingContainerView()
+            case .login:
+                LoginView()
+            case .main:
+                MainContainerView()
+            }
         }
-        .padding()
     }
 }
 

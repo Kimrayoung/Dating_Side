@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Dating_SideApp: App {
+    @StateObject private var appState: AppState = AppState()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(appState)
         }
     }
 }

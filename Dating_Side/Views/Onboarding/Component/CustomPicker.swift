@@ -26,6 +26,7 @@ struct CustomPicker: View {
         
         ScrollViewReader { proxy in
             ScrollView(.vertical) {
+                
                 LazyVStack(spacing: 0){
                     ForEach(0..<items.count, id: \.self) { index in
                         let item = items[index]
@@ -35,7 +36,6 @@ struct CustomPicker: View {
                                 .foregroundStyle(index == selectedIndex ? .black : .gray)
                                 .font(.pixel(14))
                                 .padding()
-                                .frame(width: 100)
                                 .id(index)
                         }
                         .frame(height: index == selectedIndex ? itemHeight : 20)

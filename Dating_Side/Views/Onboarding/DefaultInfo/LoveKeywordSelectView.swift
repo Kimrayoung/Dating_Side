@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct LoveKeywordSelectView: View {
+    @EnvironmentObject private var appState: AppState
+    @ObservedObject var viewModel: OnboardingViewModel
+    
     let columns = [
             GridItem(.flexible()),
             GridItem(.flexible())
@@ -18,8 +21,6 @@ struct LoveKeywordSelectView: View {
     let items2 = ["정이 쌓이는 연애", "편하게 오래", "운명적인 연애", "강한 끌림", "강한 유대감", "우리 서로 취우선", "함꼐 그려가는 미래", "책임감 있는", "사랑은 배려", "조건없는 연애", "구속없는 사랑", "즐거운 연애"]
     
     @State var possibleNext: Bool = false
-    
-    @State var isSelected: Bool = false
     
     @State var isButtonSelected: [Bool] = Array(repeating: false, count: 12)
     
@@ -36,11 +37,32 @@ struct LoveKeywordSelectView: View {
                 .padding(.bottom, 27)
             gridView
             
-            Button(action: {}, label: {
+            Button(action: {
+                appState.onboardingPath.append(Onboarding.userProfile)
+            }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .blackColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal)
+        }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .toolbar(content: {
+            ToolbarItem(placement: .principal) {
+                CustomProgressBar(progress: 3, total: onboardingPageCnt)
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    appState.onboardingPath.removeLast()
+                } label: {
+                    Image("navigationBackBtn")
+                }
+            }
+        })
+        .onChange(of: isButtonSelected) { oldValue, newValue in
+            let selectedCnt = isButtonSelected.filter { $0 == true }.count
+            if selectedCnt >= 3 && selectedCnt <= 7 { possibleNext.toggle() }
         }
     }
     
@@ -63,5 +85,5 @@ struct LoveKeywordSelectView: View {
 }
 
 #Preview {
-    LoveKeywordSelectView()
+    LoveKeywordSelectView(viewModel: OnboardingViewModel())
 }

@@ -3,4 +3,54 @@
    uuid = "F6007FBD-628B-4B83-8A3D-A05E9D15F4EE"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5466D32A-D29D-4AF6-A40F-EBFAA1B2DD68"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dating_Side/Views/Onboarding/CustomPicker.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "CustomPicker"
+            landmarkType = "14">
+            <Locations>
+               <Location
+                  uuid = "5466D32A-D29D-4AF6-A40F-EBFAA1B2DD68 - 2fccdee3d47050fa"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dating_Side.CustomPicker.body.getter : some"
+                  moduleName = "Dating_Side"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/Dating_Side/Dating_Side/Views/Onboarding/CustomPicker.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "60">
+               </Location>
+               <Location
+                  uuid = "5466D32A-D29D-4AF6-A40F-EBFAA1B2DD68 - 317395d52ffb048c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 2 of Dating_Side.CustomPicker.init(selectedIndex: SwiftUI.Binding&lt;Swift.Optional&lt;Swift.Int&gt;&gt;, items: Swift.Array&lt;Dating_Side.CustomPickerItem&gt;, itemHeight: CoreGraphics.CGFloat, menuHeightMultiplier: CoreGraphics.CGFloat) -&gt; Dating_Side.CustomPicker"
+                  moduleName = "Dating_Side"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/Dating_Side/Dating_Side/Views/Onboarding/CustomPicker.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
