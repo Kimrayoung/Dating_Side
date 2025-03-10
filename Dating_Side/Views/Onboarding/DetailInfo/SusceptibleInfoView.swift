@@ -7,7 +7,10 @@
 
 import SwiftUI
 
-struct sensitiveInfoView: View {
+struct SusceptibleInfoView: View {
+    @EnvironmentObject private var appState: AppState
+    @ObservedObject var viewModel: OnboardingViewModel
+    
     var drunkTexts: [String] = ["언제든지!", "가볍게 즐겨요", "안마셔요"]
     var smokeTexts: [String] = ["흡연자에요", "가끔 피워요", "비흡연자에요"]
     var tattooTexts: [String] = ["있어요", "관심이 있어요", "없어요"]
@@ -39,7 +42,7 @@ struct sensitiveInfoView: View {
         .navigationBarBackButtonHidden()
         .toolbar(content: {
             ToolbarItem(placement: .principal) {
-                CustomProgressBar(progress: 3, total: onboardingPageCnt)
+                CustomProgressBar(progress: 8, total: onboardingPageCnt)
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
@@ -125,5 +128,5 @@ struct sensitiveInfoView: View {
 }
 
 #Preview {
-    sensitiveInfoView()
+    SusceptibleInfoView(viewModel: OnboardingViewModel())
 }

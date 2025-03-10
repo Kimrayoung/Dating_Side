@@ -21,6 +21,7 @@ struct OnboardingContainerView: View {
                     case .loveKeyword, .keyword: LoveKeywordSelectView(viewModel: viewModel)
                     case .userProfile: UserProfileInputView(viewModel: viewModel)
                     case .education: EducationSelectView(viewModel: viewModel)
+                    case .susceptible: SusceptibleInfoView(viewModel: viewModel)
                     }
                 }
         }

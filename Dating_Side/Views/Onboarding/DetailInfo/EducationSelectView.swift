@@ -31,7 +31,7 @@ struct EducationSelectView: View {
             }
             Spacer()
             Button(action: {
-//                appState.onboardingPath.append(Onboarding.userProfile)
+                appState.onboardingPath.append(Onboarding.susceptible)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })

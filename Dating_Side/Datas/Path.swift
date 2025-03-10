@@ -18,6 +18,7 @@ enum Onboarding {
     case keyword
     case userProfile
     case education
+    case susceptible
 }
 
 enum Main {

@@ -7,4 +7,4 @@
 
 import Foundation
 
-let onboardingPageCnt: Int = 14
+let onboardingPageCnt: Int = 10
