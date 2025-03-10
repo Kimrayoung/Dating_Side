@@ -26,13 +26,14 @@ class AppState: ObservableObject {
         self.isLoggedIn = isLoggedIn
         
         // 첫 실행이면 온보딩, 로그인되어 있으면 메인, 아니면 로그인 화면
-        if isFirstLaunch {
-            currentScreen = .onboarding
-        } else if isLoggedIn {
-            currentScreen = .main
-        } else {
-            currentScreen = .login
-        }
+//        if isFirstLaunch {
+//            currentScreen = .onboarding
+//        } else if isLoggedIn {
+//            currentScreen = .main
+//        } else {
+//            currentScreen = .login
+//        }
+        currentScreen = .login
     }
     
     func startOnboarding() {
@@ -55,7 +56,7 @@ class AppState: ObservableObject {
     func login() {
         isLoggedIn = true
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
-        currentScreen = .main
+        currentScreen = .onboarding
     }
     
     func logout() {

@@ -10,7 +10,8 @@ import SwiftUI
 struct GenderSelectView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: OnboardingViewModel
-    
+    @State private var womanSelected: Bool = true
+    @State private var manSelected: Bool = false
     @State private var possibleNext: Bool = true
     let genderOption = ["여자", "남자"]
     var body: some View {
@@ -20,20 +21,13 @@ struct GenderSelectView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.bottom, .horizontal], 20)
             Spacer()
-            pickerView
-            
-//            CustomPicker(selectedIndex: $selectedIndex,
-//                         items: genderOption.enumerated().map { index, value in
-//                CustomPickerItem(id: index, value: value)
-//            },
-//                         itemHeight: 40, menuHeightMultiplier: 3) // 여기서 높이 조절
-//            .frame(height: 500)
-//            .padding(20)
+//            pickerView
+            genderButton
             Spacer()
             Button(action: {
                 appState.onboardingPath.append(Onboarding.locationSelect)
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .blackColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal)
@@ -58,17 +52,21 @@ struct GenderSelectView: View {
     var genderButton: some View {
         VStack(spacing: 0) {
             Button(action: {
-                
+                womanSelected = true
+                manSelected = false
+                viewModel.genderSelectedIndex = 0
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 36, text: "여자", backgroundColor: .gray0, selectedBackgroundColor: .blackColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $womanSelected, height: 36, text: "여자", backgroundColor: Color.white, selectedBackgroundColor: .subColor, textColor: Color.gray2, selectedTextColor: Color.black, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal)
             
             Button(action: {
-                
+                womanSelected = false
+                manSelected = true
+                viewModel.genderSelectedIndex = 1
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 36, text: "남자", backgroundColor: .gray0, selectedBackgroundColor: .blackColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $manSelected, height: 36, text: "남자", backgroundColor: .white, selectedBackgroundColor: .subColor, textColor: Color.gray2, selectedTextColor: Color.black, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal)

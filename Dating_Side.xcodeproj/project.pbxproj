@@ -46,6 +46,9 @@
 		4D95FAF92D5A255E00D0E4D7 /* SelectButtonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FAF82D5A255E00D0E4D7 /* SelectButtonLabel.swift */; };
 		4DCB1A662D759FF300676BCE /* GlobalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB1A652D759FF300676BCE /* GlobalState.swift */; };
 		4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB1A672D75A14700676BCE /* UserProfileField.swift */; };
+		4DD577542D7EBB4E001B0ED5 /* sensitiveInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577532D7EBB4E001B0ED5 /* sensitiveInfoView.swift */; };
+		4DD577562D7EC5A8001B0ED5 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577552D7EC5A8001B0ED5 /* LoginField.swift */; };
+		4DD577582D7EC638001B0ED5 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +112,9 @@
 		4D95FAF82D5A255E00D0E4D7 /* SelectButtonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectButtonLabel.swift; sourceTree = "<group>"; };
 		4DCB1A652D759FF300676BCE /* GlobalState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
 		4DCB1A672D75A14700676BCE /* UserProfileField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileField.swift; sourceTree = "<group>"; };
+		4DD577532D7EBB4E001B0ED5 /* sensitiveInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sensitiveInfoView.swift; sourceTree = "<group>"; };
+		4DD577552D7EC5A8001B0ED5 /* LoginField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
+		4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				4D6119612D75CC9100715B9E /* OnboardingViewModel.swift */,
+				4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -161,6 +168,7 @@
 				4DCB1A672D75A14700676BCE /* UserProfileField.swift */,
 				4D6D18812D637EAF00698E5D /* CustomPicker.swift */,
 				4D8FBF852D75972F0065BDA4 /* CustomProgressBar.swift */,
+				4DD577552D7EC5A8001B0ED5 /* LoginField.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -189,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				4D6119692D75EFC900715B9E /* EducationSelectView.swift */,
+				4DD577532D7EBB4E001B0ED5 /* sensitiveInfoView.swift */,
 			);
 			path = DetailInfo;
 			sourceTree = "<group>";
@@ -473,12 +482,14 @@
 			files = (
 				4D6D18802D635A7C00698E5D /* GenderSelectView.swift in Sources */,
 				4D8FBF862D75972F0065BDA4 /* CustomProgressBar.swift in Sources */,
+				4DD577582D7EC638001B0ED5 /* LoginViewModel.swift in Sources */,
 				4D6119522D75AA8700715B9E /* UnitLabel.swift in Sources */,
 				4DCB1A662D759FF300676BCE /* GlobalState.swift in Sources */,
 				4D6119572D75B20B00715B9E /* ChatView.swift in Sources */,
 				4D6119502D75AA2900715B9E /* BirthTextField.swift in Sources */,
 				4D6119592D75B21E00715B9E /* SettingView.swift in Sources */,
 				4D61196A2D75EFC900715B9E /* EducationSelectView.swift in Sources */,
+				4DD577562D7EC5A8001B0ED5 /* LoginField.swift in Sources */,
 				4D95FAD12D5A1DED00D0E4D7 /* ContentView.swift in Sources */,
 				4D6D186E2D63540900698E5D /* Path.swift in Sources */,
 				4D6D18772D6358A700698E5D /* NetworkManager.swift in Sources */,
@@ -493,6 +504,7 @@
 				4D6D186A2D6343B600698E5D /* Font+Ext.swift in Sources */,
 				4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */,
 				4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */,
+				4DD577542D7EBB4E001B0ED5 /* sensitiveInfoView.swift in Sources */,
 				4D6119542D75B0EB00715B9E /* AppState.swift in Sources */,
 				4D6D18702D63564000698E5D /* NavigationProtocol.swift in Sources */,
 				4D61195F2D75B2F500715B9E /* LoginView.swift in Sources */,

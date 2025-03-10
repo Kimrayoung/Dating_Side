@@ -35,7 +35,7 @@ extension Color {
     }
     
     /// #080434
-    static let mainColor = Color(hex: "#080434")
+    static let mainColor = Color(hex: "#769AFF")
     /// #EBEFFF
     static let subColor = Color(hex: "#EBEFFF")
     /// #121212
