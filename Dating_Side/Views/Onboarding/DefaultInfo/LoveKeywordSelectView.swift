@@ -26,21 +26,23 @@ struct LoveKeywordSelectView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Text("당신은 평소에 어떤 사람을 하나요??")
-                .font(.pixel(16))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 10)
-            Text("끌리는 키워드를 모두 선택해주세요")
-                .font(.pixel(10))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 10)
-                .padding(.bottom, 27)
+            CustomRounedGradientProgressBar(currentScreen: 5, total: onboardingPageCnt)
+                .padding(.top, 16)
+            Text("러브웨이를 만나기 전\n어떤 사랑을 해왔나요?")
+                .font(.pixel(24))
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 36)
+            Text("끌리는 키워드를 최대 7개까지 선택해주세요")
+                .font(.pixel(14))
+                .foregroundStyle(Color.mainColor)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.bottom, 24)
             gridView
             
             Button(action: {
-                appState.onboardingPath.append(Onboarding.userProfile)
+                
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal)
@@ -49,9 +51,9 @@ struct LoveKeywordSelectView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar(content: {
-            ToolbarItem(placement: .principal) {
-                CustomProgressBar(progress: 3, total: onboardingPageCnt)
-            }
+//            ToolbarItem(placement: .principal) {
+//                CustomProgressBar(progress: 3, total: onboardingPageCnt)
+//            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     appState.onboardingPath.removeLast()
@@ -79,7 +81,7 @@ struct LoveKeywordSelectView: View {
     func selectBtn(_ word: String, _ index: Int) -> some View {
         return Button(action: {
             isButtonSelected[index].toggle()
-        }, label: { SelectButtonLabel(isSelected: $isButtonSelected[index], height: 42, text: word, backgroundColor: .white, selectedBackgroundColor: .subColor, selectedTextColor: .black ,cornerRounded: 50, storkBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2) })
+        }, label: { SelectButtonLabel(isSelected: $isButtonSelected[index], height: 52, text: word, backgroundColor: .white, selectedBackgroundColor: .subColor, selectedTextColor: .black ,cornerRounded: 6, strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2, strokeBorderLineColor: .gray01, selectedStrokeBorderColor: .mainColor) })
     }
     
 }

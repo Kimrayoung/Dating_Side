@@ -13,52 +13,39 @@ struct LocationSelectView: View {
     
     @State private var possibleNext: Bool = true
     let locationOption = ["서울특별시", "경기도", "강원도", "제주도", "전라남도", "전라북도", "경상남도", "경상북도", "충청남도", "충청북도"]
+    let detailLocationOption = ["강남구", "관악구", "도봉구", "은평구", "마포구", "금천구", "동작구", "광진구", "서초구", "양천구"]
     
     var body: some View {
         VStack(spacing: 0, content: {
-            Text("내가 현재 있는 곳은 어디인가요?")
-                .font(.pixel(16))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 10)
-            Text("가까운 곳에 있는 사람과 더 쉽게 연결될 수 있어요.")
-                .font(.pixel(10))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 10)
-            Spacer()
-            Picker("Select an option", selection: $viewModel.locationSelectedIndex) {
-                ForEach(0..<locationOption.count, id: \.self) { index in
-                    Text(locationOption[index])
-                        .font(.pixel(14))
-                        .padding()
-                }
-            }
-            .pickerStyle(WheelPickerStyle()) // 다른 스타일로 변경 가능
-            .frame(height: 500)
-            .background(Color.white)
-            .cornerRadius(10)
-            .padding()
-//            CustomPicker(selectedIndex: $selectedIndex,
-//                         items: locationOption.enumerated().map { index, value in
-//                CustomPickerItem(id: index, value: value)
-//            },
-//                         itemHeight: 40, menuHeightMultiplier: 12) // 여기서 높이 조절
-//            .padding(20)
+            CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
+                .padding(.top, 16)
+            Text("어느 지역의 사람들과\n만나고 싶나요?")
+                .font(.pixel(24))
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 73)
+            Text("가까운 사람들을 추천해드려요")
+                .foregroundStyle(Color.mainColor)
+                .font(.pixel(14))
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.bottom, 36)
+            locationPicker3
             Spacer()
             Button(action: {
                 appState.onboardingPath.append(Onboarding.loveKeyword)
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
         }) //body
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar(content: {
-            ToolbarItem(placement: .principal) {
-                CustomProgressBar(progress: 2, total: onboardingPageCnt)
-            }
+//            ToolbarItem(placement: .principal) {
+//                CustomProgressBar(progress: 2, total: onboardingPageCnt)
+//            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     appState.onboardingPath.removeLast()
@@ -68,6 +55,99 @@ struct LocationSelectView: View {
             }
         })
     }
+    
+    var locationPicker: some View {
+        HStack(spacing: 6) {
+            Picker("Select an option", selection: $viewModel.locationSelectedIndex) {
+                ForEach(0..<locationOption.count, id: \.self) { index in
+                    Text(locationOption[index])
+                        .font(.pixel(14))
+                }
+            }
+            .pickerStyle(.wheel)
+            .frame(height: 300)
+            .background(Color.white)
+            Picker("Select an option", selection: $viewModel.detailLocationSelectedIndex) {
+                ForEach(0..<detailLocationOption.count, id: \.self) { index in
+                    Text(detailLocationOption[index])
+                        .font(.pixel(14))
+                        .padding()
+                }
+            }
+            .pickerStyle(WheelPickerStyle()) // 다른 스타일로 변경 가능
+            .frame(height: 300)
+            .background(Color.white)
+        }
+        .padding(.horizontal, 24)
+    }
+    
+    var locationPicker2: some View {
+        VStack(spacing: 6) {
+            List(content: {
+                Section {
+                    Picker("Select", selection: $viewModel.locationSelectedIndex) {
+                        ForEach(0..<locationOption.count, id: \.self) { index in
+                            Text(locationOption[index])
+                                .font(.pixel(14))
+                        }
+                    }
+                    .font(.pixel(10))
+                    .background(Color.white)
+                    Picker("Select an option", selection: $viewModel.detailLocationSelectedIndex) {
+                        ForEach(0..<detailLocationOption.count, id: \.self) { index in
+                            Text(detailLocationOption[index])
+                                .font(.pixel(14))
+                                .padding()
+                        }
+                    }
+                    .font(.pixel(10))
+                    .background(Color.white)
+                }
+                .listRowSeparator(.hidden)
+            })
+            .listStyle(PlainListStyle())
+            .background(Color.white)
+            .scrollContentBackground(Visibility.hidden)  // iOS 16+ 에서 사용 가능
+            
+        }
+        .padding(.horizontal, 24)
+    }
+    
+    var locationPicker3: some View {
+        HStack(content: {
+            Menu {
+                Picker(selection: $viewModel.locationSelectedIndex) {
+                    ForEach(0..<detailLocationOption.count, id: \.self) { index in
+                        Text(detailLocationOption[index])
+                            .padding()
+                    }
+                } label: {}
+            } label: {
+                Text("서울특별시")
+                    .font(.pixel(20))
+                    .foregroundStyle(Color.blackColor)
+                    .frame(width: 170, height: 42)
+                    .background(Color.gray0)
+                    .cornerRadius(8)
+            }
+            Menu {
+                Picker(selection: $viewModel.locationSelectedIndex) {
+                    ForEach(0..<detailLocationOption.count, id: \.self) { index in
+                        Text(detailLocationOption[index])
+                            .padding()
+                    }
+                } label: {}
+            } label: {
+                Text("강남구")
+                    .font(.pixel(20))
+                    .foregroundStyle(Color.blackColor)
+                    .frame(width: 170, height: 42)
+                    .background(Color.gray0)
+                    .cornerRadius(8)
+            }
+        })
+    }
+    
 }
 
 #Preview {

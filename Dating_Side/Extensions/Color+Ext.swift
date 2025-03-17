@@ -34,18 +34,18 @@ extension Color {
         )
     }
     
-    /// #080434
+    /// #769AFF
     static let mainColor = Color(hex: "#769AFF")
-    /// #EBEFFF
-    static let subColor = Color(hex: "#EBEFFF")
+    /// #EAEFFD
+    static let subColor = Color(hex: "#EAEFFD")
     /// #121212
     static let blackColor = Color(hex: "#121212")
-    /// #515151
-    static let gray3 = Color(hex: "#515151")
+    /// #656B79
+    static let gray3 = Color(hex: "#656B79")
     /// #828282
     static let gray2 = Color(hex: "#888888")
-    /// #F7F7F7
-    static let gray01 = Color(hex: "#B9B9B9")
+    /// #AFB7C9
+    static let gray01 = Color(hex: "#AFB7C9")
     /// #DCDCDC
     static let gray0 = Color(hex: "#E8E8E8")
     

@@ -13,10 +13,12 @@ enum AppScreen {
 
 enum Onboarding {
     case genderSelect
+    case nickname
+    case birth
+    case height
     case locationSelect
     case loveKeyword
     case keyword
-    case userProfile
     case education
     case susceptible
 }

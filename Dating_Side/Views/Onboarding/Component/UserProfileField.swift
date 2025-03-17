@@ -22,3 +22,14 @@ enum UserProfileField {
         }
     }
 }
+
+// 현재 포커스된 필드를 추적하기 위한 열거형
+enum BirthFocusField: Hashable {
+    case year(Int)
+    case month(Int)
+    case day(Int)
+}
+
+enum HeightFocusField: Hashable {
+    case height(Int)
+}

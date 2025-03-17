@@ -17,9 +17,11 @@ struct OnboardingContainerView: View {
                 .navigationDestination(for: Onboarding.self) { step in
                     switch step {
                     case .genderSelect: GenderSelectView(viewModel: viewModel)
+                    case .nickname: NicknameInputView(viewModel: viewModel)
+                    case .birth: BirthInputView(viewModel: viewModel)
+                    case .height: HeightInputView(viewModel: viewModel)
                     case .locationSelect: LocationSelectView(viewModel: viewModel)
                     case .loveKeyword, .keyword: LoveKeywordSelectView(viewModel: viewModel)
-                    case .userProfile: UserProfileInputView(viewModel: viewModel)
                     case .education: EducationSelectView(viewModel: viewModel)
                     case .susceptible: SusceptibleInfoView(viewModel: viewModel)
                     }

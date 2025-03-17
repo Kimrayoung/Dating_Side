@@ -49,6 +49,11 @@
 		4DD577542D7EBB4E001B0ED5 /* SusceptibleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577532D7EBB4E001B0ED5 /* SusceptibleInfoView.swift */; };
 		4DD577562D7EC5A8001B0ED5 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577552D7EC5A8001B0ED5 /* LoginField.swift */; };
 		4DD577582D7EC638001B0ED5 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */; };
+		4DF329D92D87157F00DBB823 /* CustomRounedGradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329D82D87157F00DBB823 /* CustomRounedGradientProgressBar.swift */; };
+		4DF329DB2D87170300DBB823 /* NicknameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329DA2D87170300DBB823 /* NicknameInputView.swift */; };
+		4DF329DD2D87182600DBB823 /* BottomBorderViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329DC2D87182600DBB823 /* BottomBorderViewModifier.swift */; };
+		4DF329DF2D871A3D00DBB823 /* BirthInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329DE2D871A3D00DBB823 /* BirthInputView.swift */; };
+		4DF329E12D87236500DBB823 /* HeightInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329E02D87236500DBB823 /* HeightInputView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +120,11 @@
 		4DD577532D7EBB4E001B0ED5 /* SusceptibleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SusceptibleInfoView.swift; sourceTree = "<group>"; };
 		4DD577552D7EC5A8001B0ED5 /* LoginField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
 		4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		4DF329D82D87157F00DBB823 /* CustomRounedGradientProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRounedGradientProgressBar.swift; sourceTree = "<group>"; };
+		4DF329DA2D87170300DBB823 /* NicknameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameInputView.swift; sourceTree = "<group>"; };
+		4DF329DC2D87182600DBB823 /* BottomBorderViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBorderViewModifier.swift; sourceTree = "<group>"; };
+		4DF329DE2D871A3D00DBB823 /* BirthInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthInputView.swift; sourceTree = "<group>"; };
+		4DF329E02D87236500DBB823 /* HeightInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightInputView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,7 +178,9 @@
 				4DCB1A672D75A14700676BCE /* UserProfileField.swift */,
 				4D6D18812D637EAF00698E5D /* CustomPicker.swift */,
 				4D8FBF852D75972F0065BDA4 /* CustomProgressBar.swift */,
+				4DF329D82D87157F00DBB823 /* CustomRounedGradientProgressBar.swift */,
 				4DD577552D7EC5A8001B0ED5 /* LoginField.swift */,
+				4DF329DC2D87182600DBB823 /* BottomBorderViewModifier.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -188,6 +200,9 @@
 				4D6D187F2D635A7C00698E5D /* GenderSelectView.swift */,
 				4D40568D2D64B65300F95ACF /* LocationSelectView.swift */,
 				4D4056912D66160500F95ACF /* UserProfileInputView.swift */,
+				4DF329DA2D87170300DBB823 /* NicknameInputView.swift */,
+				4DF329DE2D871A3D00DBB823 /* BirthInputView.swift */,
+				4DF329E02D87236500DBB823 /* HeightInputView.swift */,
 				4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */,
 			);
 			path = DefaultInfo;
@@ -480,6 +495,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DF329E12D87236500DBB823 /* HeightInputView.swift in Sources */,
 				4D6D18802D635A7C00698E5D /* GenderSelectView.swift in Sources */,
 				4D8FBF862D75972F0065BDA4 /* CustomProgressBar.swift in Sources */,
 				4DD577582D7EC638001B0ED5 /* LoginViewModel.swift in Sources */,
@@ -494,16 +510,20 @@
 				4D6D186E2D63540900698E5D /* Path.swift in Sources */,
 				4D6D18772D6358A700698E5D /* NetworkManager.swift in Sources */,
 				4D6D185B2D63408F00698E5D /* Color+Ext.swift in Sources */,
+				4DF329DB2D87170300DBB823 /* NicknameInputView.swift in Sources */,
+				4DF329D92D87157F00DBB823 /* CustomRounedGradientProgressBar.swift in Sources */,
 				4D61195B2D75B24300715B9E /* MainContainerView.swift in Sources */,
 				4D6D187B2D6358EE00698E5D /* Error.swift in Sources */,
 				4D6D18792D6358C700698E5D /* APIManager.swift in Sources */,
 				4D4056922D66160500F95ACF /* UserProfileInputView.swift in Sources */,
 				4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */,
 				4D6119622D75CC9100715B9E /* OnboardingViewModel.swift in Sources */,
+				4DF329DD2D87182600DBB823 /* BottomBorderViewModifier.swift in Sources */,
 				4D6D18822D637EAF00698E5D /* CustomPicker.swift in Sources */,
 				4D6D186A2D6343B600698E5D /* Font+Ext.swift in Sources */,
 				4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */,
 				4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */,
+				4DF329DF2D871A3D00DBB823 /* BirthInputView.swift in Sources */,
 				4DD577542D7EBB4E001B0ED5 /* SusceptibleInfoView.swift in Sources */,
 				4D6119542D75B0EB00715B9E /* AppState.swift in Sources */,
 				4D6D18702D63564000698E5D /* NavigationProtocol.swift in Sources */,

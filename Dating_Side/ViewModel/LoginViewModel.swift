@@ -10,11 +10,11 @@ import Combine
 
 @MainActor
 class LoginViewModel: ObservableObject {
-    @Published var phoneNumber: String = ""
+    @Published var phoneNumber: [String] = ["", "", "", "", "", "", "", ""]
     @Published var verificationNumber: String = ""
     
-    func checkNumbers() -> Bool{
-        if phoneNumber != "" && verificationNumber != "" { return true }
-        return false
-    }
+//    func checkNumbers() -> Bool{
+//        if phoneNumber != "" && verificationNumber != "" { return true }
+//        return false
+//    }
 }

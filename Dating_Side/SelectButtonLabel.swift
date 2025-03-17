@@ -12,13 +12,15 @@ struct SelectButtonLabel: View {
     var height: CGFloat
     var text: String
     var backgroundColor: Color = .red
-    var selectedBackgroundColor: Color = .blackColor
+    var selectedBackgroundColor: Color = .white
     var textColor: Color = .black
     var selectedTextColor: Color = .white
     var cornerRounded: CGFloat = 8
     var font: Font = .rounded(14)
-    var storkBorderLineWidth: CGFloat = 1
+    var strokeBorderLineWidth: CGFloat = 1
     var selectedStrokeBorderLineWidth: CGFloat = 2
+    var strokeBorderLineColor: Color = .black
+    var selectedStrokeBorderColor: Color = .red
     
     var body: some View {
         Text(text)
@@ -32,11 +34,11 @@ struct SelectButtonLabel: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRounded)
-                    .strokeBorder(Color.black, lineWidth: isSelected ? selectedStrokeBorderLineWidth : storkBorderLineWidth)
+                    .strokeBorder(isSelected ? selectedStrokeBorderColor : strokeBorderLineColor, lineWidth: isSelected ? selectedStrokeBorderLineWidth : strokeBorderLineWidth)
             )
     }
 }
 
 #Preview {
-    SelectButtonLabel(isSelected: .constant(false), height: 30, text: "hi", backgroundColor: .red)
+    SelectButtonLabel(isSelected: .constant(true), height: 30, text: "hi", backgroundColor: .red)
 }

@@ -16,61 +16,61 @@ struct GenderSelectView: View {
     let genderOption = ["여자", "남자"]
     var body: some View {
         VStack(content: {
-            Text("성별을 알려주세요")
-                .font(.pixel(16))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding([.bottom, .horizontal], 20)
             Spacer()
+            Text("당신의 성별을\n신중하게 선택해주세요")
+                .font(.pixel(24))
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
+            Text("성별은 이후 변경이 불가능합니다")
+                .foregroundStyle(Color.mainColor)
+                .font(.pixel(16))
+                .frame(maxWidth: .infinity, alignment: .center)
 //            pickerView
             genderButton
+                .padding(.top, 30)
             Spacer()
             Button(action: {
-                appState.onboardingPath.append(Onboarding.locationSelect)
+//                appState.onboardingPath.append(Onboarding.locationSelect)
+                appState.onboardingPath.append(Onboarding.nickname)
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
         })
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar(content: {
             ToolbarItem(placement: .principal) {
-                CustomProgressBar(progress: 1, total: onboardingPageCnt)
+//                CustomProgressBar(progress: 1, total: onboardingPageCnt)
+                CustomRounedGradientProgressBar(currentScreen: 1, total: onboardingPageCnt)
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Image("navigationBackBtn")
             }
         })
-        .onChange(of: viewModel.genderSelectedIndex) { oldValue, newValue in
-            print(#fileID, #function, #line, "- gender: \(newValue)")
-            print(#fileID, #function, #line, "- oldGender: \(oldValue)")
-        }
     }
     
     var genderButton: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 6) {
             Button(action: {
                 womanSelected = true
                 manSelected = false
                 viewModel.genderSelectedIndex = 0
             }, label: {
-                SelectButtonLabel(isSelected: $womanSelected, height: 36, text: "여자", backgroundColor: Color.white, selectedBackgroundColor: .subColor, textColor: Color.gray2, selectedTextColor: Color.black, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $womanSelected, height: 52, text: "여자", backgroundColor: Color.white, selectedBackgroundColor: .subColor, textColor: Color.gray2, selectedTextColor: Color.black, cornerRounded: 8, font: .pixel(20), strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2, strokeBorderLineColor: Color.gray01, selectedStrokeBorderColor: Color.mainColor)
             })
-            .padding(.bottom)
-            .padding(.horizontal)
             
             Button(action: {
                 womanSelected = false
                 manSelected = true
                 viewModel.genderSelectedIndex = 1
             }, label: {
-                SelectButtonLabel(isSelected: $manSelected, height: 36, text: "남자", backgroundColor: .white, selectedBackgroundColor: .subColor, textColor: Color.gray2, selectedTextColor: Color.black, cornerRounded: 8, font: .pixel(14), storkBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $manSelected, height: 52, text: "남자", backgroundColor: .white, selectedBackgroundColor: .subColor, textColor: Color.gray2, selectedTextColor: Color.black, cornerRounded: 8, font: .pixel(20), strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2, strokeBorderLineColor: Color.gray01, selectedStrokeBorderColor: Color.mainColor)
             })
-            .padding(.bottom)
-            .padding(.horizontal)
         }
+        .padding(.horizontal, 46)
         
     }
     
