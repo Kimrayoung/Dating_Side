@@ -117,13 +117,13 @@ struct LocationSelectView: View {
         HStack(content: {
             Menu {
                 Picker(selection: $viewModel.locationSelectedIndex) {
-                    ForEach(0..<detailLocationOption.count, id: \.self) { index in
-                        Text(detailLocationOption[index])
+                    ForEach(0..<locationOption.count, id: \.self) { index in
+                        Text(locationOption[index])
                             .padding()
                     }
                 } label: {}
             } label: {
-                Text("서울특별시")
+                Text("\(locationOption[viewModel.locationSelectedIndex])")
                     .font(.pixel(20))
                     .foregroundStyle(Color.blackColor)
                     .frame(width: 170, height: 42)
@@ -131,14 +131,14 @@ struct LocationSelectView: View {
                     .cornerRadius(8)
             }
             Menu {
-                Picker(selection: $viewModel.locationSelectedIndex) {
+                Picker(selection: $viewModel.detailLocationSelectedIndex) {
                     ForEach(0..<detailLocationOption.count, id: \.self) { index in
                         Text(detailLocationOption[index])
                             .padding()
                     }
                 } label: {}
             } label: {
-                Text("강남구")
+                Text("\(detailLocationOption[viewModel.detailLocationSelectedIndex])")
                     .font(.pixel(20))
                     .foregroundStyle(Color.blackColor)
                     .frame(width: 170, height: 42)

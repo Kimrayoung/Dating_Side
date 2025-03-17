@@ -16,7 +16,7 @@ struct ContentView: View {
             case .onboarding:
                 OnboardingContainerView()
             case .login:
-                LoginView()
+                LoginCotainerView()
             case .main:
                 MainContainerView()
             }

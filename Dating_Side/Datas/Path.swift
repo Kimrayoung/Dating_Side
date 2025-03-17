@@ -29,6 +29,11 @@ enum Main {
     case home
 }
 
+enum Login {
+    case phoneNumber
+    case verificationNumber
+}
+
 enum Path {
     case main
     case settingProfile

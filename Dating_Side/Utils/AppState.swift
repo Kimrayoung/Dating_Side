@@ -14,6 +14,7 @@ class AppState: ObservableObject {
     @Published var isLoggedIn: Bool
     @Published var mainPath = NavigationPath()
     @Published var onboardingPath = NavigationPath()
+    @Published var loginPath = NavigationPath()
 
     
     init() {
@@ -33,7 +34,8 @@ class AppState: ObservableObject {
 //        } else {
 //            currentScreen = .login
 //        }
-        currentScreen = .onboarding
+//        currentScreen = .onboarding
+        currentScreen = .login
     }
     
     func startOnboarding() {
@@ -57,6 +59,7 @@ class AppState: ObservableObject {
         isLoggedIn = true
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
         currentScreen = .onboarding
+        print(#fileID, #function, #line, "- currenScreen:\(currentScreen)")
     }
     
     func logout() {

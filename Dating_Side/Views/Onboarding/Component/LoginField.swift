@@ -7,14 +7,11 @@
 
 import Foundation
 
-enum LoginField {
-    case phoneNumber
-    case verificationNumber
-    
-    var focusedValue: Int {
-        switch self {
-        case .phoneNumber: return 1
-        case .verificationNumber: return 2
-        }
-    }
+enum PhoneNumberField: Hashable {
+    case phoneNumberFront(Int)
+    case phoneNumberBack(Int)
+}
+
+enum VerificationNumberField: Hashable {
+    case verificationNumber(Int)
 }

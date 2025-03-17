@@ -154,6 +154,7 @@ struct HeightInputView: View {
     
     var correctButton: some View {
         Button(action: {
+            showBottomModal = false
             appState.onboardingPath.append(Onboarding.locationSelect)
         }, label: {
             Text("맞아요")

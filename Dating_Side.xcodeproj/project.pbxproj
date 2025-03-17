@@ -17,7 +17,7 @@
 		4D6119592D75B21E00715B9E /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119582D75B21E00715B9E /* SettingView.swift */; };
 		4D61195B2D75B24300715B9E /* MainContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D61195A2D75B24300715B9E /* MainContainerView.swift */; };
 		4D61195D2D75B2A300715B9E /* OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D61195C2D75B2A300715B9E /* OnboardingContainerView.swift */; };
-		4D61195F2D75B2F500715B9E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D61195E2D75B2F500715B9E /* LoginView.swift */; };
+		4D61195F2D75B2F500715B9E /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D61195E2D75B2F500715B9E /* PhoneNumberView.swift */; };
 		4D6119622D75CC9100715B9E /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119612D75CC9100715B9E /* OnboardingViewModel.swift */; };
 		4D61196A2D75EFC900715B9E /* EducationSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119692D75EFC900715B9E /* EducationSelectView.swift */; };
 		4D6D185B2D63408F00698E5D /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6D185A2D63408F00698E5D /* Color+Ext.swift */; };
@@ -54,6 +54,10 @@
 		4DF329DD2D87182600DBB823 /* BottomBorderViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329DC2D87182600DBB823 /* BottomBorderViewModifier.swift */; };
 		4DF329DF2D871A3D00DBB823 /* BirthInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329DE2D871A3D00DBB823 /* BirthInputView.swift */; };
 		4DF329E12D87236500DBB823 /* HeightInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329E02D87236500DBB823 /* HeightInputView.swift */; };
+		4DF329E52D87E9C700DBB823 /* TextWithColoredSubString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329E42D87E9C700DBB823 /* TextWithColoredSubString.swift */; };
+		4DF329E72D87EAE100DBB823 /* WelcomeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329E62D87EAE100DBB823 /* WelcomeText.swift */; };
+		4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329E82D87ED5300DBB823 /* LoginCotainerView.swift */; };
+		4DF329EC2D87EEE200DBB823 /* VerificationNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329EB2D87EEE200DBB823 /* VerificationNumber.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,7 +88,7 @@
 		4D6119582D75B21E00715B9E /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		4D61195A2D75B24300715B9E /* MainContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContainerView.swift; sourceTree = "<group>"; };
 		4D61195C2D75B2A300715B9E /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerView.swift; sourceTree = "<group>"; };
-		4D61195E2D75B2F500715B9E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		4D61195E2D75B2F500715B9E /* PhoneNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
 		4D6119612D75CC9100715B9E /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		4D6119692D75EFC900715B9E /* EducationSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EducationSelectView.swift; sourceTree = "<group>"; };
 		4D6D185A2D63408F00698E5D /* Color+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Ext.swift"; sourceTree = "<group>"; };
@@ -125,6 +129,10 @@
 		4DF329DC2D87182600DBB823 /* BottomBorderViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBorderViewModifier.swift; sourceTree = "<group>"; };
 		4DF329DE2D871A3D00DBB823 /* BirthInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthInputView.swift; sourceTree = "<group>"; };
 		4DF329E02D87236500DBB823 /* HeightInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightInputView.swift; sourceTree = "<group>"; };
+		4DF329E42D87E9C700DBB823 /* TextWithColoredSubString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextWithColoredSubString.swift; sourceTree = "<group>"; };
+		4DF329E62D87EAE100DBB823 /* WelcomeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeText.swift; sourceTree = "<group>"; };
+		4DF329E82D87ED5300DBB823 /* LoginCotainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCotainerView.swift; sourceTree = "<group>"; };
+		4DF329EB2D87EEE200DBB823 /* VerificationNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationNumber.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +189,7 @@
 				4DF329D82D87157F00DBB823 /* CustomRounedGradientProgressBar.swift */,
 				4DD577552D7EC5A8001B0ED5 /* LoginField.swift */,
 				4DF329DC2D87182600DBB823 /* BottomBorderViewModifier.swift */,
+				4DF329E42D87E9C700DBB823 /* TextWithColoredSubString.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -190,6 +199,7 @@
 			children = (
 				4D61195C2D75B2A300715B9E /* OnboardingContainerView.swift */,
 				4D61195A2D75B24300715B9E /* MainContainerView.swift */,
+				4DF329E82D87ED5300DBB823 /* LoginCotainerView.swift */,
 			);
 			path = Container;
 			sourceTree = "<group>";
@@ -202,6 +212,7 @@
 				4D4056912D66160500F95ACF /* UserProfileInputView.swift */,
 				4DF329DA2D87170300DBB823 /* NicknameInputView.swift */,
 				4DF329DE2D871A3D00DBB823 /* BirthInputView.swift */,
+				4DF329E62D87EAE100DBB823 /* WelcomeText.swift */,
 				4DF329E02D87236500DBB823 /* HeightInputView.swift */,
 				4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */,
 			);
@@ -278,6 +289,7 @@
 		4D6D187D2D6359A300698E5D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4DF329EA2D87EEC900DBB823 /* Login */,
 				4D6119662D75D92100715B9E /* Container */,
 				4D6119552D75B1FE00715B9E /* Main */,
 				4D6D187E2D6359AA00698E5D /* Onboarding */,
@@ -291,7 +303,6 @@
 				4D6119682D75EF5500715B9E /* DetailInfo */,
 				4D6119672D75EF3C00715B9E /* DefaultInfo */,
 				4D6119652D75D90A00715B9E /* Component */,
-				4D61195E2D75B2F500715B9E /* LoginView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -359,6 +370,15 @@
 				4D95FAEB2D5A1DEF00D0E4D7 /* Dating_SideUITestsLaunchTests.swift */,
 			);
 			path = Dating_SideUITests;
+			sourceTree = "<group>";
+		};
+		4DF329EA2D87EEC900DBB823 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				4D61195E2D75B2F500715B9E /* PhoneNumberView.swift */,
+				4DF329EB2D87EEE200DBB823 /* VerificationNumber.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -508,26 +528,30 @@
 				4DD577562D7EC5A8001B0ED5 /* LoginField.swift in Sources */,
 				4D95FAD12D5A1DED00D0E4D7 /* ContentView.swift in Sources */,
 				4D6D186E2D63540900698E5D /* Path.swift in Sources */,
+				4DF329E72D87EAE100DBB823 /* WelcomeText.swift in Sources */,
 				4D6D18772D6358A700698E5D /* NetworkManager.swift in Sources */,
 				4D6D185B2D63408F00698E5D /* Color+Ext.swift in Sources */,
 				4DF329DB2D87170300DBB823 /* NicknameInputView.swift in Sources */,
+				4DF329EC2D87EEE200DBB823 /* VerificationNumber.swift in Sources */,
 				4DF329D92D87157F00DBB823 /* CustomRounedGradientProgressBar.swift in Sources */,
 				4D61195B2D75B24300715B9E /* MainContainerView.swift in Sources */,
 				4D6D187B2D6358EE00698E5D /* Error.swift in Sources */,
 				4D6D18792D6358C700698E5D /* APIManager.swift in Sources */,
 				4D4056922D66160500F95ACF /* UserProfileInputView.swift in Sources */,
+				4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */,
 				4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */,
 				4D6119622D75CC9100715B9E /* OnboardingViewModel.swift in Sources */,
 				4DF329DD2D87182600DBB823 /* BottomBorderViewModifier.swift in Sources */,
 				4D6D18822D637EAF00698E5D /* CustomPicker.swift in Sources */,
 				4D6D186A2D6343B600698E5D /* Font+Ext.swift in Sources */,
 				4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */,
+				4DF329E52D87E9C700DBB823 /* TextWithColoredSubString.swift in Sources */,
 				4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */,
 				4DF329DF2D871A3D00DBB823 /* BirthInputView.swift in Sources */,
 				4DD577542D7EBB4E001B0ED5 /* SusceptibleInfoView.swift in Sources */,
 				4D6119542D75B0EB00715B9E /* AppState.swift in Sources */,
 				4D6D18702D63564000698E5D /* NavigationProtocol.swift in Sources */,
-				4D61195F2D75B2F500715B9E /* LoginView.swift in Sources */,
+				4D61195F2D75B2F500715B9E /* PhoneNumberView.swift in Sources */,
 				4D4056902D64D20800F95ACF /* LoveKeywordSelectView.swift in Sources */,
 				4D6D18722D63568000698E5D /* Navigation.swift in Sources */,
 				4D95FAF92D5A255E00D0E4D7 /* SelectButtonLabel.swift in Sources */,
