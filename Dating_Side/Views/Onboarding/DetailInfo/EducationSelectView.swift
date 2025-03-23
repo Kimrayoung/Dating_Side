@@ -10,28 +10,26 @@ import SwiftUI
 struct EducationSelectView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: OnboardingViewModel
-    @FocusState var focusedSchoolName: Bool
-    @State private var showSchoolName: Bool = false
     
-    var items = ["고등학교", "대학교 재학 중", "대학 졸업"]
+    var items = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
     @State var possibleNext: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
-            Text("마지막으로 공부한 곳은 어디신가요?")
+            CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
+                .padding(.top, 16)
+                .padding(.bottom, 72)
+            Text("마지막으로 공부한 곳이\n어디인가요?")
                 .font(.pixel(16))
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.center)
                 .padding(.leading, 20)
-                .padding(.bottom, 16)
-            if !showSchoolName {
-                beforeSelectedEducationButton
-            } else {
-                afterSelectedEducationButton
-                schoolNameInput
-            }
+                .padding(.bottom, 36)
+                
+            selectedEducationButtons
             Spacer()
             Button(action: {
-                appState.onboardingPath.append(Onboarding.susceptible)
+                appState.onboardingPath.append(Onboarding.schoolName)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -42,9 +40,6 @@ struct EducationSelectView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar(content: {
-            ToolbarItem(placement: .principal) {
-                CustomProgressBar(progress: 6, total: onboardingPageCnt)
-            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     appState.onboardingPath.removeLast()
@@ -58,18 +53,14 @@ struct EducationSelectView: View {
         }
     }
     
-    var beforeSelectedEducationButton: some View {
-        VStack(spacing: 8) {
-            ForEach(Array(items.enumerated()), id: \.element) { (index, item) in
-                makeEducationButton(item, index)
-            }
-        }
-    }
     
-    @ViewBuilder var afterSelectedEducationButton: some View {
-        if let educationIndex = viewModel.selectedEducationIndex {
-            makeEducationButton(items[educationIndex], educationIndex)
-        } else { EmptyView() }
+    @ViewBuilder var selectedEducationButtons: some View {
+        VStack(content: {
+            ForEach(0..<6, id: \.self) { index in
+                makeEducationButton(items[index], index)
+            }
+        })
+        
     }
     
     func makeEducationButton(_ text: String, _ index: Int) -> some View {
@@ -84,40 +75,13 @@ struct EducationSelectView: View {
             }
             viewModel.isEducationButtonSelected[index] = true
             viewModel.selectedEducationIndex = index
-            showSchoolName = true
         } label: {
-            SelectButtonLabel(isSelected: $viewModel.isEducationButtonSelected[index], height: 42, text: text, backgroundColor: .white, selectedBackgroundColor: .subColor, textColor: .black, selectedTextColor: .black,cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2)
+            SelectButtonLabel(isSelected: $viewModel.isEducationButtonSelected[index], height: 42, text: text, backgroundColor: .white, selectedBackgroundColor: .subColor, textColor: .black, selectedTextColor: .black, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2,strokeBorderLineColor: .gray01, selectedStrokeBorderColor: .mainColor)
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 46)
     }
     
-    var schoolNameInput: some View {
-        VStack {
-            Text("학교 이름을 알려주면\n더 잘 어울리는 사람을 찾을 수 있어요!")
-                .font(.pixel(14))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 20)
-                .padding(.bottom, 12)
-                .padding(.top, 24)
-            TextField("선택사항 입니다", text: $viewModel.schoolName)
-                .padding()
-                .focused($focusedSchoolName)
-                .overlay(content: {
-                    if focusedSchoolName {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray01, lineWidth: 1.5)
-                    } else {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray01, lineWidth: 1)
-                    }
-                    
-                })
-                .font(.pixel(14))
-//                .frame(width: 207)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 20)
-        }
-    }
+    
     
 }
 

@@ -16,18 +16,22 @@ struct SusceptibleInfoView: View {
     var tattooTexts: [String] = ["있어요", "관심이 있어요", "없어요"]
     var religionTexts: [String] = ["있어요", "관심이 있어요", "없어요"]
     
-    @State var isDrunkButtonSelected: [Bool] = Array(repeating: false, count: 3)
-    @State var isSmokeButtonSelected: [Bool] = Array(repeating: false, count: 3)
-    @State var isTattooButtonSelected: [Bool] = Array(repeating: false, count: 3)
-    @State var isReligionButtonSelected: [Bool] = Array(repeating: false, count: 3)
+    
     @State var possibleNext: Bool = false
     
     var body: some View {
-        VStack(spacing: 24) {
-            drunkInfo
-            smokeInfo
-            tattooInfo
-            religionInfo
+        VStack(spacing: 0) {
+            CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
+                .padding(.top, 16)
+                .padding(.bottom, 72)
+            Text("당신의 라이프스타일을 알려주세요")
+                .font(.pixel(20))
+                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.center)
+                .padding(.leading, 20)
+                .padding(.bottom, 48)
+                .padding(.top, 24)
+            infoView
             Spacer()
             Button(action: {
                 
@@ -54,14 +58,23 @@ struct SusceptibleInfoView: View {
         })
     }
     
+    var infoView: some View {
+        VStack(spacing: 32) {
+            drunkInfo
+            smokeInfo
+            tattooInfo
+            religionInfo
+        }
+    }
+    
     var drunkInfo: some View {
         VStack(spacing: 10) {
-            Text("음주를 즐기시나요?")
-                .font(.pixel(16))
-                .frame(maxWidth: .infinity, alignment: .leading)
+            Text("음주🍺")
+                .font(.pixel(20))
+                .frame(maxWidth: .infinity)
             HStack(spacing: 7) {
                 ForEach(Array(drunkTexts.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index, $isDrunkButtonSelected)
+                    selectBtn(item, index, $viewModel.isDrunkButtonSelected)
                 }
             }
         }
@@ -69,12 +82,12 @@ struct SusceptibleInfoView: View {
     
     var smokeInfo: some View {
         VStack(spacing: 10) {
-            Text("흡연를 즐기시나요?")
-                .font(.pixel(16))
-                .frame(maxWidth: .infinity, alignment: .leading)
+            Text("흡연🚬")
+                .font(.pixel(20))
+                .frame(maxWidth: .infinity)
             HStack(spacing: 7) {
                 ForEach(Array(smokeTexts.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index, $isSmokeButtonSelected)
+                    selectBtn(item, index, $viewModel.isSmokeButtonSelected)
                 }
             }
         }
@@ -82,12 +95,12 @@ struct SusceptibleInfoView: View {
     
     var tattooInfo: some View {
         VStack(spacing: 10) {
-            Text("타투가 있으신가요?")
-                .font(.pixel(16))
-                .frame(maxWidth: .infinity, alignment: .leading)
+            Text("타투🖊️")
+                .font(.pixel(20))
+                .frame(maxWidth: .infinity)
             HStack(spacing: 7) {
                 ForEach(Array(tattooTexts.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index, $isTattooButtonSelected)
+                    selectBtn(item, index, $viewModel.isTattooButtonSelected)
                 }
             }
         }
@@ -95,12 +108,12 @@ struct SusceptibleInfoView: View {
     
     var religionInfo: some View {
         VStack(spacing: 10) {
-            Text("종교가 있으신가요?")
+            Text("종교🙏")
                 .font(.pixel(16))
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity)
             HStack(spacing: 7) {
                 ForEach(Array(religionTexts.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index, $isReligionButtonSelected)
+                    selectBtn(item, index, $viewModel.isReligionButtonSelected)
                 }
             }
         }
@@ -120,7 +133,9 @@ struct SusceptibleInfoView: View {
                 selectedTextColor: .black,
                 cornerRounded: 8,
                 strokeBorderLineWidth: 1,
-                selectedStrokeBorderLineWidth: 1
+                selectedStrokeBorderLineWidth: 2,
+                strokeBorderLineColor: Color.gray01,
+                selectedStrokeBorderColor: Color.mainColor
             )
         })
     }

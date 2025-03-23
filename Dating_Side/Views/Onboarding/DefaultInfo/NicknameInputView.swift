@@ -79,8 +79,6 @@ struct NicknameInputView: View {
             }
             .frame(width: 228)
         })
-        
-        
     }
 }
 

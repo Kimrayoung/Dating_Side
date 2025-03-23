@@ -13,6 +13,7 @@ struct GenderSelectView: View {
     @State private var womanSelected: Bool = true
     @State private var manSelected: Bool = false
     @State private var possibleNext: Bool = true
+    @State private var showAlert: Bool = false
     let genderOption = ["여자", "남자"]
     var body: some View {
         VStack(content: {
@@ -47,9 +48,14 @@ struct GenderSelectView: View {
                 CustomRounedGradientProgressBar(currentScreen: 1, total: onboardingPageCnt)
             }
             ToolbarItem(placement: .navigationBarLeading) {
-                Image("navigationBackBtn")
+                Button(action: {
+                    showAlert = true
+                }, label: {
+                    Image("navigationBackBtn")
+                })
             }
         })
+        .customAlert(isPresented: $showAlert, title: "회원가입을 중단하고\n시작화면으로 나갈까요?", message: "나가면 입력한 정보가 저장되지 않아요", primaryButtonText: "나가기", primaryButtonAction: {}, secondaryButtonText: "취소", secondaryButtonAction: {appState.onboardingPath.removeLast()})
     }
     
     var genderButton: some View {

@@ -37,7 +37,7 @@ struct CustomRounedGradientProgressBar: View {
                         width: 174
                     )
                 )
-                .cornerRadius(4)
+                .cornerRadius(10)
                 .animation(.easeInOut, value: progress)
         }
     }

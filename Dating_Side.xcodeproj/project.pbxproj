@@ -44,6 +44,10 @@
 		4D95FAEA2D5A1DEF00D0E4D7 /* Dating_SideUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FAE92D5A1DEF00D0E4D7 /* Dating_SideUITests.swift */; };
 		4D95FAEC2D5A1DEF00D0E4D7 /* Dating_SideUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FAEB2D5A1DEF00D0E4D7 /* Dating_SideUITestsLaunchTests.swift */; };
 		4D95FAF92D5A255E00D0E4D7 /* SelectButtonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FAF82D5A255E00D0E4D7 /* SelectButtonLabel.swift */; };
+		4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */; };
+		4DB5B3152D903B220060D4C6 /* JobSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3142D903B220060D4C6 /* JobSelectView.swift */; };
+		4DB5B3172D903D600060D4C6 /* JobDetailInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3162D903D600060D4C6 /* JobDetailInputView.swift */; };
+		4DB5B3192D9045AF0060D4C6 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3182D9045AF0060D4C6 /* CustomAlert.swift */; };
 		4DCB1A662D759FF300676BCE /* GlobalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB1A652D759FF300676BCE /* GlobalState.swift */; };
 		4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB1A672D75A14700676BCE /* UserProfileField.swift */; };
 		4DD577542D7EBB4E001B0ED5 /* SusceptibleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577532D7EBB4E001B0ED5 /* SusceptibleInfoView.swift */; };
@@ -119,6 +123,10 @@
 		4D95FAE92D5A1DEF00D0E4D7 /* Dating_SideUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dating_SideUITests.swift; sourceTree = "<group>"; };
 		4D95FAEB2D5A1DEF00D0E4D7 /* Dating_SideUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dating_SideUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4D95FAF82D5A255E00D0E4D7 /* SelectButtonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectButtonLabel.swift; sourceTree = "<group>"; };
+		4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolNameInputView.swift; sourceTree = "<group>"; };
+		4DB5B3142D903B220060D4C6 /* JobSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobSelectView.swift; sourceTree = "<group>"; };
+		4DB5B3162D903D600060D4C6 /* JobDetailInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobDetailInputView.swift; sourceTree = "<group>"; };
+		4DB5B3182D9045AF0060D4C6 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		4DCB1A652D759FF300676BCE /* GlobalState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
 		4DCB1A672D75A14700676BCE /* UserProfileField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileField.swift; sourceTree = "<group>"; };
 		4DD577532D7EBB4E001B0ED5 /* SusceptibleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SusceptibleInfoView.swift; sourceTree = "<group>"; };
@@ -190,6 +198,7 @@
 				4DD577552D7EC5A8001B0ED5 /* LoginField.swift */,
 				4DF329DC2D87182600DBB823 /* BottomBorderViewModifier.swift */,
 				4DF329E42D87E9C700DBB823 /* TextWithColoredSubString.swift */,
+				4DB5B3182D9045AF0060D4C6 /* CustomAlert.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -223,7 +232,10 @@
 			isa = PBXGroup;
 			children = (
 				4D6119692D75EFC900715B9E /* EducationSelectView.swift */,
+				4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */,
+				4DB5B3162D903D600060D4C6 /* JobDetailInputView.swift */,
 				4DD577532D7EBB4E001B0ED5 /* SusceptibleInfoView.swift */,
+				4DB5B3142D903B220060D4C6 /* JobSelectView.swift */,
 			);
 			path = DetailInfo;
 			sourceTree = "<group>";
@@ -518,6 +530,8 @@
 				4DF329E12D87236500DBB823 /* HeightInputView.swift in Sources */,
 				4D6D18802D635A7C00698E5D /* GenderSelectView.swift in Sources */,
 				4D8FBF862D75972F0065BDA4 /* CustomProgressBar.swift in Sources */,
+				4DB5B3192D9045AF0060D4C6 /* CustomAlert.swift in Sources */,
+				4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */,
 				4DD577582D7EC638001B0ED5 /* LoginViewModel.swift in Sources */,
 				4D6119522D75AA8700715B9E /* UnitLabel.swift in Sources */,
 				4DCB1A662D759FF300676BCE /* GlobalState.swift in Sources */,
@@ -538,6 +552,7 @@
 				4D6D187B2D6358EE00698E5D /* Error.swift in Sources */,
 				4D6D18792D6358C700698E5D /* APIManager.swift in Sources */,
 				4D4056922D66160500F95ACF /* UserProfileInputView.swift in Sources */,
+				4DB5B3152D903B220060D4C6 /* JobSelectView.swift in Sources */,
 				4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */,
 				4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */,
 				4D6119622D75CC9100715B9E /* OnboardingViewModel.swift in Sources */,
@@ -545,6 +560,7 @@
 				4D6D18822D637EAF00698E5D /* CustomPicker.swift in Sources */,
 				4D6D186A2D6343B600698E5D /* Font+Ext.swift in Sources */,
 				4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */,
+				4DB5B3172D903D600060D4C6 /* JobDetailInputView.swift in Sources */,
 				4DF329E52D87E9C700DBB823 /* TextWithColoredSubString.swift in Sources */,
 				4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */,
 				4DF329DF2D871A3D00DBB823 /* BirthInputView.swift in Sources */,

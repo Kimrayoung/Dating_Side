@@ -29,7 +29,7 @@ struct LocationSelectView: View {
                 .font(.pixel(14))
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, 36)
-            locationPicker3
+            locationPicker
             Spacer()
             Button(action: {
                 appState.onboardingPath.append(Onboarding.loveKeyword)

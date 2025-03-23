@@ -20,6 +20,9 @@ enum Onboarding {
     case loveKeyword
     case keyword
     case education
+    case schoolName
+    case job
+    case jobDetail
     case susceptible
 }
 

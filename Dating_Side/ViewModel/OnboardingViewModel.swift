@@ -18,7 +18,13 @@ class OnboardingViewModel: ObservableObject {
     @Published var birthMonth: [String] = ["", ""]
     @Published var birthDay: [String] = ["", ""]
     @Published var height: [String] = ["", ""]
-    @Published var isEducationButtonSelected: [Bool] = Array(repeating: false, count: 3)
+    @Published var isEducationButtonSelected: [Bool] = Array(repeating: false, count: 6)
     @Published var selectedEducationIndex: Int? = nil
     @Published var schoolName: String = ""
+    @Published var isJobButtonSelected: [Bool] = Array(repeating: false, count: 12)
+    @Published var jobDetail: String = ""
+    @Published var isDrunkButtonSelected: [Bool] = Array(repeating: false, count: 3)
+    @Published var isSmokeButtonSelected: [Bool] = Array(repeating: false, count: 3)
+    @Published var isTattooButtonSelected: [Bool] = Array(repeating: false, count: 3)
+    @Published var isReligionButtonSelected: [Bool] = Array(repeating: false, count: 3)
 }
