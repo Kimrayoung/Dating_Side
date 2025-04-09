@@ -8,7 +8,8 @@
 import Foundation
 
 struct APIErrorResponse: Equatable, Codable {
-    var errorCode: String
-    var errorMessage: String
+    var message: String
+    var error: String
+    var status: String
 }
 
