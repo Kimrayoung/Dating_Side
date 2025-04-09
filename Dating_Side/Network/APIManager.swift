@@ -52,7 +52,7 @@ extension APIError: LocalizedError {
         case .unexpectedResponse: return "서버로 부터 잘못된 응답을 받았습니다."
         case .networkError: return "인터넷 연결이 끊어졌습니다.\n네트워크 상태를 확인해주세요."
         case .apiError(let error):
-            return error.errorMessage
+            return error.message
         }
     }
 }

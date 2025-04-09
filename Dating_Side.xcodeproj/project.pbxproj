@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE22DA6B05D006206F1 /* LoginNetworkManager.swift */; };
 		4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE42DA6B47F006206F1 /* Login.swift */; };
+		4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE62DA6B957006206F1 /* LoginView.swift */; };
 		4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D40568D2D64B65300F95ACF /* LocationSelectView.swift */; };
 		4D4056902D64D20800F95ACF /* LoveKeywordSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */; };
 		4D4056922D66160500F95ACF /* UserProfileInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4056912D66160500F95ACF /* UserProfileInputView.swift */; };
@@ -86,6 +87,7 @@
 /* Begin PBXFileReference section */
 		4D0B3BE22DA6B05D006206F1 /* LoginNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetworkManager.swift; sourceTree = "<group>"; };
 		4D0B3BE42DA6B47F006206F1 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		4D0B3BE62DA6B957006206F1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		4D40568D2D64B65300F95ACF /* LocationSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectView.swift; sourceTree = "<group>"; };
 		4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveKeywordSelectView.swift; sourceTree = "<group>"; };
 		4D4056912D66160500F95ACF /* UserProfileInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileInputView.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 			children = (
 				4D61195E2D75B2F500715B9E /* PhoneNumberView.swift */,
 				4DF329EB2D87EEE200DBB823 /* VerificationNumber.swift */,
+				4D0B3BE62DA6B957006206F1 /* LoginView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -548,6 +551,7 @@
 				4DD577562D7EC5A8001B0ED5 /* LoginField.swift in Sources */,
 				4D95FAD12D5A1DED00D0E4D7 /* ContentView.swift in Sources */,
 				4D6D186E2D63540900698E5D /* Path.swift in Sources */,
+				4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */,
 				4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */,
 				4DF329E72D87EAE100DBB823 /* WelcomeText.swift in Sources */,
 				4D6D18772D6358A700698E5D /* NetworkManager.swift in Sources */,
