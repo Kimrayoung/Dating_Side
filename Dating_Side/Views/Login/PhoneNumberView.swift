@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct PhoneNumberView: View {
     @EnvironmentObject private var appState: AppState
@@ -67,6 +68,7 @@ struct PhoneNumberView: View {
                     if !viewModel.phoneFrontNumber[index].isEmpty {
                         if index < 3 {
                             focusedField = .phoneNumberFront(index + 1)
+                            print(#fileID, #function, #line, "- focusedField: \(focusedField?.hashValue)")
                         } else {
                             // 마지막 입력 필드에서의 처리
                             focusedField = .phoneNumberBack(0)
@@ -88,9 +90,6 @@ struct PhoneNumberView: View {
                             if (viewModel.checkPhoneNumbers()) {
                                 possibleNext = true
                             }
-                            
-                            // 마지막 입력 필드에서의 처리
-                            hideKeyboard()
                         }
                     }
                 })
@@ -98,12 +97,15 @@ struct PhoneNumberView: View {
         }
         .onAppear {
             // 첫 번째 필드에 포커스
-            focusedField = .phoneNumberFront(0)
+            DispatchQueue.main.async {
+                focusedField = .phoneNumberFront(0)
+            }
+            
         }
         
     }
     
-    private func digitTextField(text: Binding<String>, focusField: PhoneNumberField, onCommit: @escaping () -> Void) -> some View {
+    private func digitTextField(text: Binding<String>, focusField: PhoneNumberField, onCommit: @escaping () -> Void, onBackspace: (() -> Void)? = nil) -> some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
             if text.wrappedValue.isEmpty && focusedField != focusField {
                 Text("0")
@@ -112,29 +114,56 @@ struct PhoneNumberView: View {
                     .foregroundStyle(Color.gray01)
                     .frame(width: 16, height: 34, alignment: .center)
             }
-            TextField("", text: text)
-                .keyboardType(.numberPad)
-                .multilineTextAlignment(.center)
-                .font(.pixel(24))
-                .bottomBorder(color: Color.gray3, width: 2, bottomPadding: 5)
-                .frame(width: 16, height: 34)
-                .focused($focusedField, equals: focusField)
-                .onChange(of: text.wrappedValue, { oldValue, newValue in
-                    // 숫자만 입력 가능하도록
-                    if let _ = newValue.rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) {
-                        text.wrappedValue = String(newValue.filter { "0123456789".contains($0) })
+            OneDigitTextField(
+                text: text,
+                isFocused: focusedField == focusField,
+                onCommit: onCommit,
+                onBackspace: {
+                    if text.wrappedValue.isEmpty {
+                        // 텍스트가 비어 있을 때만 이전 필드로 이동
+                        if let currentIndex = focusField.index {
+                            switch focusField {
+                            case .phoneNumberFront(let i) where i > 0:
+                                focusedField = .phoneNumberFront(i - 1)
+                            case .phoneNumberBack(let i) where i > 0:
+                                focusedField = .phoneNumberBack(i - 1)
+                            case .phoneNumberBack(0):
+                                focusedField = .phoneNumberFront(3) // back의 첫 번째 → front 마지막
+                            default:
+                                break
+                            }
+                        }
                     }
-                    
-                    // 한 자리만 입력 가능하도록
-                    if newValue.count > 1 {
-                        text.wrappedValue = String(newValue.prefix(1))
-                    }
-                    
-                    // 입력이 완료되면 다음 필드로 이동
-                    if newValue.count == 1 {
-                        onCommit()
-                    }
-                })
+                }
+            )
+            .bottomBorder(color: Color.gray3, width: 2, bottomPadding: 5)
+            .frame(width: 16, height: 34)
+            .background(Color.clear)
+            .focused($focusedField, equals: focusField)
+
+//            TextField("", text: text)
+//                .keyboardType(.numberPad)
+//                .multilineTextAlignment(.center)
+//                .font(.pixel(24))
+//                .bottomBorder(color: Color.gray3, width: 2, bottomPadding: 5)
+//                .frame(width: 16, height: 34)
+//                .focused($focusedField, equals: focusField)
+//                .onChange(of: text.wrappedValue, { oldValue, newValue in
+//                    // 숫자만 입력 가능하도록
+//                    if let _ = newValue.rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) {
+//                        text.wrappedValue = String(newValue.filter { "0123456789".contains($0) })
+//                    }
+//                    
+//                    // 한 자리만 입력 가능하도록
+//                    if newValue.count > 1 {
+//                        text.wrappedValue = String(newValue.prefix(1))
+//                    }
+//                    
+//                    // 입력이 완료되면 다음 필드로 이동
+//                    if newValue.count == 1 {
+//                        onCommit()
+//                    }
+//                })
         })
     }
     

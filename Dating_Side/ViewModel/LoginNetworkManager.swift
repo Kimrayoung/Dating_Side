@@ -59,8 +59,18 @@ extension LoginAPIManager: APIManager {
     
     var headers: [String : String]? {
         switch self {
-        case .smsBase, .smsRequest, .smsVerify:
+        case .smsBase:
             return ["Content-Type" : "application/json"]
+        case .smsRequest(let loginSMSRequest):
+            return [
+                "Content-Type" : "application/json",
+                "SMS_Authorization" : loginSMSRequest.smsToken
+            ]
+        case .smsVerify(let loginSMSVerify):
+            return [
+                "Content-Type" : "application/json",
+                "SMS_Authorization" : loginSMSVerify.smsToken
+            ]
         }
     }
     

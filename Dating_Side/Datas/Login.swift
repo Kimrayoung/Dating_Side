@@ -13,9 +13,11 @@ struct LoginSMSBase: Codable {
 
 struct LoginSMSRequest: Codable {
     let phoneNumber: String
+    let smsToken: String
 }
 
 struct LoginSMSVerify: Codable {
     let phoneNumber: String
     let number: String
+    let smsToken: String
 }

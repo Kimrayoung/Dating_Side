@@ -13,14 +13,14 @@ struct NicknameInputView: View {
     @State private var possibleNext: Bool = true
     
     var body: some View {
-        VStack(content: {
+        VStack(spacing: 0, content: {
             CustomRounedGradientProgressBar(currentScreen: 2, total: onboardingPageCnt)
-                .padding(.top, 16)
+                .padding(.top, 30)
             Text("어떤 이름으로 활동하고 싶나요?")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 73)
+                .padding(.top, 48)
             Text("프로필에 사용 되며 언제든지 변경할 수 있어요")
                 .foregroundStyle(Color.mainColor)
                 .font(.pixel(14))

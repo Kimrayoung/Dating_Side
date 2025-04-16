@@ -49,7 +49,7 @@ struct UserProfileInputView: View {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)

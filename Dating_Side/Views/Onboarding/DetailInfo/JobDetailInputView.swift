@@ -16,15 +16,14 @@ struct JobDetailInputView: View {
     var body: some View {
         VStack(spacing: 0) {
             CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
-                .padding(.top, 16)
-                .padding(.bottom, 72)
+                .padding(.top, 30)
+                .padding(.bottom, 48)
             Text("자세한 직업을 알려주면\n더 잘 어울리는 사람을\n찾을 수 있어요!")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
                 .padding(.leading, 20)
-                .padding(.bottom, 36)
-                .padding(.top, 24)
+                .padding(.bottom, 72)
             jobInputView
             Spacer()
             Button(action: {
@@ -33,7 +32,7 @@ struct JobDetailInputView: View {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)

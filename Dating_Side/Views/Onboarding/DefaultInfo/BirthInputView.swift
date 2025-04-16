@@ -18,18 +18,18 @@ struct BirthInputView: View {
     var body: some View {
         VStack {
             CustomRounedGradientProgressBar(currentScreen: 3, total: onboardingPageCnt)
-                .padding(.top, 16)
+                .padding(.top, 30)
             Text("당신의 생일을\n신중하게 선택해주세요")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 73)
+                .padding(.top, 48)
             Text("생일은 이후 변경이 불가능합니다.")
                 .foregroundStyle(Color.mainColor)
                 .font(.pixel(14))
                 .frame(maxWidth: .infinity, alignment: .center)
             birthView
-                .padding(.top, 36)
+                .padding(.top, 72)
             Spacer()
             Button(action: {
                 appState.onboardingPath.append(Onboarding.height)

@@ -16,8 +16,10 @@ struct GenderSelectView: View {
     @State private var showAlert: Bool = false
     let genderOption = ["여자", "남자"]
     var body: some View {
-        VStack(content: {
-            Spacer()
+        VStack(spacing: 0, content: {
+            CustomRounedGradientProgressBar(currentScreen: 1, total: onboardingPageCnt)
+                .padding(.top, 30)
+                .padding(.bottom, 48)
             Text("당신의 성별을\n신중하게 선택해주세요")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
@@ -28,7 +30,7 @@ struct GenderSelectView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
 //            pickerView
             genderButton
-                .padding(.top, 30)
+                .padding(.top, 72)
             Spacer()
             Button(action: {
 //                appState.onboardingPath.append(Onboarding.locationSelect)
@@ -45,7 +47,7 @@ struct GenderSelectView: View {
         .toolbar(content: {
             ToolbarItem(placement: .principal) {
 //                CustomProgressBar(progress: 1, total: onboardingPageCnt)
-                CustomRounedGradientProgressBar(currentScreen: 1, total: onboardingPageCnt)
+//                CustomRounedGradientProgressBar(currentScreen: 1, total: onboardingPageCnt)
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {

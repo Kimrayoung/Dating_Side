@@ -18,12 +18,12 @@ struct LocationSelectView: View {
     var body: some View {
         VStack(spacing: 0, content: {
             CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
-                .padding(.top, 16)
+                .padding(.top, 30)
             Text("어느 지역의 사람들과\n만나고 싶나요?")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 73)
+                .padding(.top, 48)
             Text("가까운 사람들을 추천해드려요")
                 .foregroundStyle(Color.mainColor)
                 .font(.pixel(14))

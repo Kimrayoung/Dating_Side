@@ -22,15 +22,15 @@ struct SusceptibleInfoView: View {
     var body: some View {
         VStack(spacing: 0) {
             CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
-                .padding(.top, 16)
-                .padding(.bottom, 72)
+                .padding(.top, 30)
+                .padding(.bottom, 48)
             Text("당신의 라이프스타일을 알려주세요")
                 .font(.pixel(20))
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
                 .padding(.leading, 20)
                 .padding(.bottom, 48)
-                .padding(.top, 24)
+                
             infoView
             Spacer()
             Button(action: {
@@ -40,7 +40,7 @@ struct SusceptibleInfoView: View {
             })
             .padding(.bottom)
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 24)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()

@@ -18,18 +18,18 @@ struct HeightInputView: View {
     var body: some View {
         VStack {
             CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
-                .padding(.top, 16)
+                .padding(.top, 30)
             Text("당신의 키를\n신중하게 선택해주세요")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 73)
+                .padding(.top, 48)
             Text("생일은 이후 변경이 불가능합니다.")
                 .foregroundStyle(Color.mainColor)
                 .font(.pixel(14))
                 .frame(maxWidth: .infinity, alignment: .center)
             heightView
-                .padding(.top, 36)
+                .padding(.top, 72)
             Spacer()
             Button(action: {
                 showBottomModal = true
@@ -123,6 +123,14 @@ struct HeightInputView: View {
                     if newValue.count == 1 {
                         onCommit()
                     }
+                    // 백스페이스 감지 및 이전 필드로 이동
+                                    if oldValue.count == 1 && newValue.isEmpty {
+                                        // 현재 필드의 인덱스 추출 (HeightFocusField에서 인덱스 값 가져오기)
+                                        if case let .height(index) = focusField, index > 0 {
+                                            // 이전 필드로 포커스 이동
+                                            focusedField = .height(index - 1)
+                                        }
+                                    }
                 })
         })
     }

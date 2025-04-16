@@ -7,9 +7,21 @@
 
 import Foundation
 
-enum PhoneNumberField: Hashable {
+enum PhoneNumberField: Hashable, Equatable {
     case phoneNumberFront(Int)
     case phoneNumberBack(Int)
+    var index: Int? {
+        switch self {
+        case .phoneNumberFront(let i): return i
+        case .phoneNumberBack(let i): return i
+        }
+    }
+    var isFront: Bool {
+        switch self {
+        case .phoneNumberFront: return true
+        case .phoneNumberBack: return false
+        }
+    }
 }
 
 enum VerificationNumberField: Hashable {

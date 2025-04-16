@@ -17,14 +17,14 @@ struct EducationSelectView: View {
     var body: some View {
         VStack(spacing: 0) {
             CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
-                .padding(.top, 16)
-                .padding(.bottom, 72)
+                .padding(.top, 30)
+                .padding(.bottom, 48)
             Text("마지막으로 공부한 곳이\n어디인가요?")
                 .font(.pixel(16))
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
                 .padding(.leading, 20)
-                .padding(.bottom, 36)
+                .padding(.bottom, 72)
                 
             selectedEducationButtons
             Spacer()
@@ -34,7 +34,7 @@ struct EducationSelectView: View {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
