@@ -61,17 +61,53 @@ struct PhoneNumberView: View {
             Text("-")
                 .font(.pixel(24))
                 .padding(.horizontal, 6)
+//            ForEach(0..<4) { index in
+//                GenericDigitTextField(
+//                    text: $viewModel.phoneFrontNumber[index],
+//                    focusField: PhoneNumberField.phoneNumberFront(index),
+//                    isFocused: focusedField == .phoneNumberFront(index),
+//                    onCommit: {
+//                        if index < 3 {
+//                            print(#fileID, #function, #line, "- check here🥹: \(index)")
+//                            focusedField = .phoneNumberFront(index + 1)
+//                        } else {
+//                            focusedField = .phoneNumberBack(0)
+//                        }
+//                    },
+//                    onBackspace: {
+//                        if index > 0 {
+//                            focusedField = .phoneNumberFront(index - 1)
+//                        }
+//                    },
+//                    requestFocus: {
+//                        focusedField = .phoneNumberFront(index)
+//                    }
+//                )
+//            }
             ForEach(0..<4, id: \.self) { index in
                 digitTextField(text: $viewModel.phoneFrontNumber[index],
                                focusField: .phoneNumberFront(index),
                                onCommit: {
                     if !viewModel.phoneFrontNumber[index].isEmpty {
+                        print(#fileID, #function, #line, "- check here🥹")
+                        print(#fileID, #function, #line, "- check index: \(index)")
                         if index < 3 {
                             focusedField = .phoneNumberFront(index + 1)
-                            print(#fileID, #function, #line, "- focusedField: \(focusedField?.hashValue)")
                         } else {
                             // 마지막 입력 필드에서의 처리
                             focusedField = .phoneNumberBack(0)
+                        }
+                    }
+                }, alreadyFilled: { text in
+                    if index == 3 {
+                        viewModel.phoneBackNumber[0] = text
+                        focusedField = .phoneNumberBack(1)
+                    } else {
+                        viewModel.phoneFrontNumber[index + 1] = text
+                        if index == 2 {
+                            focusedField = .phoneNumberBack(0)
+                        } else {
+                            focusedField = .phoneNumberFront(index + 2)
                         }
                     }
                 })
@@ -92,6 +128,19 @@ struct PhoneNumberView: View {
                             }
                         }
                     }
+                }, alreadyFilled: { text in
+                    if index < 2 {
+                        viewModel.phoneBackNumber[index + 1] = text
+                        focusedField = .phoneNumberBack(index + 2)
+                    } else {
+                        if index == 2 {
+                            viewModel.phoneBackNumber[index + 1] = text
+                            focusedField = .phoneNumberBack(index + 1)
+                        }
+                        if (viewModel.checkPhoneNumbers()) {
+                            possibleNext = true
+                        }
+                    }
                 })
             }
         }
@@ -105,7 +154,7 @@ struct PhoneNumberView: View {
         
     }
     
-    private func digitTextField(text: Binding<String>, focusField: PhoneNumberField, onCommit: @escaping () -> Void, onBackspace: (() -> Void)? = nil) -> some View {
+    private func digitTextField(text: Binding<String>, focusField: PhoneNumberField, onCommit: @escaping () -> Void, onBackspace: (() -> Void)? = nil, alreadyFilled: @escaping (_ text: String) -> Void) -> some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
             if text.wrappedValue.isEmpty && focusedField != focusField {
                 Text("0")
@@ -118,6 +167,7 @@ struct PhoneNumberView: View {
                 text: text,
                 isFocused: focusedField == focusField,
                 onCommit: onCommit,
+                alreadyFilled: alreadyFilled,
                 onBackspace: {
                     if text.wrappedValue.isEmpty {
                         // 텍스트가 비어 있을 때만 이전 필드로 이동
@@ -141,29 +191,6 @@ struct PhoneNumberView: View {
             .background(Color.clear)
             .focused($focusedField, equals: focusField)
 
-//            TextField("", text: text)
-//                .keyboardType(.numberPad)
-//                .multilineTextAlignment(.center)
-//                .font(.pixel(24))
-//                .bottomBorder(color: Color.gray3, width: 2, bottomPadding: 5)
-//                .frame(width: 16, height: 34)
-//                .focused($focusedField, equals: focusField)
-//                .onChange(of: text.wrappedValue, { oldValue, newValue in
-//                    // 숫자만 입력 가능하도록
-//                    if let _ = newValue.rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) {
-//                        text.wrappedValue = String(newValue.filter { "0123456789".contains($0) })
-//                    }
-//                    
-//                    // 한 자리만 입력 가능하도록
-//                    if newValue.count > 1 {
-//                        text.wrappedValue = String(newValue.prefix(1))
-//                    }
-//                    
-//                    // 입력이 완료되면 다음 필드로 이동
-//                    if newValue.count == 1 {
-//                        onCommit()
-//                    }
-//                })
         })
     }
     

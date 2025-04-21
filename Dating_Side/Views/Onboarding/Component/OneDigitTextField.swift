@@ -5,6 +5,7 @@ struct OneDigitTextField: UIViewRepresentable {
     @Binding var text: String
     var isFocused: Bool
     var onCommit: () -> Void
+    var alreadyFilled: (_ text: String) -> Void
     var onBackspace: () -> Void
     
     class Coordinator: NSObject, UITextFieldDelegate {
@@ -22,11 +23,18 @@ struct OneDigitTextField: UIViewRepresentable {
                 parent.onBackspace()
                 return false
             }
-            
             if let firstChar = string.first, string.count == 1, firstChar.isNumber {
-                textField.text = String(firstChar)
-                parent.text = String(firstChar)
-                parent.onCommit()
+                if !parent.text.isEmpty {
+                    // 현재 칸이 이미 차있으면 → 다음 칸으로 이동 + 입력 넘기기
+                    parent.alreadyFilled(String(firstChar))  // 포커스를 다음 칸으로 옮기는 트리거
+                    return false // 현재 텍스트 필드는 안 바꾸고 넘김
+                } else {
+                    // 현재 칸이 비어있으면 → 현재 칸에 입력하고 다음으로 이동
+                    textField.text = String(firstChar)
+                    parent.text = String(firstChar)
+                    parent.onCommit()
+                    return false
+                }
             }
             return false
         }

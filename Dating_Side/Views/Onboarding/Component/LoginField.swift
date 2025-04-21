@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PhoneNumberField: Hashable, Equatable {
+enum PhoneNumberField: OneDigitalTextField {
     case phoneNumberFront(Int)
     case phoneNumberBack(Int)
     var index: Int? {
@@ -24,6 +24,12 @@ enum PhoneNumberField: Hashable, Equatable {
     }
 }
 
-enum VerificationNumberField: Hashable {
+enum VerificationNumberField: OneDigitalTextField {
     case verificationNumber(Int)
+    
+    var index: Int? {
+        switch self {
+        case .verificationNumber(let i): return i
+        }
+    }
 }
