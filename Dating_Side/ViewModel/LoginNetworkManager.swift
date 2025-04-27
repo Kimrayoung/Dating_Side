@@ -12,7 +12,7 @@ import Combine
 class LoginNetworkManager: ObservableObject {
     private let networkManager: NetworkProtocol
     
-    init(networkManager: NetworkProtocol) {
+    init(networkManager: NetworkProtocol = NetworkManager.shared) {
         self.networkManager = networkManager
     }
     
@@ -22,12 +22,12 @@ class LoginNetworkManager: ObservableObject {
         return await networkManager.callWithAsync(endpoint: LoginAPIManager.smsBase, httpCodes: .success)
     }
     
-    func smsRequest(_ loginSMSRequest: LoginSMSRequest) async throws -> Result<LoginSMSRequest, Error> {
+    func smsRequest(_ loginSMSRequest: LoginSMSRequest) async throws -> Result<SMSVerificationNumber, Error> {
         return await networkManager.callWithAsync(endpoint: LoginAPIManager.smsRequest(loginSMSRequest: loginSMSRequest), httpCodes: .success)
     }
     
-    func smsVerify(_ loginSMSVerify: LoginSMSVerify) async throws -> Result<LoginSMSVerify, Error> {
-        return await networkManager.callWithAsync(endpoint: LoginAPIManager.smsVerify(loginSMSVerify: loginSMSVerify), httpCodes: .success)
+    func smsVerify(_ loginSMSVerify: LoginSMSVerify, _ smsToken: String) async throws -> Result<ResponseBoolean, Error> {
+        return await networkManager.callWithAsync(endpoint: LoginAPIManager.smsVerify(loginSMSVerify: loginSMSVerify, smsToken: smsToken), httpCodes: .success)
     }
     
 }
@@ -35,7 +35,7 @@ class LoginNetworkManager: ObservableObject {
 enum LoginAPIManager {
     case smsBase
     case smsRequest(loginSMSRequest: LoginSMSRequest)
-    case smsVerify(loginSMSVerify: LoginSMSVerify)
+    case smsVerify(loginSMSVerify: LoginSMSVerify, smsToken: String)
 }
 
 extension LoginAPIManager: APIManager {
@@ -66,10 +66,10 @@ extension LoginAPIManager: APIManager {
                 "Content-Type" : "application/json",
                 "SMS_Authorization" : loginSMSRequest.smsToken
             ]
-        case .smsVerify(let loginSMSVerify):
+        case let .smsVerify(_, smsToken):
             return [
                 "Content-Type" : "application/json",
-                "SMS_Authorization" : loginSMSVerify.smsToken
+                "SMS_Authorization" : smsToken
             ]
         }
     }
@@ -81,7 +81,7 @@ extension LoginAPIManager: APIManager {
             let jsonEncoder = JSONEncoder()
             let jsonData = try jsonEncoder.encode(loginSMSRequest)
             return jsonData
-        case .smsVerify(let loginSMSVerify):
+        case let .smsVerify(loginSMSVerify, _):
             let jsonEncoder = JSONEncoder()
             let jsonData = try jsonEncoder.encode(loginSMSVerify)
             return jsonData

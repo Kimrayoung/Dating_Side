@@ -10,10 +10,12 @@ import Combine
 
 @MainActor
 class LoginViewModel: ObservableObject {
+    let loginNetworkManger = LoginNetworkManager()
     @Published var phoneFrontNumber: [String] = ["", "", "", ""]
     @Published var phoneBackNumber: [String]
      = ["", "", "", ""]
     @Published var verificationNumber: [String] = ["", "", "", ""]
+    @Published var loginComplete: Bool = false
     
     func checkPhoneNumbers() -> Bool{
         return !self.phoneFrontNumber.contains("") && !self.phoneBackNumber.contains("")
@@ -27,5 +29,84 @@ class LoginViewModel: ObservableObject {
         let front = phoneFrontNumber.joined()
         let back = phoneBackNumber.joined()
         return "010-\(front)-\(back)"
+    }
+    
+    func getVerificationNumber() -> String {
+        return verificationNumber.joined()
+    }
+    
+    func getSMSToken() async -> String? {
+        do {
+            let result = try await loginNetworkManger.smsBase()
+            switch result {
+            case .success(let baseToken):
+                return baseToken.smsTempToken
+            case .failure(let error):
+                return nil
+            }
+        } catch {
+            return nil
+        }
+    }
+    
+    func requestVerifiactionNumber() async {
+        let phoneNumber = getPhoneNumber()
+        guard let getSMSToken = await getSMSToken() else { return }
+        print(#fileID, #function, #line, "- phoneNumer check: \(phoneNumber), smsToken check: \(getSMSToken)")
+        let separateDigit = separateDigist(1234)
+        for i in 0...3 {
+            verificationNumber[i] = separateDigit[i]
+        }
+        if checkPhoneNumbers() {
+            loginComplete = true
+        }
+        
+//        let loginSMSReuquest = LoginSMSRequest(phoneNumber: phoneNumber, smsToken: getSMSToken)
+//        do {
+//            let result = try await loginNetworkManger.smsRequest(loginSMSReuquest)
+//            switch result {
+//            case .success(let sms):
+//                let separateDigit = separateDigist(sms.number)
+//                for i in 0...3 {
+//                    verificationNumber[i] = separateDigit[i]
+//                }
+//            case .failure(let error):
+//                print(#fileID, #function, #line, "- error")
+//            }
+//        } catch {
+//            print(#fileID, #function, #line, "- error: \(error)")
+//        }
+    }
+    
+    func separateDigist(_ number: Int) -> [String] {
+        let numberString = String(number)
+        var digits: [String] = []
+        
+        for char in numberString {
+            digits.append(String(char))
+        }
+        
+        return digits
+    }
+    
+    func checkRequestNumber() async -> Bool {
+        let phoneNumber = getPhoneNumber()
+        let verificationNumber = getVerificationNumber()
+        guard let getSMSToken = await getSMSToken() else { return false }
+        
+        let check = LoginSMSVerify(phoneNumber: phoneNumber, number: verificationNumber)
+        do {
+            let result = try await loginNetworkManger.smsVerify(check, getSMSToken)
+            switch result {
+            case .success(let complete):
+                print(#fileID, #function, #line, "- check true: \(complete)")
+                return complete.result
+            case .failure(let error):
+                print(#fileID, #function, #line, "- error: \(error)")
+            }
+        } catch {
+            print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+        }
+        return false
     }
 }

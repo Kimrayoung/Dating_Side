@@ -23,16 +23,32 @@ struct VerificationNumber: View {
             verificationNumberView
             Spacer()
             Button(action: {
-                if viewModel.checkVerificationNumber() {
-                    print(#fileID, #function, #line, "- 여기")
-                    appState.login()
+                Task {
+                    if await viewModel.checkRequestNumber() {
+                        print(#fileID, #function, #line, "- 여기")
+                        appState.login()
+                    }
                 }
+                
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "러브웨이 시작하기", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
-        })
+        }).onChange(of: viewModel.loginComplete) { oldValue, newValue in
+            if newValue {
+                possibleNext = true
+            }
+        }
+        .onAppear {
+            Task {
+                await viewModel.requestVerifiactionNumber()
+                
+                if viewModel.verificationNumber.count == 4 {
+                    focusedField = .verificationNumber(viewModel.verificationNumber.count - 1)
+                }
+            }
+        }
     }
     
     var verificationNumberView: some View {
@@ -41,25 +57,36 @@ struct VerificationNumber: View {
                 digitTextField(text: $viewModel.verificationNumber[index],
                                focusField: .verificationNumber(index),
                                onCommit: {
-                    if !viewModel.verificationNumber[index].isEmpty {
+                    if !viewModel.phoneFrontNumber[index].isEmpty {
                         if index < 3 {
                             focusedField = .verificationNumber(index + 1)
                         } else {
                             // 마지막 입력 필드에서의 처리
+                            if (viewModel.checkVerificationNumber()) {
+                                possibleNext = true
+                            }
+                        }
+                    }
+                }, alreadyFilled: { text in
+                    if index < 2 {
+                        viewModel.verificationNumber[index + 1] = text
+                        focusedField = .verificationNumber(index + 2)
+                    } else {
+                        if index == 2 {
+                            viewModel.verificationNumber[index + 1] = text
+                            focusedField = .verificationNumber(index + 1)
+                        }
+                        if (viewModel.checkVerificationNumber()) {
                             possibleNext = true
-                            hideKeyboard()
                         }
                     }
                 })
             }
         }
-        .onAppear {
-            // 첫 번째 필드에 포커스
-            focusedField = .verificationNumber(0)
-        }
+        
     }
     
-    private func digitTextField(text: Binding<String>, focusField: VerificationNumberField, onCommit: @escaping () -> Void) -> some View {
+    private func digitTextField(text: Binding<String>, focusField: VerificationNumberField, onCommit: @escaping () -> Void, onBackspace: (() -> Void)? = nil, alreadyFilled: @escaping (_ text: String) -> Void) -> some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
             if text.wrappedValue.isEmpty && focusedField != focusField {
                 Text("0")
@@ -68,29 +95,29 @@ struct VerificationNumber: View {
                     .foregroundStyle(Color.gray01)
                     .frame(width: 16, height: 34, alignment: .center)
             }
-            TextField("", text: text)
-                .keyboardType(.numberPad)
-                .multilineTextAlignment(.center)
-                .font(.pixel(24))
-                .bottomBorder(color: Color.gray3, width: 2, bottomPadding: 5)
-                .frame(width: 16, height: 34)
-                .focused($focusedField, equals: focusField)
-                .onChange(of: text.wrappedValue, { oldValue, newValue in
-                    // 숫자만 입력 가능하도록
-                    if let _ = newValue.rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) {
-                        text.wrappedValue = String(newValue.filter { "0123456789".contains($0) })
+            OneDigitTextField(
+                text: text,
+                isFocused: focusedField == focusField,
+                onCommit: onCommit,
+                alreadyFilled: alreadyFilled,
+                onBackspace: {
+                    if text.wrappedValue.isEmpty {
+                        // 텍스트가 비어 있을 때만 이전 필드로 이동
+                        if focusField.index != nil {
+                            switch focusField {
+                            case .verificationNumber(let i) where i > 0:
+                                focusedField = .verificationNumber(i - 1)
+                            default:
+                                break
+                            }
+                        }
                     }
-                    
-                    // 한 자리만 입력 가능하도록
-                    if newValue.count > 1 {
-                        text.wrappedValue = String(newValue.prefix(1))
-                    }
-                    
-                    // 입력이 완료되면 다음 필드로 이동
-                    if newValue.count == 1 {
-                        onCommit()
-                    }
-                })
+                }
+            )
+            .bottomBorder(color: Color.gray3, width: 2, bottomPadding: 5)
+            .frame(width: 16, height: 34)
+            .background(Color.clear)
+            .focused($focusedField, equals: focusField)
         })
     }
     
@@ -98,6 +125,7 @@ struct VerificationNumber: View {
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+    
 }
 
 #Preview {

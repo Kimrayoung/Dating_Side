@@ -16,8 +16,15 @@ struct LoginSMSRequest: Codable {
     let smsToken: String
 }
 
+struct SMSVerificationNumber: Codable {
+    let number: Int
+}
+
 struct LoginSMSVerify: Codable {
     let phoneNumber: String
     let number: String
-    let smsToken: String
+}
+
+struct ResponseBoolean: Codable {
+    let result: Bool
 }

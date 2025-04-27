@@ -26,7 +26,10 @@ struct PhoneNumberView: View {
             phoneNumberView
             Spacer()
             Button(action: {
-                appState.loginPath.append(Login.verificationNumber)
+                hideKeyboard()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    appState.loginPath.append(Login.verificationNumber)
+                }
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "인증번호 받기", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -61,88 +64,11 @@ struct PhoneNumberView: View {
             Text("-")
                 .font(.pixel(24))
                 .padding(.horizontal, 6)
-//            ForEach(0..<4) { index in
-//                GenericDigitTextField(
-//                    text: $viewModel.phoneFrontNumber[index],
-//                    focusField: PhoneNumberField.phoneNumberFront(index),
-//                    isFocused: focusedField == .phoneNumberFront(index),
-//                    onCommit: {
-//                        if index < 3 {
-//                            print(#fileID, #function, #line, "- check here🥹: \(index)")
-//                            focusedField = .phoneNumberFront(index + 1)
-//                        } else {
-//                            focusedField = .phoneNumberBack(0)
-//                        }
-//                    },
-//                    onBackspace: {
-//                        if index > 0 {
-//                            focusedField = .phoneNumberFront(index - 1)
-//                        }
-//                    },
-//                    requestFocus: {
-//                        focusedField = .phoneNumberFront(index)
-//                    }
-//                )
-//            }
-            ForEach(0..<4, id: \.self) { index in
-                digitTextField(text: $viewModel.phoneFrontNumber[index],
-                               focusField: .phoneNumberFront(index),
-                               onCommit: {
-                    if !viewModel.phoneFrontNumber[index].isEmpty {
-                        print(#fileID, #function, #line, "- check here🥹")
-                        print(#fileID, #function, #line, "- check index: \(index)")
-                        if index < 3 {
-                            focusedField = .phoneNumberFront(index + 1)
-                        } else {
-                            // 마지막 입력 필드에서의 처리
-                            focusedField = .phoneNumberBack(0)
-                        }
-                    }
-                }, alreadyFilled: { text in
-                    if index == 3 {
-                        viewModel.phoneBackNumber[0] = text
-                        focusedField = .phoneNumberBack(1)
-                    } else {
-                        viewModel.phoneFrontNumber[index + 1] = text
-                        if index == 2 {
-                            focusedField = .phoneNumberBack(0)
-                        } else {
-                            focusedField = .phoneNumberFront(index + 2)
-                        }
-                    }
-                })
-            }
+            frontPhoneNumebrTextFiels
             Text("-")
                 .font(.pixel(24))
                 .padding(.horizontal, 6)
-            ForEach(0..<4, id: \.self) { index in
-                digitTextField(text: $viewModel.phoneBackNumber[index],
-                               focusField: .phoneNumberBack(index),
-                               onCommit: {
-                    if !viewModel.phoneBackNumber[index].isEmpty {
-                        if index < 3 {
-                            focusedField = .phoneNumberBack(index + 1)
-                        } else {
-                            if (viewModel.checkPhoneNumbers()) {
-                                possibleNext = true
-                            }
-                        }
-                    }
-                }, alreadyFilled: { text in
-                    if index < 2 {
-                        viewModel.phoneBackNumber[index + 1] = text
-                        focusedField = .phoneNumberBack(index + 2)
-                    } else {
-                        if index == 2 {
-                            viewModel.phoneBackNumber[index + 1] = text
-                            focusedField = .phoneNumberBack(index + 1)
-                        }
-                        if (viewModel.checkPhoneNumbers()) {
-                            possibleNext = true
-                        }
-                    }
-                })
-            }
+            backPhoneNumberTextFields
         }
         .onAppear {
             // 첫 번째 필드에 포커스
@@ -151,7 +77,6 @@ struct PhoneNumberView: View {
             }
             
         }
-        
     }
     
     private func digitTextField(text: Binding<String>, focusField: PhoneNumberField, onCommit: @escaping () -> Void, onBackspace: (() -> Void)? = nil, alreadyFilled: @escaping (_ text: String) -> Void) -> some View {
@@ -171,7 +96,7 @@ struct PhoneNumberView: View {
                 onBackspace: {
                     if text.wrappedValue.isEmpty {
                         // 텍스트가 비어 있을 때만 이전 필드로 이동
-                        if let currentIndex = focusField.index {
+                        if focusField.index != nil {
                             switch focusField {
                             case .phoneNumberFront(let i) where i > 0:
                                 focusedField = .phoneNumberFront(i - 1)
@@ -197,6 +122,68 @@ struct PhoneNumberView: View {
     // 키보드 숨기기
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
+    // 8자리 중에 앞부분
+    var frontPhoneNumebrTextFiels: some View {
+        ForEach(0..<4, id: \.self) { index in
+            digitTextField(text: $viewModel.phoneFrontNumber[index],
+                           focusField: .phoneNumberFront(index),
+                           onCommit: {
+                if !viewModel.phoneFrontNumber[index].isEmpty {
+                    if index < 3 {
+                        focusedField = .phoneNumberFront(index + 1)
+                    } else {
+                        // 마지막 입력 필드에서의 처리
+                        focusedField = .phoneNumberBack(0)
+                    }
+                }
+            }, alreadyFilled: { text in
+                if index == 3 {
+                    viewModel.phoneBackNumber[0] = text
+                    focusedField = .phoneNumberBack(1)
+                } else {
+                    viewModel.phoneFrontNumber[index + 1] = text
+                    if index == 2 {
+                        focusedField = .phoneNumberBack(0)
+                    } else {
+                        focusedField = .phoneNumberFront(index + 2)
+                    }
+                }
+            })
+        }
+    }
+    
+    // 8자리 중에 뒷부분
+    var backPhoneNumberTextFields: some View {
+        ForEach(0..<4, id: \.self) { index in
+            digitTextField(text: $viewModel.phoneBackNumber[index],
+                           focusField: .phoneNumberBack(index),
+                           onCommit: {
+                if !viewModel.phoneBackNumber[index].isEmpty {
+                    if index < 3 {
+                        focusedField = .phoneNumberBack(index + 1)
+                    } else {
+                        if (viewModel.checkPhoneNumbers()) {
+                            possibleNext = true
+                        }
+                    }
+                }
+            }, alreadyFilled: { text in
+                if index < 2 {
+                    viewModel.phoneBackNumber[index + 1] = text
+                    focusedField = .phoneNumberBack(index + 2)
+                } else {
+                    if index == 2 {
+                        viewModel.phoneBackNumber[index + 1] = text
+                        focusedField = .phoneNumberBack(index + 1)
+                    }
+                    if (viewModel.checkPhoneNumbers()) {
+                        possibleNext = true
+                    }
+                }
+            })
+        }
     }
 }
 

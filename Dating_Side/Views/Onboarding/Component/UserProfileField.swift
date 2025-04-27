@@ -24,12 +24,24 @@ enum UserProfileField {
 }
 
 // 현재 포커스된 필드를 추적하기 위한 열거형
-enum BirthFocusField: Hashable {
+enum BirthFocusField: OneDigitalTextField {
     case year(Int)
     case month(Int)
     case day(Int)
+    var index: Int? {
+        switch self {
+        case .year(let i): return i
+        case .month(let i): return i
+        case .day(let i): return i
+        }
+    }
 }
 
-enum HeightFocusField: Hashable {
+enum HeightFocusField: OneDigitalTextField {
     case height(Int)
+    var index: Int? {
+        switch self {
+        case .height(let i): return i
+        }
+    }
 }

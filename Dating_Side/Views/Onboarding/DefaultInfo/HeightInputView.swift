@@ -77,7 +77,12 @@ struct HeightInputView: View {
                             hideKeyboard()
                         }
                     }
-                })
+                }) { text in
+                    if index == 0 {
+                        viewModel.height[1] = text
+                        focusedField = .height(1)
+                    }
+                }
             }
             Text("cm")
                 .font(.pixel(14))
@@ -92,7 +97,7 @@ struct HeightInputView: View {
         
     }
     
-    private func digitTextField(text: Binding<String>, focusField: HeightFocusField, onCommit: @escaping () -> Void) -> some View {
+    private func digitTextField(text: Binding<String>, focusField: HeightFocusField, onCommit: @escaping () -> Void, onBackspace: (() -> Void)? = nil, alreadyFilled: @escaping (_ text: String) -> Void) -> some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
             if text.wrappedValue.isEmpty && focusedField != focusField {
                 Text("0")
@@ -101,37 +106,29 @@ struct HeightInputView: View {
                     .foregroundStyle(Color.gray01)
                     .frame(width: 16, height: 34, alignment: .center)
             }
-            TextField("", text: text)
-                .keyboardType(.numberPad)
-                .multilineTextAlignment(.center)
-                .font(.pixel(24))
-                .bottomBorder(color: Color.gray3, width: 2, bottomPadding: 5)
-                .frame(width: 16, height: 34)
-                .focused($focusedField, equals: focusField)
-                .onChange(of: text.wrappedValue, { oldValue, newValue in
-                    // 숫자만 입력 가능하도록
-                    if let _ = newValue.rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) {
-                        text.wrappedValue = String(newValue.filter { "0123456789".contains($0) })
+            OneDigitTextField(
+                text: text,
+                isFocused: focusedField == focusField,
+                onCommit: onCommit,
+                alreadyFilled: alreadyFilled,
+                onBackspace: {
+                    if text.wrappedValue.isEmpty {
+                        // 텍스트가 비어 있을 때만 이전 필드로 이동
+                        if focusField.index != nil {
+                            switch focusField {
+                            case .height(let i) where i > 0:
+                                focusedField = .height(i - 1)
+                            default:
+                                break
+                            }
+                        }
                     }
-                    
-                    // 한 자리만 입력 가능하도록
-                    if newValue.count > 1 {
-                        text.wrappedValue = String(newValue.prefix(1))
-                    }
-                    
-                    // 입력이 완료되면 다음 필드로 이동
-                    if newValue.count == 1 {
-                        onCommit()
-                    }
-                    // 백스페이스 감지 및 이전 필드로 이동
-                                    if oldValue.count == 1 && newValue.isEmpty {
-                                        // 현재 필드의 인덱스 추출 (HeightFocusField에서 인덱스 값 가져오기)
-                                        if case let .height(index) = focusField, index > 0 {
-                                            // 이전 필드로 포커스 이동
-                                            focusedField = .height(index - 1)
-                                        }
-                                    }
-                })
+                }
+            )
+            .bottomBorder(color: Color.gray3, width: 2, bottomPadding: 5)
+            .frame(width: 16, height: 34)
+            .background(Color.clear)
+            .focused($focusedField, equals: focusField)
         })
     }
     
