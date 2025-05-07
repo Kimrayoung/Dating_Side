@@ -17,30 +17,35 @@ class LoginViewModel: ObservableObject {
     @Published var verificationNumber: [String] = ["", "", "", ""]
     @Published var loginComplete: Bool = false
     
+    // 핸드폰 번호에 빈문자열이 들어가져 있는지 확인
     func checkPhoneNumbers() -> Bool{
         return !self.phoneFrontNumber.contains("") && !self.phoneBackNumber.contains("")
     }
     
+    // 인증번호에 빈 문자열이 들어가져 있는지 확인
     func checkVerificationNumber() -> Bool {
         return !self.verificationNumber.contains("")
     }
     
+    // 핸드폰 번호 합쳐서 가져오기
     func getPhoneNumber() -> String {
         let front = phoneFrontNumber.joined()
         let back = phoneBackNumber.joined()
         return "010-\(front)-\(back)"
     }
     
+    // 인증번호 합쳐서 가져오기
     func getVerificationNumber() -> String {
         return verificationNumber.joined()
     }
     
+    // sms 인증시 필요한 Base Token가져오기
     func getSMSToken() async -> String? {
         do {
             let result = try await loginNetworkManger.smsBase()
             switch result {
             case .success(let baseToken):
-                return baseToken.smsTempToken
+                return baseToken.0.smsTempToken
             case .failure(let error):
                 return nil
             }
@@ -49,6 +54,7 @@ class LoginViewModel: ObservableObject {
         }
     }
     
+    // 인증번호 요청
     func requestVerifiactionNumber() async {
         let phoneNumber = getPhoneNumber()
         guard let getSMSToken = await getSMSToken() else { return }
@@ -89,6 +95,7 @@ class LoginViewModel: ObservableObject {
         return digits
     }
     
+    // 인증번호 검증(확인)
     func checkRequestNumber() async -> Bool {
         let phoneNumber = getPhoneNumber()
         let verificationNumber = getVerificationNumber()
@@ -100,7 +107,9 @@ class LoginViewModel: ObservableObject {
             switch result {
             case .success(let complete):
                 print(#fileID, #function, #line, "- check true: \(complete)")
-                return complete.result
+                guard let parsingBeforeAccessToken = complete.1, let parsingAccessToken = getAccessToken(from: parsingBeforeAccessToken) else { return false }
+                accessToken = parsingAccessToken
+                return complete.0.result
             case .failure(let error):
                 print(#fileID, #function, #line, "- error: \(error)")
             }

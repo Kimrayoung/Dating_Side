@@ -34,20 +34,21 @@ struct SusceptibleInfoView: View {
             infoView
             Spacer()
             Button(action: {
-                
+                appState.onboardingPath.append(Onboarding.chatProfileImage)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
         }
+        
         .padding(.horizontal, 24)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar(content: {
-            ToolbarItem(placement: .principal) {
-                CustomProgressBar(progress: 8, total: onboardingPageCnt)
-            }
+//            ToolbarItem(placement: .principal) {
+//                CustomProgressBar(progress: 8, total: onboardingPageCnt)
+//            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     
@@ -122,7 +123,14 @@ struct SusceptibleInfoView: View {
     func selectBtn(_ word: String, _ index: Int, _ selectedArray: Binding<[Bool]>) -> some View {
         return Button(action: {
             // Binding<[Bool]>타입이므로 이 바인딩의 실제 값에 접근하기 위해서는 .wrapped프로퍼티를 사용해야함
-            selectedArray.wrappedValue[index].toggle()
+            for i in 0...2 {
+                if index == i {
+                    selectedArray.wrappedValue[index] = true
+                } else {
+                    selectedArray.wrappedValue[i] = false
+                }
+            }
+            
         }, label: {
             SelectButtonLabel(
                 isSelected: selectedArray[index],

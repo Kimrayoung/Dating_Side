@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NetworkProtocol {
-    func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes) async -> Result<Value, Error> where Value: Decodable
+    func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes) async -> Result<(Value, String?), Error> where Value: Decodable
 }
 
 final class NetworkManager: NetworkProtocol {
@@ -24,7 +24,7 @@ final class NetworkManager: NetworkProtocol {
     ///   - endpoint: 만들어진  URLRequest
     ///   - httpCodes: 반드시 특정 httpCode가 들어와야 할 경우에 작성(ex, 203만 들어와야 할 경우)
     /// - Returns: 필요한 데이터의 형태로 나감
-    func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes = .success) async -> Result<Value, Error> where Value: Decodable {
+    func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes = .success) async -> Result<(Value, String?), Error> where Value: Decodable {
         do {
             let request = try endpoint.urlRequest(baseURL: BASE_URL)
 //            print(#fileID, #function, #line, "- request url checking🍂: \(request)")
@@ -45,6 +45,12 @@ final class NetworkManager: NetworkProtocol {
                 throw APIError.httpCode(code)
             }
             
+            guard let header = (response as? HTTPURLResponse)?.allHeaderFields else {
+                throw APIError.unexpectedResponse
+            }
+            
+            let accessToken = header["Set-Cookie"] as? String
+            print(#fileID, #function, #line, "- accessToken checking: \(accessToken)")
             // 데이터가 비어있거나 값이 없는 경우를 처리
 //            if Value.self == EmptyResponse.self,
 //               let emptyResponse = EmptyResponse() as? Value {
@@ -53,7 +59,7 @@ final class NetworkManager: NetworkProtocol {
             
             let decoder = JSONDecoder()
             let decodeData = try decoder.decode(Value.self, from: data)
-            return .success(decodeData)
+            return .success((decodeData, accessToken))
         } catch let error {
             return .failure(error)
         }

@@ -24,7 +24,3 @@ struct LoginCotainerView: View {
         }
     }
 }
-
-#Preview {
-    LoginCotainerView()
-}

@@ -10,6 +10,7 @@ import SwiftUI
 struct OnboardingContainerView: View {
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel = OnboardingViewModel()
+    @StateObject private var imageViewModel = ImageOnboardingViewModel()
     
     var body: some View {
         NavigationStack(path: $appState.onboardingPath) {
@@ -27,6 +28,7 @@ struct OnboardingContainerView: View {
                     case .job: JobSelectView(viewModel: viewModel)
                     case .jobDetail: JobDetailInputView(viewModel: viewModel)
                     case .susceptible: SusceptibleInfoView(viewModel: viewModel)
+                    case .chatProfileImage: ChatProfileImageView(viewModel: imageViewModel)
                     }
                 }
         }

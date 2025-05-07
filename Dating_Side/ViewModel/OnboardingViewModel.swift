@@ -27,4 +27,14 @@ class OnboardingViewModel: ObservableObject {
     @Published var isSmokeButtonSelected: [Bool] = Array(repeating: false, count: 3)
     @Published var isTattooButtonSelected: [Bool] = Array(repeating: false, count: 3)
     @Published var isReligionButtonSelected: [Bool] = Array(repeating: false, count: 3)
+    
+    
+    func susceptibleInfoCompleteChecking() -> Bool {
+        let drunkButtonSelected = isDrunkButtonSelected.contains(true)
+        let smokeButtonSelected = isSmokeButtonSelected.contains(true)
+        let tattooButtonSelected = isTattooButtonSelected.contains(true)
+        let religionButtonSelected = isReligionButtonSelected.contains(true)
+        
+        return drunkButtonSelected && smokeButtonSelected && tattooButtonSelected && religionButtonSelected
+    }
 }

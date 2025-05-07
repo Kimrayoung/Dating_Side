@@ -1,0 +1,29 @@
+//
+//  Methods.swift
+//  Dating_Side
+//
+//  Created by 김라영 on 2025/05/07.
+//
+
+import Foundation
+
+func getAccessToken(from authHeader: String) -> String? {
+    // "Bearer%2520" 다음부터 시작하는 부분 찾기
+    guard let bearerRange = authHeader.range(of: "Bearer%2520") else {
+        return nil
+    }
+    
+    // Bearer%2520 이후의 문자열 가져오기
+    let tokenStartIndex = bearerRange.upperBound
+    
+    // ";" 이전까지의 문자열 가져오기
+    guard let semicolonRange = authHeader[tokenStartIndex...].range(of: ";") else {
+        // 만약 ";"가 없다면 문자열 끝까지 반환
+        return String(authHeader[tokenStartIndex...])
+    }
+    
+    // Bearer%2520 이후부터 첫 번째 ";" 이전까지 추출
+    return String(authHeader[tokenStartIndex..<semicolonRange.lowerBound])
+}
+
+

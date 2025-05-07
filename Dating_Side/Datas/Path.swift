@@ -24,6 +24,7 @@ enum Onboarding {
     case job
     case jobDetail
     case susceptible
+    case chatProfileImage
 }
 
 enum Main {
