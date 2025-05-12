@@ -25,6 +25,4 @@ struct LoginSMSVerify: Codable {
     let number: String
 }
 
-struct ResponseBoolean: Codable {
-    let result: Bool
-}
+

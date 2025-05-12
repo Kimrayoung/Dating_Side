@@ -9,6 +9,8 @@ import SwiftUI
 
 // 앱 상태를 관리하는 클래스
 class AppState: ObservableObject {
+    static let shared = AppState()
+    
     @Published var currentScreen: AppScreen
     @Published var isFirstLaunch: Bool
     @Published var isLoggedIn: Bool
@@ -59,7 +61,6 @@ class AppState: ObservableObject {
         isLoggedIn = true
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
         currentScreen = .onboarding
-        print(#fileID, #function, #line, "- currenScreen:\(currentScreen)")
     }
     
     func logout() {

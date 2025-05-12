@@ -32,6 +32,9 @@ struct OnboardingContainerView: View {
                     }
                 }
         }
+        .task {
+            await viewModel.getUsersProfileData()
+        }
     }
 }
 

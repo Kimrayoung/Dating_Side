@@ -45,7 +45,7 @@ class LoginViewModel: ObservableObject {
             let result = try await loginNetworkManger.smsBase()
             switch result {
             case .success(let baseToken):
-                return baseToken.0.smsTempToken
+                return baseToken.smsTempToken
             case .failure(let error):
                 return nil
             }
@@ -107,9 +107,8 @@ class LoginViewModel: ObservableObject {
             switch result {
             case .success(let complete):
                 print(#fileID, #function, #line, "- check true: \(complete)")
-                guard let parsingBeforeAccessToken = complete.1, let parsingAccessToken = getAccessToken(from: parsingBeforeAccessToken) else { return false }
-                accessToken = parsingAccessToken
-                return complete.0.result
+                
+                return complete.result
             case .failure(let error):
                 print(#fileID, #function, #line, "- error: \(error)")
             }

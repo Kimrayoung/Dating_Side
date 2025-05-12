@@ -12,5 +12,3 @@ let onboardingPageCnt: Int = 10
 public protocol OneDigitalTextField: Hashable, Equatable {
     var index: Int? { get }
 }
-
-var accessToken: String = ""

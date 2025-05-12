@@ -29,7 +29,13 @@ struct NicknameInputView: View {
                 .padding(.top, 72)
             Spacer()
             Button(action: {
-                appState.onboardingPath.append(Onboarding.birth)
+                Task {
+                    let result = await viewModel.updateUserProfileData(updateType: .nickname, data: viewModel.nicknameInput)
+                    if result {
+                        appState.onboardingPath.append(Onboarding.birth)
+                    }
+                }
+                
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })

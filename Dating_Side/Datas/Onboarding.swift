@@ -7,14 +7,21 @@
 
 import Foundation
 
+struct UserProfileResponse: Codable {
+    let result: Bool
+    let data: UserProfile
+}
+
 struct UserProfile: Codable {
-    let gender, activeRegion, preferenceType, nickname: String?
-    let birthDate: String?
-    let height: Int?
-    let highestEducation, job: String?
-    let sensitiveInfo: SensitiveInfo?
-    let profileImage: ProfileImage?
-    let introduction: String?
+    var gender, activeRegion, preferenceType, nickname: String?
+    var birthDate: String?
+    var height: Int?
+    var highestEducation, job: String?
+    var sensitiveInfo: SensitiveInfo?
+    var profileImage: ProfileImage?
+    var introduction: String?
+    var createdAt: String?
+    var updatedAt: String?
 }
 
 // MARK: - ProfileImage
@@ -25,4 +32,22 @@ struct ProfileImage: Codable {
 // MARK: - SensitiveInfo
 struct SensitiveInfo: Codable {
     let isDrink, isSmoke, hasTattoo, hasReligion: String?
+}
+
+struct ResponseBoolean: Codable {
+    let result: Bool
+}
+
+enum OnboardingUpdateType {
+    case gender
+    case nickname
+    case birth
+    case height
+    case location
+    case loveKeyword
+    case highestEducation
+    case job
+    case sensitiveInfo
+    case profileImage
+    case introduction
 }

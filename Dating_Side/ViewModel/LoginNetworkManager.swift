@@ -18,17 +18,17 @@ class LoginNetworkManager: ObservableObject {
     
     // 문자전송(로그인을 위한 문자) API(smsAPI를 의미)를 사용하기 위해서는 header에 항상 SMS_Authorization 값 세팅이 필요
     // smsTempToken에 반환되는 값 사용
-    func smsBase() async throws -> Result<(LoginSMSBase, String?), Error> {
+    func smsBase() async throws -> Result<LoginSMSBase, Error> {
         return await networkManager.callWithAsync(endpoint: LoginAPIManager.smsBase, httpCodes: .success)
     }
     
     // 인증번호 요청
-    func smsRequest(_ loginSMSRequest: LoginSMSRequest) async throws -> Result<(SMSVerificationNumber, String?), Error> {
+    func smsRequest(_ loginSMSRequest: LoginSMSRequest) async throws -> Result<SMSVerificationNumber, Error> {
         return await networkManager.callWithAsync(endpoint: LoginAPIManager.smsRequest(loginSMSRequest: loginSMSRequest), httpCodes: .success)
     }
     
     // 인증번호 확인
-    func smsVerify(_ loginSMSVerify: LoginSMSVerify, _ smsToken: String) async throws -> Result<(ResponseBoolean, String?), Error> {
+    func smsVerify(_ loginSMSVerify: LoginSMSVerify, _ smsToken: String) async throws -> Result<ResponseBoolean, Error> {
         return await networkManager.callWithAsync(endpoint: LoginAPIManager.smsVerify(loginSMSVerify: loginSMSVerify, smsToken: smsToken), httpCodes: .success)
     }
     

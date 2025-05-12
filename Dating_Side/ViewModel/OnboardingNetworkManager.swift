@@ -10,16 +10,16 @@ import Foundation
 class OnboardingNetworkManager {
     private let networkManager: NetworkProtocol
     
-    init(networkManager: NetworkProtocol) {
+    init(networkManager: NetworkProtocol = NetworkManager.shared) {
         self.networkManager = networkManager
     }
     
-    func patchOnboardingData() {
-        
+    func patchOnboardingData(userProfileData: UserProfile) async throws -> Result<ResponseBoolean, Error>  {
+        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.patchUserProfileData(userProfileData: userProfileData), httpCodes: .success)
     }
     
-    func fetchOnboardingData() {
-        
+    func fetchOnboardingData() async throws -> Result<UserProfileResponse, Error>  {
+        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.getUserProfile, httpCodes: .success)
     }
 }
 
@@ -44,10 +44,12 @@ extension OnboardingAPIManager: APIManager {
     }
     
     var headers: [String : String]? {
-        return [
-            "Content-Type" : "application/json",
-            "SMS_Authorization" : accessToken
-        ]
+        if let accessToken = KeychainManager.shared.getToken(service: "com.loveway.auth", account: "accessToken") {
+            return [
+                "Content-Type" : "application/json",
+                "SMS_Authorization" : "Bearer " + accessToken
+            ]
+        } else { return nil }
     }
     
     func body() throws -> Data? {
@@ -55,7 +57,7 @@ extension OnboardingAPIManager: APIManager {
         case .getUserProfile:
             return nil
         case .patchUserProfileData(let userProfileData):
-            let patchDic = try userProfileData.asPatchJSON() 
+            let patchDic = try userProfileData.asPatchJSON()
             let jsonData = try JSONSerialization.data(withJSONObject: patchDic)
             return jsonData
         }

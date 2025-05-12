@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct Dating_SideApp: App {
-    @StateObject private var appState: AppState = AppState()
+    @StateObject private var appState: AppState = AppState.shared
     
     var body: some Scene {
         WindowGroup {
