@@ -10,13 +10,6 @@ import SwiftUI
 struct SusceptibleInfoView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: OnboardingViewModel
-    
-    var drunkTexts: [String] = ["언제든지!", "가볍게 즐겨요", "안마셔요"]
-    var smokeTexts: [String] = ["흡연자에요", "가끔 피워요", "비흡연자에요"]
-    var tattooTexts: [String] = ["있어요", "관심이 있어요", "없어요"]
-    var religionTexts: [String] = ["있어요", "관심이 있어요", "없어요"]
-    
-    
     @State var possibleNext: Bool = false
     
     var body: some View {
@@ -74,7 +67,7 @@ struct SusceptibleInfoView: View {
                 .font(.pixel(20))
                 .frame(maxWidth: .infinity)
             HStack(spacing: 7) {
-                ForEach(Array(drunkTexts.enumerated()), id: \.element) { (index, item) in
+                ForEach(Array(viewModel.drunkTexts.enumerated()), id: \.element) { (index, item) in
                     selectBtn(item, index, $viewModel.isDrunkButtonSelected)
                 }
             }
@@ -87,7 +80,7 @@ struct SusceptibleInfoView: View {
                 .font(.pixel(20))
                 .frame(maxWidth: .infinity)
             HStack(spacing: 7) {
-                ForEach(Array(smokeTexts.enumerated()), id: \.element) { (index, item) in
+                ForEach(Array(viewModel.smokeTexts.enumerated()), id: \.element) { (index, item) in
                     selectBtn(item, index, $viewModel.isSmokeButtonSelected)
                 }
             }
@@ -100,7 +93,7 @@ struct SusceptibleInfoView: View {
                 .font(.pixel(20))
                 .frame(maxWidth: .infinity)
             HStack(spacing: 7) {
-                ForEach(Array(tattooTexts.enumerated()), id: \.element) { (index, item) in
+                ForEach(Array(viewModel.tattooTexts.enumerated()), id: \.element) { (index, item) in
                     selectBtn(item, index, $viewModel.isTattooButtonSelected)
                 }
             }
@@ -113,7 +106,7 @@ struct SusceptibleInfoView: View {
                 .font(.pixel(16))
                 .frame(maxWidth: .infinity)
             HStack(spacing: 7) {
-                ForEach(Array(religionTexts.enumerated()), id: \.element) { (index, item) in
+                ForEach(Array(viewModel.religionTexts.enumerated()), id: \.element) { (index, item) in
                     selectBtn(item, index, $viewModel.isReligionButtonSelected)
                 }
             }

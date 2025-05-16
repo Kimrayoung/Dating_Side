@@ -51,7 +51,11 @@ struct NicknameInputView: View {
 //                CustomRounedGradientProgressBar(currentScreen: 2, total: onboardingPageCnt)
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
-                Image("navigationBackBtn")
+                Button {
+                    appState.onboardingPath.removeLast()
+                } label: {
+                    Image("navigationBackBtn")
+                }
             }
         })
     }

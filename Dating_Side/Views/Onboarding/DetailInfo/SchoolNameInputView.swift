@@ -28,7 +28,13 @@ struct SchoolNameInput: View {
             schoolNameView
             Spacer()
             Button(action: {
-                appState.onboardingPath.append(Onboarding.job)
+                Task {
+                    let education = viewModel.makeEducationString()
+                    let result = await viewModel.updateUserProfileData(updateType: .highestEducation, data: education)
+                    if result {
+                        appState.onboardingPath.append(Onboarding.job)
+                    }
+                }
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })

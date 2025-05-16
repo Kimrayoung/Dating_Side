@@ -12,8 +12,6 @@ struct LocationSelectView: View {
     @ObservedObject var viewModel: OnboardingViewModel
     
     @State private var possibleNext: Bool = true
-    let locationOption = ["서울특별시", "경기도", "강원도", "제주도", "전라남도", "전라북도", "경상남도", "경상북도", "충청남도", "충청북도"]
-    let detailLocationOption = ["강남구", "관악구", "도봉구", "은평구", "마포구", "금천구", "동작구", "광진구", "서초구", "양천구"]
     
     var body: some View {
         VStack(spacing: 0, content: {
@@ -32,7 +30,13 @@ struct LocationSelectView: View {
             locationPicker
             Spacer()
             Button(action: {
-                appState.onboardingPath.append(Onboarding.loveKeyword)
+                Task {
+                    let location = viewModel.makeLocation()
+                    let result = await viewModel.updateUserProfileData(updateType: .location, data: location)
+                    if result {
+                        appState.onboardingPath.append(Onboarding.loveKeyword)
+                    }
+                }
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -59,8 +63,8 @@ struct LocationSelectView: View {
     var locationPicker: some View {
         HStack(spacing: 6) {
             Picker("Select an option", selection: $viewModel.locationSelectedIndex) {
-                ForEach(0..<locationOption.count, id: \.self) { index in
-                    Text(locationOption[index])
+                ForEach(0..<viewModel.locationOption.count, id: \.self) { index in
+                    Text(viewModel.locationOption[index])
                         .font(.pixel(14))
                 }
             }
@@ -68,8 +72,8 @@ struct LocationSelectView: View {
             .frame(height: 300)
             .background(Color.white)
             Picker("Select an option", selection: $viewModel.detailLocationSelectedIndex) {
-                ForEach(0..<detailLocationOption.count, id: \.self) { index in
-                    Text(detailLocationOption[index])
+                ForEach(0..<viewModel.detailLocationOption.count, id: \.self) { index in
+                    Text(viewModel.detailLocationOption[index])
                         .font(.pixel(14))
                         .padding()
                 }
@@ -86,16 +90,16 @@ struct LocationSelectView: View {
             List(content: {
                 Section {
                     Picker("Select", selection: $viewModel.locationSelectedIndex) {
-                        ForEach(0..<locationOption.count, id: \.self) { index in
-                            Text(locationOption[index])
+                        ForEach(0..<viewModel.locationOption.count, id: \.self) { index in
+                            Text(viewModel.locationOption[index])
                                 .font(.pixel(14))
                         }
                     }
                     .font(.pixel(10))
                     .background(Color.white)
                     Picker("Select an option", selection: $viewModel.detailLocationSelectedIndex) {
-                        ForEach(0..<detailLocationOption.count, id: \.self) { index in
-                            Text(detailLocationOption[index])
+                        ForEach(0..<viewModel.detailLocationOption.count, id: \.self) { index in
+                            Text(viewModel.detailLocationOption[index])
                                 .font(.pixel(14))
                                 .padding()
                         }
@@ -117,13 +121,13 @@ struct LocationSelectView: View {
         HStack(content: {
             Menu {
                 Picker(selection: $viewModel.locationSelectedIndex) {
-                    ForEach(0..<locationOption.count, id: \.self) { index in
-                        Text(locationOption[index])
+                    ForEach(0..<viewModel.locationOption.count, id: \.self) { index in
+                        Text(viewModel.locationOption[index])
                             .padding()
                     }
                 } label: {}
             } label: {
-                Text("\(locationOption[viewModel.locationSelectedIndex])")
+                Text("\(viewModel.locationOption[viewModel.locationSelectedIndex])")
                     .font(.pixel(20))
                     .foregroundStyle(Color.blackColor)
                     .frame(width: 170, height: 42)
@@ -132,13 +136,13 @@ struct LocationSelectView: View {
             }
             Menu {
                 Picker(selection: $viewModel.detailLocationSelectedIndex) {
-                    ForEach(0..<detailLocationOption.count, id: \.self) { index in
-                        Text(detailLocationOption[index])
+                    ForEach(0..<viewModel.detailLocationOption.count, id: \.self) { index in
+                        Text(viewModel.detailLocationOption[index])
                             .padding()
                     }
                 } label: {}
             } label: {
-                Text("\(detailLocationOption[viewModel.detailLocationSelectedIndex])")
+                Text("\(viewModel.detailLocationOption[viewModel.detailLocationSelectedIndex])")
                     .font(.pixel(20))
                     .foregroundStyle(Color.blackColor)
                     .frame(width: 170, height: 42)

@@ -11,7 +11,7 @@ struct EducationSelectView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: OnboardingViewModel
     
-    var items = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
+    
     @State var possibleNext: Bool = false
     
     var body: some View {
@@ -20,11 +20,11 @@ struct EducationSelectView: View {
                 .padding(.top, 30)
                 .padding(.bottom, 48)
             Text("마지막으로 공부한 곳이\n어디인가요?")
-                .font(.pixel(16))
+                .font(.pixel(24))
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
                 .padding(.leading, 20)
-                .padding(.bottom, 72)
+                .padding(.bottom, 36)
                 
             selectedEducationButtons
             Spacer()
@@ -48,8 +48,15 @@ struct EducationSelectView: View {
                 }
             }
         })
-        .onChange(of: viewModel.selectedEducationIndex) { oldValue, newValue in
-            print(#fileID, #function, #line, "- newvalue:\(newValue)")
+        .onChange(of: viewModel.selectedEducationIndex) {
+            if viewModel.selectedEducationIndex != nil {
+                possibleNext = true
+            }
+        }
+        .onAppear {
+            if viewModel.selectedEducationIndex != nil {
+                possibleNext = true
+            }
         }
     }
     
@@ -57,7 +64,7 @@ struct EducationSelectView: View {
     @ViewBuilder var selectedEducationButtons: some View {
         VStack(content: {
             ForEach(0..<6, id: \.self) { index in
-                makeEducationButton(items[index], index)
+                makeEducationButton(viewModel.education[index], index)
             }
         })
         
@@ -65,7 +72,7 @@ struct EducationSelectView: View {
     
     func makeEducationButton(_ text: String, _ index: Int) -> some View {
         return Button {
-            possibleNext = true
+            
             for idx in 0..<viewModel.isEducationButtonSelected.count {
                 if idx == index {
                     viewModel.isEducationButtonSelected[idx] = true

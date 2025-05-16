@@ -27,7 +27,14 @@ struct JobDetailInputView: View {
             jobInputView
             Spacer()
             Button(action: {
-                appState.onboardingPath.append(Onboarding.susceptible)
+                Task {
+                    let job = viewModel.makeJobString()
+                    let result = await viewModel.updateUserProfileData(updateType: .job, data: job)
+                    if result {
+                        appState.onboardingPath.append(Onboarding.susceptible)
+                    }
+                }
+                
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })

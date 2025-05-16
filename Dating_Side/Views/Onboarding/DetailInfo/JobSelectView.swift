@@ -15,7 +15,7 @@ struct JobSelectView: View {
             GridItem(.flexible()),
             GridItem(.flexible())
         ]
-    let items = ["전문직/기업", "연구/교육", "IT/개발", "의료/복지", "디자인/크리에이티브", "미디어/예술", "금융/법률", "영업/서비스", "기술/생산", "은퇴", "아직 학생이에요", "기타"]
+    
     @State var possibleNext: Bool = false
     
     var body: some View {
@@ -57,7 +57,7 @@ struct JobSelectView: View {
     
     var gridView: some View {
         LazyVGrid(columns: columns, spacing: 10, content: {
-            ForEach(Array(items.enumerated()), id: \.element) { (index, item) in
+            ForEach(Array(viewModel.jobItmes.enumerated()), id: \.element) { (index, item) in
                 selectBtn(item, index)
             }
         })
@@ -67,8 +67,15 @@ struct JobSelectView: View {
     
     func selectBtn(_ word: String, _ index: Int) -> some View {
         return Button(action: {
-            viewModel.isJobButtonSelected[index].toggle()
             possibleNext = true;
+            for idx in 0..<viewModel.jobItmes.count {
+                if idx == index {
+                    viewModel.isJobButtonSelected[idx] = true
+                } else {
+                    viewModel.isJobButtonSelected[idx] = false
+                }
+                viewModel.selectedJobIndex = index
+            }
         }, label: { SelectButtonLabel(isSelected: $viewModel.isJobButtonSelected[index], height: 52, text: word, backgroundColor: .white, selectedBackgroundColor: .subColor, selectedTextColor: .black ,cornerRounded: 6, strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2, strokeBorderLineColor: .gray01, selectedStrokeBorderColor: .mainColor) })
     }
 }

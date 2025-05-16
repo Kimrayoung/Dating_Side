@@ -33,9 +33,16 @@ struct BirthInputView: View {
             Spacer()
             Button(action: {
                 hideKeyboard()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    appState.onboardingPath.append(Onboarding.height)
+                Task {
+                    let birthDate = viewModel.makeBirthDate()
+                    let result = await viewModel.updateUserProfileData(updateType: .birth, data: birthDate)
+                    if result {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            appState.onboardingPath.append(Onboarding.height)
+                        }
+                    }
                 }
+                
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -51,7 +58,14 @@ struct BirthInputView: View {
 //                CustomRounedGradientProgressBar(currentScreen: 2, total: onboardingPageCnt)
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
-                Image("navigationBackBtn")
+                Button {
+                    hideKeyboard()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                        appState.onboardingPath.removeLast()
+                    })
+                } label: {
+                    Image("navigationBackBtn")
+                }
             }
         })
     }

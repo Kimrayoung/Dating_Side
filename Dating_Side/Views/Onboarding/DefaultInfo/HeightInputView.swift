@@ -34,6 +34,7 @@ struct HeightInputView: View {
             Button(action: {
                 hideKeyboard()
                 showBottomModal = true
+                
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -161,7 +162,13 @@ struct HeightInputView: View {
     var correctButton: some View {
         Button(action: {
             showBottomModal = false
-            appState.onboardingPath.append(Onboarding.locationSelect)
+            Task {
+                let height = viewModel.makeHeight()
+                let result = await viewModel.updateUserProfileData(updateType: .height, data: height)
+                if result {
+                    appState.onboardingPath.append(Onboarding.locationSelect)
+                }
+            }
         }, label: {
             Text("맞아요")
                 .foregroundStyle(Color.white)
