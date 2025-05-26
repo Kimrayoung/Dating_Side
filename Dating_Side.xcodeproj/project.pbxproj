@@ -11,6 +11,9 @@
 		4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE42DA6B47F006206F1 /* Login.swift */; };
 		4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE62DA6B957006206F1 /* LoginView.swift */; };
 		4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */; };
+		4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */; };
+		4D3AD6E62DE4A99B00436A4B /* ProflieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */; };
+		4D3AD6E82DE4AA2600436A4B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E72DE4AA2600436A4B /* Profile.swift */; };
 		4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D40568D2D64B65300F95ACF /* LocationSelectView.swift */; };
 		4D4056902D64D20800F95ACF /* LoveKeywordSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */; };
 		4D4056922D66160500F95ACF /* UserProfileInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4056912D66160500F95ACF /* UserProfileInputView.swift */; };
@@ -55,6 +58,8 @@
 		4D95FAEA2D5A1DEF00D0E4D7 /* Dating_SideUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FAE92D5A1DEF00D0E4D7 /* Dating_SideUITests.swift */; };
 		4D95FAEC2D5A1DEF00D0E4D7 /* Dating_SideUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FAEB2D5A1DEF00D0E4D7 /* Dating_SideUITestsLaunchTests.swift */; };
 		4D95FAF92D5A255E00D0E4D7 /* SelectButtonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FAF82D5A255E00D0E4D7 /* SelectButtonLabel.swift */; };
+		4DB5827B2DDB4F87001952D0 /* ChatProfileAddImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5827A2DDB4F87001952D0 /* ChatProfileAddImageView.swift */; };
+		4DB5827D2DDB5B86001952D0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5827C2DDB5B86001952D0 /* ProfileView.swift */; };
 		4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */; };
 		4DB5B3152D903B220060D4C6 /* JobSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3142D903B220060D4C6 /* JobSelectView.swift */; };
 		4DB5B3172D903D600060D4C6 /* JobDetailInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3162D903D600060D4C6 /* JobDetailInputView.swift */; };
@@ -98,6 +103,9 @@
 		4D0B3BE42DA6B47F006206F1 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		4D0B3BE62DA6B957006206F1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericDigitTextField.swift; sourceTree = "<group>"; };
+		4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValuesListView.swift; sourceTree = "<group>"; };
+		4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProflieViewModel.swift; sourceTree = "<group>"; };
+		4D3AD6E72DE4AA2600436A4B /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		4D40568D2D64B65300F95ACF /* LocationSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectView.swift; sourceTree = "<group>"; };
 		4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveKeywordSelectView.swift; sourceTree = "<group>"; };
 		4D4056912D66160500F95ACF /* UserProfileInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileInputView.swift; sourceTree = "<group>"; };
@@ -146,6 +154,8 @@
 		4D95FAE92D5A1DEF00D0E4D7 /* Dating_SideUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dating_SideUITests.swift; sourceTree = "<group>"; };
 		4D95FAEB2D5A1DEF00D0E4D7 /* Dating_SideUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dating_SideUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4D95FAF82D5A255E00D0E4D7 /* SelectButtonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectButtonLabel.swift; sourceTree = "<group>"; };
+		4DB5827A2DDB4F87001952D0 /* ChatProfileAddImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProfileAddImageView.swift; sourceTree = "<group>"; };
+		4DB5827C2DDB5B86001952D0 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolNameInputView.swift; sourceTree = "<group>"; };
 		4DB5B3142D903B220060D4C6 /* JobSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobSelectView.swift; sourceTree = "<group>"; };
 		4DB5B3162D903D600060D4C6 /* JobDetailInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobDetailInputView.swift; sourceTree = "<group>"; };
@@ -196,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				4D443BA12DCB954F00F4B9EB /* ChatProfileImageView.swift */,
+				4DB5827A2DDB4F87001952D0 /* ChatProfileAddImageView.swift */,
 			);
 			path = ImageOnboarding;
 			sourceTree = "<group>";
@@ -205,6 +216,8 @@
 			children = (
 				4D6119562D75B20B00715B9E /* ChatView.swift */,
 				4D6119582D75B21E00715B9E /* SettingView.swift */,
+				4DB5827C2DDB5B86001952D0 /* ProfileView.swift */,
+				4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -217,6 +230,7 @@
 				4D0B3BE22DA6B05D006206F1 /* LoginNetworkManager.swift */,
 				4D443B9A2DCB85C600F4B9EB /* OnboardingNetworkManager.swift */,
 				4D443BA32DCB957C00F4B9EB /* ImageOnboardingViewModel.swift */,
+				4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -304,6 +318,7 @@
 				4DCB1A652D759FF300676BCE /* Global.swift */,
 				4D0B3BE42DA6B47F006206F1 /* Login.swift */,
 				4D443BA62DCBA34000F4B9EB /* Onboarding.swift */,
+				4D3AD6E72DE4AA2600436A4B /* Profile.swift */,
 			);
 			path = Datas;
 			sourceTree = "<group>";
@@ -579,6 +594,7 @@
 				4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */,
 				4DD577582D7EC638001B0ED5 /* LoginViewModel.swift in Sources */,
 				4D6119522D75AA8700715B9E /* UnitLabel.swift in Sources */,
+				4D3AD6E62DE4A99B00436A4B /* ProflieViewModel.swift in Sources */,
 				4DCB1A662D759FF300676BCE /* Global.swift in Sources */,
 				4D6119572D75B20B00715B9E /* ChatView.swift in Sources */,
 				4D6119502D75AA2900715B9E /* BirthTextField.swift in Sources */,
@@ -586,6 +602,7 @@
 				4D61196A2D75EFC900715B9E /* EducationSelectView.swift in Sources */,
 				4D443BAB2DCCE15F00F4B9EB /* KeychainManager.swift in Sources */,
 				4DD577562D7EC5A8001B0ED5 /* LoginField.swift in Sources */,
+				4DB5827B2DDB4F87001952D0 /* ChatProfileAddImageView.swift in Sources */,
 				4D95FAD12D5A1DED00D0E4D7 /* ContentView.swift in Sources */,
 				4D6D186E2D63540900698E5D /* Path.swift in Sources */,
 				4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */,
@@ -621,13 +638,16 @@
 				4DF329DF2D871A3D00DBB823 /* BirthInputView.swift in Sources */,
 				4DD577542D7EBB4E001B0ED5 /* SusceptibleInfoView.swift in Sources */,
 				4D6119542D75B0EB00715B9E /* AppState.swift in Sources */,
+				4D3AD6E82DE4AA2600436A4B /* Profile.swift in Sources */,
 				4D6D18702D63564000698E5D /* NavigationProtocol.swift in Sources */,
+				4DB5827D2DDB5B86001952D0 /* ProfileView.swift in Sources */,
 				4D61195F2D75B2F500715B9E /* PhoneNumberView.swift in Sources */,
 				4D4056902D64D20800F95ACF /* LoveKeywordSelectView.swift in Sources */,
 				4D6D18722D63568000698E5D /* Navigation.swift in Sources */,
 				4D95FAF92D5A255E00D0E4D7 /* SelectButtonLabel.swift in Sources */,
 				4D6D186C2D6353E600698E5D /* Service.swift in Sources */,
 				4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */,
+				4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */,
 				4D61195D2D75B2A300715B9E /* OnboardingContainerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

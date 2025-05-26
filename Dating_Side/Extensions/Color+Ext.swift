@@ -38,8 +38,12 @@ extension Color {
     static let mainColor = Color(hex: "#769AFF")
     /// #EAEFFD
     static let subColor = Color(hex: "#EAEFFD")
+    /// #DAE4FF
+    static let subColor1 = Color(hex: "#DAE4FF")
     /// #121212
     static let blackColor = Color(hex: "#121212")
+    /// #FDFDFF
+    static let whiteColor = Color(hex: "#FDFDFF")
     /// #656B79
     static let gray3 = Color(hex: "#656B79")
     /// #828282

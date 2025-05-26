@@ -15,6 +15,7 @@ struct GenderSelectView: View {
     @State private var possibleNext: Bool = true
     @State private var showAlert: Bool = false
     let genderOption = ["여자", "남자"]
+    
     var body: some View {
         VStack(spacing: 0, content: {
             CustomRounedGradientProgressBar(currentScreen: 1, total: onboardingPageCnt)
