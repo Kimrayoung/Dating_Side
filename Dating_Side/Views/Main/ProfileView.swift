@@ -12,6 +12,9 @@ struct ProfileView: View {
     @State private var showAlert: Bool = false
     var body: some View {
         VStack(spacing: 16) {
+            Text("프로필")
+                .font(.pixel(16))
+                .padding(.top, 20)
             profile
             manner
             ScrollView(.horizontal) {

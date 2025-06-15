@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D0122A12DEC812E003E72B0 /* MathcingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0122A02DEC812E003E72B0 /* MathcingView.swift */; };
+		4D0122A52DEC90B4003E72B0 /* WriteAnswerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0122A42DEC90B4003E72B0 /* WriteAnswerView.swift */; };
 		4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE22DA6B05D006206F1 /* LoginNetworkManager.swift */; };
 		4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE42DA6B47F006206F1 /* Login.swift */; };
 		4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE62DA6B957006206F1 /* LoginView.swift */; };
@@ -79,6 +81,11 @@
 		4DF329E72D87EAE100DBB823 /* WelcomeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329E62D87EAE100DBB823 /* WelcomeText.swift */; };
 		4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329E82D87ED5300DBB823 /* LoginCotainerView.swift */; };
 		4DF329EC2D87EEE200DBB823 /* VerificationNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329EB2D87EEE200DBB823 /* VerificationNumber.swift */; };
+		4DF855752DFEE5AF00D429F6 /* MatchingCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF855742DFEE5AF00D429F6 /* MatchingCompleteView.swift */; };
+		4DF855772DFEEF6B00D429F6 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF855762DFEEF6B00D429F6 /* BottomSheet.swift */; };
+		4DF855792DFF03C200D429F6 /* MatchingFailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF855782DFF03C200D429F6 /* MatchingFailView.swift */; };
+		4DF8557B2DFF04D200D429F6 /* ProfileMiniView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF8557A2DFF04D200D429F6 /* ProfileMiniView.swift */; };
+		4DF8557F2DFF0C4300D429F6 /* secondMathcingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF8557E2DFF0C4300D429F6 /* secondMathcingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +106,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4D0122A02DEC812E003E72B0 /* MathcingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathcingView.swift; sourceTree = "<group>"; };
+		4D0122A42DEC90B4003E72B0 /* WriteAnswerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteAnswerView.swift; sourceTree = "<group>"; };
 		4D0B3BE22DA6B05D006206F1 /* LoginNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetworkManager.swift; sourceTree = "<group>"; };
 		4D0B3BE42DA6B47F006206F1 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		4D0B3BE62DA6B957006206F1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -175,6 +184,12 @@
 		4DF329E62D87EAE100DBB823 /* WelcomeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeText.swift; sourceTree = "<group>"; };
 		4DF329E82D87ED5300DBB823 /* LoginCotainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCotainerView.swift; sourceTree = "<group>"; };
 		4DF329EB2D87EEE200DBB823 /* VerificationNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationNumber.swift; sourceTree = "<group>"; };
+		4DF855732DF71D1E00D429F6 /* Dating_Side.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dating_Side.entitlements; sourceTree = "<group>"; };
+		4DF855742DFEE5AF00D429F6 /* MatchingCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingCompleteView.swift; sourceTree = "<group>"; };
+		4DF855762DFEEF6B00D429F6 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
+		4DF855782DFF03C200D429F6 /* MatchingFailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingFailView.swift; sourceTree = "<group>"; };
+		4DF8557A2DFF04D200D429F6 /* ProfileMiniView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMiniView.swift; sourceTree = "<group>"; };
+		4DF8557E2DFF0C4300D429F6 /* secondMathcingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secondMathcingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +233,13 @@
 				4D6119582D75B21E00715B9E /* SettingView.swift */,
 				4DB5827C2DDB5B86001952D0 /* ProfileView.swift */,
 				4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */,
+				4D0122A02DEC812E003E72B0 /* MathcingView.swift */,
+				4D0122A42DEC90B4003E72B0 /* WriteAnswerView.swift */,
+				4DF855742DFEE5AF00D429F6 /* MatchingCompleteView.swift */,
+				4DF855782DFF03C200D429F6 /* MatchingFailView.swift */,
+				4DF8557E2DFF0C4300D429F6 /* secondMathcingView.swift */,
+				4DF855762DFEEF6B00D429F6 /* BottomSheet.swift */,
+				4DF8557A2DFF04D200D429F6 /* ProfileMiniView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -400,6 +422,7 @@
 		4D95FACD2D5A1DED00D0E4D7 /* Dating_Side */ = {
 			isa = PBXGroup;
 			children = (
+				4DF855732DF71D1E00D429F6 /* Dating_Side.entitlements */,
 				4D6119602D75CC8000715B9E /* ViewModel */,
 				4D6D187D2D6359A300698E5D /* Views */,
 				4D6D18682D63436700698E5D /* Dating-Side-Info.plist */,
@@ -605,6 +628,7 @@
 				4DB5827B2DDB4F87001952D0 /* ChatProfileAddImageView.swift in Sources */,
 				4D95FAD12D5A1DED00D0E4D7 /* ContentView.swift in Sources */,
 				4D6D186E2D63540900698E5D /* Path.swift in Sources */,
+				4D0122A52DEC90B4003E72B0 /* WriteAnswerView.swift in Sources */,
 				4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */,
 				4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */,
 				4D443B9B2DCB85C600F4B9EB /* OnboardingNetworkManager.swift in Sources */,
@@ -612,7 +636,9 @@
 				4D443BA42DCB957C00F4B9EB /* ImageOnboardingViewModel.swift in Sources */,
 				4DF329E72D87EAE100DBB823 /* WelcomeText.swift in Sources */,
 				4D443BA22DCB954F00F4B9EB /* ChatProfileImageView.swift in Sources */,
+				4DF8557B2DFF04D200D429F6 /* ProfileMiniView.swift in Sources */,
 				4D6D18772D6358A700698E5D /* NetworkManager.swift in Sources */,
+				4DF8557F2DFF0C4300D429F6 /* secondMathcingView.swift in Sources */,
 				4D6D185B2D63408F00698E5D /* Color+Ext.swift in Sources */,
 				4DF329DB2D87170300DBB823 /* NicknameInputView.swift in Sources */,
 				4DF329EC2D87EEE200DBB823 /* VerificationNumber.swift in Sources */,
@@ -620,6 +646,7 @@
 				4D61195B2D75B24300715B9E /* MainContainerView.swift in Sources */,
 				4D6D187B2D6358EE00698E5D /* Error.swift in Sources */,
 				4DCB70582DA80C10006C120C /* OneDigitTextField.swift in Sources */,
+				4DF855792DFF03C200D429F6 /* MatchingFailView.swift in Sources */,
 				4D6D18792D6358C700698E5D /* APIManager.swift in Sources */,
 				4D4056922D66160500F95ACF /* UserProfileInputView.swift in Sources */,
 				4DB5B3152D903B220060D4C6 /* JobSelectView.swift in Sources */,
@@ -637,9 +664,11 @@
 				4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */,
 				4DF329DF2D871A3D00DBB823 /* BirthInputView.swift in Sources */,
 				4DD577542D7EBB4E001B0ED5 /* SusceptibleInfoView.swift in Sources */,
+				4D0122A12DEC812E003E72B0 /* MathcingView.swift in Sources */,
 				4D6119542D75B0EB00715B9E /* AppState.swift in Sources */,
 				4D3AD6E82DE4AA2600436A4B /* Profile.swift in Sources */,
 				4D6D18702D63564000698E5D /* NavigationProtocol.swift in Sources */,
+				4DF855752DFEE5AF00D429F6 /* MatchingCompleteView.swift in Sources */,
 				4DB5827D2DDB5B86001952D0 /* ProfileView.swift in Sources */,
 				4D61195F2D75B2F500715B9E /* PhoneNumberView.swift in Sources */,
 				4D4056902D64D20800F95ACF /* LoveKeywordSelectView.swift in Sources */,
@@ -649,6 +678,7 @@
 				4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */,
 				4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */,
 				4D61195D2D75B2A300715B9E /* OnboardingContainerView.swift in Sources */,
+				4DF855772DFEEF6B00D429F6 /* BottomSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,7 +767,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -794,7 +824,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -809,6 +839,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Dating_Side/Dating_Side.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Dating_Side/Preview Content\"";
@@ -821,12 +852,13 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rayoung.Dating-Side";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -839,6 +871,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Dating_Side/Dating_Side.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Dating_Side/Preview Content\"";
@@ -851,12 +884,13 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rayoung.Dating-Side";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

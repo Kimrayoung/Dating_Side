@@ -73,10 +73,10 @@ struct ChatProfileImageView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.black, lineWidth: 1)
         }
-        .photosPicker(isPresented: $viewModel.isImagePickerPresented, selection: $viewModel.selectedPickerImage, matching: .images)
-        .onChange(of: viewModel.selectedPickerImage) {
+        .onChange(of: viewModel.selectedPickerImage, {
             viewModel.loadSelectedImage()
-        }
+        })
+        
         .onChange(of: viewModel.selectedImage) {
             if viewModel.selectedImage != nil {
                 possibleNext = true
