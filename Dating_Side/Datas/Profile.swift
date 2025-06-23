@@ -10,3 +10,9 @@ import Foundation
 struct ValueData: Hashable, Codable {
     let text: String
 }
+
+struct TomeUserProfile: Hashable, Codable {
+    let userName: String
+    let userImage: String
+    let userType: String
+}

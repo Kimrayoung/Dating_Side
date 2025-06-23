@@ -25,7 +25,7 @@ struct MatchingFailView: View {
                 .font(.pixel(12))
                 .foregroundStyle(Color.whiteColor)
             Spacer()
-            ProfileMiniView(isDefault: true)
+            ProfileMiniView(isDefault: true, userImageURL: nil  )
                 .clipShape(RoundedRectangle(cornerRadius: 8.85))
                 .frame(width: 180, height: 180)
             Spacer()

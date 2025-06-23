@@ -13,6 +13,8 @@
 		4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE42DA6B47F006206F1 /* Login.swift */; };
 		4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE62DA6B957006206F1 /* LoginView.swift */; };
 		4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */; };
+		4D33EA172E09720100B2661B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4D33EA162E09720100B2661B /* Kingfisher */; };
+		4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D33EA182E0995B600B2661B /* ChatListViewModel.swift */; };
 		4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */; };
 		4D3AD6E62DE4A99B00436A4B /* ProflieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */; };
 		4D3AD6E82DE4AA2600436A4B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E72DE4AA2600436A4B /* Profile.swift */; };
@@ -29,7 +31,7 @@
 		4D6119502D75AA2900715B9E /* BirthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D61194F2D75AA2900715B9E /* BirthTextField.swift */; };
 		4D6119522D75AA8700715B9E /* UnitLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119512D75AA8700715B9E /* UnitLabel.swift */; };
 		4D6119542D75B0EB00715B9E /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119532D75B0EB00715B9E /* AppState.swift */; };
-		4D6119572D75B20B00715B9E /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119562D75B20B00715B9E /* ChatView.swift */; };
+		4D6119572D75B20B00715B9E /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119562D75B20B00715B9E /* ChatListView.swift */; };
 		4D6119592D75B21E00715B9E /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119582D75B21E00715B9E /* SettingView.swift */; };
 		4D61195B2D75B24300715B9E /* MainContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D61195A2D75B24300715B9E /* MainContainerView.swift */; };
 		4D61195D2D75B2A300715B9E /* OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D61195C2D75B2A300715B9E /* OnboardingContainerView.swift */; };
@@ -112,6 +114,7 @@
 		4D0B3BE42DA6B47F006206F1 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		4D0B3BE62DA6B957006206F1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericDigitTextField.swift; sourceTree = "<group>"; };
+		4D33EA182E0995B600B2661B /* ChatListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
 		4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValuesListView.swift; sourceTree = "<group>"; };
 		4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProflieViewModel.swift; sourceTree = "<group>"; };
 		4D3AD6E72DE4AA2600436A4B /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
@@ -128,7 +131,7 @@
 		4D61194F2D75AA2900715B9E /* BirthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthTextField.swift; sourceTree = "<group>"; };
 		4D6119512D75AA8700715B9E /* UnitLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitLabel.swift; sourceTree = "<group>"; };
 		4D6119532D75B0EB00715B9E /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		4D6119562D75B20B00715B9E /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		4D6119562D75B20B00715B9E /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		4D6119582D75B21E00715B9E /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		4D61195A2D75B24300715B9E /* MainContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContainerView.swift; sourceTree = "<group>"; };
 		4D61195C2D75B2A300715B9E /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerView.swift; sourceTree = "<group>"; };
@@ -197,6 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D33EA172E09720100B2661B /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,7 +233,7 @@
 		4D6119552D75B1FE00715B9E /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				4D6119562D75B20B00715B9E /* ChatView.swift */,
+				4D6119562D75B20B00715B9E /* ChatListView.swift */,
 				4D6119582D75B21E00715B9E /* SettingView.swift */,
 				4DB5827C2DDB5B86001952D0 /* ProfileView.swift */,
 				4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */,
@@ -253,6 +257,7 @@
 				4D443B9A2DCB85C600F4B9EB /* OnboardingNetworkManager.swift */,
 				4D443BA32DCB957C00F4B9EB /* ImageOnboardingViewModel.swift */,
 				4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */,
+				4D33EA182E0995B600B2661B /* ChatListViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -491,6 +496,9 @@
 			dependencies = (
 			);
 			name = Dating_Side;
+			packageProductDependencies = (
+				4D33EA162E09720100B2661B /* Kingfisher */,
+			);
 			productName = Dating_Side;
 			productReference = 4D95FACB2D5A1DED00D0E4D7 /* Dating_Side.app */;
 			productType = "com.apple.product-type.application";
@@ -563,6 +571,9 @@
 				Base,
 			);
 			mainGroup = 4D95FAC22D5A1DED00D0E4D7;
+			packageReferences = (
+				4D33EA152E09720100B2661B /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = 4D95FACC2D5A1DED00D0E4D7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -619,7 +630,7 @@
 				4D6119522D75AA8700715B9E /* UnitLabel.swift in Sources */,
 				4D3AD6E62DE4A99B00436A4B /* ProflieViewModel.swift in Sources */,
 				4DCB1A662D759FF300676BCE /* Global.swift in Sources */,
-				4D6119572D75B20B00715B9E /* ChatView.swift in Sources */,
+				4D6119572D75B20B00715B9E /* ChatListView.swift in Sources */,
 				4D6119502D75AA2900715B9E /* BirthTextField.swift in Sources */,
 				4D6119592D75B21E00715B9E /* SettingView.swift in Sources */,
 				4D61196A2D75EFC900715B9E /* EducationSelectView.swift in Sources */,
@@ -630,6 +641,7 @@
 				4D6D186E2D63540900698E5D /* Path.swift in Sources */,
 				4D0122A52DEC90B4003E72B0 /* WriteAnswerView.swift in Sources */,
 				4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */,
+				4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */,
 				4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */,
 				4D443B9B2DCB85C600F4B9EB /* OnboardingNetworkManager.swift in Sources */,
 				4D443BA92DCBAB6A00F4B9EB /* Codable+Ext.swift in Sources */,
@@ -1014,6 +1026,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4D33EA152E09720100B2661B /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4D33EA162E09720100B2661B /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D33EA152E09720100B2661B /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4D95FAC32D5A1DED00D0E4D7 /* Project object */;
 }

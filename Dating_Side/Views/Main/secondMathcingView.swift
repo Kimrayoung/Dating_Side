@@ -18,7 +18,7 @@ struct secondMathcingView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 6)
             Spacer()
-            ProfileMiniView(isDefault: false)
+            ProfileMiniView(isDefault: false, userImageURL: "https://picsum.photos/200/300", userName: "운명의 상대", userType: "따뜻한 연애")
                 .clipShape(RoundedRectangle(cornerRadius: 8.85))
                 .frame(width: 180, height: 180)
                 .onTapGesture {
