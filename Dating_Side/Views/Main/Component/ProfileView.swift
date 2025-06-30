@@ -10,6 +10,8 @@ import SwiftUI
 struct ProfileView: View {
     @State var selfIntroduceText: String = ""
     @State private var showAlert: Bool = false
+    var showButtonStack: Bool
+    
     var body: some View {
         VStack(spacing: 16) {
             Text("프로필")
@@ -26,11 +28,14 @@ struct ProfileView: View {
             .padding(.horizontal, 24)
             valuesProfileInfo
             selfTextView
-            HStack(spacing: 5, content: {
-                skipButton
-                okButton
-            })
-            .padding(.horizontal, 24)
+            if showButtonStack {
+                HStack(spacing: 5, content: {
+                    skipButton
+                    okButton
+                })
+                .padding(.horizontal, 24)
+            }
+            
         }
         .customAlert(isPresented: $showAlert, title: "이 분을 영영 볼 수 없어도 괜찮나요?", message: "대화 해보면 잘 맞을지도 몰라요", primaryButtonText: "다시 봐볼게요", primaryButtonAction: {}, secondaryButtonText: "괜찮아요", secondaryButtonAction: {})
     }
@@ -176,6 +181,7 @@ struct ProfileView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(Color.gray, lineWidth: 1)
                 )
+                .frame(height: 200)
         })
         .padding(.horizontal, 24)
     }
@@ -210,5 +216,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(showButtonStack: false)
 }

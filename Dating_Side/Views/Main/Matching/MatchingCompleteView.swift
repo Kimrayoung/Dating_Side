@@ -37,7 +37,7 @@ struct MatchingCompleteView: View {
                 .sheet(isPresented: $showModal, onDismiss: {
                     bottomSheetStartHeight = 0.45
                 }, content: {
-                    ProfileView()
+                    ProfileView(showButtonStack: true)
                         .presentationDetents([.fraction(0.99)])
                         .presentationCornerRadius(10)
                         .presentationDragIndicator(.visible)

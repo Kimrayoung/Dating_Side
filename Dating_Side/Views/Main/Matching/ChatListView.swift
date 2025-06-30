@@ -42,6 +42,7 @@ struct ChatListView: View {
         })
     }
     
+    // 내가 다가간 사람
     var formme: some View {
         VStack(content: {
             Text("내가 다가간 사람")
@@ -50,16 +51,18 @@ struct ChatListView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             if existFromme {
                 simpleProfile
+                    .padding(.vertical, 17)
             } else {
                 Text("아직 다가간 사람이 없어요")
                     .font(.pixel(16))
                     .foregroundStyle(Color.gray01)
                     .frame(height: 106, alignment: .center)
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, 17)
             }
         })
         .padding(.horizontal, 24)
-        .frame(height: 106)
+        
     }
     
     
@@ -125,6 +128,7 @@ struct ChatListView: View {
             ProfileMiniView(isDefault: false, userImageURL: imageUrl, userName: profileName, userType: userType)
         })
     }
+    
 }
 
 #Preview {

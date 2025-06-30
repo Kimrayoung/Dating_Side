@@ -12,7 +12,7 @@ struct MainContainerView: View {
     
     var body: some View {
         NavigationStack(path: $appState.mainPath) {
-            ChatListView()
+            ChatingView()
         }
     }
 }
