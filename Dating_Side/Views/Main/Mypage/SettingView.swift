@@ -15,7 +15,8 @@ struct MyPageView: View {
     var body: some View {
         ScrollView {
             VStack {
-                ProfileView(selfIntroduceText: selfIntroductText, showButtonStack: false)
+                #warning("MainPath생성할떄 ProfileViewModel 추가")
+                ProfileView(showProfileViewType: .myPage)
                 photoView
             }
         }

@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject private var appState: AppState
     @State var selfIntroduceText: String = ""
-    @State private var showAlert: Bool = false
-    var showButtonStack: Bool
+    var showProfileViewType: ShowProfileViewType
     
     var body: some View {
         VStack(spacing: 16) {
@@ -28,16 +28,8 @@ struct ProfileView: View {
             .padding(.horizontal, 24)
             valuesProfileInfo
             selfTextView
-            if showButtonStack {
-                HStack(spacing: 5, content: {
-                    skipButton
-                    okButton
-                })
-                .padding(.horizontal, 24)
-            }
-            
         }
-        .customAlert(isPresented: $showAlert, title: "이 분을 영영 볼 수 없어도 괜찮나요?", message: "대화 해보면 잘 맞을지도 몰라요", primaryButtonText: "다시 봐볼게요", primaryButtonAction: {}, secondaryButtonText: "괜찮아요", secondaryButtonAction: {})
+        
     }
     
     var profile: some View {
@@ -132,21 +124,25 @@ struct ProfileView: View {
             HStack {
                 Button {
                     print(#fileID, #function, #line, "- 연애관으로 이동")
+                    profilePathCheck(valueType: .couple)
                 } label: {
                    makeValueProfileView(imageString: "loveView", text: "연애")
                 }
                 Button {
-                    print(#fileID, #function, #line, "- 연애관으로 이동")
+                    print(#fileID, #function, #line, "- 결혼관으로 이동")
+                    profilePathCheck(valueType: .marry)
                 } label: {
                     makeValueProfileView(imageString: "marryView", text: "결혼")
                 }
                 Button {
-                    print(#fileID, #function, #line, "- 연애관으로 이동")
+                    print(#fileID, #function, #line, "- 직장관으로 이동")
+                    profilePathCheck(valueType: .company)
                 } label: {
                     makeValueProfileView(imageString: "workView", text: "직장")
                 }
                 Button {
-                    print(#fileID, #function, #line, "- 연애관으로 이동")
+                    print(#fileID, #function, #line, "- 생활관으로 이동")
+                    profilePathCheck(valueType: .life)
                 } label: {
                     makeValueProfileView(imageString: "lifeView", text: "생활")
                 }
@@ -168,6 +164,12 @@ struct ProfileView: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
     
+    func profilePathCheck(valueType: ProfileValueType) {
+        if showProfileViewType == .chat {
+            appState.onChatProfilePath.append(OnChatProfilePath.profileValueList(valueType: valueType))
+        }
+    }
+    
     var selfTextView: some View {
         VStack(content: {
             Text("자기소개")
@@ -186,35 +188,9 @@ struct ProfileView: View {
         .padding(.horizontal, 24)
     }
     
-    var skipButton: some View {
-        Button(action: {
-            showAlert = true
-        }, label: {
-            Text("좋은 인연 만나세요")
-                .font(.pixel(16))
-                .foregroundStyle(Color.gray3)
-                .frame(height: 48)
-                .frame(maxWidth: .infinity)
-                .background(Color.gray0)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-        })
-    }
     
-    var okButton: some View {
-        Button(action: {
-            
-        }, label: {
-            Text("대화 해볼래요")
-                .font(.pixel(16))
-                .foregroundStyle(Color.whiteColor)
-                .frame(height: 48)
-                .frame(maxWidth: .infinity)
-                .background(Color.mainColor)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-        })
-    }
 }
 
 #Preview {
-    ProfileView(showButtonStack: false)
+    ProfileView(showProfileViewType: .chat)
 }

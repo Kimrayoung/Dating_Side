@@ -97,6 +97,8 @@
 		4DFAFB932E12C7D7006E3B5F /* ArrowNextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFAFB922E12C7D7006E3B5F /* ArrowNextRow.swift */; };
 		4DFAFB952E12C884006E3B5F /* ProflieEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFAFB942E12C884006E3B5F /* ProflieEditView.swift */; };
 		4DFAFB972E12CB63006E3B5F /* AccoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFAFB962E12CB63006E3B5F /* AccoutView.swift */; };
+		4DFAFB9A2E1435AF006E3B5F /* Tempchat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFAFB992E1435AF006E3B5F /* Tempchat.swift */; };
+		4DFAFB9E2E1571E7006E3B5F /* OnChatProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFAFB9D2E1571E7006E3B5F /* OnChatProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -211,6 +213,8 @@
 		4DFAFB922E12C7D7006E3B5F /* ArrowNextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowNextRow.swift; sourceTree = "<group>"; };
 		4DFAFB942E12C884006E3B5F /* ProflieEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProflieEditView.swift; sourceTree = "<group>"; };
 		4DFAFB962E12CB63006E3B5F /* AccoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccoutView.swift; sourceTree = "<group>"; };
+		4DFAFB992E1435AF006E3B5F /* Tempchat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tempchat.swift; sourceTree = "<group>"; };
+		4DFAFB9D2E1571E7006E3B5F /* OnChatProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnChatProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -251,11 +255,10 @@
 		4D6119552D75B1FE00715B9E /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				4DEB5A742E0C296C009BE55B /* Component */,
+				4DFAFB982E142B3B006E3B5F /* Chat */,
+				4DEB5A742E0C296C009BE55B /* Profile */,
 				4DEB5A732E0C294B009BE55B /* Mypage */,
 				4DEB5A722E0C2929009BE55B /* Matching */,
-				4DDF23632E0C29CB006A0096 /* ChatingView.swift */,
-				4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -509,7 +512,7 @@
 			path = Mypage;
 			sourceTree = "<group>";
 		};
-		4DEB5A742E0C296C009BE55B /* Component */ = {
+		4DEB5A742E0C296C009BE55B /* Profile */ = {
 			isa = PBXGroup;
 			children = (
 				4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */,
@@ -518,7 +521,7 @@
 				4DB5827C2DDB5B86001952D0 /* ProfileView.swift */,
 				4DF8557A2DFF04D200D429F6 /* ProfileMiniView.swift */,
 			);
-			path = Component;
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		4DF329EA2D87EEC900DBB823 /* Login */ = {
@@ -529,6 +532,17 @@
 				4D0B3BE62DA6B957006206F1 /* LoginView.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		4DFAFB982E142B3B006E3B5F /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				4DDF23632E0C29CB006A0096 /* ChatingView.swift */,
+				4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */,
+				4DFAFB992E1435AF006E3B5F /* Tempchat.swift */,
+				4DFAFB9D2E1571E7006E3B5F /* OnChatProfileView.swift */,
+			);
+			path = Chat;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -702,6 +716,7 @@
 				4D443BA42DCB957C00F4B9EB /* ImageOnboardingViewModel.swift in Sources */,
 				4DF329E72D87EAE100DBB823 /* WelcomeText.swift in Sources */,
 				4D443BA22DCB954F00F4B9EB /* ChatProfileImageView.swift in Sources */,
+				4DFAFB9A2E1435AF006E3B5F /* Tempchat.swift in Sources */,
 				4DF8557B2DFF04D200D429F6 /* ProfileMiniView.swift in Sources */,
 				4D6D18772D6358A700698E5D /* NetworkManager.swift in Sources */,
 				4DF8557F2DFF0C4300D429F6 /* secondMathcingView.swift in Sources */,
@@ -724,6 +739,7 @@
 				4DF329DD2D87182600DBB823 /* BottomBorderViewModifier.swift in Sources */,
 				4D443BA72DCBA34000F4B9EB /* Onboarding.swift in Sources */,
 				4D6D18822D637EAF00698E5D /* CustomPicker.swift in Sources */,
+				4DFAFB9E2E1571E7006E3B5F /* OnChatProfileView.swift in Sources */,
 				4DEB5A6D2E0AD412009BE55B /* CoupleMatchingView.swift in Sources */,
 				4D6D186A2D6343B600698E5D /* Font+Ext.swift in Sources */,
 				4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */,

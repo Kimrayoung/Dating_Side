@@ -9,6 +9,7 @@ import SwiftUI
 
 // MARK: - 메시지 버블
 struct MessageBubble: View {
+    @Binding var showProfile: Bool
     let message: ChatMessage
     
     var body: some View {
@@ -21,6 +22,10 @@ struct MessageBubble: View {
                         Image(systemName: "person.fill")
                             .foregroundColor(.gray)
                     )
+                    .onTapGesture {
+                        showProfile.toggle()
+                        
+                    }
                 
             }
             Text(message.text)
@@ -40,12 +45,13 @@ struct MessageBubble: View {
 struct MessageRow: View {
     let message: ChatMessage
     let showTimestamp: Bool
-
+    @Binding var showProfile: Bool
+    
     var body: some View {
         HStack(alignment: .bottom, spacing: 4) {
             if message.isCurrentUser {
                 Spacer()
-                MessageBubble(message: message)
+                MessageBubble(showProfile: $showProfile, message: message)
                     .offset(x: showTimestamp ? -40 : 0)
                     .animation(.easeInOut(duration: 0.2), value: showTimestamp)
 //                    .animation(.easeInOut(duration: 0.2), value: showTimestamp)
@@ -57,7 +63,7 @@ struct MessageRow: View {
                         .padding(.trailing, 4)
                 }
             } else {
-                MessageBubble(message: message)
+                MessageBubble(showProfile: $showProfile, message: message)
                     .offset(x: showTimestamp ? -80 : 0)
                     .animation(.easeInOut(duration: 0.2), value: showTimestamp)
                 Spacer()

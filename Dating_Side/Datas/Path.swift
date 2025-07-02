@@ -5,6 +5,7 @@
 //  Created by 김라영 on 2025/02/17.
 //
 
+/// 앱 처음 들어왔을 때 어떤 뷰 보여줘야 하는지
 enum AppScreen {
     case onboarding
     case login
@@ -24,7 +25,10 @@ enum Onboarding {
     case job
     case jobDetail
     case susceptible
+    /// 채팅 프로필 (프로필 사진, 자기소개)
     case chatProfileImage
+    /// 추가사진
+    case additionalphotos
 }
 
 enum Main {
@@ -38,9 +42,17 @@ enum Login {
     case verificationNumber
 }
 
+
 enum Path {
     case main
     case settingProfile
     case guide
     case myPage
+    case proflile
+}
+
+///채팅방에서 프로필 보기를 했을때의 경로
+enum OnChatProfilePath: Hashable {
+    case profileMain
+    case profileValueList(valueType: ProfileValueType)
 }

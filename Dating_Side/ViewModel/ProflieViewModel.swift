@@ -7,6 +7,6 @@
 
 import Foundation
 
-class ProflieViewModel: ObservableObject {
+class ProfileViewModel: ObservableObject {
     @Published var valueList: [String] = []
 }

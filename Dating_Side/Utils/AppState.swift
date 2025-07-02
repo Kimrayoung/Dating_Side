@@ -17,7 +17,7 @@ class AppState: ObservableObject {
     @Published var mainPath = NavigationPath()
     @Published var onboardingPath = NavigationPath()
     @Published var loginPath = NavigationPath()
-
+    @Published var onChatProfilePath = NavigationPath()
     
     init() {
         // UserDefaults에서 첫 실행 여부 확인

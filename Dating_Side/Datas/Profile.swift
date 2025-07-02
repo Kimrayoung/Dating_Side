@@ -16,3 +16,17 @@ struct TomeUserProfile: Hashable, Codable {
     let userImage: String
     let userType: String
 }
+
+///가치관 기록
+enum ProfileValueType {
+    case couple
+    case marry
+    case company
+    case life
+}
+
+// 어떤 뷰에서 프로필을 보여주는지
+enum ShowProfileViewType {
+    case chat
+    case myPage
+}

@@ -29,6 +29,7 @@ struct OnboardingContainerView: View {
                     case .jobDetail: JobDetailInputView(viewModel: viewModel)
                     case .susceptible: SusceptibleInfoView(viewModel: viewModel)
                     case .chatProfileImage: ChatProfileImageView(viewModel: imageViewModel)
+                    case .additionalphotos: ChatProfileAddImageView(viewModel: imageViewModel)
                     }
                 }
         }

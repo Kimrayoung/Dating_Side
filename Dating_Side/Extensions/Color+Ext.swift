@@ -40,6 +40,8 @@ extension Color {
     static let subColor = Color(hex: "#EAEFFD")
     /// #DAE4FF
     static let subColor1 = Color(hex: "#DAE4FF")
+    /// #CBD8FB
+    static let subColor2 = Color(hex: "#CBD8FB")
     /// #121212
     static let blackColor = Color(hex: "#121212")
     /// #FDFDFF
