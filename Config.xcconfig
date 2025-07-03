@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig
+//  Dating_Side
+//
+//  Created by 김라영 on 2025/07/03.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+KAKAO_NATIVE_APP_KEY = 81fa24236c361b387e3213a91edef523
