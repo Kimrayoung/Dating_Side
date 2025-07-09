@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SusceptibleInfoView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State var possibleNext: Bool = false
     
     var body: some View {
@@ -144,5 +144,5 @@ struct SusceptibleInfoView: View {
 }
 
 #Preview {
-    SusceptibleInfoView(viewModel: OnboardingViewModel())
+    SusceptibleInfoView(viewModel: AccountViewModel())
 }

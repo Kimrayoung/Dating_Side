@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SchoolNameInput: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @FocusState var focusedSchoolName: Bool
     @State var possibleNext: Bool = true
     
@@ -28,13 +28,7 @@ struct SchoolNameInput: View {
             schoolNameView
             Spacer()
             Button(action: {
-                Task {
-                    let education = viewModel.makeEducationString()
-                    let result = await viewModel.updateUserProfileData(updateType: .highestEducation, data: education)
-                    if result {
-                        appState.onboardingPath.append(Onboarding.job)
-                    }
-                }
+                appState.onboardingPath.append(Onboarding.job)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -87,5 +81,5 @@ struct SchoolNameInput: View {
 }
 
 #Preview {
-    SchoolNameInput(viewModel: OnboardingViewModel())
+    SchoolNameInput(viewModel: AccountViewModel())
 }

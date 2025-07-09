@@ -25,4 +25,6 @@ struct LoginSMSVerify: Codable {
     let number: String
 }
 
-
+struct LoginRequest: Codable {
+    let userSocialId: String
+}

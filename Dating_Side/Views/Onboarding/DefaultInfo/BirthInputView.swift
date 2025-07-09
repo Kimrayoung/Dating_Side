@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BirthInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = true
     
     // 포커스 상태 관리
@@ -33,16 +33,7 @@ struct BirthInputView: View {
             Spacer()
             Button(action: {
                 hideKeyboard()
-                Task {
-                    let birthDate = viewModel.makeBirthDate()
-                    let result = await viewModel.updateUserProfileData(updateType: .birth, data: birthDate)
-                    if result {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            appState.onboardingPath.append(Onboarding.height)
-                        }
-                    }
-                }
-                
+                appState.onboardingPath.append(Onboarding.height)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -226,5 +217,5 @@ struct BirthInputView: View {
 }
 
 #Preview {
-    BirthInputView(viewModel: OnboardingViewModel())
+    BirthInputView(viewModel: AccountViewModel())
 }

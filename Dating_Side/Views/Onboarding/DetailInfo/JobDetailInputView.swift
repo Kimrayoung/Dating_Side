@@ -9,7 +9,7 @@ import SwiftUI
 
 struct JobDetailInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @FocusState var focusedJobDetail: Bool
     @State var possibleNext: Bool = true
     
@@ -27,14 +27,7 @@ struct JobDetailInputView: View {
             jobInputView
             Spacer()
             Button(action: {
-                Task {
-                    let job = viewModel.makeJobString()
-                    let result = await viewModel.updateUserProfileData(updateType: .job, data: job)
-                    if result {
-                        appState.onboardingPath.append(Onboarding.susceptible)
-                    }
-                }
-                
+                appState.onboardingPath.append(Onboarding.susceptible)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -86,5 +79,5 @@ struct JobDetailInputView: View {
 }
 
 #Preview {
-    JobDetailInputView(viewModel: OnboardingViewModel())
+    JobDetailInputView(viewModel: AccountViewModel())
 }

@@ -9,9 +9,9 @@ import Foundation
 import Combine
 
 @MainActor
-class OnboardingViewModel: ObservableObject {
+class AccountViewModel: ObservableObject {
     private var appState = AppState.shared
-    let onboardingNetworkManger = OnboardingNetworkManager()
+    let onboardingNetworkManger = AccountNetworkManager()
     @Published var genderSelectedIndex: Int = 0
     
     let locationOption = ["서울특별시", "경기도", "강원도", "제주도", "전라남도", "전라북도", "경상남도", "경상북도", "충청남도", "충청북도"]
@@ -56,24 +56,6 @@ class OnboardingViewModel: ObservableObject {
         return locationOption[locationSelectedIndex] + "/" + detailLocationOption[detailLocationSelectedIndex]
     }
     
-    func makeJobString() -> String? {
-        guard let selectedEducationIndex = selectedEducationIndex else { return nil }
-        if jobDetail != "" {
-            return education[selectedEducationIndex] + "/" + jobDetail
-        } else {
-            return education[selectedEducationIndex]
-        }
-    }
-    
-    func makeEducationString() -> String? {
-        guard let selectedEducationIndex = selectedEducationIndex else { return nil }
-        if jobDetail != "" {
-            return education[selectedEducationIndex] + "/" + jobDetail
-        } else {
-            return education[selectedEducationIndex]
-        }
-    }
-    
     func makeSusceptibleString() -> String? {
         guard let drunkIndex = isDrunkButtonSelected.firstIndex(of: true) else { return nil }
         guard let smokeIndex = isSmokeButtonSelected.firstIndex(of: true) else { return nil }
@@ -93,16 +75,14 @@ class OnboardingViewModel: ObservableObject {
 }
 
 //MARK: - 서버 통신 관련
-extension OnboardingViewModel {
+extension AccountViewModel {
     // 유저 정보 받아오기
     func getUsersProfileData() async {
         do {
-            let result = try await onboardingNetworkManger.fetchOnboardingData()
+            let result = try await onboardingNetworkManger.fetchUserData()
             switch result {
             case .success(let data):
                 print(#fileID, #function, #line, "- data checking: \(data)")
-                self.settingProfileData(userProfile: data.data)
-                await self.determineStartProfileData(userProfile: data.data)
             case .failure(let error):
                 print(#fileID, #function, #line, "- failur: \(error.localizedDescription)")
             }
@@ -110,152 +90,56 @@ extension OnboardingViewModel {
         }
     }
     
-    // 초반에 어떤 뷰로 가야하는지 세팅 -> 초반에 프로필을 입력하다가 나갔을 경우 입력이 안된 페이지 부터 입력해야 하므로 그 화면이 어디인지 판단하는 함수
-    // ex) 성별, 닉네임, 생일까지 입력했으면 -> 다시 들어올 때는 키 입력하는 화면으로 이동되어야함
-    func determineStartProfileData(userProfile: UserProfile) async {
-        if userProfile.gender == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-        } else if userProfile.nickname == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-            appState.onboardingPath.append(Onboarding.nickname)
-        } else if userProfile.birthDate == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-            appState.onboardingPath.append(Onboarding.nickname)
-            appState.onboardingPath.append(Onboarding.birth)
-        } else if userProfile.height == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-            appState.onboardingPath.append(Onboarding.nickname)
-            appState.onboardingPath.append(Onboarding.birth)
-            appState.onboardingPath.append(Onboarding.height)
-        } else if userProfile.activeRegion == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-            appState.onboardingPath.append(Onboarding.nickname)
-            appState.onboardingPath.append(Onboarding.birth)
-            appState.onboardingPath.append(Onboarding.height)
-            appState.onboardingPath.append(Onboarding.locationSelect)
-        } else if userProfile.preferenceType == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-            appState.onboardingPath.append(Onboarding.nickname)
-            appState.onboardingPath.append(Onboarding.birth)
-            appState.onboardingPath.append(Onboarding.height)
-            appState.onboardingPath.append(Onboarding.locationSelect)
-            appState.onboardingPath.append(Onboarding.loveKeyword)
-        } else if userProfile.highestEducation == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-            appState.onboardingPath.append(Onboarding.nickname)
-            appState.onboardingPath.append(Onboarding.birth)
-            appState.onboardingPath.append(Onboarding.height)
-            appState.onboardingPath.append(Onboarding.locationSelect)
-            appState.onboardingPath.append(Onboarding.loveKeyword)
-            appState.onboardingPath.append(Onboarding.education)
-        } else if userProfile.job == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-            appState.onboardingPath.append(Onboarding.nickname)
-            appState.onboardingPath.append(Onboarding.birth)
-            appState.onboardingPath.append(Onboarding.height)
-            appState.onboardingPath.append(Onboarding.locationSelect)
-            appState.onboardingPath.append(Onboarding.loveKeyword)
-            appState.onboardingPath.append(Onboarding.education)
-            appState.onboardingPath.append(Onboarding.job)
-        } else if userProfile.sensitiveInfo == nil {
-            appState.onboardingPath.append(Onboarding.genderSelect)
-            appState.onboardingPath.append(Onboarding.nickname)
-            appState.onboardingPath.append(Onboarding.birth)
-            appState.onboardingPath.append(Onboarding.height)
-            appState.onboardingPath.append(Onboarding.locationSelect)
-            appState.onboardingPath.append(Onboarding.loveKeyword)
-            appState.onboardingPath.append(Onboarding.education)
-            appState.onboardingPath.append(Onboarding.job)
-            appState.onboardingPath.append(Onboarding.susceptible)
-        }
-    }
-    
-    // 입력된 정보를 세팅하는 부분
-    func settingProfileData(userProfile: UserProfile) {
-        if let gender = userProfile.gender {
-            genderSelectedIndex = gender == "M" ? 1 : 0
-        }
-        if let nickname = userProfile.nickname {
-            nicknameInput = nickname
-        }
-        if let birthDate = userProfile.birthDate {
-            let components = birthDate.components(separatedBy: "-")
-            let splitComponent = components.map { component in
-                component.map { String($0) }
-            }
-            birthYear = splitComponent[0]
-            birthMonth = splitComponent[1]
-            birthDay = splitComponent[2]
-        }
-        if let heightInt = userProfile.height {
-            let digits = String(heightInt).compactMap { String($0) }
-            height[0] = digits[0]
-            height[1] = digits[1]
-        }
-        if let activeRegion = userProfile.activeRegion {
-            let components = activeRegion.components(separatedBy: "/")
-        }
-        if let preferenceType = userProfile.preferenceType {
-            let components = preferenceType.components(separatedBy: "/")
-        }
-        if let highestEducation = userProfile.highestEducation {
-            let components = highestEducation.components(separatedBy: ["(", ")"]).filter { !$0.isEmpty }
-            if components.count <= 2 {
-                let degree = components[0]
-                guard let index = education.firstIndex(of: degree) else { return }
-                isEducationButtonSelected[index] = true
-                selectedEducationIndex = index
-                if components.count == 2 {
-                    schoolName = components[1]
-                }
-            }
-        }
-        if let job = userProfile.job {
-            let components = job.components(separatedBy: "/")
-            if components.count == 2 {
-                let job = components[0]
-                guard let index = jobItmes.firstIndex(of: job) else { return }
-                isJobButtonSelected[index] = true
-                self.jobDetail = components[1]
-            }
-        }
-        if let sensitiveInfo = userProfile.sensitiveInfo {
-            // 이거에 관련해서 명칭 통일 필요
-        }
+    // 유저 정보 저장하기
+    func postUserData(_ socialType: String, _ userSocialID: String) async {
+        let location = makeLocation()
+        let birthDate = makeBirthDate()
+        let height = makeHeight()
+        guard let selectedEducationIndex = selectedEducationIndex else { return }
+        guard let selectedJobIndex = selectedJobIndex else { return }
         
+        // 선택된 민감 정보 파악하기
+        guard let selectedDrunkIndex = isDrunkButtonSelected.firstIndex(where: { $0 == true }) else { return }
+        guard let selectedSmokeIndex = isSmokeButtonSelected.firstIndex(where: { $0 == true }) else { return }
+        guard let selectedTattoIndex = isTattooButtonSelected.firstIndex(where: { $0 == true }) else { return }
+        guard let selectedReligionIndex = isReligionButtonSelected.firstIndex(where: { $0 == true }) else { return }
+        let lifeStyle = LifeStyle(drinking: drunkTexts[selectedDrunkIndex], smoking: smokeTexts[selectedSmokeIndex], tatto: tattooTexts[selectedTattoIndex], religion: religionTexts[selectedReligionIndex])
+        
+        let userData = SignupRequest(socialType: socialType, userSocialId: userSocialID, phoneNumber: "", genderType: genderSelectedIndex == 0 ? "여자" : "남자", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: [], afterPreferenceTypeList: [], edcationType: education[selectedEducationIndex], educationDetail: schoolName, jobType: jobItmes[selectedJobIndex], jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "")
     }
     
     // 유저 정보 서버에 업데이트 해주기
-    func updateUserProfileData<T>(updateType: OnboardingUpdateType, data: T) async -> Bool {
-        var newData = UserProfile(gender: nil, activeRegion: nil, preferenceType: nil, nickname: nil, birthDate: nil, height: nil, highestEducation: nil, job: nil, sensitiveInfo: nil, profileImage: nil, introduction: nil, createdAt: nil, updatedAt: nil)
+    func updateUserProfileData<T>(updateType: UserDataUpdateType, data: T) async -> Bool {
+        var newData = UserData(genderType: "", nickName: "", birthDate: "", height: 0, activeRegion: "", beforePreferenceTypeList: [], afterPreferenceTypeList: [], edcationType: "", educationDetail: "", jobType: "", jobDetail: "", lifeStyle: LifeStyle(drinking: "", smoking: "", tatto: "", religion: ""), introduction: "", fcmToken: "")
         
         switch updateType {
         case .gender:
-            newData.gender = data as? String
+            newData.genderType = data as? String ?? ""
         case .nickname:
-            newData.nickname = data as? String
+            newData.nickName = data as? String ?? ""
         case .birth:
-            newData.birthDate = data as? String
+            newData.birthDate = data as? String ?? ""
         case .height:
-            newData.height = data as? Int
+            newData.height = data as? Int ?? 0
         case .location:
-            newData.activeRegion = data as? String
+            newData.activeRegion = data as? String ?? ""
         case .loveKeyword:
-            newData.preferenceType = data as? String
+            newData.beforePreferenceTypeList = data as? [String] ?? []
         case .highestEducation:
-            newData.highestEducation = data as? String
+            newData.educationDetail = data as? String ?? ""
         case .job:
-            newData.job = data as? String
+            newData.jobDetail = data as? String ?? ""
         case .sensitiveInfo:
-            newData.sensitiveInfo = data as? SensitiveInfo
+            newData.lifeStyle = data as? LifeStyle ?? LifeStyle(drinking: "", smoking: "", tatto: "", religion: "")
         case .profileImage:
-            newData.profileImage = data as? ProfileImage
+//            newData. = data as? ProfileImage
+            ""
         case .introduction:
-            newData.introduction = data as? String
+            newData.introduction = data as? String ?? ""
         }
         
         do {
-            let result = try await onboardingNetworkManger.patchOnboardingData(userProfileData: newData)
+            let result = try await onboardingNetworkManger.patchUserData(userData: newData)
             switch result {
             case .success(let check):
                 print(#fileID, #function, #line, "- check: \(check)")

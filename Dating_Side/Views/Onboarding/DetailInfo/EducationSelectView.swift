@@ -9,8 +9,7 @@ import SwiftUI
 
 struct EducationSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
-    
+    @ObservedObject var viewModel: AccountViewModel
     
     @State var possibleNext: Bool = false
     
@@ -93,5 +92,5 @@ struct EducationSelectView: View {
 }
 
 #Preview {
-    EducationSelectView(viewModel: OnboardingViewModel())
+    EducationSelectView(viewModel: AccountViewModel())
 }

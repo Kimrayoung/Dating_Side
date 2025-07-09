@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoveKeywordSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     
     let columns = [
             GridItem(.flexible()),
@@ -87,5 +87,5 @@ struct LoveKeywordSelectView: View {
 }
 
 #Preview {
-    LoveKeywordSelectView(viewModel: OnboardingViewModel())
+    LoveKeywordSelectView(viewModel: AccountViewModel())
 }

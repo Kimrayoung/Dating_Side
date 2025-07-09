@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LocationSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     
     @State private var possibleNext: Bool = true
     
@@ -30,13 +30,8 @@ struct LocationSelectView: View {
             locationPicker
             Spacer()
             Button(action: {
-                Task {
-                    let location = viewModel.makeLocation()
-                    let result = await viewModel.updateUserProfileData(updateType: .location, data: location)
-                    if result {
-                        appState.onboardingPath.append(Onboarding.loveKeyword)
-                    }
-                }
+                let location = viewModel.makeLocation()
+                appState.onboardingPath.append(Onboarding.loveKeyword)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -155,5 +150,5 @@ struct LocationSelectView: View {
 }
 
 #Preview {
-    LocationSelectView(viewModel: OnboardingViewModel())
+    LocationSelectView(viewModel: AccountViewModel())
 }

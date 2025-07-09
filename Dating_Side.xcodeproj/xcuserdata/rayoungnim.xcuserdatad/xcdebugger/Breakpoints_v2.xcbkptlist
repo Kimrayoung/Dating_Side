@@ -31,8 +31,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "60">
+                  endingLineNumber = "19">
                </Location>
                <Location
                   uuid = "5466D32A-D29D-4AF6-A40F-EBFAA1B2DD68 - 317395d52ffb048c"
@@ -46,8 +45,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "4">
+                  endingLineNumber = "0">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -64,7 +62,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "30"
             endingLineNumber = "30"
-            landmarkName = "OnboardingViewModel"
+            landmarkName = "AccountViewModel"
             landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>

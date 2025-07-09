@@ -9,7 +9,7 @@ import SwiftUI
 
 struct JobSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     
     let columns = [
             GridItem(.flexible()),
@@ -81,5 +81,5 @@ struct JobSelectView: View {
 }
 
 #Preview {
-    JobSelectView(viewModel: OnboardingViewModel())
+    JobSelectView(viewModel: AccountViewModel())
 }

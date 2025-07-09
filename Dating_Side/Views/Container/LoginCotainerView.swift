@@ -13,7 +13,7 @@ struct LoginCotainerView: View {
     
     var body: some View {
         NavigationStack(path: $appState.loginPath) {
-            PhoneNumberView(viewModel: viewModel)
+            LoginView()
                 .navigationDestination(for: Login.self) { step in
                     switch step {
                     case .phoneNumber: PhoneNumberView(viewModel: viewModel)

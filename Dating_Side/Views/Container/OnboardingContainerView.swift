@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OnboardingContainerView: View {
     @EnvironmentObject private var appState: AppState
-    @StateObject private var viewModel = OnboardingViewModel()
+    @StateObject private var viewModel = AccountViewModel()
     @StateObject private var imageViewModel = ImageOnboardingViewModel()
     
     var body: some View {
@@ -32,9 +32,6 @@ struct OnboardingContainerView: View {
                     case .additionalphotos: ChatProfileAddImageView(viewModel: imageViewModel)
                     }
                 }
-        }
-        .task {
-            await viewModel.getUsersProfileData()
         }
     }
 }

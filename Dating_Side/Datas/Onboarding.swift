@@ -38,7 +38,7 @@ struct ResponseBoolean: Codable {
     let result: Bool
 }
 
-enum OnboardingUpdateType {
+enum UserDataUpdateType {
     case gender
     case nickname
     case birth

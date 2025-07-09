@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HeightInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = true
     
     @FocusState private var focusedField: HeightFocusField?
@@ -162,13 +162,7 @@ struct HeightInputView: View {
     var correctButton: some View {
         Button(action: {
             showBottomModal = false
-            Task {
-                let height = viewModel.makeHeight()
-                let result = await viewModel.updateUserProfileData(updateType: .height, data: height)
-                if result {
-                    appState.onboardingPath.append(Onboarding.locationSelect)
-                }
-            }
+            appState.onboardingPath.append(Onboarding.locationSelect)
         }, label: {
             Text("맞아요")
                 .foregroundStyle(Color.white)
@@ -216,5 +210,5 @@ struct HeightInputView: View {
 }
 
 #Preview {
-    HeightInputView(viewModel: OnboardingViewModel())
+    HeightInputView(viewModel: AccountViewModel())
 }
