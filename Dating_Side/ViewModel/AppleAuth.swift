@@ -11,6 +11,7 @@ import CryptoKit
 import Security
 
 class AppleAuth: NSObject, ObservableObject {
+    var loginCompletion: ((String) -> Void)?
     
     //MARK: - ID토큰이 명시적으로 부여되었는지 확인
     private func randomNonceString(length: Int = 32) -> String {
@@ -75,16 +76,10 @@ extension AppleAuth: ASAuthorizationControllerDelegate {
                 
                 return
             }
-            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                
-                return }
-            
-            let appleFullName = appleIDCredential.fullName
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else { return }
             let appleAccessToken = idTokenString
-            
-            Task {
-                
-            }
+            guard let loginCompletion = loginCompletion else { return }
+            loginCompletion(appleAccessToken)
         }
     }//authorizationController 성공
     

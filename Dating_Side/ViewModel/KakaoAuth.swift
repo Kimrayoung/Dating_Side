@@ -14,6 +14,7 @@ import KakaoSDKAuth
 class KakaoAuth: ObservableObject {
     var cancellables = Set<AnyCancellable>()
     let encoder = JSONEncoder()
+    var loginCompletion: ((String) -> Void)?
     
     func handleKakaoLogin() {
         // 카카오톡 실행 가능 여부 확인
@@ -32,9 +33,7 @@ class KakaoAuth: ObservableObject {
             } else {
                 guard let oauthToken = oauthToken else { return }
                 print(#fileID, #function, #line, "- oauthToken checking: \(oauthToken)")
-                
-                // 로그인 성공 후 사용자 정보 조회
-//                self.getUserInfo()
+                self.login(accessToken: oauthToken.accessToken)
             }
         }
     }
@@ -47,36 +46,17 @@ class KakaoAuth: ObservableObject {
             } else {
                 guard let oauthToken = oauthToken else { return }
                 print(#fileID, #function, #line, "- oauthToken checking: \(oauthToken)")
-                // 로그인 성공 후 사용자 정보 조회
-//                self.getUserInfo()
+                self.login(accessToken: oauthToken.accessToken)
             }
         }
     }
     
-    // MARK: - 사용자 정보 조회
-    func getUserInfo() {
-        UserApi.shared.me { (user, error) in
-            if let error = error {
-                print("사용자 정보 조회 실패: \(error)")
-            } else {
-                guard let user = user else { return }
-                print("사용자 정보 조회 성공")
-                print("닉네임: \(user.kakaoAccount?.profile?.nickname ?? "없음")")
-                print("이메일: \(user.kakaoAccount?.email ?? "없음")")
-                
-                // 여기서 서버로 사용자 정보 전송하거나 다른 로직 수행
-                self.handleUserInfo(user: user)
-            }
-        }
+    // MARK: - 로그인 completion 실행
+    func login(accessToken: String) {
+        guard let loginCompletion = loginCompletion else { return }
+        loginCompletion(accessToken)
     }
-    
-    // MARK: - 사용자 정보 처리
-    func handleUserInfo(user: User) {
-        // 사용자 정보로 서버 통신이나 앱 내 로직 처리
-        DispatchQueue.main.async {
-            // UI 업데이트 등
-        }
-    }
+
     
     #if DEBUG
     deinit {

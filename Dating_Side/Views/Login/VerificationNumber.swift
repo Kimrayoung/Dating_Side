@@ -26,7 +26,7 @@ struct VerificationNumber: View {
                 Task {
                     if await viewModel.checkRequestNumber() {
                         print(#fileID, #function, #line, "- 여기")
-                        appState.login()
+//                        appState.login()
                     }
                 }
                 

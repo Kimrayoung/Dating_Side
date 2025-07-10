@@ -54,61 +54,61 @@ struct SusceptibleInfoView: View {
     
     var infoView: some View {
         VStack(spacing: 32) {
-            drunkInfo
-            smokeInfo
-            tattooInfo
-            religionInfo
+            makeInfoView(category: "drunking")
+            makeInfoView(category: "smoking")
+            makeInfoView(category: "tattoo")
+            makeInfoView(category: "religion")
         }
     }
     
-    var drunkInfo: some View {
+    func makeInfoView(category: String) -> some View {
         VStack(spacing: 10) {
-            Text("음주🍺")
+            makeInfoTitle(category: category)
                 .font(.pixel(20))
                 .frame(maxWidth: .infinity)
-            HStack(spacing: 7) {
-                ForEach(Array(viewModel.drunkTexts.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index, $viewModel.isDrunkButtonSelected)
-                }
+            ScrollView(.horizontal) {
+                makeInfoStack(category: category)
             }
         }
     }
     
-    var smokeInfo: some View {
-        VStack(spacing: 10) {
-            Text("흡연🚬")
-                .font(.pixel(20))
-                .frame(maxWidth: .infinity)
-            HStack(spacing: 7) {
-                ForEach(Array(viewModel.smokeTexts.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index, $viewModel.isSmokeButtonSelected)
-                }
-            }
+    func makeInfoTitle(category: String) -> some View {
+        switch category {
+        case "drunking":
+            return Text("음주🍺")
+        case "smoking":
+            return Text("흡연🚬")
+        case "tattoo":
+            return Text("타투🖊️")
+        case "religion":
+            return Text("종교🙏")
+        default:
+            return Text(category)
         }
     }
     
-    var tattooInfo: some View {
-        VStack(spacing: 10) {
-            Text("타투🖊️")
-                .font(.pixel(20))
-                .frame(maxWidth: .infinity)
-            HStack(spacing: 7) {
-                ForEach(Array(viewModel.tattooTexts.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index, $viewModel.isTattooButtonSelected)
-                }
+    @ViewBuilder
+    func makeInfoStack(category: String) -> some View {
+        switch category {
+        case "drunking":
+            ForEach(Array(viewModel.drunkTexts.enumerated()), id: \.element) { (index, item) in
+                selectBtn(item, index, $viewModel.isDrunkButtonSelected)
             }
-        }
-    }
-    
-    var religionInfo: some View {
-        VStack(spacing: 10) {
-            Text("종교🙏")
-                .font(.pixel(16))
-                .frame(maxWidth: .infinity)
-            HStack(spacing: 7) {
-                ForEach(Array(viewModel.religionTexts.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index, $viewModel.isReligionButtonSelected)
-                }
+        case "smoking":
+            ForEach(Array(viewModel.smokeTexts.enumerated()), id: \.element) { (index, item) in
+                selectBtn(item, index, $viewModel.isSmokeButtonSelected)
+            }
+        case "tattoo":
+            ForEach(Array(viewModel.tattooTexts.enumerated()), id: \.element) { (index, item) in
+                selectBtn(item, index, $viewModel.isTattooButtonSelected)
+            }
+        case "religion":
+            ForEach(Array(viewModel.religionTexts.enumerated()), id: \.element) { (index, item) in
+                selectBtn(item, index, $viewModel.isReligionButtonSelected)
+            }
+        default:
+            ForEach(Array(viewModel.religionTexts.enumerated()), id: \.element) { (index, item) in
+                selectBtn(item, index, $viewModel.isReligionButtonSelected)
             }
         }
     }

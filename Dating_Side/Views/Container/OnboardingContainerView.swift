@@ -11,6 +11,8 @@ struct OnboardingContainerView: View {
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel = AccountViewModel()
     @StateObject private var imageViewModel = ImageOnboardingViewModel()
+    let socialType: SocialType
+    let socialId: String
     
     var body: some View {
         NavigationStack(path: $appState.onboardingPath) {
@@ -31,6 +33,10 @@ struct OnboardingContainerView: View {
                     case .chatProfileImage: ChatProfileImageView(viewModel: imageViewModel)
                     case .additionalphotos: ChatProfileAddImageView(viewModel: imageViewModel)
                     }
+                }
+                .onAppear {
+                    viewModel.socialType = socialType
+                    viewModel.socialId = socialId
                 }
         }
     }

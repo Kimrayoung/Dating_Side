@@ -28,3 +28,9 @@ struct LoginSMSVerify: Codable {
 struct LoginRequest: Codable {
     let userSocialId: String
 }
+
+enum SocialType {
+    case naver
+    case kakao
+    case apple
+}

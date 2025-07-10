@@ -57,10 +57,10 @@ class AppState: ObservableObject {
         currentScreen = .login
     }
     
-    func login() {
+    func login(socialType: SocialType, socialId: String) {
         isLoggedIn = true
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
-        currentScreen = .onboarding
+        currentScreen = .onboarding(socialType, socialId)
     }
     
     func logout() {

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject var appState: AppState
     @StateObject var kakaoAuth = KakaoAuth()
     @StateObject var appleAuth = AppleAuth()
     @State var isSelectedB: Bool = false
@@ -20,6 +21,8 @@ struct LoginView: View {
                 .foregroundColor(.black)
                 .padding(.bottom, 8)
             kakaoLoginBtn
+                .padding(.bottom, 8)
+            naverLoginBtn
                 .padding(.bottom, 8)
             appleLoginBtn
                 .padding(.bottom, 88)
@@ -39,6 +42,9 @@ struct LoginView: View {
     var kakaoLoginBtn: some View {
         Button {
             kakaoAuth.handleKakaoLogin()
+            kakaoAuth.loginCompletion = { token in
+                appState.login(socialType: .kakao, socialId: token) // 로그인 completion 넘겨줌
+            }
         } label: {
             Image("kakaoLogin")
         }
@@ -48,8 +54,20 @@ struct LoginView: View {
     var appleLoginBtn: some View {
         Button {
             appleAuth.startSignInWithAppleFlow()
+            appleAuth.loginCompletion = { token in
+                appState.login(socialType: .naver, socialId: token) // 로그인 completion 넘겨줌
+            }
         } label: {
             Image("appleLogin")
+        }
+        .frame(width: 343, height: 50)
+    }
+    
+    var naverLoginBtn: some View {
+        Button {
+            
+        } label: {
+            Image("naverLogin")
         }
         .frame(width: 343, height: 50)
     }

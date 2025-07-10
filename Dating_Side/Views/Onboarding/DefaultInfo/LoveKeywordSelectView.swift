@@ -15,15 +15,7 @@ struct LoveKeywordSelectView: View {
             GridItem(.flexible()),
             GridItem(.flexible())
         ]
-    
-    let items = ["첫눈에 반했어", "애정표현을 많이", "연락은 바로", "확신이 필요해", "네 행복이 최우선", "내가 더 사랑해", "연애도 다른 재미도", "가벼운 설렘", "서로의 일상 공유", "연락 부담 없는", "더치페이 편해", "같은 가치관"]
-    
-    let items2 = ["정이 쌓이는 연애", "편하게 오래", "운명적인 연애", "강한 끌림", "강한 유대감", "우리 서로 취우선", "함꼐 그려가는 미래", "책임감 있는", "사랑은 배려", "조건없는 연애", "구속없는 사랑", "즐거운 연애"]
-    
-    @State var possibleNext: Bool = false
-    
-    @State var isButtonSelected: [Bool] = Array(repeating: false, count: 12)
-    
+
     var body: some View {
         VStack(spacing: 0) {
             CustomRounedGradientProgressBar(currentScreen: 5, total: onboardingPageCnt)
@@ -42,10 +34,14 @@ struct LoveKeywordSelectView: View {
             Button(action: {
                 appState.onboardingPath.append(Onboarding.education)
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $viewModel.isBeforePreferenceTypeComplete, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
+        }
+        .task {
+            viewModel.setupBeforePreferenceBindings()
+            await viewModel.fetchPreferenceType(preferenceType: .before)
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
@@ -62,15 +58,17 @@ struct LoveKeywordSelectView: View {
                 }
             }
         })
-        .onChange(of: isButtonSelected) { oldValue, newValue in
-            let selectedCnt = isButtonSelected.filter { $0 == true }.count
-            if selectedCnt >= 3 && selectedCnt <= 7 { possibleNext.toggle() }
-        }
+//        .onChange(of: viewModel.isBeforePreferenceTypesSelected) { oldValue, newValue in
+//            if viewModel.isBeforePreferenceTypesSelected.count > 7 {
+//                let selectedCnt = viewModel.isbeforePreferenceTypesSelected.filter { $0 == true }.count
+//                if selectedCnt >= 3 && selectedCnt <= 7 { possibleNext.toggle() }
+//            }
+//        }
     }
     
     var gridView: some View {
         LazyVGrid(columns: columns, spacing: 10, content: {
-            ForEach(Array(items.enumerated()), id: \.element) { (index, item) in
+            ForEach(Array(viewModel.beforePreferenceTypes.enumerated()), id: \.element) { (index, item) in
                 selectBtn(item, index)
             }
         })
@@ -80,8 +78,8 @@ struct LoveKeywordSelectView: View {
     
     func selectBtn(_ word: String, _ index: Int) -> some View {
         return Button(action: {
-            isButtonSelected[index].toggle()
-        }, label: { SelectButtonLabel(isSelected: $isButtonSelected[index], height: 52, text: word, backgroundColor: .white, selectedBackgroundColor: .subColor, selectedTextColor: .black ,cornerRounded: 6, strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2, strokeBorderLineColor: .gray01, selectedStrokeBorderColor: .mainColor) })
+            viewModel.isBeforePreferenceTypesSelected[index].toggle()
+        }, label: { SelectButtonLabel(isSelected: $viewModel.isBeforePreferenceTypesSelected[index], height: 52, text: word, backgroundColor: .white, selectedBackgroundColor: .subColor, selectedTextColor: .black ,cornerRounded: 6, strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2, strokeBorderLineColor: .gray01, selectedStrokeBorderColor: .mainColor) })
     }
     
 }

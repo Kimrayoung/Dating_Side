@@ -13,8 +13,8 @@ struct ContentView: View {
     var body: some View {
         Group {
             switch appState.currentScreen {
-            case .onboarding:
-                OnboardingContainerView()
+            case let .onboarding(socialType, socialId):
+                OnboardingContainerView(socialType: socialType, socialId: socialId)
             case .login:
                 LoginCotainerView()
             case .main:

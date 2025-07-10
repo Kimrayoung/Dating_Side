@@ -14,7 +14,7 @@ protocol NetworkProtocol {
 final class NetworkManager: NetworkProtocol {
     static let shared = NetworkManager()
     private let session: URLSession
-    private let BASE_URL: String = "https://dating.tannding.com/"
+    private let BASE_URL: String = "https://donvolo.shop/api/"
     
     init() {
         let config = URLSessionConfiguration.default

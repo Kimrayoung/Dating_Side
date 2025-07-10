@@ -27,7 +27,7 @@ class AccountNetworkManager {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getUserProfile, httpCodes: .success)
     }
     
-    func fetchAddressData(_ addrCode: String? = nil) async throws -> Result<[Address], Error>  {
+    func fetchAddressData(_ addrCode: String?) async throws -> Result<[Address], Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getAddressData(addrCode: addrCode), httpCodes: .success)
     }
  
@@ -37,6 +37,10 @@ class AccountNetworkManager {
     
     func fetchPreferenceType(_ preferenceType: String) async throws -> Result<[String], Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getPreferenceTypes(preferenceType: preferenceType), httpCodes: .success)
+    }
+    
+    func fetchLifeStyleDatas() async throws -> Result<[LifeStyleResponse], Error>  {
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.getLifeStyleDatas, httpCodes: .success)
     }
 }
 
@@ -64,7 +68,7 @@ extension AccountAPIManager: APIManager {
         case .getLifeStyleDatas:
             return "account/lifestyle-type"
         case .getPreferenceTypes(let preferenceType):
-            return "account/preference-type/preferenceType=\(preferenceType)"
+            return "account/preference-type?preferenceType=\(preferenceType)"
         }
     }
     

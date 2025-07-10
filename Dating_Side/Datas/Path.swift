@@ -7,7 +7,7 @@
 
 /// 앱 처음 들어왔을 때 어떤 뷰 보여줘야 하는지
 enum AppScreen {
-    case onboarding
+    case onboarding(SocialType, String)
     case login
     case main
 }

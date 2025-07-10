@@ -11,6 +11,7 @@ struct NicknameInputView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = true
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         VStack(spacing: 0, content: {
@@ -29,12 +30,19 @@ struct NicknameInputView: View {
                 .padding(.top, 72)
             Spacer()
             Button(action: {
+                isFocused = false
                 appState.onboardingPath.append(Onboarding.birth)
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
+        })
+        .onAppear(perform: {
+            
+            DispatchQueue.main.async {
+                isFocused = true
+            }
         })
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
@@ -46,6 +54,7 @@ struct NicknameInputView: View {
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
+                    isFocused = false
                     appState.onboardingPath.removeLast()
                 } label: {
                     Image("navigationBackBtn")
@@ -57,16 +66,9 @@ struct NicknameInputView: View {
     var nicknameView: some View {
         VStack(spacing: 4, content: {
             ZStack(alignment: .center, content: {
-                if viewModel.nicknameInput.isEmpty {
-                    Text("닉네임을 입력해주세요")
-                        .bottomBorder(color: Color.clear, width: 2)
-                        .font(.pixel(20))
-                        .foregroundStyle(Color.gray01)
-                        .frame(width: 228)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
-                TextField("", text: $viewModel.nicknameInput)
+                TextField("닉네임을 입력해주세요", text: $viewModel.nicknameInput)
                     .multilineTextAlignment(.center)
+                    .focused($isFocused)
                     .bottomBorder(color: Color.gray3, width: 2)
                     .font(.pixel(20))
                     .frame(width: 228)

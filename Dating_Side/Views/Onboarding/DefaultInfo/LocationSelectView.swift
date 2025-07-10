@@ -30,7 +30,6 @@ struct LocationSelectView: View {
             locationPicker
             Spacer()
             Button(action: {
-                let location = viewModel.makeLocation()
                 appState.onboardingPath.append(Onboarding.loveKeyword)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
@@ -38,6 +37,10 @@ struct LocationSelectView: View {
             .padding(.bottom)
             .padding(.horizontal, 24)
         }) //body
+        .task {
+            await viewModel.fetchAddressData(isFirstLoading: true)
+        }
+        
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -59,16 +62,23 @@ struct LocationSelectView: View {
         HStack(spacing: 6) {
             Picker("Select an option", selection: $viewModel.locationSelectedIndex) {
                 ForEach(0..<viewModel.locationOption.count, id: \.self) { index in
-                    Text(viewModel.locationOption[index])
+                    Text(viewModel.locationOption[index].addrName)
                         .font(.pixel(14))
                 }
             }
             .pickerStyle(.wheel)
             .frame(height: 300)
             .background(Color.white)
+            .onChange(of: viewModel.locationSelectedIndex) { oldValue, newValue in
+                let selectedLocation = viewModel.locationOption[newValue]
+                print(#fileID, #function, #line, "- selectedLocation: \(selectedLocation)")
+                Task {
+                    await viewModel.fetchAddressData(code: selectedLocation.code)
+                }
+            }
             Picker("Select an option", selection: $viewModel.detailLocationSelectedIndex) {
                 ForEach(0..<viewModel.detailLocationOption.count, id: \.self) { index in
-                    Text(viewModel.detailLocationOption[index])
+                    Text(viewModel.detailLocationOption[index].addrName)
                         .font(.pixel(14))
                         .padding()
                 }
@@ -78,73 +88,6 @@ struct LocationSelectView: View {
             .background(Color.white)
         }
         .padding(.horizontal, 24)
-    }
-    
-    var locationPicker2: some View {
-        VStack(spacing: 6) {
-            List(content: {
-                Section {
-                    Picker("Select", selection: $viewModel.locationSelectedIndex) {
-                        ForEach(0..<viewModel.locationOption.count, id: \.self) { index in
-                            Text(viewModel.locationOption[index])
-                                .font(.pixel(14))
-                        }
-                    }
-                    .font(.pixel(10))
-                    .background(Color.white)
-                    Picker("Select an option", selection: $viewModel.detailLocationSelectedIndex) {
-                        ForEach(0..<viewModel.detailLocationOption.count, id: \.self) { index in
-                            Text(viewModel.detailLocationOption[index])
-                                .font(.pixel(14))
-                                .padding()
-                        }
-                    }
-                    .font(.pixel(10))
-                    .background(Color.white)
-                }
-                .listRowSeparator(.hidden)
-            })
-            .listStyle(PlainListStyle())
-            .background(Color.white)
-            .scrollContentBackground(Visibility.hidden)  // iOS 16+ 에서 사용 가능
-            
-        }
-        .padding(.horizontal, 24)
-    }
-    
-    var locationPicker3: some View {
-        HStack(content: {
-            Menu {
-                Picker(selection: $viewModel.locationSelectedIndex) {
-                    ForEach(0..<viewModel.locationOption.count, id: \.self) { index in
-                        Text(viewModel.locationOption[index])
-                            .padding()
-                    }
-                } label: {}
-            } label: {
-                Text("\(viewModel.locationOption[viewModel.locationSelectedIndex])")
-                    .font(.pixel(20))
-                    .foregroundStyle(Color.blackColor)
-                    .frame(width: 170, height: 42)
-                    .background(Color.gray0)
-                    .cornerRadius(8)
-            }
-            Menu {
-                Picker(selection: $viewModel.detailLocationSelectedIndex) {
-                    ForEach(0..<viewModel.detailLocationOption.count, id: \.self) { index in
-                        Text(viewModel.detailLocationOption[index])
-                            .padding()
-                    }
-                } label: {}
-            } label: {
-                Text("\(viewModel.detailLocationOption[viewModel.detailLocationSelectedIndex])")
-                    .font(.pixel(20))
-                    .foregroundStyle(Color.blackColor)
-                    .frame(width: 170, height: 42)
-                    .background(Color.gray0)
-                    .cornerRadius(8)
-            }
-        })
     }
     
 }

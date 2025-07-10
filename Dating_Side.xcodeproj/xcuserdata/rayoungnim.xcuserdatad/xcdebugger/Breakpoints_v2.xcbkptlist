@@ -60,8 +60,8 @@
             filePath = "Dating_Side/ViewModel/OnboardingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "AccountViewModel"
             landmarkType = "3">
          </BreakpointContent>
