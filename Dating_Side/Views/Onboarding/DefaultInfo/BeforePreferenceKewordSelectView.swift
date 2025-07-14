@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LoveKeywordSelectView: View {
+struct BeforePreferenceKewordSelectView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: AccountViewModel
     
@@ -58,12 +58,6 @@ struct LoveKeywordSelectView: View {
                 }
             }
         })
-//        .onChange(of: viewModel.isBeforePreferenceTypesSelected) { oldValue, newValue in
-//            if viewModel.isBeforePreferenceTypesSelected.count > 7 {
-//                let selectedCnt = viewModel.isbeforePreferenceTypesSelected.filter { $0 == true }.count
-//                if selectedCnt >= 3 && selectedCnt <= 7 { possibleNext.toggle() }
-//            }
-//        }
     }
     
     var gridView: some View {
@@ -85,5 +79,5 @@ struct LoveKeywordSelectView: View {
 }
 
 #Preview {
-    LoveKeywordSelectView(viewModel: AccountViewModel())
+    BeforePreferenceKewordSelectView(viewModel: AccountViewModel())
 }
