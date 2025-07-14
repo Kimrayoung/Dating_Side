@@ -18,8 +18,8 @@ enum Onboarding {
     case birth
     case height
     case locationSelect
-    case loveKeyword
-    case keyword
+    case beforePreference
+    case afterPreference
     case education
     case schoolName
     case job

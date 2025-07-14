@@ -11,6 +11,7 @@ struct LoginView: View {
     @EnvironmentObject var appState: AppState
     @StateObject var kakaoAuth = KakaoAuth()
     @StateObject var appleAuth = AppleAuth()
+    @StateObject var naverAuth = NaverAuth()
     @State var isSelectedB: Bool = false
     var body: some View {
         VStack(spacing: 0) {
@@ -65,7 +66,7 @@ struct LoginView: View {
     
     var naverLoginBtn: some View {
         Button {
-            
+            naverAuth.handleNaverLogin()
         } label: {
             Image("naverLogin")
         }

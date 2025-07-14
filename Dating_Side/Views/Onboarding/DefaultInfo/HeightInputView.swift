@@ -32,9 +32,10 @@ struct HeightInputView: View {
                 .padding(.top, 72)
             Spacer()
             Button(action: {
-                hideKeyboard()
-                showBottomModal = true
-                
+                if viewModel.checkHeightComplete() {
+                    hideKeyboard()
+                    showBottomModal = true
+                }
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })

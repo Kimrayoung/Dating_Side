@@ -32,7 +32,10 @@ struct BeforePreferenceKewordSelectView: View {
             gridView
             
             Button(action: {
-                appState.onboardingPath.append(Onboarding.education)
+                if !viewModel.isBeforePreferenceTypeComplete {
+                    return
+                }
+                appState.onboardingPath.append(Onboarding.afterPreference)
             }, label: {
                 SelectButtonLabel(isSelected: $viewModel.isBeforePreferenceTypeComplete, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -61,11 +64,13 @@ struct BeforePreferenceKewordSelectView: View {
     }
     
     var gridView: some View {
-        LazyVGrid(columns: columns, spacing: 10, content: {
-            ForEach(Array(viewModel.beforePreferenceTypes.enumerated()), id: \.element) { (index, item) in
-                selectBtn(item, index)
-            }
-        })
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 10, content: {
+                ForEach(Array(viewModel.beforePreferenceTypes.enumerated()), id: \.element) { (index, item) in
+                    selectBtn(item, index)
+                }
+            })
+        }
         .frame(maxHeight: .infinity)
         .padding(.horizontal, 23)
     }

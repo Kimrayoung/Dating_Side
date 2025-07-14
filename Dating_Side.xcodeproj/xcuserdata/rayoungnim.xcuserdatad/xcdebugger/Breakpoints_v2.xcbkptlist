@@ -60,8 +60,8 @@
             filePath = "Dating_Side/ViewModel/OnboardingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
             landmarkName = "AccountViewModel"
             landmarkType = "3">
          </BreakpointContent>
@@ -79,6 +79,22 @@
             startingLineNumber = "29"
             endingLineNumber = "29"
             landmarkName = "textField(_:shouldChangeCharactersIn:replacementString:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F6138B07-85B5-4C29-A4D7-27DACF806CB4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dating_Side/ViewModel/Auth/AppleAuth.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "authorizationController(controller:didCompleteWithAuthorization:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

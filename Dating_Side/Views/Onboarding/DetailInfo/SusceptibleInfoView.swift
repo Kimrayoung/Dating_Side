@@ -11,6 +11,7 @@ struct SusceptibleInfoView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: AccountViewModel
     @State var possibleNext: Bool = false
+    let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
         VStack(spacing: 0) {
@@ -27,13 +28,17 @@ struct SusceptibleInfoView: View {
             infoView
             Spacer()
             Button(action: {
-                appState.onboardingPath.append(Onboarding.chatProfileImage)
+                if possibleNext {
+                    appState.onboardingPath.append(Onboarding.chatProfileImage)
+                }
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
         }
-        
+        .task {
+            await viewModel.fetchLifeStyle()
+        }
         .padding(.horizontal, 24)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
@@ -54,7 +59,7 @@ struct SusceptibleInfoView: View {
     
     var infoView: some View {
         VStack(spacing: 32) {
-            makeInfoView(category: "drunking")
+            makeInfoView(category: "drinking")
             makeInfoView(category: "smoking")
             makeInfoView(category: "tattoo")
             makeInfoView(category: "religion")
@@ -74,7 +79,7 @@ struct SusceptibleInfoView: View {
     
     func makeInfoTitle(category: String) -> some View {
         switch category {
-        case "drunking":
+        case "drinking":
             return Text("음주🍺")
         case "smoking":
             return Text("흡연🚬")
@@ -89,29 +94,29 @@ struct SusceptibleInfoView: View {
     
     @ViewBuilder
     func makeInfoStack(category: String) -> some View {
-        switch category {
-        case "drunking":
-            ForEach(Array(viewModel.drunkTexts.enumerated()), id: \.element) { (index, item) in
-                selectBtn(item, index, $viewModel.isDrunkButtonSelected)
-            }
-        case "smoking":
-            ForEach(Array(viewModel.smokeTexts.enumerated()), id: \.element) { (index, item) in
-                selectBtn(item, index, $viewModel.isSmokeButtonSelected)
-            }
-        case "tattoo":
-            ForEach(Array(viewModel.tattooTexts.enumerated()), id: \.element) { (index, item) in
-                selectBtn(item, index, $viewModel.isTattooButtonSelected)
-            }
-        case "religion":
-            ForEach(Array(viewModel.religionTexts.enumerated()), id: \.element) { (index, item) in
-                selectBtn(item, index, $viewModel.isReligionButtonSelected)
-            }
-        default:
-            ForEach(Array(viewModel.religionTexts.enumerated()), id: \.element) { (index, item) in
-                selectBtn(item, index, $viewModel.isReligionButtonSelected)
+        Group {
+            if let contentList = viewModel.lifeStyleList[category] {
+                let boolBinding = Binding<[Bool]>( //Binding<[Bool>] -> [Bool]배열을 바인딩 한다
+                    get: { // viewModel.lifeStyleButtonList[category]에서 값을 꺼내나
+                        viewModel.lifeStyleButtonList[category] ?? Array(repeating: false, count: contentList.count)
+                    },
+                    set: { newValue in // 뷰에서 버튼을 클릭하면 내부에서 바인딩 배열이 변경된 배열로 바뀜
+                        viewModel.lifeStyleButtonList[category] = newValue
+                    }
+                )
+                
+                HStack(spacing: 4) {
+                    ForEach(Array(contentList.enumerated()), id: \.1) { index, item in
+                        selectBtn(item, index, boolBinding)
+                    }
+                }
+            } else {
+                EmptyView()
             }
         }
     }
+
+
     
     func selectBtn(_ word: String, _ index: Int, _ selectedArray: Binding<[Bool]>) -> some View {
         return Button(action: {
@@ -123,7 +128,7 @@ struct SusceptibleInfoView: View {
                     selectedArray.wrappedValue[i] = false
                 }
             }
-            
+            possibleNext = viewModel.susceptibleInfoCompleteChecking()
         }, label: {
             SelectButtonLabel(
                 isSelected: selectedArray[index],
@@ -138,6 +143,7 @@ struct SusceptibleInfoView: View {
                 strokeBorderLineColor: Color.gray01,
                 selectedStrokeBorderColor: Color.mainColor
             )
+            .frame(width: (screenWidth - 49 - 8) / 3)
         })
     }
     

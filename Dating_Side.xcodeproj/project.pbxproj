@@ -13,15 +13,23 @@
 		4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE42DA6B47F006206F1 /* Login.swift */; };
 		4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE62DA6B957006206F1 /* LoginView.swift */; };
 		4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */; };
-		4D33EA172E09720100B2661B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4D33EA162E09720100B2661B /* Kingfisher */; };
 		4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D33EA182E0995B600B2661B /* ChatListViewModel.swift */; };
 		4D389C2A2E1C0ECF00B56F84 /* AppleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C292E1C0EC900B56F84 /* AppleAuth.swift */; };
 		4D389C2C2E1E9DB800B56F84 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C2B2E1E9DB600B56F84 /* Account.swift */; };
+		4D389C302E252EBB00B56F84 /* AfterPreferenceKewordSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C2F2E252EB400B56F84 /* AfterPreferenceKewordSelectView.swift */; };
+		4D389C352E25331800B56F84 /* NaverAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C342E25331400B56F84 /* NaverAuth.swift */; };
+		4D389C382E253DE800B56F84 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 4D389C372E253DE800B56F84 /* KakaoSDK */; };
+		4D389C3A2E253DE800B56F84 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4D389C392E253DE800B56F84 /* KakaoSDKAuth */; };
+		4D389C3C2E253DE800B56F84 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 4D389C3B2E253DE800B56F84 /* KakaoSDKCommon */; };
+		4D389C3E2E253DE800B56F84 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 4D389C3D2E253DE800B56F84 /* KakaoSDKUser */; };
+		4D389C412E253DF700B56F84 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4D389C402E253DF700B56F84 /* Kingfisher */; };
+		4D389C442E253E0E00B56F84 /* NidThirdPartyLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4D389C432E253E0E00B56F84 /* NidThirdPartyLogin */; };
+		4D389C462E254A0000B56F84 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C452E254A0000B56F84 /* AppDelegate.swift */; };
 		4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */; };
 		4D3AD6E62DE4A99B00436A4B /* ProflieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */; };
 		4D3AD6E82DE4AA2600436A4B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3AD6E72DE4AA2600436A4B /* Profile.swift */; };
 		4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D40568D2D64B65300F95ACF /* LocationSelectView.swift */; };
-		4D4056902D64D20800F95ACF /* LoveKeywordSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */; };
+		4D4056902D64D20800F95ACF /* BeforePreferenceKewordSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D40568F2D64D20800F95ACF /* BeforePreferenceKewordSelectView.swift */; };
 		4D4056922D66160500F95ACF /* UserProfileInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4056912D66160500F95ACF /* UserProfileInputView.swift */; };
 		4D443B9B2DCB85C600F4B9EB /* AccountNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D443B9A2DCB85C600F4B9EB /* AccountNetworkManager.swift */; };
 		4D443B9D2DCB8B5F00F4B9EB /* Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D443B9C2DCB8B5F00F4B9EB /* Methods.swift */; };
@@ -40,9 +48,6 @@
 		4D61195F2D75B2F500715B9E /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D61195E2D75B2F500715B9E /* PhoneNumberView.swift */; };
 		4D6119622D75CC9100715B9E /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119612D75CC9100715B9E /* OnboardingViewModel.swift */; };
 		4D61196A2D75EFC900715B9E /* EducationSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6119692D75EFC900715B9E /* EducationSelectView.swift */; };
-		4D6C01492E16CA4600C8FE86 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 4D6C01482E16CA4600C8FE86 /* KakaoSDK */; };
-		4D6C014B2E16CA4600C8FE86 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4D6C014A2E16CA4600C8FE86 /* KakaoSDKAuth */; };
-		4D6C014D2E16CA4600C8FE86 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 4D6C014C2E16CA4600C8FE86 /* KakaoSDKCommon */; };
 		4D6D185B2D63408F00698E5D /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6D185A2D63408F00698E5D /* Color+Ext.swift */; };
 		4D6D18622D63432200698E5D /* Moneygraphy-Pixel.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D6D18602D63432200698E5D /* Moneygraphy-Pixel.ttf */; };
 		4D6D18632D63432200698E5D /* Moneygraphy-Rounded.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D6D18612D63432200698E5D /* Moneygraphy-Rounded.ttf */; };
@@ -133,11 +138,14 @@
 		4D33EA182E0995B600B2661B /* ChatListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
 		4D389C292E1C0EC900B56F84 /* AppleAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuth.swift; sourceTree = "<group>"; };
 		4D389C2B2E1E9DB600B56F84 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		4D389C2F2E252EB400B56F84 /* AfterPreferenceKewordSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfterPreferenceKewordSelectView.swift; sourceTree = "<group>"; };
+		4D389C342E25331400B56F84 /* NaverAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverAuth.swift; sourceTree = "<group>"; };
+		4D389C452E254A0000B56F84 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValuesListView.swift; sourceTree = "<group>"; };
 		4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProflieViewModel.swift; sourceTree = "<group>"; };
 		4D3AD6E72DE4AA2600436A4B /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		4D40568D2D64B65300F95ACF /* LocationSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectView.swift; sourceTree = "<group>"; };
-		4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveKeywordSelectView.swift; sourceTree = "<group>"; };
+		4D40568F2D64D20800F95ACF /* BeforePreferenceKewordSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforePreferenceKewordSelectView.swift; sourceTree = "<group>"; };
 		4D4056912D66160500F95ACF /* UserProfileInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileInputView.swift; sourceTree = "<group>"; };
 		4D443B9A2DCB85C600F4B9EB /* AccountNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNetworkManager.swift; sourceTree = "<group>"; };
 		4D443B9C2DCB8B5F00F4B9EB /* Methods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Methods.swift; sourceTree = "<group>"; };
@@ -230,10 +238,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D6C014D2E16CA4600C8FE86 /* KakaoSDKCommon in Frameworks */,
-				4D33EA172E09720100B2661B /* Kingfisher in Frameworks */,
-				4D6C01492E16CA4600C8FE86 /* KakaoSDK in Frameworks */,
-				4D6C014B2E16CA4600C8FE86 /* KakaoSDKAuth in Frameworks */,
+				4D389C3E2E253DE800B56F84 /* KakaoSDKUser in Frameworks */,
+				4D389C382E253DE800B56F84 /* KakaoSDK in Frameworks */,
+				4D389C3C2E253DE800B56F84 /* KakaoSDKCommon in Frameworks */,
+				4D389C3A2E253DE800B56F84 /* KakaoSDKAuth in Frameworks */,
+				4D389C412E253DF700B56F84 /* Kingfisher in Frameworks */,
+				4D389C442E253E0E00B56F84 /* NidThirdPartyLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +264,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D389C332E25330600B56F84 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				4D389C342E25331400B56F84 /* NaverAuth.swift */,
+				4DFAFBA12E16BE7A006E3B5F /* KakaoAuth.swift */,
+				4D389C292E1C0EC900B56F84 /* AppleAuth.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		4D443B9E2DCB93BA00F4B9EB /* ImageOnboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,13 +297,12 @@
 		4D6119602D75CC8000715B9E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				4D389C292E1C0EC900B56F84 /* AppleAuth.swift */,
+				4D389C332E25330600B56F84 /* Auth */,
 				4D6119612D75CC9100715B9E /* OnboardingViewModel.swift */,
 				4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */,
 				4D443BA32DCB957C00F4B9EB /* ImageOnboardingViewModel.swift */,
 				4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */,
 				4D33EA182E0995B600B2661B /* ChatListViewModel.swift */,
-				4DFAFBA12E16BE7A006E3B5F /* KakaoAuth.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -320,6 +339,7 @@
 		4D6119672D75EF3C00715B9E /* DefaultInfo */ = {
 			isa = PBXGroup;
 			children = (
+				4D389C2F2E252EB400B56F84 /* AfterPreferenceKewordSelectView.swift */,
 				4D6D187F2D635A7C00698E5D /* GenderSelectView.swift */,
 				4D40568D2D64B65300F95ACF /* LocationSelectView.swift */,
 				4D4056912D66160500F95ACF /* UserProfileInputView.swift */,
@@ -327,7 +347,7 @@
 				4DF329DE2D871A3D00DBB823 /* BirthInputView.swift */,
 				4DF329E62D87EAE100DBB823 /* WelcomeText.swift */,
 				4DF329E02D87236500DBB823 /* HeightInputView.swift */,
-				4D40568F2D64D20800F95ACF /* LoveKeywordSelectView.swift */,
+				4D40568F2D64D20800F95ACF /* BeforePreferenceKewordSelectView.swift */,
 			);
 			path = DefaultInfo;
 			sourceTree = "<group>";
@@ -476,6 +496,7 @@
 				4D6D18732D63586200698E5D /* Datas */,
 				4D6D185C2D6342F100698E5D /* Resources */,
 				4D95FACE2D5A1DED00D0E4D7 /* Dating_SideApp.swift */,
+				4D389C452E254A0000B56F84 /* AppDelegate.swift */,
 				4D95FAD02D5A1DED00D0E4D7 /* ContentView.swift */,
 				4D95FAF82D5A255E00D0E4D7 /* SelectButtonLabel.swift */,
 				4D95FAD22D5A1DEE00D0E4D7 /* Assets.xcassets */,
@@ -584,10 +605,12 @@
 			);
 			name = Dating_Side;
 			packageProductDependencies = (
-				4D33EA162E09720100B2661B /* Kingfisher */,
-				4D6C01482E16CA4600C8FE86 /* KakaoSDK */,
-				4D6C014A2E16CA4600C8FE86 /* KakaoSDKAuth */,
-				4D6C014C2E16CA4600C8FE86 /* KakaoSDKCommon */,
+				4D389C372E253DE800B56F84 /* KakaoSDK */,
+				4D389C392E253DE800B56F84 /* KakaoSDKAuth */,
+				4D389C3B2E253DE800B56F84 /* KakaoSDKCommon */,
+				4D389C3D2E253DE800B56F84 /* KakaoSDKUser */,
+				4D389C402E253DF700B56F84 /* Kingfisher */,
+				4D389C432E253E0E00B56F84 /* NidThirdPartyLogin */,
 			);
 			productName = Dating_Side;
 			productReference = 4D95FACB2D5A1DED00D0E4D7 /* Dating_Side.app */;
@@ -662,8 +685,9 @@
 			);
 			mainGroup = 4D95FAC22D5A1DED00D0E4D7;
 			packageReferences = (
-				4D33EA152E09720100B2661B /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				4D6C01472E16CA4600C8FE86 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				4D389C362E253DE800B56F84 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				4D389C3F2E253DF700B56F84 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				4D389C422E253E0E00B56F84 /* XCRemoteSwiftPackageReference "naveridlogin-sdk-ios-swift" */,
 			);
 			productRefGroup = 4D95FACC2D5A1DED00D0E4D7 /* Products */;
 			projectDirPath = "";
@@ -744,6 +768,7 @@
 				4D443BA22DCB954F00F4B9EB /* ChatProfileImageView.swift in Sources */,
 				4DFAFB9A2E1435AF006E3B5F /* Tempchat.swift in Sources */,
 				4DFAFBA22E16BE7A006E3B5F /* KakaoAuth.swift in Sources */,
+				4D389C462E254A0000B56F84 /* AppDelegate.swift in Sources */,
 				4DF8557B2DFF04D200D429F6 /* ProfileMiniView.swift in Sources */,
 				4D6D18772D6358A700698E5D /* NetworkManager.swift in Sources */,
 				4DF8557F2DFF0C4300D429F6 /* secondMathcingView.swift in Sources */,
@@ -763,11 +788,13 @@
 				4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */,
 				4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */,
 				4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */,
+				4D389C352E25331800B56F84 /* NaverAuth.swift in Sources */,
 				4D6119622D75CC9100715B9E /* OnboardingViewModel.swift in Sources */,
 				4DF329DD2D87182600DBB823 /* BottomBorderViewModifier.swift in Sources */,
 				4D443BA72DCBA34000F4B9EB /* Onboarding.swift in Sources */,
 				4D6D18822D637EAF00698E5D /* CustomPicker.swift in Sources */,
 				4DFAFB9E2E1571E7006E3B5F /* OnChatProfileView.swift in Sources */,
+				4D389C302E252EBB00B56F84 /* AfterPreferenceKewordSelectView.swift in Sources */,
 				4DEB5A6D2E0AD412009BE55B /* CoupleMatchingView.swift in Sources */,
 				4D6D186A2D6343B600698E5D /* Font+Ext.swift in Sources */,
 				4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */,
@@ -784,7 +811,7 @@
 				4DF855752DFEE5AF00D429F6 /* MatchingCompleteView.swift in Sources */,
 				4DB5827D2DDB5B86001952D0 /* ProfileView.swift in Sources */,
 				4D61195F2D75B2F500715B9E /* PhoneNumberView.swift in Sources */,
-				4D4056902D64D20800F95ACF /* LoveKeywordSelectView.swift in Sources */,
+				4D4056902D64D20800F95ACF /* BeforePreferenceKewordSelectView.swift in Sources */,
 				4DDF23642E0C29CB006A0096 /* ChatingView.swift in Sources */,
 				4DEB5A712E0ADACB009BE55B /* Date+Ext.swift in Sources */,
 				4D909AA72E12C23900F19AD0 /* SettingAndEditView.swift in Sources */,
@@ -1140,44 +1167,62 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		4D33EA152E09720100B2661B /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+		4D389C362E253DE800B56F84 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.24.5;
+			};
+		};
+		4D389C3F2E253DF700B56F84 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 8.3.3;
+				minimumVersion = 8.4.0;
 			};
 		};
-		4D6C01472E16CA4600C8FE86 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+		4D389C422E253E0E00B56F84 /* XCRemoteSwiftPackageReference "naveridlogin-sdk-ios-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			repositoryURL = "https://github.com/naver/naveridlogin-sdk-ios-swift";
 			requirement = {
-				kind = exactVersion;
-				version = 2.22.4;
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4D33EA162E09720100B2661B /* Kingfisher */ = {
+		4D389C372E253DE800B56F84 /* KakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4D33EA152E09720100B2661B /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-		4D6C01482E16CA4600C8FE86 /* KakaoSDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4D6C01472E16CA4600C8FE86 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			package = 4D389C362E253DE800B56F84 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDK;
 		};
-		4D6C014A2E16CA4600C8FE86 /* KakaoSDKAuth */ = {
+		4D389C392E253DE800B56F84 /* KakaoSDKAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4D6C01472E16CA4600C8FE86 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			package = 4D389C362E253DE800B56F84 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKAuth;
 		};
-		4D6C014C2E16CA4600C8FE86 /* KakaoSDKCommon */ = {
+		4D389C3B2E253DE800B56F84 /* KakaoSDKCommon */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4D6C01472E16CA4600C8FE86 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			package = 4D389C362E253DE800B56F84 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKCommon;
+		};
+		4D389C3D2E253DE800B56F84 /* KakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D389C362E253DE800B56F84 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKUser;
+		};
+		4D389C402E253DF700B56F84 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D389C3F2E253DF700B56F84 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		4D389C432E253E0E00B56F84 /* NidThirdPartyLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D389C422E253E0E00B56F84 /* XCRemoteSwiftPackageReference "naveridlogin-sdk-ios-swift" */;
+			productName = NidThirdPartyLogin;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -30,7 +30,7 @@ struct LocationSelectView: View {
             locationPicker
             Spacer()
             Button(action: {
-                appState.onboardingPath.append(Onboarding.loveKeyword)
+                appState.onboardingPath.append(Onboarding.beforePreference)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })

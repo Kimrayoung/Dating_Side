@@ -39,7 +39,7 @@ class AccountNetworkManager {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getPreferenceTypes(preferenceType: preferenceType), httpCodes: .success)
     }
     
-    func fetchLifeStyleDatas() async throws -> Result<[LifeStyleResponse], Error>  {
+    func fetchLifeStyleDatas() async throws -> Result<LifeStyleResponse, Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getLifeStyleDatas, httpCodes: .success)
     }
 }

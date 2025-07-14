@@ -35,6 +35,7 @@ class AccountViewModel: ObservableObject {
     @Published var isBeforePreferenceTypesSelected: [Bool] = []
     @Published var isAfterPreferenceTypesSelected: [Bool] = []
     @Published var isBeforePreferenceTypeComplete: Bool = false
+    @Published var isAfterPreferenceTypeComplete: Bool = false
     
     var education = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
     @Published var isEducationButtonSelected: [Bool] = Array(repeating: false, count: 6)
@@ -46,14 +47,20 @@ class AccountViewModel: ObservableObject {
     @Published var selectedJobIndex: Int? = nil
     @Published var jobDetail: String = ""
     
-    @Published var drunkTexts: [String] = ["언제든지!", "가볍게 즐겨요", "안마셔요"]
-    @Published var smokeTexts: [String] = ["흡연자에요", "가끔 피워요", "비흡연자에요"]
-    @Published var tattooTexts: [String] = ["있어요", "관심이 있어요", "없어요"]
-    @Published var religionTexts: [String] = ["있어요", "관심이 있어요", "없어요"]
-    @Published var isDrunkButtonSelected: [Bool] = Array(repeating: false, count: 3)
-    @Published var isSmokeButtonSelected: [Bool] = Array(repeating: false, count: 3)
-    @Published var isTattooButtonSelected: [Bool] = Array(repeating: false, count: 3)
-    @Published var isReligionButtonSelected: [Bool] = Array(repeating: false, count: 3)
+    var lifeStyleList: [String : [String]] = [:]
+    @Published var lifeStyleButtonList: [String : [Bool]] = [:]
+    
+    /// birthDay가 하나라도 비어있지 않은지 체크
+    func checkBirthdayComplete() -> Bool {
+        return birthYear.allSatisfy { !$0.isEmpty } &&
+        birthMonth.allSatisfy { !$0.isEmpty } &&
+        birthDay.allSatisfy { !$0.isEmpty }
+    }
+    
+    /// height가 하나라도 비어있지 않은지 체크
+    func checkHeightComplete() -> Bool {
+        return height.allSatisfy { !$0.isEmpty }
+    }
     
     func makeBirthDate() -> String {
         return birthYear.joined() + "-" + birthMonth.joined() + "-" + birthDay.joined()
@@ -67,19 +74,23 @@ class AccountViewModel: ObservableObject {
         return locationOption[locationSelectedIndex].addrName + "/" + detailLocationOption[detailLocationSelectedIndex].addrName
     }
     
-    func makeSusceptibleString() -> String? {
-        guard let drunkIndex = isDrunkButtonSelected.firstIndex(of: true) else { return nil }
-        guard let smokeIndex = isSmokeButtonSelected.firstIndex(of: true) else { return nil }
-        guard let tattoIndex = isTattooButtonSelected.firstIndex(of: true) else { return nil }
-        guard let religionIndex = isReligionButtonSelected.firstIndex(of: true) else { return nil }
-        return drunkTexts[drunkIndex] + "/" + smokeTexts[smokeIndex] + "/" + tattooTexts[tattoIndex] + "/" + religionTexts[religionIndex]
+    func makeLifeStyle() -> LifeStyle? {
+        guard let drunkIndex = lifeStyleButtonList["drinking"]?.firstIndex(of: true) else { return nil }
+        guard let smokeIndex = lifeStyleButtonList["smoking"]?.firstIndex(of: true) else { return nil }
+        guard let tattoIndex = lifeStyleButtonList["tattoo"]?.firstIndex(of: true) else { return nil }
+        guard let religionIndex = lifeStyleButtonList["religion"]?.firstIndex(of: true) else { return nil }
+        guard let drunkTextOptions = lifeStyleList["drinking"] else { return nil }
+        guard let smokeTextOptions = lifeStyleList["smoking"] else { return nil }
+        guard let tattoTextOptions = lifeStyleList["tattoo"] else { return nil }
+        guard let religionTextOptions = lifeStyleList["religion"] else { return nil }
+        return LifeStyle(drinking: drunkTextOptions[drunkIndex], smoking: smokeTextOptions[smokeIndex], tatto: tattoTextOptions[tattoIndex], religion: religionTextOptions[religionIndex])
     }
     
     func susceptibleInfoCompleteChecking() -> Bool {
-        let drunkButtonSelected = isDrunkButtonSelected.contains(true)
-        let smokeButtonSelected = isSmokeButtonSelected.contains(true)
-        let tattooButtonSelected = isTattooButtonSelected.contains(true)
-        let religionButtonSelected = isReligionButtonSelected.contains(true)
+        guard let drunkButtonSelected = lifeStyleButtonList["drinking"]?.contains(true) else { return false }
+        guard let smokeButtonSelected = lifeStyleButtonList["smoking"]?.contains(true) else { return false }
+        guard let tattooButtonSelected = lifeStyleButtonList["tattoo"]?.contains(true) else { return false }
+        guard let religionButtonSelected = lifeStyleButtonList["religion"]?.contains(true) else { return false }
         
         return drunkButtonSelected && smokeButtonSelected && tattooButtonSelected && religionButtonSelected
     }
@@ -90,7 +101,23 @@ class AccountViewModel: ObservableObject {
                 guard let self = self else { return }
                 let selectedCnt = newValue.filter { $0 == true }.count
                 if selectedCnt >= 3 && selectedCnt <= 7 {
-                    self.isBeforePreferenceTypeComplete.toggle()
+                    self.isBeforePreferenceTypeComplete = true
+                } else {
+                    self.isBeforePreferenceTypeComplete = false
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func setupAfterPreferenceBindings() {
+        $isAfterPreferenceTypesSelected
+            .sink { [weak self] newValue in
+                guard let self = self else { return }
+                let selectedCnt = newValue.filter { $0 == true }.count
+                if selectedCnt >= 3 && selectedCnt <= 7 {
+                    self.isAfterPreferenceTypeComplete = true
+                } else {
+                    self.isAfterPreferenceTypeComplete = false
                 }
             }
             .store(in: &cancellables)
@@ -165,7 +192,18 @@ extension AccountViewModel {
     func fetchLifeStyle() async {
         do {
             let result = try await accountNetworkManger.fetchLifeStyleDatas()
-            
+            switch result {
+            case .success(let lifeStyleResponse):
+                lifeStyleResponse.lifeStyleList.forEach({ lifeStyleContent in
+                    lifeStyleList[lifeStyleContent.category] = lifeStyleContent.choices
+                })
+                lifeStyleResponse.lifeStyleList.forEach({ lifeStyleContent in
+                    let tempButton = Array(repeating: false, count: lifeStyleContent.choices.count)
+                    lifeStyleButtonList[lifeStyleContent.category] = tempButton
+                })
+            case .failure(let error):
+                print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+            }
         } catch {
             
         }
@@ -194,11 +232,7 @@ extension AccountViewModel {
         guard let selectedJobIndex = selectedJobIndex else { return }
         
         // 선택된 민감 정보 파악하기
-        guard let selectedDrunkIndex = isDrunkButtonSelected.firstIndex(where: { $0 == true }) else { return }
-        guard let selectedSmokeIndex = isSmokeButtonSelected.firstIndex(where: { $0 == true }) else { return }
-        guard let selectedTattoIndex = isTattooButtonSelected.firstIndex(where: { $0 == true }) else { return }
-        guard let selectedReligionIndex = isReligionButtonSelected.firstIndex(where: { $0 == true }) else { return }
-        let lifeStyle = LifeStyle(drinking: drunkTexts[selectedDrunkIndex], smoking: smokeTexts[selectedSmokeIndex], tatto: tattooTexts[selectedTattoIndex], religion: religionTexts[selectedReligionIndex])
+        guard let lifeStyle = makeLifeStyle() else { return }
         
         let userData = SignupRequest(socialType: socialType, userSocialId: userSocialID, phoneNumber: "", genderType: genderSelectedIndex == 0 ? "여자" : "남자", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: [], afterPreferenceTypeList: [], edcationType: education[selectedEducationIndex], educationDetail: schoolName, jobType: jobItmes[selectedJobIndex], jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "")
     }

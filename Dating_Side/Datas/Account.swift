@@ -55,13 +55,13 @@ struct Address: Codable {
 }
 
 struct LifeStyleResponse: Codable {
-    let lifeStyleList: [LifeStyleList]
+    let lifeStyleList: [LifeStyleContent]
 }
 
 // MARK: - LifeStyleList
-struct LifeStyleList: Codable {
+struct LifeStyleContent: Codable {
     let category: String
-    let contentList: [String]
+    let choices: [String]
 }
 
 enum PreferenceType: String {

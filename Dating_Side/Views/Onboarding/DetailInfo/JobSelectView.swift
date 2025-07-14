@@ -30,12 +30,17 @@ struct JobSelectView: View {
             gridView
             
             Button(action: {
-                appState.onboardingPath.append(Onboarding.jobDetail)
+                if possibleNext {
+                    appState.onboardingPath.append(Onboarding.jobDetail)
+                }
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
+        }
+        .task {
+            await viewModel.fetchJobType()
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)

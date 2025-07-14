@@ -79,6 +79,7 @@ extension AppleAuth: ASAuthorizationControllerDelegate {
             guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else { return }
             let appleAccessToken = idTokenString
             guard let loginCompletion = loginCompletion else { return }
+            print(#fileID, #function, #line, "- accessToken checking: \(appleAccessToken)")
             loginCompletion(appleAccessToken)
         }
     }//authorizationController 성공

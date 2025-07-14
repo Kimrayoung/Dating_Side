@@ -30,6 +30,9 @@ struct NicknameInputView: View {
                 .padding(.top, 72)
             Spacer()
             Button(action: {
+                if viewModel.nicknameInput.isEmpty {
+                    return
+                }
                 isFocused = false
                 appState.onboardingPath.append(Onboarding.birth)
             }, label: {

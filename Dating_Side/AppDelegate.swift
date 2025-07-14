@@ -6,3 +6,18 @@
 //
 
 import Foundation
+import UIKit
+import NidThirdPartyLogin
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+//        
+//        if NidOAuth.shared.handleURL(url) {
+//            return true
+//        }
+
+        return false
+    }
+}
