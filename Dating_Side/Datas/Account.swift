@@ -5,6 +5,9 @@
 //  Created by 김라영 on 7/9/25.
 //
 
+import Foundation
+import UIKit
+
 struct SignupRequest: Codable {
     let socialType: String
     let userSocialId: String
@@ -24,6 +27,35 @@ struct SignupRequest: Codable {
     var introduction: String
     var fcmToken: String
 }
+
+struct AccountImage {
+    var imageTitle: String
+    var image: UIImage
+}
+
+extension SignupRequest {
+    func toMultipartFormBuilder(images: [AccountImage]) -> MultipartFormDataBuilder? {
+        var builder = MultipartFormDataBuilder()
+
+        // 1. 모든 프로퍼티 → key-value로 자동 추출
+        guard let keyValuePairs = self.toKeyValuePairs() else { return nil }
+
+        for (key, value) in keyValuePairs {
+            builder.appendTextField(named: key, value: value)
+        }
+
+        for image in images{
+            builder.appendImageField(named: image.imageTitle, image: image.image)
+        }
+
+        // 3. 종료 바운더리
+        builder.finalize()
+
+        return builder
+    }
+}
+
+
 
 struct UserData: Codable {
     var genderType: String

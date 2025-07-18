@@ -13,11 +13,13 @@
 			</array>
 		</dict>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>naverlogin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>naverlogin</string>
+				<string>loveway</string>
 			</array>
 		</dict>
 	</array>
@@ -31,22 +33,14 @@
 		<string>naversearchapp</string>
 		<string>naversearchthirdlogin</string>
 	</array>
-<!--	<key>NidAppName</key>-->
-<!--	<string>loveway</string>-->
-<!--	<key>NidClientID</key>-->
-<!--	<string>O0KrSKSqZzOsh_oOIXUF</string>-->
-<!--	<key>NidClientSecret</key>-->
-<!--	<string>DVINweiTD8</string>-->
-<!--	<key>NidUrlScheme</key>-->
-<!--	<string>https://donvolo.shop/api/account/auth/callback/kakao</string>-->
-    <key>NidAppName</key>
-    <string>naverLoginSample</string>
-    <key>NidClientID</key>
-    <string>FM6Fws9c43UJN0aszPwy</string>
-    <key>NidClientSecret</key>
-    <string>diqNkbuyTK</string>
-    <key>NidUrlScheme</key>
-    <string>naverlogin</string>
+	<key>NidAppName</key>
+	<string>loveway</string>
+	<key>NidClientID</key>
+	<string>O0KrSKSqZzOsh_oOIXUF</string>
+	<key>NidClientSecret</key>
+	<string>DVINweiTD8</string>
+	<key>NidUrlScheme</key>
+	<string>loveway</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Moneygraphy-Pixel.otf</string>

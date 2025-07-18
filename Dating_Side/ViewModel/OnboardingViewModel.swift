@@ -7,6 +7,8 @@
 
 import Foundation
 import Combine
+import PhotosUI
+import SwiftUI
 
 @MainActor
 class AccountViewModel: ObservableObject {
@@ -49,6 +51,13 @@ class AccountViewModel: ObservableObject {
     
     var lifeStyleList: [String : [String]] = [:]
     @Published var lifeStyleButtonList: [String : [Bool]] = [:]
+    
+    @Published var introduceText: String = ""
+    
+    @Published var selectedImage: UIImage?
+    @Published var selectedSeconDayImage: UIImage?
+    @Published var selectedForthDayImage: UIImage?
+    @Published var selectedSixthDayImage: UIImage?
     
     /// birthDay가 하나라도 비어있지 않은지 체크
     func checkBirthdayComplete() -> Bool {
@@ -121,6 +130,31 @@ class AccountViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func loadSelectedImage(imageType: ImageType, pickerItem: PhotosPickerItem) {
+        pickerItem.loadTransferable(type: Data.self) { result in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                switch result {
+                case .success(let data):
+                    if let data = data, let image = UIImage(data: data) {
+                        switch imageType {
+                        case .mainProfile:
+                            self.selectedImage = image
+                        case .secondDay:
+                            self.selectedSeconDayImage = image
+                        case .forthDay:
+                            self.selectedForthDayImage = image
+                        case .sixthDay:
+                            self.selectedSixthDayImage = image
+                        }
+                    }
+                case .failure(let error):
+                    print("load error:", error)
+                }
+            }
+        }
     }
 }
 
@@ -224,17 +258,40 @@ extension AccountViewModel {
     }
     
     // 유저 정보 저장하기
-    func postUserData(_ socialType: String, _ userSocialID: String) async {
+    func postUserData(_ socialType: String, _ userSocialID: String) async -> Bool{
         let location = makeLocation()
         let birthDate = makeBirthDate()
         let height = makeHeight()
-        guard let selectedEducationIndex = selectedEducationIndex else { return }
-        guard let selectedJobIndex = selectedJobIndex else { return }
+        guard let selectedEducationIndex = selectedEducationIndex else { return false }
+        guard let selectedJobIndex = selectedJobIndex else { return  false }
         
         // 선택된 민감 정보 파악하기
-        guard let lifeStyle = makeLifeStyle() else { return }
+        guard let lifeStyle = makeLifeStyle() else { return false }
+        
+        guard let selectedImage = selectedImage, let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return false }
         
         let userData = SignupRequest(socialType: socialType, userSocialId: userSocialID, phoneNumber: "", genderType: genderSelectedIndex == 0 ? "여자" : "남자", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: [], afterPreferenceTypeList: [], edcationType: education[selectedEducationIndex], educationDetail: schoolName, jobType: jobItmes[selectedJobIndex], jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "")
+        
+        let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImage", image: selectedImage), AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
+        
+        let signupData = userData.toMultipartFormBuilder(images: userImageData)
+        
+        guard let signupData = signupData else { return false }
+        
+        do {
+            let result = try await AccountNetworkManager().postUserData(signupData: signupData)
+            switch result {
+            case .success(let result):
+                print(#fileID, #function, #line, "- data checking: \(result.result)")
+                return result.result
+            case .failure(let error):
+                print(#fileID, #function, #line, "- failur: \(error.localizedDescription)")
+                return false
+            }
+        } catch {
+            print(#fileID, #function, #line, "- errlr")
+            return false
+        }
     }
     
     // 유저 정보 서버에 업데이트 해주기

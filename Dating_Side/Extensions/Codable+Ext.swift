@@ -19,3 +19,25 @@ extension Encodable {
         return dict.filter { $0.value is NSNull == false }
     }
 }
+
+extension Encodable {
+    func toKeyValuePairs() -> [String: String]? {
+        guard let data = try? JSONEncoder().encode(self),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data),
+              let dictionary = jsonObject as? [String: Any] else { return nil }
+
+        var result: [String: String] = [:]
+        for (key, value) in dictionary {
+            // 단순한 값만 문자열로 변환 (Array는 별도 처리 필요)
+            if let array = value as? [Any] {
+                if let data = try? JSONSerialization.data(withJSONObject: array),
+                   let jsonString = String(data: data, encoding: .utf8) {
+                    result[key] = jsonString
+                }
+            } else {
+                result[key] = "\(value)"
+            }
+        }
+        return result
+    }
+}

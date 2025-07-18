@@ -27,8 +27,12 @@ enum Onboarding {
     case susceptible
     /// 채팅 프로필 (프로필 사진, 자기소개)
     case chatProfileImage
-    /// 추가사진
-    case additionalphotos
+    /// 추가사진 - 2일차
+    case secondDayPhoto
+    /// 추가사진 - 4일차
+    case forthDayPhoto
+    /// 추가사진 - 6일차
+    case sixthDayPhoto
 }
 
 enum Main {

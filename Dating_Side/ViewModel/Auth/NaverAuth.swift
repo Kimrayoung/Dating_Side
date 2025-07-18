@@ -10,6 +10,8 @@ import Combine
 import UIKit
 
 class NaverAuth: ObservableObject {
+    var loginCompletion: ((String) -> Void)?
+    
     func isNaverAppInstalled() -> Bool {
         return UIApplication.shared.canOpenURLScheme("\(Constant.naverAppThirdLoginScheme)://")
     }
@@ -28,6 +30,10 @@ class NaverAuth: ObservableObject {
           switch result {
           case .success(let loginResult):
             print("Access Token: ", loginResult.accessToken.tokenString)
+              DispatchQueue.main.async {
+                  self.loginCompletion?(loginResult.accessToken.tokenString)
+              }
+              
           case .failure(let error):
             print("Error: ", error.localizedDescription)
           }

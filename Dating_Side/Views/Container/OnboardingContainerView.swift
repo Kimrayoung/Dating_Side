@@ -10,13 +10,13 @@ import SwiftUI
 struct OnboardingContainerView: View {
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel = AccountViewModel()
-    @StateObject private var imageViewModel = ImageOnboardingViewModel()
     let socialType: SocialType
     let socialId: String
     
     var body: some View {
         NavigationStack(path: $appState.onboardingPath) {
-            GenderSelectView(viewModel: viewModel)
+//            GenderSelectView(viewModel: viewModel)
+            ChatProfileImageView(viewModel: viewModel)
                 .navigationDestination(for: Onboarding.self) { step in
                     switch step {
                     case .genderSelect: GenderSelectView(viewModel: viewModel)
@@ -31,8 +31,10 @@ struct OnboardingContainerView: View {
                     case .job: JobSelectView(viewModel: viewModel)
                     case .jobDetail: JobDetailInputView(viewModel: viewModel)
                     case .susceptible: SusceptibleInfoView(viewModel: viewModel)
-                    case .chatProfileImage: ChatProfileImageView(viewModel: imageViewModel)
-                    case .additionalphotos: ChatProfileAddImageView(viewModel: imageViewModel)
+                    case .chatProfileImage: ChatProfileImageView(viewModel: viewModel)
+                    case .secondDayPhoto: ProfileSecondImageView(viewModel: viewModel)
+                    case .forthDayPhoto: ProfileForthImageView(viewModel: viewModel)
+                    case .sixthDayPhoto: ProfileSixthImageView(viewModel: viewModel)
                     }
                 }
                 .onAppear {

@@ -67,6 +67,9 @@ struct LoginView: View {
     var naverLoginBtn: some View {
         Button {
             naverAuth.handleNaverLogin()
+            naverAuth.loginCompletion = { token in
+                appState.login(socialType: .naver, socialId: token) 
+            }
         } label: {
             Image("naverLogin")
         }

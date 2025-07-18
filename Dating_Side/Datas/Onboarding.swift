@@ -51,3 +51,10 @@ enum UserDataUpdateType {
     case profileImage
     case introduction
 }
+
+enum ImageType {
+    case mainProfile
+    case secondDay
+    case forthDay
+    case sixthDay
+}

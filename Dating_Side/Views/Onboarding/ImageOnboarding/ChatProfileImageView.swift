@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ChatProfileImageView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: ImageOnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State var possibleNext: Bool = true
+    @State var selectedPickerImage: [PhotosPickerItem] = []
+    @State var isImagePickerPresented: Bool = false
     
     var body: some View {
         CustomRounedGradientProgressBar(currentScreen: 8, total: onboardingPageCnt)
@@ -35,7 +38,7 @@ struct ChatProfileImageView: View {
         selfIntroduceTextView
         Spacer()
         Button(action: {
-            appState.onboardingPath.append(Onboarding.additionalphotos)
+            appState.onboardingPath.append(Onboarding.secondDayPhoto)
         }, label: {
             SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
         })
@@ -61,7 +64,7 @@ struct ChatProfileImageView: View {
     
     var selectImageButton: some View {
         Button(action: {
-            viewModel.isImagePickerPresented = true
+            isImagePickerPresented = true
         }, label: {
             Text("사진 선택하기")
                 .foregroundStyle(Color.black)
@@ -73,10 +76,16 @@ struct ChatProfileImageView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.black, lineWidth: 1)
         }
-        .onChange(of: viewModel.selectedPickerImage, {
-            viewModel.loadSelectedImage()
+        .photosPicker(
+            isPresented: $isImagePickerPresented,
+            selection: $selectedPickerImage,
+            maxSelectionCount: 1,
+            matching: .images
+        )
+        .onChange(of: selectedPickerImage, {
+            guard let selectedPickerImage = selectedPickerImage.first else { return }
+            viewModel.loadSelectedImage(imageType: .mainProfile, pickerItem: selectedPickerImage)
         })
-        
         .onChange(of: viewModel.selectedImage) {
             if viewModel.selectedImage != nil {
                 possibleNext = true
@@ -111,5 +120,5 @@ struct ChatProfileImageView: View {
 }
 
 #Preview {
-    ChatProfileImageView(viewModel: ImageOnboardingViewModel())
+    ChatProfileImageView(viewModel: AccountViewModel())
 }

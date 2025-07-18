@@ -15,7 +15,7 @@ class AccountNetworkManager {
         self.networkManager = networkManager
     }
     
-    func postUserData(signupData: SignupRequest) async throws -> Result<ResponseBoolean, Error> {
+    func postUserData(signupData: MultipartFormDataBuilder) async throws -> Result<ResponseBoolean, Error> {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.postUserProfileData(signupData: signupData), httpCodes: .success)
     }
     
@@ -47,7 +47,7 @@ class AccountNetworkManager {
 enum AccountAPIManager {
     case getUserProfile
     case patchUserProfileData(userData: UserData)
-    case postUserProfileData(signupData: SignupRequest)
+    case postUserProfileData(signupData: MultipartFormDataBuilder)
     case getAddressData(addrCode: String?)
     case getJopTypes
     case getLifeStyleDatas
@@ -81,12 +81,19 @@ extension AccountAPIManager: APIManager {
     }
     
     var headers: [String : String]? {
-        if let accessToken = KeychainManager.shared.getToken(service: "com.loveway.auth", account: "accessToken") {
+        switch self {
+        case .postUserProfileData(let signupRequest):
             return [
-                "Content-Type" : "application/json",
-                "SMS_Authorization" : "Bearer " + accessToken
+                "Content-Type" : signupRequest.contentType,
             ]
-        } else { return nil }
+        default:
+            if let accessToken = KeychainManager.shared.getToken(service: "com.loveway.auth", account: "accessToken") {
+                return [
+                    "Content-Type" : "application/json",
+                    "SMS_Authorization" : "Bearer " + accessToken
+                ]
+            } else { return nil }
+        }
     }
     
     func body() throws -> Data? {
@@ -98,9 +105,7 @@ extension AccountAPIManager: APIManager {
             let jsonData = try JSONSerialization.data(withJSONObject: patchDic)
             return jsonData
         case .postUserProfileData(let signupData):
-            let jsonEncoder = JSONEncoder()
-            let jsonData = try jsonEncoder.encode(signupData)
-            return jsonData
+            return signupData.body
         }
     }
     
