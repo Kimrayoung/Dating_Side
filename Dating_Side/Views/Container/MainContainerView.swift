@@ -9,11 +9,40 @@ import SwiftUI
 
 struct MainContainerView: View {
     @EnvironmentObject private var appState: AppState
+    @State private var selection = 0
+    
+    init() {
+        UITabBar.appearance().unselectedItemTintColor = UIColor.init(hex: "#CBD8FB")
+    }
     
     var body: some View {
-        NavigationStack(path: $appState.mainPath) {
-            ChatingView()
+        TabView(selection: $selection) {
+            NavigationStack(path: $appState.mainPath) {
+                ChatingView()
+            }
+            .tabItem {
+                Label("채팅", image: selection == 0 ? "chatSelected" : "chatNotSelected")
+                    .font(.pixel(8))
+            }
+            .tag(0)
+            NavigationStack(path: $appState.mainPath) {
+                ChatingView()
+            }
+            .tabItem {
+                Label("매칭", image: selection == 1 ? "matchSelected" : "matchNotSelected")
+                    .font(.pixel(8))
+            }
+            .tag(1)
+            NavigationStack(path: $appState.mainPath) {
+                MyPageView()
+            }
+            .tabItem {
+                Label("마이페이지", image: selection == 2 ? "mypageSelected" : "mypageNotSelected")
+                    .font(.pixel(8))
+            }
+            .tag(2)
         }
+        .tint(.mainColor)
     }
 }
 

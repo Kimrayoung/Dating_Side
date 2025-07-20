@@ -9,12 +9,13 @@ import SwiftUI
 
 struct OnboardingContainerView: View {
     @EnvironmentObject private var appState: AppState
-    @StateObject private var viewModel = AccountViewModel()
+    @StateObject private var viewModel = OnboardingViewModel()
     let socialType: SocialType
     let socialId: String
     
     var body: some View {
         NavigationStack(path: $appState.onboardingPath) {
+//            ChatProfileImageView(viewModel: viewModel)
             GenderSelectView(viewModel: viewModel)
                 .navigationDestination(for: Onboarding.self) { step in
                     switch step {

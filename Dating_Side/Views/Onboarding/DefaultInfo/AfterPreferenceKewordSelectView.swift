@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AfterPreferenceKewordSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     
     let columns = [
             GridItem(.flexible()),
@@ -18,15 +18,19 @@ struct AfterPreferenceKewordSelectView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 5, total: onboardingPageCnt)
+            CustomRounedGradientProgressBar(currentScreen: 7, total: onboardingPageCnt)
                 .padding(.top, 30)
-            Text("이제 러브웨이에서 어떤 사랑을 하고 싶나요?")
-                .font(.pixel(24))
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 48)
+            TextWithColoredSubString(
+                text: "이제 러브웨이에서\n어떤 사랑을 하고 싶나요?",
+                highlight: "러브웨이",
+                gradientColors: [.mainColor]
+            )
+            .font(.pixel(24))
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.top, 48)
             Text("끌리는 키워드를 최대 7개까지 선택해주세요")
                 .font(.pixel(14))
-                .foregroundStyle(Color.mainColor)
+                .foregroundStyle(Color.gray3)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, 36)
             gridView
@@ -37,7 +41,7 @@ struct AfterPreferenceKewordSelectView: View {
                 }
                 appState.onboardingPath.append(Onboarding.education)
             }, label: {
-                SelectButtonLabel(isSelected: $viewModel.isAfterPreferenceTypeComplete, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $viewModel.isAfterPreferenceTypeComplete, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -84,5 +88,5 @@ struct AfterPreferenceKewordSelectView: View {
 }
 
 #Preview {
-    AfterPreferenceKewordSelectView(viewModel: AccountViewModel())
+    AfterPreferenceKewordSelectView(viewModel: OnboardingViewModel())
 }

@@ -7,6 +7,10 @@
 
 import Foundation
 
+enum NicknameFocusField {
+    case nickname
+}
+
 enum UserProfileField {
     case nickname
     case birthYear

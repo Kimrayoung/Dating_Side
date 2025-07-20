@@ -10,7 +10,7 @@ import PhotosUI
 
 struct ProfileSixthImageView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
 
     @State var sixthDayImageComplete: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
@@ -18,13 +18,17 @@ struct ProfileSixthImageView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 8, total: onboardingPageCnt)
+            CustomRounedGradientProgressBar(currentScreen: 16, total: onboardingPageCnt)
                 .padding(.top, 30)
                 .padding(.bottom, 48)
-            Text("매칭된 상대에게 6일차에 공개할 사진을 등록해주세요")
-                .font(.pixel(24))
-                .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundStyle(Color.blackColor)
+            TextWithColoredSubString(
+                text: "매칭된 상대에게 6일차에 공개할 사진을 등록해주세요",
+                highlight: "6일차",
+                gradientColors: [.mainColor]
+            )
+            .font(.pixel(24))
+            .frame(maxWidth: .infinity, alignment: .center)
+            .foregroundStyle(Color.blackColor)
             Text("흥미있는 대화를 위한 사진입니다.\n6일차에 보여주고 싶은 나의 모습을 등록해주세요")
                 .font(.pixel(14))
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -33,9 +37,11 @@ struct ProfileSixthImageView: View {
             sixthDayImage
                 .padding(.bottom, 70)
             Button(action: {
-
+                if viewModel.selectedSixthDayImage == nil {
+                    return
+                }
             }, label: {
-                SelectButtonLabel(isSelected: $sixthDayImageComplete, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $sixthDayImageComplete, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -45,6 +51,18 @@ struct ProfileSixthImageView: View {
                 sixthDayImageComplete = true
             }
         }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    appState.onboardingPath.removeLast()
+                } label: {
+                    Image("navigationBackBtn")
+                }
+            }
+        })
     }
     
     var sixthDayImage: some View {
@@ -54,6 +72,7 @@ struct ProfileSixthImageView: View {
             if let image = viewModel.selectedSixthDayImage {
                 Image(uiImage: image)
                     .resizable()
+                    .scaledToFill()
                     .frame(width: 240, height: 360)
                     .clipShape(RoundedRectangle(cornerRadius: 9.57))
             } else {
@@ -82,5 +101,5 @@ struct ProfileSixthImageView: View {
 }
 
 #Preview {
-    ProfileSixthImageView(viewModel: AccountViewModel())
+    ProfileSixthImageView(viewModel: OnboardingViewModel())
 }

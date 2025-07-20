@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BeforePreferenceKewordSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     
     let columns = [
             GridItem(.flexible()),
@@ -18,7 +18,7 @@ struct BeforePreferenceKewordSelectView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 5, total: onboardingPageCnt)
+            CustomRounedGradientProgressBar(currentScreen: 6, total: onboardingPageCnt)
                 .padding(.top, 30)
             Text("러브웨이를 만나기 전\n어떤 사랑을 해왔나요?")
                 .font(.pixel(24))
@@ -26,9 +26,10 @@ struct BeforePreferenceKewordSelectView: View {
                 .padding(.top, 48)
             Text("끌리는 키워드를 최대 7개까지 선택해주세요")
                 .font(.pixel(14))
-                .foregroundStyle(Color.mainColor)
+                .foregroundStyle(Color.gray3)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, 36)
+            
             gridView
             
             Button(action: {
@@ -37,7 +38,7 @@ struct BeforePreferenceKewordSelectView: View {
                 }
                 appState.onboardingPath.append(Onboarding.afterPreference)
             }, label: {
-                SelectButtonLabel(isSelected: $viewModel.isBeforePreferenceTypeComplete, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $viewModel.isBeforePreferenceTypeComplete, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -84,5 +85,5 @@ struct BeforePreferenceKewordSelectView: View {
 }
 
 #Preview {
-    BeforePreferenceKewordSelectView(viewModel: AccountViewModel())
+    BeforePreferenceKewordSelectView(viewModel: OnboardingViewModel())
 }

@@ -9,13 +9,13 @@ import SwiftUI
 
 struct SusceptibleInfoView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     @State var possibleNext: Bool = false
     let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
+            CustomRounedGradientProgressBar(currentScreen: 12, total: onboardingPageCnt)
                 .padding(.top, 30)
                 .padding(.bottom, 48)
             Text("당신의 라이프스타일을 알려주세요")
@@ -32,7 +32,7 @@ struct SusceptibleInfoView: View {
                     appState.onboardingPath.append(Onboarding.chatProfileImage)
                 }
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
         }
@@ -49,7 +49,7 @@ struct SusceptibleInfoView: View {
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    
+                    appState.onboardingPath.removeLast()
                 } label: {
                     Image("navigationBackBtn")
                 }
@@ -97,7 +97,7 @@ struct SusceptibleInfoView: View {
         Group {
             if let contentList = viewModel.lifeStyleList[category] {
                 let boolBinding = Binding<[Bool]>( //Binding<[Bool>] -> [Bool]배열을 바인딩 한다
-                    get: { // viewModel.lifeStyleButtonList[category]에서 값을 꺼내나
+                    get: { // viewModel.lifeStyleButtonList[category]에서 값을 꺼냄
                         viewModel.lifeStyleButtonList[category] ?? Array(repeating: false, count: contentList.count)
                     },
                     set: { newValue in // 뷰에서 버튼을 클릭하면 내부에서 바인딩 배열이 변경된 배열로 바뀜
@@ -132,7 +132,7 @@ struct SusceptibleInfoView: View {
         }, label: {
             SelectButtonLabel(
                 isSelected: selectedArray[index],
-                height: 42,
+                height: 48,
                 text: word,
                 backgroundColor: .white,
                 selectedBackgroundColor: .subColor,
@@ -150,5 +150,5 @@ struct SusceptibleInfoView: View {
 }
 
 #Preview {
-    SusceptibleInfoView(viewModel: AccountViewModel())
+    SusceptibleInfoView(viewModel: OnboardingViewModel())
 }

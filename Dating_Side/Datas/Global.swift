@@ -7,7 +7,7 @@
 
 import Foundation
 
-let onboardingPageCnt: Int = 10
+let onboardingPageCnt: Int = 16
 
 public protocol OneDigitalTextField: Hashable, Equatable {
     var index: Int? { get }

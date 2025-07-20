@@ -10,13 +10,13 @@ import SwiftUI
 struct OnChatProfileView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: ProfileViewModel = ProfileViewModel()
-    
     @State private var showAlert: Bool = false
+    @State var selfIntroductText: String = ""
     
     var body: some View {
         NavigationStack(path: $appState.onChatProfilePath) {
             VStack {
-                ProfileView(showProfileViewType: .chat)
+                ProfileView(selfIntroduceText: $selfIntroductText, showProfileViewType: .chat)
                 HStack(spacing: 5, content: {
                     skipButton
                     okButton

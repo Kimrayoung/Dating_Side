@@ -9,7 +9,7 @@ import SwiftUI
 
 struct JobSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     
     let columns = [
             GridItem(.flexible()),
@@ -20,12 +20,13 @@ struct JobSelectView: View {
     
     var body: some View {
         VStack {
-            CustomRounedGradientProgressBar(currentScreen: 9, total: onboardingPageCnt)
+            CustomRounedGradientProgressBar(currentScreen: 10, total: onboardingPageCnt)
                 .padding(.top, 30)
             Text("어떤 일을 하고 계신가요?")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 56)
+                .padding(.bottom, 72)
             
             gridView
             
@@ -34,7 +35,7 @@ struct JobSelectView: View {
                     appState.onboardingPath.append(Onboarding.jobDetail)
                 }
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -42,6 +43,11 @@ struct JobSelectView: View {
         .task {
             await viewModel.fetchJobType()
         }
+        .onAppear(perform: {
+            if viewModel.selectedJobIndex != nil {
+                possibleNext = true
+            }
+        })
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -61,18 +67,20 @@ struct JobSelectView: View {
     }
     
     var gridView: some View {
-        LazyVGrid(columns: columns, spacing: 10, content: {
-            ForEach(Array(viewModel.jobItmes.enumerated()), id: \.element) { (index, item) in
-                selectBtn(item, index)
-            }
-        })
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 10, content: {
+                ForEach(Array(viewModel.jobItmes.enumerated()), id: \.element) { (index, item) in
+                    selectBtn(item, index)
+                }
+            })
+        }
         .frame(maxHeight: .infinity)
         .padding(.horizontal, 31.5)
     }
     
     func selectBtn(_ word: String, _ index: Int) -> some View {
         return Button(action: {
-            possibleNext = true;
+            possibleNext = true
             for idx in 0..<viewModel.jobItmes.count {
                 if idx == index {
                     viewModel.isJobButtonSelected[idx] = true
@@ -86,5 +94,5 @@ struct JobSelectView: View {
 }
 
 #Preview {
-    JobSelectView(viewModel: AccountViewModel())
+    JobSelectView(viewModel: OnboardingViewModel())
 }

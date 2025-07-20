@@ -9,9 +9,9 @@ import SwiftUI
 
 struct NicknameInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
-    @State private var possibleNext: Bool = true
-    @FocusState private var isFocused: Bool
+    @ObservedObject var viewModel: OnboardingViewModel
+    @State private var possibleNext: Bool = false
+    @FocusState private var nicknameFocusField: NicknameFocusField?
     
     var body: some View {
         VStack(spacing: 0, content: {
@@ -33,7 +33,7 @@ struct NicknameInputView: View {
                 if viewModel.nicknameInput.isEmpty {
                     return
                 }
-                isFocused = false
+                nicknameFocusField = nil
                 appState.onboardingPath.append(Onboarding.birth)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
@@ -41,23 +41,23 @@ struct NicknameInputView: View {
             .padding(.bottom)
             .padding(.horizontal, 24)
         })
+        .onChange(of: viewModel.nicknameInput, { oldValue, newValue in
+            if newValue != "" {
+                possibleNext = true
+            }
+        })
         .onAppear(perform: {
-            
             DispatchQueue.main.async {
-                isFocused = true
+                nicknameFocusField = .nickname
             }
         })
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar(content: {
-//            ToolbarItem(placement: .principal) {
-//                //                CustomProgressBar(progress: 1, total: onboardingPageCnt)
-//                CustomRounedGradientProgressBar(currentScreen: 2, total: onboardingPageCnt)
-//            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    isFocused = false
+                    nicknameFocusField = nil
                     appState.onboardingPath.removeLast()
                 } label: {
                     Image("navigationBackBtn")
@@ -71,7 +71,7 @@ struct NicknameInputView: View {
             ZStack(alignment: .center, content: {
                 TextField("닉네임을 입력해주세요", text: $viewModel.nicknameInput)
                     .multilineTextAlignment(.center)
-                    .focused($isFocused)
+                    .focused($nicknameFocusField, equals: .nickname)
                     .bottomBorder(color: Color.gray3, width: 2)
                     .font(.pixel(20))
                     .frame(width: 228)
@@ -92,5 +92,5 @@ struct NicknameInputView: View {
 }
 
 #Preview {
-    NicknameInputView(viewModel: AccountViewModel())
+    NicknameInputView(viewModel: OnboardingViewModel())
 }

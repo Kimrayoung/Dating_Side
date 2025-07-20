@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject private var appState: AppState
-    @State var selfIntroduceText: String = ""
+    @Binding var selfIntroduceText: String
     var showProfileViewType: ShowProfileViewType
     
     var body: some View {
@@ -192,5 +192,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(showProfileViewType: .chat)
+    ProfileView(selfIntroduceText: .constant("hihih"), showProfileViewType: .chat)
 }

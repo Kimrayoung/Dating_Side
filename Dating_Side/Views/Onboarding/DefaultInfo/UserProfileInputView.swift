@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UserProfileInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     
     let titles: [String] = ["어떻게 당신을 불러드릴까요?", "생일을 알려주세요", "키를 알려주세요"]
     let subTitles: [String] = ["10글자 이내로 입력해주세요.", "생일은 변경이 불가하니 정확히 입력해주세요", ""]
@@ -46,7 +46,7 @@ struct UserProfileInputView: View {
 //                    }
                 }
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -185,5 +185,5 @@ struct UserProfileInputView: View {
 }
 
 #Preview {
-    UserProfileInputView(viewModel: AccountViewModel())
+    UserProfileInputView(viewModel: OnboardingViewModel())
 }

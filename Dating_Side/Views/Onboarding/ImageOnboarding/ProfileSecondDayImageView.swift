@@ -10,20 +10,24 @@ import PhotosUI
 
 struct ProfileSecondImageView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     @State var secondDayImageComplete: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
     @State var isImagePickerPresented: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 8, total: onboardingPageCnt)
+            CustomRounedGradientProgressBar(currentScreen: 14, total: onboardingPageCnt)
                 .padding(.top, 30)
                 .padding(.bottom, 48)
-            Text("매칭된 상대에게 2일차에 공개할 사진을 등록해주세요")
-                .font(.pixel(24))
-                .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundStyle(Color.blackColor)
+            TextWithColoredSubString(
+                text: "매칭된 상대에게 2일차에 공개할 사진을 등록해주세요",
+                highlight: "2일차",
+                gradientColors: [.mainColor]
+            )
+            .font(.pixel(24))
+            .frame(maxWidth: .infinity, alignment: .center)
+            .foregroundStyle(Color.blackColor)
             Text("흥미있는 대화를 위한 사진입니다.\n2일차에 보여주고 싶은 나의 모습을 등록해주세요")
                 .font(.pixel(14))
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -36,9 +40,12 @@ struct ProfileSecondImageView: View {
             }
             .padding(.bottom, 70)
             Button(action: {
+                if viewModel.selectedSeconDayImage == nil {
+                    return
+                }
                 appState.onboardingPath.append(Onboarding.forthDayPhoto)
             }, label: {
-                SelectButtonLabel(isSelected: $secondDayImageComplete, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $secondDayImageComplete, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -48,6 +55,18 @@ struct ProfileSecondImageView: View {
                 secondDayImageComplete = true
             }
         }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    appState.onboardingPath.removeLast()
+                } label: {
+                    Image("navigationBackBtn")
+                }
+            }
+        })
     }
     
     var secondDayImage: some View {
@@ -57,6 +76,7 @@ struct ProfileSecondImageView: View {
             if let image = viewModel.selectedSeconDayImage {
                 Image(uiImage: image)
                     .resizable()
+                    .scaledToFill()
                     .frame(width: 240, height: 360)
                     .clipShape(RoundedRectangle(cornerRadius: 9.57))
             } else {
@@ -99,5 +119,5 @@ struct ProfileSecondImageView: View {
 }
 
 #Preview {
-    ProfileSecondImageView(viewModel: AccountViewModel())
+    ProfileSecondImageView(viewModel: OnboardingViewModel())
 }

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct BirthInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
-    @State private var possibleNext: Bool = true
+    @ObservedObject var viewModel: OnboardingViewModel
+    @State private var possibleNext: Bool = false
     
     // 포커스 상태 관리
     @FocusState private var focusedField: BirthFocusField?
@@ -43,6 +43,15 @@ struct BirthInputView: View {
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
+        }
+        .onChange(of: viewModel.birthYear) { _, _ in
+            possibleNext = viewModel.checkBirthdayComplete()
+        }
+        .onChange(of: viewModel.birthMonth) { _, _ in
+            possibleNext = viewModel.checkBirthdayComplete()
+        }
+        .onChange(of: viewModel.birthDay) { _, _ in
+            possibleNext = viewModel.checkBirthdayComplete()
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
@@ -214,12 +223,8 @@ struct BirthInputView: View {
             }
         }
     }
-    
-    private func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
 }
 
 #Preview {
-    BirthInputView(viewModel: AccountViewModel())
+    BirthInputView(viewModel: OnboardingViewModel())
 }

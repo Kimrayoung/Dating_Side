@@ -9,13 +9,13 @@ import SwiftUI
 
 struct LocationSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     
     @State private var possibleNext: Bool = true
     
     var body: some View {
         VStack(spacing: 0, content: {
-            CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
+            CustomRounedGradientProgressBar(currentScreen: 5, total: onboardingPageCnt)
                 .padding(.top, 30)
             Text("어느 지역의 사람들과\n만나고 싶나요?")
                 .font(.pixel(24))
@@ -32,7 +32,7 @@ struct LocationSelectView: View {
             Button(action: {
                 appState.onboardingPath.append(Onboarding.beforePreference)
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -93,5 +93,5 @@ struct LocationSelectView: View {
 }
 
 #Preview {
-    LocationSelectView(viewModel: AccountViewModel())
+    LocationSelectView(viewModel: OnboardingViewModel())
 }

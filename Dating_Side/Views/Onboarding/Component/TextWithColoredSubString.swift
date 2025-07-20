@@ -13,31 +13,34 @@ struct TextWithColoredSubString: View {
     let gradientColors: [Color]
     
     var body: some View {
-        buildText()
-    }
-    
-    @ViewBuilder
-    private func buildText() -> some View {
-        let components = text.components(separatedBy: highlight)
-        HStack(spacing: 0) {
-            ForEach(0..<components.count, id: \.self) { index in
-                Text(components[index])
-                
-                if index < components.count - 1 {
-                    Text(highlight)
-                        .foregroundColor(.clear)
-                        .overlay {
-                            LinearGradient(colors: gradientColors, startPoint: .leading, endPoint: .trailing).mask(
-                                Text(highlight)
-                            )
-                        }
-                        .bold()
-                }
-            }
+        // 1. split on your highlight
+        let parts = text.components(separatedBy: highlight)
+        
+        // 2. start with the first segment
+        var composed = Text(parts[0])
+        
+        // 3. append highlight + next piece, for each occurrence
+        for idx in 0..<parts.count - 1 {
+            composed = composed +
+            Text(highlight)
+            // apply gradient *directly* as the foreground style,
+            // no need for clear‑color + overlay
+                .foregroundStyle(
+                    .linearGradient(
+                        colors: gradientColors,
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .bold()
+            composed = composed + Text(parts[idx+1])
         }
-    }
-}
+        
+        // 4. let SwiftUI wrap it naturally
+        return composed
+            .multilineTextAlignment(.center)
+    }}
 
 #Preview {
-    TextWithColoredSubString(text: "환영해요! 러브웨이 입니다", highlight: "러브웨이", gradientColors: [.blue, .purple, .pink])
+    TextWithColoredSubString(text: "이제 러브웨이에서\n어떤 사랑을 하고 싶나요?", highlight: "러브웨이", gradientColors: [.blue, .purple, .pink])
 }

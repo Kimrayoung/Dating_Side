@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 extension Color {
     // HEX 문자열로 색상 생성 (ex: "#FF0000" or "FF0000")
@@ -34,8 +35,8 @@ extension Color {
         )
     }
     
-    /// #769AFF
-    static let mainColor = Color(hex: "#769AFF")
+    /// #8494F6
+    static let mainColor = Color(hex: "#8494F6")
     /// #EAEFFD
     static let subColor = Color(hex: "#EAEFFD")
     /// #DAE4FF
@@ -54,5 +55,50 @@ extension Color {
     static let gray01 = Color(hex: "#C6CEE0")
     /// #DCDCDC
     static let gray0 = Color(hex: "#E8E8E8")
+    
+}
+
+extension UIColor {
+    convenience init(hex: String) {
+        // 1) 불필요한 문자 제거
+        let hexString = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int = UInt64()
+        Scanner(string: hexString).scanHexInt64(&int)
+        
+        let a, r, g, b: UInt64
+        switch hexString.count {
+        case 3: // RGB (12-bit: RGB each 1 hex digit)
+            (a, r, g, b) = (
+                255,
+                (int >> 8) * 17,
+                (int >> 4 & 0xF) * 17,
+                (int & 0xF) * 17
+            )
+        case 6: // RRGGBB (24-bit)
+            (a, r, g, b) = (
+                255,
+                int >> 16,
+                int >> 8 & 0xFF,
+                int & 0xFF
+            )
+        case 8: // AARRGGBB (32-bit)
+            (a, r, g, b) = (
+                int >> 24,
+                int >> 16 & 0xFF,
+                int >> 8 & 0xFF,
+                int & 0xFF
+            )
+        default:
+            // 잘못된 포맷: 검은색으로 폴백
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        
+        self.init(
+            red:   CGFloat(r) / 255,
+            green: CGFloat(g) / 255,
+            blue:  CGFloat(b) / 255,
+            alpha: CGFloat(a) / 255
+        )
+    }
     
 }

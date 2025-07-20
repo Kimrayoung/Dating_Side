@@ -34,21 +34,18 @@ struct AccountImage {
 }
 
 extension SignupRequest {
-    func toMultipartFormBuilder(images: [AccountImage]) -> MultipartFormDataBuilder? {
+    func toMultipartFormBuilder(images: [AccountImage]) -> MultipartFormDataBuilder {
         var builder = MultipartFormDataBuilder()
 
-        // 1. 모든 프로퍼티 → key-value로 자동 추출
-        guard let keyValuePairs = self.toKeyValuePairs() else { return nil }
+        // 1) JSON 전체를 `request` 파트로 추가
+        builder.appendJSONField(named: "request", value: self)
 
-        for (key, value) in keyValuePairs {
-            builder.appendTextField(named: key, value: value)
+        // 2) 이미지들 추가
+        for img in images {
+            builder.appendImageField(named: img.imageTitle, image: img.image)
         }
 
-        for image in images{
-            builder.appendImageField(named: image.imageTitle, image: image.image)
-        }
-
-        // 3. 종료 바운더리
+        // 3) 마무리 boundary
         builder.finalize()
 
         return builder
@@ -99,4 +96,38 @@ struct LifeStyleContent: Codable {
 enum PreferenceType: String {
     case before = "BEFORE"
     case after = "AFTER"
+}
+
+enum ImageType {
+    case mainProfile
+    case secondDay
+    case forthDay
+    case sixthDay
+}
+
+struct UserAccount: Codable {
+    let id: Int
+    let phoneNumber, genderType, nickName, birthDate: String
+    let height: Int
+    let activeRegion: String
+    let beforePreferenceTypeList, afterPreferenceTypeList: [String]
+    let keyword, educationType, educationDetail, jobType: String
+    let jobDetail: String
+    let lifeStyle: LifeStyle
+    let profileImageURL: String
+    let profileImageURLByDay: ProfileImageURLByDay
+    let introduction: String
+    let mannerTemperature: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id, phoneNumber, genderType, nickName, birthDate, height, activeRegion, beforePreferenceTypeList, afterPreferenceTypeList, keyword, educationType, educationDetail, jobType, jobDetail, lifeStyle
+        case profileImageURL = "profileImageUrl"
+        case profileImageURLByDay = "profileImageUrlByDay"
+        case introduction, mannerTemperature
+    }
+}
+
+// MARK: - ProfileImageURLByDay
+struct ProfileImageURLByDay: Codable {
+    let daySecond, dayFourth, daySixth: String
 }

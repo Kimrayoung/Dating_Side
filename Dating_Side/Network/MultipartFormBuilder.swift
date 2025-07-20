@@ -19,26 +19,23 @@ struct MultipartFormDataBuilder {
         "multipart/form-data; boundary=\(boundary)"
     }
 
-    mutating func appendTextField(named name: String, value: String) {
-        body.append("--\(boundary)\r\n")
-        body.append("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n")
-        body.append("\(value)\r\n")
-    }
-
-    // 일반 데이터(String, Int등)
     mutating func appendJSONField<T: Encodable>(named name: String, value: T) {
         let encoder = JSONEncoder()
-        guard let jsonData = try? encoder.encode(value),
-              let jsonString = String(data: jsonData, encoding: .utf8) else { return }
+        encoder.dateEncodingStrategy = .iso8601
+        guard let jsonData = try? encoder.encode(value) else { return }
 
         body.append("--\(boundary)\r\n")
         body.append("Content-Disposition: form-data; name=\"\(name)\"\r\n")
         body.append("Content-Type: application/json\r\n\r\n")
-        body.append("\(jsonString)\r\n")
+        body.append(jsonData)
+        body.append("\r\n")
     }
 
-    //Image데이터
-    mutating func appendImageField(named name: String, image: UIImage, filename: String = UUID().uuidString + ".jpg", mimeType: String = "image/jpeg", compressionQuality: CGFloat = 0.8) {
+    mutating func appendImageField(named name: String,
+                                   image: UIImage,
+                                   filename: String = UUID().uuidString + ".jpg",
+                                   mimeType: String = "image/jpeg",
+                                   compressionQuality: CGFloat = 0.8) {
         guard let imageData = image.jpegData(compressionQuality: compressionQuality) else { return }
 
         body.append("--\(boundary)\r\n")
@@ -54,9 +51,5 @@ struct MultipartFormDataBuilder {
 
     func build() -> Data {
         return body
-    }
-
-    func getBoundary() -> String {
-        return boundary
     }
 }

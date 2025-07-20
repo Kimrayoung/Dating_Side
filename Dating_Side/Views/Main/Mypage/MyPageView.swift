@@ -11,12 +11,13 @@ import Kingfisher
 @MainActor
 struct MyPageView: View {
     @State private var imageList: [String] = ["https://picsum.photos/id/1/200/300", "https://picsum.photos/id/2/200/300", "https://picsum.photos/id/3/200/300", "https://picsum.photos/200/300", "https://picsum.photos/200/300", ""]
-    @Binding var selfIntroductText: String
+    @State var selfIntroductText: String = ""
+    
     var body: some View {
         ScrollView {
             VStack {
                 #warning("MainPath생성할떄 ProfileViewModel 추가")
-                ProfileView(showProfileViewType: .myPage)
+                ProfileView(selfIntroduceText: $selfIntroductText, showProfileViewType: .myPage)
                 photoView
             }
         }
@@ -55,5 +56,5 @@ struct MyPageView: View {
 }
 
 #Preview {
-    MyPageView(selfIntroductText: .constant("hi"))
+    MyPageView()
 }

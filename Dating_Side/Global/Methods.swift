@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 func getAccessToken(from authHeader: String) -> String? {
     // "Bearer%2520" 다음부터 시작하는 부분 찾기
@@ -21,3 +22,6 @@ func getAccessToken(from authHeader: String) -> String? {
 }
 
 
+func hideKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+}

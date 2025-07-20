@@ -11,9 +11,9 @@ import PhotosUI
 import SwiftUI
 
 @MainActor
-class AccountViewModel: ObservableObject {
+class OnboardingViewModel: ObservableObject {
     private var appState = AppState.shared
-    let accountNetworkManger = AccountNetworkManager()
+    let accountNetworkManger = OnboardingNetworkManager()
     private var cancellables = Set<AnyCancellable>()
     
     var socialType: SocialType? = nil
@@ -159,7 +159,8 @@ class AccountViewModel: ObservableObject {
 }
 
 //MARK: - 서버 통신 관련
-extension AccountViewModel {
+extension OnboardingViewModel {
+    /// 주소 데이터 가져오기
     func fetchAddressData(isFirstLoading: Bool = false, code: String? = nil, isDetailLocation: Bool = false) async {
         do {
             let result = try await accountNetworkManger.fetchAddressData(code)
@@ -185,6 +186,7 @@ extension AccountViewModel {
         }
     }
     
+    /// 러브웨이 키워드 선택 API
     func fetchPreferenceType(preferenceType: PreferenceType) async {
         do {
             let result = try await accountNetworkManger.fetchPreferenceType(preferenceType.rawValue)
@@ -192,10 +194,12 @@ extension AccountViewModel {
             case .success(let data):
                 switch preferenceType {
                 case .before:
+                    if beforePreferenceTypes == data { return }
                     beforePreferenceTypes = data
                     isBeforePreferenceTypesSelected = Array(repeating: false, count: data.count)
                     print(#fileID, #function, #line, "- preference data: \(data)")
                 case .after:
+                    if afterPreferceTypes == data { return }
                     afterPreferceTypes = data
                     isAfterPreferenceTypesSelected = Array(repeating: false, count: data.count)
                 }
@@ -208,11 +212,13 @@ extension AccountViewModel {
         }
     }
     
+    /// 직업 선택지 API
     func fetchJobType() async {
         do {
             let result = try await accountNetworkManger.fetchJobType()
             switch result {
             case .success(let data):
+                if jobItmes == data { return }
                 jobItmes = data
                 isJobButtonSelected = Array(repeating: false, count: data.count)
             case .failure(let error):
@@ -245,16 +251,16 @@ extension AccountViewModel {
     
     // 유저 정보 받아오기
     func getUsersProfileData() async {
-        do {
-            let result = try await accountNetworkManger.fetchUserData()
-            switch result {
-            case .success(let data):
-                print(#fileID, #function, #line, "- data checking: \(data)")
-            case .failure(let error):
-                print(#fileID, #function, #line, "- failur: \(error.localizedDescription)")
-            }
-        } catch {
-        }
+//        do {
+//            let result = try await accountNetworkManger.fetchUserData()
+//            switch result {
+//            case .success(let data):
+//                print(#fileID, #function, #line, "- data checking: \(data)")
+//            case .failure(let error):
+//                print(#fileID, #function, #line, "- failur: \(error.localizedDescription)")
+//            }
+//        } catch {
+//        }
     }
     
     // 유저 정보 저장하기
@@ -279,11 +285,11 @@ extension AccountViewModel {
         guard let signupData = signupData else { return false }
         
         do {
-            let result = try await AccountNetworkManager().postUserData(signupData: signupData)
+            let result = try await OnboardingNetworkManager().postUserData(signupData: signupData)
             switch result {
             case .success(let result):
-                print(#fileID, #function, #line, "- data checking: \(result.result)")
-                return result.result
+                print(#fileID, #function, #line, "- data checking: \(result)")
+                return true
             case .failure(let error):
                 print(#fileID, #function, #line, "- failur: \(error.localizedDescription)")
                 return false
@@ -295,47 +301,47 @@ extension AccountViewModel {
     }
     
     // 유저 정보 서버에 업데이트 해주기
-    func updateUserProfileData<T>(updateType: UserDataUpdateType, data: T) async -> Bool {
-        var newData = UserData(genderType: "", nickName: "", birthDate: "", height: 0, activeRegion: "", beforePreferenceTypeList: [], afterPreferenceTypeList: [], edcationType: "", educationDetail: "", jobType: "", jobDetail: "", lifeStyle: LifeStyle(drinking: "", smoking: "", tatto: "", religion: ""), introduction: "", fcmToken: "")
-        
-        switch updateType {
-        case .gender:
-            newData.genderType = data as? String ?? ""
-        case .nickname:
-            newData.nickName = data as? String ?? ""
-        case .birth:
-            newData.birthDate = data as? String ?? ""
-        case .height:
-            newData.height = data as? Int ?? 0
-        case .location:
-            newData.activeRegion = data as? String ?? ""
-        case .loveKeyword:
-            newData.beforePreferenceTypeList = data as? [String] ?? []
-        case .highestEducation:
-            newData.educationDetail = data as? String ?? ""
-        case .job:
-            newData.jobDetail = data as? String ?? ""
-        case .sensitiveInfo:
-            newData.lifeStyle = data as? LifeStyle ?? LifeStyle(drinking: "", smoking: "", tatto: "", religion: "")
-        case .profileImage:
-//            newData. = data as? ProfileImage
-            ""
-        case .introduction:
-            newData.introduction = data as? String ?? ""
-        }
-        
-        do {
-            let result = try await accountNetworkManger.patchUserData(userData: newData)
-            switch result {
-            case .success(let check):
-                print(#fileID, #function, #line, "- check: \(check)")
-                return check.result
-            case .failure(let error):
-                print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-            }
-        } catch {
-            
-        }
-        return false
-    }
+//    func updateUserProfileData<T>(updateType: UserDataUpdateType, data: T) async -> Bool {
+//        var newData = UserData(genderType: "", nickName: "", birthDate: "", height: 0, activeRegion: "", beforePreferenceTypeList: [], afterPreferenceTypeList: [], edcationType: "", educationDetail: "", jobType: "", jobDetail: "", lifeStyle: LifeStyle(drinking: "", smoking: "", tatto: "", religion: ""), introduction: "", fcmToken: "")
+//        
+//        switch updateType {
+//        case .gender:
+//            newData.genderType = data as? String ?? ""
+//        case .nickname:
+//            newData.nickName = data as? String ?? ""
+//        case .birth:
+//            newData.birthDate = data as? String ?? ""
+//        case .height:
+//            newData.height = data as? Int ?? 0
+//        case .location:
+//            newData.activeRegion = data as? String ?? ""
+//        case .loveKeyword:
+//            newData.beforePreferenceTypeList = data as? [String] ?? []
+//        case .highestEducation:
+//            newData.educationDetail = data as? String ?? ""
+//        case .job:
+//            newData.jobDetail = data as? String ?? ""
+//        case .sensitiveInfo:
+//            newData.lifeStyle = data as? LifeStyle ?? LifeStyle(drinking: "", smoking: "", tatto: "", religion: "")
+//        case .profileImage:
+////            newData. = data as? ProfileImage
+//            ""
+//        case .introduction:
+//            newData.introduction = data as? String ?? ""
+//        }
+//        
+//        do {
+//            let result = try await accountNetworkManger.patchUserData(userData: newData)
+//            switch result {
+//            case .success(let check):
+//                print(#fileID, #function, #line, "- check: \(check)")
+//                return check.result
+//            case .failure(let error):
+//                print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+//            }
+//        } catch {
+//            
+//        }
+//        return false
+//    }
 }

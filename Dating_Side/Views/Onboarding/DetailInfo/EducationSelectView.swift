@@ -9,13 +9,13 @@ import SwiftUI
 
 struct EducationSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     
     @State var possibleNext: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
+            CustomRounedGradientProgressBar(currentScreen: 8, total: onboardingPageCnt)
                 .padding(.top, 30)
                 .padding(.bottom, 48)
             Text("마지막으로 공부한 곳이\n어디인가요?")
@@ -32,7 +32,7 @@ struct EducationSelectView: View {
                     appState.onboardingPath.append(Onboarding.schoolName)
                 }
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -84,7 +84,7 @@ struct EducationSelectView: View {
             viewModel.isEducationButtonSelected[index] = true
             viewModel.selectedEducationIndex = index
         } label: {
-            SelectButtonLabel(isSelected: $viewModel.isEducationButtonSelected[index], height: 42, text: text, backgroundColor: .white, selectedBackgroundColor: .subColor, textColor: .black, selectedTextColor: .black, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2,strokeBorderLineColor: .gray01, selectedStrokeBorderColor: .mainColor)
+            SelectButtonLabel(isSelected: $viewModel.isEducationButtonSelected[index], height: 52, text: text, backgroundColor: .white, selectedBackgroundColor: .subColor, textColor: .black, selectedTextColor: .black, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 1, selectedStrokeBorderLineWidth: 2,strokeBorderLineColor: .gray01, selectedStrokeBorderColor: .mainColor)
         }
         .padding(.horizontal, 46)
     }
@@ -94,5 +94,5 @@ struct EducationSelectView: View {
 }
 
 #Preview {
-    EducationSelectView(viewModel: AccountViewModel())
+    EducationSelectView(viewModel: OnboardingViewModel())
 }

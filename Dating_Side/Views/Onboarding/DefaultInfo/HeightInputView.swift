@@ -9,8 +9,8 @@ import SwiftUI
 
 struct HeightInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
-    @State private var possibleNext: Bool = true
+    @ObservedObject var viewModel: OnboardingViewModel
+    @State private var possibleNext: Bool = false
     
     @FocusState private var focusedField: HeightFocusField?
     @State private var showBottomModal: Bool = false
@@ -42,6 +42,9 @@ struct HeightInputView: View {
             .padding(.bottom)
             .padding(.horizontal, 24)
         }
+        .onChange(of: viewModel.height, { oldValue, newValue in
+            possibleNext = viewModel.checkHeightComplete()
+        })
         .sheet(isPresented: $showBottomModal, content: {
             bottomModal
                 .presentationDetents([.height(306)])
@@ -56,7 +59,14 @@ struct HeightInputView: View {
 //                CustomRounedGradientProgressBar(currentScreen: 2, total: onboardingPageCnt)
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
-                Image("navigationBackBtn")
+                Button {
+                    hideKeyboard()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                        appState.onboardingPath.removeLast()
+                    })
+                } label: {
+                    Image("navigationBackBtn")
+                }
             }
         })
     }
@@ -206,10 +216,10 @@ struct HeightInputView: View {
     func getHeightString() -> String {
         let heightStr = viewModel.height.joined()
         
-        return "\(heightStr)cm"
+        return "1\(heightStr)cm"
     }
 }
 
 #Preview {
-    HeightInputView(viewModel: AccountViewModel())
+    HeightInputView(viewModel: OnboardingViewModel())
 }

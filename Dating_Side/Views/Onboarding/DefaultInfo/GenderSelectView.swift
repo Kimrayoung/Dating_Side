@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GenderSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: AccountViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     @State private var womanSelected: Bool = true
     @State private var manSelected: Bool = false
     @State private var possibleNext: Bool = true
@@ -99,7 +99,7 @@ struct GenderSelectView: View {
 }
 
 #Preview {
-    GenderSelectView(viewModel: AccountViewModel())
+    GenderSelectView(viewModel: OnboardingViewModel())
 }
 
 
