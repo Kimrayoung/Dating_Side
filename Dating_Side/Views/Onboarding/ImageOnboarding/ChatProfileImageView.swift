@@ -11,6 +11,7 @@ import PhotosUI
 /// 프로필 사진 등록 및 자기소개 등록
 struct ChatProfileImageView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var alertManager: AlertManager
     @ObservedObject var viewModel: OnboardingViewModel
     @State var possibleNext: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
@@ -50,11 +51,19 @@ struct ChatProfileImageView: View {
             .padding(.bottom)
             .padding(.horizontal, 24)
         }
+        .alert(isPresented: $alertManager.isPresented) {
+            Alert(
+                title: Text(alertManager.title),
+                message: Text(alertManager.message),
+                dismissButton: alertManager.button
+            )
+        }
         .onChange(of: viewModel.selectedImage, { oldValue, newValue in
             if newValue != nil {
                 possibleNext = true
             }
         })
+        
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -90,34 +99,27 @@ struct ChatProfileImageView: View {
     }
     
     var selectImageButton: some View {
-        Button(action: {
-            isImagePickerPresented = true
-        }, label: {
-            Text("사진 선택하기")
-                .foregroundStyle(Color.black)
-                .font(.pixel(14))
-        })
-        .padding(.vertical, 9.5)
-        .padding(.horizontal, 24.5)
-        .overlay {
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.black, lineWidth: 1)
-        }
-        .photosPicker(
+        PhotoPickerButton(
+            imageType: .mainProfile,
             isPresented: $isImagePickerPresented,
-            selection: $selectedPickerImage,
-            maxSelectionCount: 1,
-            matching: .images
-        )
-        .onChange(of: selectedPickerImage, {
-            guard let selectedPickerImage = selectedPickerImage.first else { return }
-            viewModel.loadSelectedImage(imageType: .mainProfile, pickerItem: selectedPickerImage)
-        })
-        .onChange(of: viewModel.selectedImage) {
-            if viewModel.selectedImage != nil {
-                possibleNext = true
+            selectedPickerImage: $selectedPickerImage,
+            onImagePicked: { item in
+                viewModel.loadSelectedImage(imageType: .mainProfile, pickerItem: item)
+            }) {
+                Text("사진 선택하기")
+                    .foregroundStyle(Color.black)
+                    .font(.pixel(14))
+                    .padding(.vertical, 9.5)
+                    .padding(.horizontal, 24.5)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.black, lineWidth: 1)
+                    }
+            }.onChange(of: viewModel.selectedImage) {
+                if viewModel.selectedImage != nil {
+                    possibleNext = true
+                }
             }
-        }
     }
     
     var selfIntroduceTextView: some View {

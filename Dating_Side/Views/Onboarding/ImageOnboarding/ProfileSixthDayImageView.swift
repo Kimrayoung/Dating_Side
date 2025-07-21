@@ -66,37 +66,31 @@ struct ProfileSixthImageView: View {
     }
     
     var sixthDayImage: some View {
-        Button {
-            isImagePickerPresented = true
-        } label: {
-            if let image = viewModel.selectedSixthDayImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 240, height: 360)
-                    .clipShape(RoundedRectangle(cornerRadius: 9.57))
-            } else {
-                RoundedRectangle(cornerRadius: 9.57)
-                    .fill(Color.subColor1)
-                    .frame(width: 240, height: 360)
-            }
-        }
-        .photosPicker(
+        PhotoPickerButton(
+            imageType: .sixthDay,
             isPresented: $isImagePickerPresented,
-            selection: $selectedPickerImage,
-            maxSelectionCount: 1,
-            matching: .images
-        )
-        .onChange(of: selectedPickerImage, {
-            guard let selectedPickerImage = selectedPickerImage.first else { return }
-            viewModel.loadSelectedImage(imageType: .sixthDay, pickerItem: selectedPickerImage)
-        })
-        
-        .onChange(of: viewModel.selectedSixthDayImage) {
-            if viewModel.selectedSixthDayImage != nil {
-                sixthDayImageComplete = true
+            selectedPickerImage: $selectedPickerImage,
+            onImagePicked: { item in
+                viewModel.loadSelectedImage(imageType: .sixthDay, pickerItem: item)
+            }) {
+                Group {
+                    if let image = viewModel.selectedSixthDayImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 240, height: 360)
+                            .clipShape(RoundedRectangle(cornerRadius: 9.57))
+                    } else {
+                        Image("checkerImage")
+                            .frame(width: 240, height: 360)
+                    }
+                }
             }
-        }
+            .onChange(of: viewModel.selectedSixthDayImage) {
+                if viewModel.selectedSixthDayImage != nil {
+                    sixthDayImageComplete = true
+                }
+            }
     }
 }
 

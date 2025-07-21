@@ -27,6 +27,7 @@ struct Dating_SideApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
+                .environmentObject(AlertManager.shared)
                 .onOpenURL { url in
                     handleOpenURL(url)
                 }

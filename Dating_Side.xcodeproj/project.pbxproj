@@ -13,6 +13,9 @@
 		4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE42DA6B47F006206F1 /* Login.swift */; };
 		4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE62DA6B957006206F1 /* LoginView.swift */; };
 		4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */; };
+		4D301E932E2E5FC3001FA1A1 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D301E922E2E5FBC001FA1A1 /* PermissionManager.swift */; };
+		4D301E952E2E610E001FA1A1 /* PhotoPickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D301E942E2E6109001FA1A1 /* PhotoPickerButton.swift */; };
+		4D301E972E2E66D7001FA1A1 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D301E962E2E66CA001FA1A1 /* AlertManager.swift */; };
 		4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D33EA182E0995B600B2661B /* ChatListViewModel.swift */; };
 		4D389C2A2E1C0ECF00B56F84 /* AppleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C292E1C0EC900B56F84 /* AppleAuth.swift */; };
 		4D389C2C2E1E9DB800B56F84 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C2B2E1E9DB600B56F84 /* Account.swift */; };
@@ -141,6 +144,9 @@
 		4D0B3BE42DA6B47F006206F1 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		4D0B3BE62DA6B957006206F1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericDigitTextField.swift; sourceTree = "<group>"; };
+		4D301E922E2E5FBC001FA1A1 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
+		4D301E942E2E6109001FA1A1 /* PhotoPickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerButton.swift; sourceTree = "<group>"; };
+		4D301E962E2E66CA001FA1A1 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		4D33EA182E0995B600B2661B /* ChatListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
 		4D389C292E1C0EC900B56F84 /* AppleAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuth.swift; sourceTree = "<group>"; };
 		4D389C2B2E1E9DB600B56F84 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -324,6 +330,7 @@
 		4D6119652D75D90A00715B9E /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				4D301E942E2E6109001FA1A1 /* PhotoPickerButton.swift */,
 				4D61194F2D75AA2900715B9E /* BirthTextField.swift */,
 				4D6119512D75AA8700715B9E /* UnitLabel.swift */,
 				4D6D18812D637EAF00698E5D /* CustomPicker.swift */,
@@ -422,6 +429,8 @@
 		4D6D18742D63587400698E5D /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				4D301E962E2E66CA001FA1A1 /* AlertManager.swift */,
+				4D301E922E2E5FBC001FA1A1 /* PermissionManager.swift */,
 				4D6D186B2D6353E600698E5D /* Service.swift */,
 				4D6D186F2D63564000698E5D /* NavigationProtocol.swift */,
 				4D6119532D75B0EB00715B9E /* AppState.swift */,
@@ -779,11 +788,13 @@
 				4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */,
 				4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */,
 				4DEB5A6F2E0AD56D009BE55B /* Message.swift in Sources */,
+				4D301E952E2E610E001FA1A1 /* PhotoPickerButton.swift in Sources */,
 				4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */,
 				4D389C522E2CEE3D00B56F84 /* MatchingNetworkManager.swift in Sources */,
 				4D443B9B2DCB85C600F4B9EB /* OnboardingNetworkManager.swift in Sources */,
 				4D443BA92DCBAB6A00F4B9EB /* Codable+Ext.swift in Sources */,
 				4DF329E72D87EAE100DBB823 /* WelcomeText.swift in Sources */,
+				4D301E972E2E66D7001FA1A1 /* AlertManager.swift in Sources */,
 				4D443BA22DCB954F00F4B9EB /* ChatProfileImageView.swift in Sources */,
 				4DFAFB9A2E1435AF006E3B5F /* Tempchat.swift in Sources */,
 				4DFAFBA22E16BE7A006E3B5F /* KakaoAuth.swift in Sources */,
@@ -807,6 +818,7 @@
 				4D389C482E2A46CC00B56F84 /* ProfileForthDayImageView.swift in Sources */,
 				4D389C562E2CF4C200B56F84 /* AccountNetworkManager.swift in Sources */,
 				4DB5B3152D903B220060D4C6 /* JobSelectView.swift in Sources */,
+				4D301E932E2E5FC3001FA1A1 /* PermissionManager.swift in Sources */,
 				4D389C542E2CEF4B00B56F84 /* Matching.swift in Sources */,
 				4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */,
 				4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */,
@@ -1017,6 +1029,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Dating-Side-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "프로필 사진 등록을 위해 사진 접근 권한이 필요합니다. 허용하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "프로필 사진 등록을 위해 사진 접근 권한이 필요합니다. 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1050,6 +1064,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Dating-Side-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "프로필 사진 등록을 위해 사진 접근 권한이 필요합니다. 허용하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "프로필 사진 등록을 위해 사진 접근 권한이 필요합니다. 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -37,8 +37,8 @@ class AppState: ObservableObject {
 //            currentScreen = .login
 //        }
 //        currentScreen = .onboarding
-//        currentScreen = .login
-        currentScreen = .main
+        currentScreen = .login
+//        currentScreen = .main
     }
     
     func startOnboarding() {

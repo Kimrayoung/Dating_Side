@@ -70,36 +70,32 @@ struct ProfileForthImageView: View {
     }
     
     var forthDayImage: some View {
-        Button {
-            isImagePickerPresented = true
-        } label: {
-            if let image = viewModel.selectedForthDayImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 240, height: 360)
-                    .clipShape(RoundedRectangle(cornerRadius: 9.57))
-            } else {
-                RoundedRectangle(cornerRadius: 9.57)
-                    .fill(Color.subColor)
-                    .frame(width: 240, height: 360)
-            }
-        }
-        .photosPicker(
+        PhotoPickerButton(
+            imageType: .forthDay,
             isPresented: $isImagePickerPresented,
-            selection: $selectedPickerImage,
-            maxSelectionCount: 1,
-            matching: .images
-        )
-        .onChange(of: selectedPickerImage, {
-            guard let selectedPickerImage = selectedPickerImage.first else { return }
-            viewModel.loadSelectedImage(imageType: .forthDay, pickerItem: selectedPickerImage)
-        })
-        .onChange(of: viewModel.selectedForthDayImage) {
-            if viewModel.selectedForthDayImage != nil {
-                forthDayImageComplete = true
+            selectedPickerImage: $selectedPickerImage,
+            onImagePicked: { item in
+                viewModel.loadSelectedImage(imageType: .forthDay, pickerItem: item)
+            }) {
+                Group {
+                    if let image = viewModel.selectedForthDayImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 240, height: 360)
+                            .clipShape(RoundedRectangle(cornerRadius: 9.57))
+                    } else {
+                        RoundedRectangle(cornerRadius: 9.57)
+                            .fill(Color.subColor)
+                            .frame(width: 240, height: 360)
+                    }
+                }
             }
-        }
+            .onChange(of: viewModel.selectedForthDayImage) {
+                if viewModel.selectedForthDayImage != nil {
+                    forthDayImageComplete = true
+                }
+            }
     }
     
     var sixthDayImage: some View {

@@ -282,8 +282,6 @@ extension OnboardingViewModel {
         
         let signupData = userData.toMultipartFormBuilder(images: userImageData)
         
-        guard let signupData = signupData else { return false }
-        
         do {
             let result = try await OnboardingNetworkManager().postUserData(signupData: signupData)
             switch result {

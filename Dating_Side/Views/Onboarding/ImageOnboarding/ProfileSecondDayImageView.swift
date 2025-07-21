@@ -70,37 +70,31 @@ struct ProfileSecondImageView: View {
     }
     
     var secondDayImage: some View {
-        Button {
-            isImagePickerPresented = true
-        } label: {
-            if let image = viewModel.selectedSeconDayImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 240, height: 360)
-                    .clipShape(RoundedRectangle(cornerRadius: 9.57))
-            } else {
-                Image("checkerImage")
-                    .frame(width: 240, height: 360)
-            }
-        }
-        .photosPicker(
+        PhotoPickerButton(
+            imageType: .secondDay,
             isPresented: $isImagePickerPresented,
-            selection: $selectedPickerImage,
-            maxSelectionCount: 1,
-            matching: .images
-        )
-        .onChange(of: selectedPickerImage, {
-            guard let selectedPickerImage = selectedPickerImage.first else { return }
-            viewModel.loadSelectedImage(imageType: .secondDay, pickerItem: selectedPickerImage)
-        })
-        
-        .onChange(of: viewModel.selectedSeconDayImage) {
-            if viewModel.selectedSeconDayImage != nil {
-                secondDayImageComplete = true
+            selectedPickerImage: $selectedPickerImage,
+            onImagePicked: { item in
+                viewModel.loadSelectedImage(imageType: .secondDay, pickerItem: item)
+            }) {
+                Group {
+                    if let image = viewModel.selectedSeconDayImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 240, height: 360)
+                            .clipShape(RoundedRectangle(cornerRadius: 9.57))
+                    } else {
+                        Image("checkerImage")
+                            .frame(width: 240, height: 360)
+                    }
+                }
             }
-        }
-        
+            .onChange(of: viewModel.selectedSeconDayImage) {
+                if viewModel.selectedSeconDayImage != nil {
+                    secondDayImageComplete = true
+                }
+            }
     }
     
     var forthDayImage: some View {
