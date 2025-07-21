@@ -11,18 +11,21 @@ struct LoginSMSBase: Codable {
     let appVersion, smsTempToken: String?
 }
 
-struct LoginSMSRequest: Codable {
-    let phoneNumber: String
-    let smsToken: String
+struct SMSTokenResponse: Codable {
+    let token: String
 }
 
-struct SMSVerificationNumber: Codable {
-    let number: Int
+struct SMSCodeResponse: Codable {
+    let code: String
 }
 
-struct LoginSMSVerify: Codable {
+struct SMSVerifyRequest: Codable {
     let phoneNumber: String
-    let number: String
+    let code: String
+}
+
+struct SMSCodeRequest: Codable {
+    let phoneNumber: String
 }
 
 struct LoginRequest: Codable {

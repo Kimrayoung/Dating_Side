@@ -10,7 +10,7 @@ import Combine
 
 struct PhoneNumberView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: LoginViewModel
+    @ObservedObject var viewModel: SMSViewModel
     
     @FocusState private var focusedField: PhoneNumberField?
     @State private var possibleNext: Bool = false
@@ -26,15 +26,21 @@ struct PhoneNumberView: View {
             phoneNumberView
             Spacer()
             Button(action: {
+                if  viewModel.getPhoneNumber() == "" {
+                    return
+                }
                 hideKeyboard()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    appState.loginPath.append(Login.verificationNumber)
+                    appState.onboardingPath.append(Onboarding.verifySMSCode)
                 }
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "인증번호 받기", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
+        }
+        .task {
+            await viewModel.getSMSBaseToken()
         }
         .padding(.horizontal, 20)
         .navigationTitle("")
@@ -188,5 +194,5 @@ struct PhoneNumberView: View {
 }
 
 #Preview {
-    PhoneNumberView(viewModel: LoginViewModel())
+    PhoneNumberView(viewModel: SMSViewModel())
 }

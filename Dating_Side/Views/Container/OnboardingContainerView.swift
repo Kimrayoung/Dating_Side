@@ -10,6 +10,8 @@ import SwiftUI
 struct OnboardingContainerView: View {
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel = OnboardingViewModel()
+    @StateObject private var smsViewModel = SMSViewModel()
+    
     let socialType: SocialType
     let socialId: String
     
@@ -19,6 +21,8 @@ struct OnboardingContainerView: View {
 //            GenderSelectView(viewModel: viewModel)
                 .navigationDestination(for: Onboarding.self) { step in
                     switch step {
+                    case .phoneNumber: PhoneNumberView(viewModel: smsViewModel)
+                    case .verifySMSCode: VerificationNumber(viewModel: smsViewModel)
                     case .genderSelect: GenderSelectView(viewModel: viewModel)
                     case .nickname: NicknameInputView(viewModel: viewModel)
                     case .birth: BirthInputView(viewModel: viewModel)

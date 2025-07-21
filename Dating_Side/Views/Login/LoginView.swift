@@ -44,7 +44,7 @@ struct LoginView: View {
         Button {
             kakaoAuth.handleKakaoLogin()
             kakaoAuth.loginCompletion = { token in
-                appState.login(socialType: .kakao, socialId: token) // 로그인 completion 넘겨줌
+                loginHandler(sociaType: .kakao, token: token)
             }
         } label: {
             Image("kakaoLogin")
@@ -56,7 +56,7 @@ struct LoginView: View {
         Button {
             appleAuth.startSignInWithAppleFlow()
             appleAuth.loginCompletion = { token in
-                appState.login(socialType: .naver, socialId: token) // 로그인 completion 넘겨줌
+                loginHandler(sociaType: .apple, token: token)
             }
         } label: {
             Image("appleLogin")
@@ -68,12 +68,26 @@ struct LoginView: View {
         Button {
             naverAuth.handleNaverLogin()
             naverAuth.loginCompletion = { token in
-                appState.login(socialType: .naver, socialId: token) 
+                loginHandler(sociaType: .naver, token: token)
             }
         } label: {
             Image("naverLogin")
         }
         .frame(width: 343, height: 50)
+    }
+    
+    func loginHandler(sociaType: SocialType, token: String) {
+        Task {
+            let loginRequest = LoginRequest(userSocialId: token)
+            let result = try await AccountNetworkManager().login(userSocialId: loginRequest)
+            switch result {
+            case .success:
+                print(#fileID, #function, #line, "- 로그인 정보 있음")
+            case .failure(let error):
+                print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+                appState.login(socialType: .kakao, socialId: token) // 로그인 completion 넘겨줌
+            }
+        }
     }
 }
 

@@ -10,7 +10,7 @@
 		4D0122A12DEC812E003E72B0 /* MathcingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0122A02DEC812E003E72B0 /* MathcingView.swift */; };
 		4D0122A52DEC90B4003E72B0 /* WriteAnswerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0122A42DEC90B4003E72B0 /* WriteAnswerView.swift */; };
 		4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE22DA6B05D006206F1 /* LoginNetworkManager.swift */; };
-		4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE42DA6B47F006206F1 /* Login.swift */; };
+		4D0B3BE52DA6B47F006206F1 /* SMSandLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE42DA6B47F006206F1 /* SMSandLogin.swift */; };
 		4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B3BE62DA6B957006206F1 /* LoginView.swift */; };
 		4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */; };
 		4D301E932E2E5FC3001FA1A1 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D301E922E2E5FBC001FA1A1 /* PermissionManager.swift */; };
@@ -93,7 +93,7 @@
 		4DCB70582DA80C10006C120C /* OneDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB70572DA80C10006C120C /* OneDigitTextField.swift */; };
 		4DD577542D7EBB4E001B0ED5 /* SusceptibleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577532D7EBB4E001B0ED5 /* SusceptibleInfoView.swift */; };
 		4DD577562D7EC5A8001B0ED5 /* LoginField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577552D7EC5A8001B0ED5 /* LoginField.swift */; };
-		4DD577582D7EC638001B0ED5 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */; };
+		4DD577582D7EC638001B0ED5 /* SMSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577572D7EC638001B0ED5 /* SMSViewModel.swift */; };
 		4DDF23642E0C29CB006A0096 /* ChatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDF23632E0C29CB006A0096 /* ChatingView.swift */; };
 		4DEB5A6D2E0AD412009BE55B /* CoupleMatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEB5A6C2E0AD412009BE55B /* CoupleMatchingView.swift */; };
 		4DEB5A6F2E0AD56D009BE55B /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEB5A6E2E0AD56D009BE55B /* Message.swift */; };
@@ -141,7 +141,7 @@
 		4D0122A02DEC812E003E72B0 /* MathcingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathcingView.swift; sourceTree = "<group>"; };
 		4D0122A42DEC90B4003E72B0 /* WriteAnswerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteAnswerView.swift; sourceTree = "<group>"; };
 		4D0B3BE22DA6B05D006206F1 /* LoginNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetworkManager.swift; sourceTree = "<group>"; };
-		4D0B3BE42DA6B47F006206F1 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		4D0B3BE42DA6B47F006206F1 /* SMSandLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSandLogin.swift; sourceTree = "<group>"; };
 		4D0B3BE62DA6B957006206F1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericDigitTextField.swift; sourceTree = "<group>"; };
 		4D301E922E2E5FBC001FA1A1 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
@@ -222,7 +222,7 @@
 		4DCB70572DA80C10006C120C /* OneDigitTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneDigitTextField.swift; sourceTree = "<group>"; };
 		4DD577532D7EBB4E001B0ED5 /* SusceptibleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SusceptibleInfoView.swift; sourceTree = "<group>"; };
 		4DD577552D7EC5A8001B0ED5 /* LoginField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginField.swift; sourceTree = "<group>"; };
-		4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		4DD577572D7EC638001B0ED5 /* SMSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSViewModel.swift; sourceTree = "<group>"; };
 		4DDF23632E0C29CB006A0096 /* ChatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatingView.swift; sourceTree = "<group>"; };
 		4DEB5A6C2E0AD412009BE55B /* CoupleMatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoupleMatchingView.swift; sourceTree = "<group>"; };
 		4DEB5A6E2E0AD56D009BE55B /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -282,6 +282,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D301E982E2E83CE001FA1A1 /* SMS */ = {
+			isa = PBXGroup;
+			children = (
+				4D61195E2D75B2F500715B9E /* PhoneNumberView.swift */,
+				4DF329EB2D87EEE200DBB823 /* VerificationNumber.swift */,
+			);
+			path = SMS;
+			sourceTree = "<group>";
+		};
 		4D389C332E25330600B56F84 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -320,7 +329,7 @@
 				4D389C4F2E2CECCA00B56F84 /* MatchingViewModel.swift */,
 				4D389C332E25330600B56F84 /* Auth */,
 				4D6119612D75CC9100715B9E /* OnboardingViewModel.swift */,
-				4DD577572D7EC638001B0ED5 /* LoginViewModel.swift */,
+				4DD577572D7EC638001B0ED5 /* SMSViewModel.swift */,
 				4D3AD6E52DE4A99B00436A4B /* ProflieViewModel.swift */,
 				4D33EA182E0995B600B2661B /* ChatListViewModel.swift */,
 			);
@@ -419,7 +428,7 @@
 				4D6D186D2D63540900698E5D /* Path.swift */,
 				4D6D187A2D6358EE00698E5D /* Error.swift */,
 				4DCB1A652D759FF300676BCE /* Global.swift */,
-				4D0B3BE42DA6B47F006206F1 /* Login.swift */,
+				4D0B3BE42DA6B47F006206F1 /* SMSandLogin.swift */,
 				4D3AD6E72DE4AA2600436A4B /* Profile.swift */,
 				4DEB5A6E2E0AD56D009BE55B /* Message.swift */,
 			);
@@ -480,6 +489,7 @@
 		4D6D187E2D6359AA00698E5D /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				4D301E982E2E83CE001FA1A1 /* SMS */,
 				4D443B9E2DCB93BA00F4B9EB /* ImageOnboarding */,
 				4D6119682D75EF5500715B9E /* DetailInfo */,
 				4D6119672D75EF3C00715B9E /* DefaultInfo */,
@@ -597,8 +607,6 @@
 		4DF329EA2D87EEC900DBB823 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				4D61195E2D75B2F500715B9E /* PhoneNumberView.swift */,
-				4DF329EB2D87EEE200DBB823 /* VerificationNumber.swift */,
 				4D0B3BE62DA6B957006206F1 /* LoginView.swift */,
 			);
 			path = Login;
@@ -769,7 +777,7 @@
 				4DB5B3192D9045AF0060D4C6 /* CustomAlert.swift in Sources */,
 				4D909AA42E0D8A5D00F19AD0 /* MessageComponent.swift in Sources */,
 				4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */,
-				4DD577582D7EC638001B0ED5 /* LoginViewModel.swift in Sources */,
+				4DD577582D7EC638001B0ED5 /* SMSViewModel.swift in Sources */,
 				4D6119522D75AA8700715B9E /* UnitLabel.swift in Sources */,
 				4D3AD6E62DE4A99B00436A4B /* ProflieViewModel.swift in Sources */,
 				4DCB1A662D759FF300676BCE /* Global.swift in Sources */,
@@ -789,7 +797,7 @@
 				4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */,
 				4DEB5A6F2E0AD56D009BE55B /* Message.swift in Sources */,
 				4D301E952E2E610E001FA1A1 /* PhotoPickerButton.swift in Sources */,
-				4D0B3BE52DA6B47F006206F1 /* Login.swift in Sources */,
+				4D0B3BE52DA6B47F006206F1 /* SMSandLogin.swift in Sources */,
 				4D389C522E2CEE3D00B56F84 /* MatchingNetworkManager.swift in Sources */,
 				4D443B9B2DCB85C600F4B9EB /* OnboardingNetworkManager.swift in Sources */,
 				4D443BA92DCBAB6A00F4B9EB /* Codable+Ext.swift in Sources */,

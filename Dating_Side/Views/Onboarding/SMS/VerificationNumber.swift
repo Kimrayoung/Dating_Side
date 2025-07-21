@@ -9,7 +9,7 @@ import SwiftUI
 
 struct VerificationNumber: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: LoginViewModel
+    @ObservedObject var viewModel: SMSViewModel
     @FocusState private var focusedField: VerificationNumberField?
     @State private var possibleNext: Bool = false
     
@@ -23,10 +23,16 @@ struct VerificationNumber: View {
             verificationNumberView
             Spacer()
             Button(action: {
+                if !viewModel.checkVerificationNumber() {
+                    return
+                }
+                hideKeyboard()
                 Task {
-                    if await viewModel.checkRequestNumber() {
-                        print(#fileID, #function, #line, "- 여기")
-//                        appState.login()
+                    let result = await viewModel.verifySMSCode()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        if result {
+                            appState.onboardingPath.append(Onboarding.genderSelect)
+                        }
                     }
                 }
                 
@@ -35,19 +41,18 @@ struct VerificationNumber: View {
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
-        }).onChange(of: viewModel.loginComplete) { oldValue, newValue in
-            if newValue {
-                possibleNext = true
-            }
-        }
+        })
         .onAppear {
             Task {
-//                await viewModel.requestVerifiactionNumber()
+                await viewModel.requestVerifiactionNumber()
                 
                 if viewModel.verificationNumber.count == 4 {
                     focusedField = .verificationNumber(viewModel.verificationNumber.count - 1)
                 }
             }
+        }
+        .onChange(of: viewModel.verificationNumber) { oldValue, newValue in
+            possibleNext = viewModel.checkVerificationNumber()
         }
     }
     
@@ -129,5 +134,5 @@ struct VerificationNumber: View {
 }
 
 #Preview {
-    VerificationNumber(viewModel: LoginViewModel())
+    VerificationNumber(viewModel: SMSViewModel())
 }

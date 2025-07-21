@@ -22,11 +22,16 @@ class AccountNetworkManager {
 //        return await networkManager.callWithAsync(endpoint: AccountAPIManager.getUserProfile, httpCodes: .success)
 //    }
     
+    func login(userSocialId: LoginRequest) async throws -> Result<VoidResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.login(userSocialId: userSocialId), httpCodes: .success)
+    }
 }
 
 enum AccountAPIManager {
     case getUserProfile
     case patchUserProfileData(userData: UserData)
+    /// 로그인(소셜로그인 -> 소셜로그인 accessToken 전달 -> 404: 계정 없음)
+    case login(userSocialId: LoginRequest)
 }
 
 extension AccountAPIManager: APIManager {
@@ -34,6 +39,8 @@ extension AccountAPIManager: APIManager {
         switch self {
         case .getUserProfile, .patchUserProfileData:
             return "account"
+        case .login:
+            return "account/login"
         }
     }
     
@@ -41,6 +48,7 @@ extension AccountAPIManager: APIManager {
         switch self {
         case .getUserProfile: return .get
         case .patchUserProfileData: return .patch
+        case .login: return .post
         }
     }
     
@@ -61,7 +69,9 @@ extension AccountAPIManager: APIManager {
             let patchDic = try userProfileData.asPatchJSON()
             let jsonData = try JSONSerialization.data(withJSONObject: patchDic)
             return jsonData
-
+        case .login(let loginRequest):
+            let jsonData = try JSONEncoder().encode(loginRequest)
+            return jsonData
         }
     }
     

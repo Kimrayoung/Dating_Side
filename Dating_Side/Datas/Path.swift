@@ -13,6 +13,10 @@ enum AppScreen {
 }
 
 enum Onboarding {
+    /// 핸드폰 번호 입력
+    case phoneNumber
+    /// 인증코드 입력
+    case verifySMSCode
     case genderSelect
     case nickname
     case birth
@@ -39,11 +43,6 @@ enum Main {
     case chat
     case setting
     case home
-}
-
-enum Login {
-    case phoneNumber
-    case verificationNumber
 }
 
 
