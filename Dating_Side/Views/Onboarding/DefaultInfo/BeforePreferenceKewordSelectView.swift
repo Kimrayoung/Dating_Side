@@ -36,6 +36,11 @@ struct BeforePreferenceKewordSelectView: View {
                 if !viewModel.isBeforePreferenceTypeComplete {
                     return
                 }
+                let selectedBefore = zip(viewModel.beforePreferenceTypes, viewModel.isBeforePreferenceTypesSelected)
+                    .compactMap { (type, isSelected) in
+                        isSelected ? type : nil
+                    }
+                Log.debugPublic("선택지 확인", selectedBefore)
                 appState.onboardingPath.append(Onboarding.afterPreference)
             }, label: {
                 SelectButtonLabel(isSelected: $viewModel.isBeforePreferenceTypeComplete, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
@@ -68,7 +73,7 @@ struct BeforePreferenceKewordSelectView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 10, content: {
                 ForEach(Array(viewModel.beforePreferenceTypes.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index)
+                    selectBtn(item.korean, index)
                 }
             })
         }

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct SignupRequest: Codable {
+struct SignUpRequest: Codable {
     let socialType: String
     let userSocialId: String
     let phoneNumber: String
@@ -19,50 +19,7 @@ struct SignupRequest: Codable {
     var activeRegion: String
     var beforePreferenceTypeList: [String]
     var afterPreferenceTypeList: [String]
-    var edcationType: String
-    var educationDetail: String
-    var jobType: String
-    var jobDetail: String
-    var lifeStyle: LifeStyle
-    var introduction: String
-    var fcmToken: String
-}
-
-struct AccountImage {
-    var imageTitle: String
-    var image: UIImage
-}
-
-extension SignupRequest {
-    func toMultipartFormBuilder(images: [AccountImage]) -> MultipartFormDataBuilder {
-        var builder = MultipartFormDataBuilder()
-
-        // 1) JSON 전체를 `request` 파트로 추가
-        builder.appendJSONField(named: "request", value: self)
-
-        // 2) 이미지들 추가
-        for img in images {
-            builder.appendImageField(named: img.imageTitle, image: img.image)
-        }
-
-        // 3) 마무리 boundary
-        builder.finalize()
-
-        return builder
-    }
-}
-
-
-
-struct UserData: Codable {
-    var genderType: String
-    var nickName: String
-    var birthDate: String
-    var height: Int
-    var activeRegion: String
-    var beforePreferenceTypeList: [String]
-    var afterPreferenceTypeList: [String]
-    var edcationType: String
+    var educationType: String
     var educationDetail: String
     var jobType: String
     var jobDetail: String
@@ -74,9 +31,34 @@ struct UserData: Codable {
 struct LifeStyle: Codable {
     let drinking: String
     let smoking: String
-    let tatto: String
+    let tattoo: String
     let religion: String
 }
+
+struct AccountImage {
+    var imageTitle: String
+    var image: UIImage
+}
+
+
+struct UserData: Codable {
+    var genderType: String
+    var nickName: String
+    var birthDate: String
+    var height: Int
+    var activeRegion: String
+    var beforePreferenceTypeList: [KoreanData]
+    var afterPreferenceTypeList: [KoreanData]
+    var educationType: String
+    var educationDetail: String
+    var jobType: String
+    var jobDetail: String
+    var lifeStyle: LifeStyle
+    var introduction: String
+    var fcmToken: String
+}
+
+
 
 struct Address: Codable {
     let code: String
@@ -90,7 +72,7 @@ struct LifeStyleResponse: Codable {
 // MARK: - LifeStyleList
 struct LifeStyleContent: Codable {
     let category: String
-    let choices: [String]
+    let choices: [KoreanData]
 }
 
 enum PreferenceType: String {
@@ -104,6 +86,40 @@ enum ImageType {
     case forthDay
     case sixthDay
 }
+
+/// 한글이랑 key랑 매핑 필요한 데이터(ex. 선호도 키워드)
+struct KoreanData: Codable, Equatable, Hashable {
+    let type: String
+    let korean: String
+}
+
+enum EducationEnglish: String, CaseIterable {
+    case highSchool           = "HIGH_SCHOOL"
+    case universityEnrolled   = "UNIVERSITY_ENROLLED"
+    case universityGraduated  = "UNIVERSITY_GRADUATED"
+    case master               = "MASTER"
+    case doctoral             = "DOCTORAL"
+    case etc                  = "ETC"
+    
+    /// 한글 표현
+    var korean: String {
+        switch self {
+        case .highSchool:
+            return "고등학교"
+        case .universityEnrolled:
+            return "대학교 재학 중"
+        case .universityGraduated:
+            return "대학교 졸업"
+        case .master:
+            return "석사"
+        case .doctoral:
+            return "박사"
+        case .etc:
+            return "기타"
+        }
+    }
+}
+
 
 struct UserAccount: Codable {
     let id: Int

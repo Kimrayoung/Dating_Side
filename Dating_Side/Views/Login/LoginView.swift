@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os
 
 struct LoginView: View {
     @EnvironmentObject var appState: AppState
@@ -27,10 +28,6 @@ struct LoginView: View {
                 .padding(.bottom, 8)
             appleLoginBtn
                 .padding(.bottom, 88)
-//            SelectButtonLabel(isSelected: $isSelectedB, height: 48, text: "전화번호로 시작하기", backgroundColor: .white, selectedBackgroundColor: .white, textColor: .black, selectedTextColor: .black, cornerRounded: 8, font: .pixel(16), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0, strokeBorderLineColor: .white, selectedStrokeBorderColor: .white)
-//                .padding(.bottom, 88)
-//                .padding(.horizontal, 24)
-//                .shadow(color: Color.mainColor.opacity(0.25), radius: 10, x: 0, y: 9)
         }
         .background(
             Image("bgImg")
@@ -82,10 +79,15 @@ struct LoginView: View {
             let result = try await AccountNetworkManager().login(userSocialId: loginRequest)
             switch result {
             case .success:
-                print(#fileID, #function, #line, "- 로그인 정보 있음")
+                Log.infoPrivate("로그인 성공", sociaType, token)
+                print(#fileID, #function, #line, "- success")
             case .failure(let error):
-                print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-                appState.login(socialType: .kakao, socialId: token) // 로그인 completion 넘겨줌
+                let logger = Logger(subsystem: LogSubsystem, category: "Info")
+                logger.error("로그인 실패: \(token, privacy: .private)")
+                
+                Log.infoPublic("로그인 실패", token)
+                Log.infoPrivate("로그인 실패🔥", token)
+                appState.login(socialType: sociaType, socialId: token) // 로그인 completion 넘겨줌
             }
         }
     }

@@ -31,25 +31,27 @@ class OnboardingViewModel: ObservableObject {
     @Published var birthDay: [String] = ["", ""]
     @Published var height: [String] = ["", ""]
     
-    @Published var beforePreferenceTypes: [String] = []
-    @Published var afterPreferceTypes: [String] = []
+    @Published var beforePreferenceTypes: [KoreanData] = []
+    @Published var afterPreferceTypes: [KoreanData] = []
     
     @Published var isBeforePreferenceTypesSelected: [Bool] = []
     @Published var isAfterPreferenceTypesSelected: [Bool] = []
     @Published var isBeforePreferenceTypeComplete: Bool = false
     @Published var isAfterPreferenceTypeComplete: Bool = false
     
-    var education = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
+//    var education = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
+    var education: [EducationEnglish] = EducationEnglish.allCases
     @Published var isEducationButtonSelected: [Bool] = Array(repeating: false, count: 6)
     @Published var selectedEducationIndex: Int? = nil
     @Published var schoolName: String = ""
     
-    @Published var jobItmes: [String] = []
+    @Published var jobItmes: [KoreanData] = []
     @Published var isJobButtonSelected: [Bool] = []
     @Published var selectedJobIndex: Int? = nil
     @Published var jobDetail: String = ""
     
-    var lifeStyleList: [String : [String]] = [:]
+    var lifeStyleOriginalList: [String : [KoreanData]] = [:]
+    var lifeStyleList: [String: [String]] = [:]
     @Published var lifeStyleButtonList: [String : [Bool]] = [:]
     
     @Published var introduceText: String = ""
@@ -88,11 +90,12 @@ class OnboardingViewModel: ObservableObject {
         guard let smokeIndex = lifeStyleButtonList["smoking"]?.firstIndex(of: true) else { return nil }
         guard let tattoIndex = lifeStyleButtonList["tattoo"]?.firstIndex(of: true) else { return nil }
         guard let religionIndex = lifeStyleButtonList["religion"]?.firstIndex(of: true) else { return nil }
-        guard let drunkTextOptions = lifeStyleList["drinking"] else { return nil }
-        guard let smokeTextOptions = lifeStyleList["smoking"] else { return nil }
-        guard let tattoTextOptions = lifeStyleList["tattoo"] else { return nil }
-        guard let religionTextOptions = lifeStyleList["religion"] else { return nil }
-        return LifeStyle(drinking: drunkTextOptions[drunkIndex], smoking: smokeTextOptions[smokeIndex], tatto: tattoTextOptions[tattoIndex], religion: religionTextOptions[religionIndex])
+        guard let drunkTextOptions = lifeStyleOriginalList["drinking"] else { return nil }
+        guard let smokeTextOptions = lifeStyleOriginalList["smoking"] else { return nil }
+        guard let tattoTextOptions = lifeStyleOriginalList["tattoo"] else { return nil }
+        guard let religionTextOptions = lifeStyleOriginalList["religion"] else { return nil }
+        
+        return LifeStyle(drinking: drunkTextOptions[drunkIndex].type, smoking: smokeTextOptions[smokeIndex].type, tattoo: tattoTextOptions[tattoIndex].type, religion: religionTextOptions[religionIndex].type)
     }
     
     func susceptibleInfoCompleteChecking() -> Bool {
@@ -139,15 +142,23 @@ class OnboardingViewModel: ObservableObject {
                 switch result {
                 case .success(let data):
                     if let data = data, let image = UIImage(data: data) {
+                        // 압축/리사이즈 적용 (예: 1024픽셀 기준, 품질 0.7)
+                        let reducedImage: UIImage
+                        if let resizedData = image.resizedAndCompressedJPEGData(toWidth: 1024, quality: 0.2),
+                           let resizedImage = UIImage(data: resizedData) {
+                            reducedImage = resizedImage
+                        } else {
+                            reducedImage = image
+                        }
                         switch imageType {
                         case .mainProfile:
-                            self.selectedImage = image
+                            self.selectedImage = reducedImage
                         case .secondDay:
-                            self.selectedSeconDayImage = image
+                            self.selectedSeconDayImage = reducedImage
                         case .forthDay:
-                            self.selectedForthDayImage = image
+                            self.selectedForthDayImage = reducedImage
                         case .sixthDay:
-                            self.selectedSixthDayImage = image
+                            self.selectedSixthDayImage = reducedImage
                         }
                     }
                 case .failure(let error):
@@ -162,6 +173,13 @@ class OnboardingViewModel: ObservableObject {
 extension OnboardingViewModel {
     /// 주소 데이터 가져오기
     func fetchAddressData(isFirstLoading: Bool = false, code: String? = nil, isDetailLocation: Bool = false) async {
+        let signpost = httpTimeLog.fetchLocationData
+                         .makeSignpost(name: #function, object: self)
+        
+        signpost.begin("code: %d, firstLoading: %d detail: %d", code ?? "nil", String(isFirstLoading), String(isDetailLocation))
+
+        defer { signpost.end() }
+        
         do {
             let result = try await accountNetworkManger.fetchAddressData(code)
             switch result {
@@ -173,18 +191,25 @@ extension OnboardingViewModel {
                 }
                 
                 print(#fileID, #function, #line, "- self.locationOption: \(self.locationOption )")
-                if isFirstLoading {
-                    guard let firstLocationData = data.first else { return }
-                    print(#fileID, #function, #line, "- firstLocation: \(firstLocationData)")
-                    await self.fetchAddressData(isFirstLoading: false, code: firstLocationData.code, isDetailLocation: true)
+                
+                if isFirstLoading, let first = data.first {
+                    print(#fileID, #function, #line, "- firstLocation: \(first)")
+                    await self.fetchAddressData(
+                      isFirstLoading: false,
+                      code: first.code,
+                      isDetailLocation: true
+                    )
                 }
+                
             case .failure(let error):
-                print(#fileID, #function, #line, "- failur: \(error.localizedDescription)")
+                print(#fileID, #function, #line, "- failure: \(error.localizedDescription)")
             }
+            
         } catch {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
         }
     }
+
     
     /// 러브웨이 키워드 선택 API
     func fetchPreferenceType(preferenceType: PreferenceType) async {
@@ -229,13 +254,16 @@ extension OnboardingViewModel {
         }
     }
     
+    /// 민감정보데이터 받아오기(흡연, 음주, 타투, 종교)
     func fetchLifeStyle() async {
         do {
             let result = try await accountNetworkManger.fetchLifeStyleDatas()
             switch result {
             case .success(let lifeStyleResponse):
                 lifeStyleResponse.lifeStyleList.forEach({ lifeStyleContent in
-                    lifeStyleList[lifeStyleContent.category] = lifeStyleContent.choices
+                    lifeStyleOriginalList[lifeStyleContent.category] = lifeStyleContent.choices
+                    let koreanString = lifeStyleContent.choices.map { $0.korean }
+                    lifeStyleList[lifeStyleContent.category] = koreanString
                 })
                 lifeStyleResponse.lifeStyleList.forEach({ lifeStyleContent in
                     let tempButton = Array(repeating: false, count: lifeStyleContent.choices.count)
@@ -249,25 +277,22 @@ extension OnboardingViewModel {
         }
     }
     
-    // 유저 정보 받아오기
-    func getUsersProfileData() async {
-//        do {
-//            let result = try await accountNetworkManger.fetchUserData()
-//            switch result {
-//            case .success(let data):
-//                print(#fileID, #function, #line, "- data checking: \(data)")
-//            case .failure(let error):
-//                print(#fileID, #function, #line, "- failur: \(error.localizedDescription)")
-//            }
-//        } catch {
-//        }
-    }
-    
     // 유저 정보 저장하기
-    func postUserData(_ socialType: String, _ userSocialID: String) async -> Bool{
+    func postUserData() async -> Bool{
+        Log.debugPublic("유저 정보 저장 호출")
+        guard let socialType = socialType?.rawValue, let socialId = socialId else { return false }
         let location = makeLocation()
         let birthDate = makeBirthDate()
         let height = makeHeight()
+        let selectedBefore = zip(beforePreferenceTypes, isBeforePreferenceTypesSelected)
+            .compactMap { (type, isSelected) in
+                isSelected ? type.type : nil
+            }
+        let selectedAfter = zip(afterPreferceTypes, isAfterPreferenceTypesSelected)
+            .compactMap { (type, isSelected) in
+                isSelected ? type.type : nil
+            }
+
         guard let selectedEducationIndex = selectedEducationIndex else { return false }
         guard let selectedJobIndex = selectedJobIndex else { return  false }
         
@@ -276,24 +301,29 @@ extension OnboardingViewModel {
         
         guard let selectedImage = selectedImage, let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return false }
         
-        let userData = SignupRequest(socialType: socialType, userSocialId: userSocialID, phoneNumber: "", genderType: genderSelectedIndex == 0 ? "여자" : "남자", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: [], afterPreferenceTypeList: [], edcationType: education[selectedEducationIndex], educationDetail: schoolName, jobType: jobItmes[selectedJobIndex], jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "")
+        let userData = SignUpRequest(socialType: socialType, userSocialId: socialId, phoneNumber: "010-9988-3585", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: education[selectedEducationIndex].rawValue, educationDetail: schoolName, jobType: jobItmes[selectedJobIndex].type, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "socialId")
         
         let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImage", image: selectedImage), AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
         
-        let signupData = userData.toMultipartFormBuilder(images: userImageData)
+        Log.debugPublic("유저 데이터", userData)
+        let identifier: String = UUID().uuidString
+        let boundary: String = "Boundary-\(identifier)"
+        
+        let signupData = createUploadBody(request: userData, images: userImageData, boundary: boundary)
         
         do {
-            let result = try await OnboardingNetworkManager().postUserData(signupData: signupData)
+//            let result = try await OnboardingNetworkManager().postUserData(requestModel: userData, images: userImageData)
+            let result = try await OnboardingNetworkManager().postUserData(requestModel: signupData, boundaryString: boundary)
             switch result {
             case .success(let result):
-                print(#fileID, #function, #line, "- data checking: \(result)")
+                Log.debugPublic("유저 정보 저장 성공", result)
                 return true
             case .failure(let error):
-                print(#fileID, #function, #line, "- failur: \(error.localizedDescription)")
+                Log.networkPublic("유저 정보 저장 실패", error)
                 return false
             }
         } catch {
-            print(#fileID, #function, #line, "- errlr")
+            Log.errorPublic("유저 정보 저장 실패", error.localizedDescription)
             return false
         }
     }
@@ -343,3 +373,4 @@ extension OnboardingViewModel {
 //        return false
 //    }
 }
+

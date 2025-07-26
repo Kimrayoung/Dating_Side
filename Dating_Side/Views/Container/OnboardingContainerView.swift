@@ -17,8 +17,9 @@ struct OnboardingContainerView: View {
     
     var body: some View {
         NavigationStack(path: $appState.onboardingPath) {
-            ChatProfileImageView(viewModel: viewModel)
-//            GenderSelectView(viewModel: viewModel)
+//            ChatProfileImageView(viewModel: viewModel)
+            GenderSelectView(viewModel: viewModel)
+//            LocationSelectView(viewModel: viewModel)
                 .navigationDestination(for: Onboarding.self) { step in
                     switch step {
                     case .phoneNumber: PhoneNumberView(viewModel: smsViewModel)

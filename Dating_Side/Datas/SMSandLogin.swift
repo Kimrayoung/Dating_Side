@@ -32,8 +32,8 @@ struct LoginRequest: Codable {
     let userSocialId: String
 }
 
-enum SocialType {
-    case naver
-    case kakao
-    case apple
+enum SocialType: String {
+    case naver = "NAVER"
+    case kakao = "KAKAO"
+    case apple = "APPLE"
 }

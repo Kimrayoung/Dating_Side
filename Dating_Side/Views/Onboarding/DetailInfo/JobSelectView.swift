@@ -70,7 +70,7 @@ struct JobSelectView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 10, content: {
                 ForEach(Array(viewModel.jobItmes.enumerated()), id: \.element) { (index, item) in
-                    selectBtn(item, index)
+                    selectBtn(item.korean, index)
                 }
             })
         }

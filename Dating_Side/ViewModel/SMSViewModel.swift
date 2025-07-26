@@ -63,10 +63,10 @@ extension SMSViewModel {
             case .success(let smsTokenResponse):
                 self.smsBaseToken = smsTokenResponse.token
             case .failure(let error):
-                print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+                Log.errorPublic("smsTokenResponse error: \(error)")
             }
         } catch {
-            print(#fileID, #function, #line, "- error: \(error)")
+//            Log.errorPublic("smsToken 실패: \(error)")
         }
     }
     
@@ -93,12 +93,12 @@ extension SMSViewModel {
                 for i in 0...3 {
                     verificationNumber[i] = separateDigit[i]
                 }
-                
+//                Log.networkPrivate("코드 수신 성공", code)
             case .failure(let error):
-                print(#fileID, #function, #line, "- error")
+                Log.errorPublic("인증번호 받아오는 거 실패", error)
             }
         } catch {
-            print(#fileID, #function, #line, "- error: \(error)")
+//            Log.errorPublic("인증번호 받아오는 거 실패", error)
         }
     }
     
@@ -112,12 +112,13 @@ extension SMSViewModel {
             let result = try await smsNetworkManger.verifySmsCode(smsVerifyRequest: smsVerifyRequest)
             switch result {
             case .success:
+//                Log.errorPrivate("검증 성공")
                 return true
             case .failure(let error):
-                print(#fileID, #function, #line, "- error: \(error)")
+                Log.errorPublic("검증 실패", error)
             }
         } catch {
-            print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+//            Log.errorPublic("검증 실패", error)
         }
         return false
     }

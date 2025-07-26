@@ -15,19 +15,19 @@ class OnboardingNetworkManager {
         self.networkManager = networkManager
     }
     
-    func postUserData(signupData: MultipartFormDataBuilder) async throws -> Result<VoidResponse, Error> {
-        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.postUserProfileData(signupData: signupData), httpCodes: .success)
+    func postUserData(requestModel: Data, boundaryString: String) async throws -> Result<VoidResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.postUserProfileData(signupData: requestModel, boundaryString: boundaryString), httpCodes: .success)
     }
     
     func fetchAddressData(_ addrCode: String?) async throws -> Result<[Address], Error>  {
         return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.getAddressData(addrCode: addrCode), httpCodes: .success)
     }
  
-    func fetchJobType() async throws -> Result<[String], Error>  {
+    func fetchJobType() async throws -> Result<[KoreanData], Error>  {
         return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.getJopTypes, httpCodes: .success)
     }
     
-    func fetchPreferenceType(_ preferenceType: String) async throws -> Result<[String], Error>  {
+    func fetchPreferenceType(_ preferenceType: String) async throws -> Result<[KoreanData], Error>  {
         return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.getPreferenceTypes(preferenceType: preferenceType), httpCodes: .success)
     }
     
@@ -37,7 +37,7 @@ class OnboardingNetworkManager {
 }
 
 enum OnboardingAPIManager {
-    case postUserProfileData(signupData: MultipartFormDataBuilder)
+    case postUserProfileData(signupData: Data, boundaryString: String)
     case getAddressData(addrCode: String?)
     case getJopTypes
     case getLifeStyleDatas
@@ -69,9 +69,9 @@ extension OnboardingAPIManager: APIManager {
     
     var headers: [String : String]? {
         switch self {
-        case .postUserProfileData(let signupRequest):
+        case .postUserProfileData(_, let boundaryString):
             return [
-                "Content-Type" : signupRequest.contentType,
+                "Content-Type" : "multipart/form-data; boundary=\(boundaryString)",
             ]
         default:
             return [
@@ -84,8 +84,8 @@ extension OnboardingAPIManager: APIManager {
         switch self {
         case .getAddressData, .getJopTypes, .getLifeStyleDatas, .getPreferenceTypes:
             return nil
-        case .postUserProfileData(let signupData):
-            return signupData.build()
+        case .postUserProfileData(let signupData, _):
+            return signupData
         }
     }
     

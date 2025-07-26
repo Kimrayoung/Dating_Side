@@ -21,6 +21,8 @@ final class NetworkManager: NetworkProtocol {
         config.httpCookieStorage = HTTPCookieStorage.shared
         config.httpShouldSetCookies = true
         config.httpCookieAcceptPolicy = .always
+        config.timeoutIntervalForRequest  = 200  // 헤더+바디 전송 완료 최대 120초
+        config.timeoutIntervalForResource = 300
         self.session = URLSession(configuration: config)
     }
     /// API요청
@@ -30,7 +32,9 @@ final class NetworkManager: NetworkProtocol {
     /// - Returns: 필요한 데이터의 형태로 나감
     func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes = .success) async -> Result<Value, Error> where Value: Decodable {
         do {
-            let request = try endpoint.urlRequest(baseURL: BASE_URL)
+            var request = try endpoint.urlRequest(baseURL: BASE_URL)
+            request.timeoutInterval = 300
+
             let (data, response) = try await session.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse,
@@ -40,6 +44,18 @@ final class NetworkManager: NetworkProtocol {
             
             if let requestHeader = request.allHTTPHeaderFields {
                 print(#fileID, #function, #line, "- requestHeader checking: \(requestHeader)")
+            }
+            
+            if let http = response as? HTTPURLResponse,
+               !(200..<300).contains(http.statusCode) {
+                print(#fileID, #function, #line, "- 실패: \(http.statusCode)")
+            } else {
+                let http = response as? HTTPURLResponse
+                print(#fileID, #function, #line, "- http: \(http?.statusCode)")
+            }
+            
+            if let sampleText = String(data: data, encoding: .utf8) {
+              print("Response body:\(sampleText) \n test")
             }
             
             // ✅ HTTP 상태코드 체크
@@ -71,11 +87,20 @@ final class NetworkManager: NetworkProtocol {
                         return .failure(APIError.unexpectedResponse)
                     }
                 } else {
-//                    print("새로운 Authorization 쿠키를 발급 안됨")
+//                   print("새로운 Authorization 쿠키를 발급 안됨")
                     // 필요 시 에러를 던지거나 기본값을 설정할 수 있음
                 }
             }
-
+            print(#fileID, #function, #line, "- 여기까지 성공")
+            if data.isEmpty {
+                // Value 타입이 VoidResponse일 때만 처리
+                if Value.self == VoidResponse.self {
+                    // 강제 캐스팅이지만, VoidResponse.self == Value.self이 보장됨
+                    return .success(VoidResponse() as! Value)
+                }
+                // 다른 타입인데 바디가 비어 있으면 에러 처리
+                throw APIError.unexpectedResponse
+            }
             // 실제 데이터 디코딩
             let decoder = JSONDecoder()
             let decodeData = try decoder.decode(Value.self, from: data)

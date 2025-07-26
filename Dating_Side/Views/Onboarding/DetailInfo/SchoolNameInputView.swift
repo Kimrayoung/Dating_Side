@@ -62,18 +62,21 @@ struct SchoolNameInput: View {
                 .multilineTextAlignment(.center)
                 .bottomBorder(color: Color.gray3, width: 2)
                 .font(.pixel(20))
-                .frame(width: 228)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .font(.pixel(14))
-//                .frame(width: 207)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .overlay(
+                    Rectangle()
+                      .frame(height: 2)
+                      .foregroundStyle(Color.gray3),
+                    alignment: .bottom
+                  )
+                .frame(width: 228)
                 .padding(.horizontal, 20)
             HStack {
                 Text("최대 10자")
                     .font(.pixel(12))
                     .foregroundStyle(Color.gray3)
                 Spacer()
-                Text("\(viewModel.nicknameInput.count)/10")
+                Text("\(viewModel.schoolName.count)/10")
                     .font(.pixel(12))
                     .foregroundStyle(Color.gray3)
             }

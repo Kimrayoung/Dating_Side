@@ -65,7 +65,7 @@ struct EducationSelectView: View {
     @ViewBuilder var selectedEducationButtons: some View {
         VStack(content: {
             ForEach(0..<6, id: \.self) { index in
-                makeEducationButton(viewModel.education[index], index)
+                makeEducationButton(viewModel.education[index].korean, index)
             }
         })
         
