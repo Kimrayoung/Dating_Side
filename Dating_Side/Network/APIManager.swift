@@ -20,10 +20,8 @@ typealias HTTPCodes = Range<HTTPCode>
 
 extension HTTPCodes {
     static let success = 200..<300
-    static let badRequest = 400
-    static let unauthorized = 401
-    static let notFound = 402
-    static let conflict = 409
+    static let loginExpired = 401
+    static let clientError = 402..<500
     static let serverError = 500..<600
 }
 
@@ -38,10 +36,12 @@ enum HTTPMethod: String {
 ///API에러
 enum APIError: Error, Equatable {
     case invalidURL
+    case loginExpired
     case httpCode(HTTPCode)
     case unexpectedResponse
     case networkError
     case apiError(APIErrorResponse)
+    case serverError(HTTPCode)
 //    case imageDeserialization
 }
 
@@ -49,11 +49,13 @@ extension APIError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidURL: return "잘못된 URL입니다."
+        case .loginExpired: return "로그인 시간이 만료되었습니다.\n다시 로그인해주세요."
         case .httpCode(let status): return "Unexpected status code: \(status)"
         case .unexpectedResponse: return "서버로 부터 잘못된 응답을 받았습니다."
         case .networkError: return "인터넷 연결이 끊어졌습니다.\n네트워크 상태를 확인해주세요."
+        case .serverError(let status): return "서버에서 문제가 발생했습니다. \n 관리자에게 문의해주세요"
         case .apiError(let error):
-            return error.message
+            return error.error
         }
     }
 }

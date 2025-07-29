@@ -11,16 +11,19 @@ import PhotosUI
 /// 4일차에 상대방에게 보여줄 사진
 struct ProfileForthImageView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State var forthDayImageComplete: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
     @State var isImagePickerPresented: Bool = false
+    @State private var showAlert: Bool = false
     
     var body: some View {
         VStack {
-            CustomRounedGradientProgressBar(currentScreen: 15, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
-                .padding(.bottom, 48)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 15, total: onboardingPageCnt)
+            }
             TextWithColoredSubString(
                 text: "매칭된 상대에게 4일차에 공개할 사진을 등록해주세요",
                 highlight: "4일차",
@@ -28,6 +31,7 @@ struct ProfileForthImageView: View {
             )
             .font(.pixel(24))
             .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.top, 48)
             .foregroundStyle(Color.blackColor)
             Text("흥미있는 대화를 위한 사진입니다.\n4일차에 보여주고 싶은 나의 모습을 등록해주세요")
                 .font(.pixel(14))
@@ -55,6 +59,7 @@ struct ProfileForthImageView: View {
                forthDayImageComplete = true
             }
         }
+        .customAlert(isPresented: $showAlert, title: "오류", message: "설정에서 접근 권한을 허용해주세요", primaryButtonText: "취소", primaryButtonAction: {}, secondaryButtonText: "설정으로 이동", secondaryButtonAction: {})
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -74,6 +79,7 @@ struct ProfileForthImageView: View {
             imageType: .forthDay,
             isPresented: $isImagePickerPresented,
             selectedPickerImage: $selectedPickerImage,
+            showAlert: $showAlert,
             onImagePicked: { item in
                 viewModel.loadSelectedImage(imageType: .forthDay, pickerItem: item)
             }) {
@@ -107,5 +113,5 @@ struct ProfileForthImageView: View {
 }
 
 #Preview {
-    ProfileForthImageView(viewModel: OnboardingViewModel())
+    ProfileForthImageView(viewModel: AccountViewModel())
 }

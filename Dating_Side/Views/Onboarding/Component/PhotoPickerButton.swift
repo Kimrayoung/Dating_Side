@@ -14,10 +14,10 @@ import PhotosUI
 /// - onImagePicked: 이미지 선택 완료 콜백
 /// - label: 버튼의 레이블을 커스터마이징할 클로저
 struct PhotoPickerButton<Label: View>: View {
-    @EnvironmentObject private var alertManager: AlertManager
     let imageType: ImageType
     @Binding var isPresented: Bool
     @Binding var selectedPickerImage: [PhotosPickerItem]
+    @Binding var showAlert: Bool
     let onImagePicked: (PhotosPickerItem) -> Void
     let label: () -> Label
 
@@ -27,7 +27,7 @@ struct PhotoPickerButton<Label: View>: View {
             PermissionManager.shared.requestPhotoLibraryAccess { granted in
                 if granted { isPresented = true }
                 else {
-                    alertManager.showAlert(title: "오류", message: "접근 권한을 허용해주세요")
+                    showAlert = true
                 }
             }
         } label: {

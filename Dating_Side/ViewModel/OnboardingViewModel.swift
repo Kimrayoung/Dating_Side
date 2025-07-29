@@ -1,5 +1,5 @@
 //
-//  OnboardingViewModel.swift
+//  AccountViewModel.swift
 //  Dating_Side
 //
 //  Created by 김라영 on 2025/03/03.
@@ -11,13 +11,16 @@ import PhotosUI
 import SwiftUI
 
 @MainActor
-class OnboardingViewModel: ObservableObject {
+class AccountViewModel: ObservableObject {
     private var appState = AppState.shared
-    let accountNetworkManger = OnboardingNetworkManager()
+    let accountNetworkManger = AccountNetworkManager()
     private var cancellables = Set<AnyCancellable>()
+    let loadingManager = LoadingManager.shared
     
+    var isOnboarding: Bool = false
     var socialType: SocialType? = nil
     var socialId: String? = nil
+    
     @Published var genderSelectedIndex: Int = 0
     
     @Published var locationOption: [Address] = []
@@ -73,18 +76,22 @@ class OnboardingViewModel: ObservableObject {
         return height.allSatisfy { !$0.isEmpty }
     }
     
+    /// 생일정보 만들기
     func makeBirthDate() -> String {
         return birthYear.joined() + "-" + birthMonth.joined() + "-" + birthDay.joined()
     }
     
+    /// 키 정보 만들기
     func makeHeight() -> Int {
         return Int(height.joined()) ?? 00
     }
     
+    /// 위치 정보 만들기
     func makeLocation() -> String {
         return locationOption[locationSelectedIndex].addrName + "/" + detailLocationOption[detailLocationSelectedIndex].addrName
     }
     
+    /// 민감정보 만들기
     func makeLifeStyle() -> LifeStyle? {
         guard let drunkIndex = lifeStyleButtonList["drinking"]?.firstIndex(of: true) else { return nil }
         guard let smokeIndex = lifeStyleButtonList["smoking"]?.firstIndex(of: true) else { return nil }
@@ -98,6 +105,42 @@ class OnboardingViewModel: ObservableObject {
         return LifeStyle(drinking: drunkTextOptions[drunkIndex].type, smoking: smokeTextOptions[smokeIndex].type, tattoo: tattoTextOptions[tattoIndex].type, religion: religionTextOptions[religionIndex].type)
     }
     
+    /// signup api에 보낼 데이터 만들기
+    func makeSignupRequest() -> SignUpRequest? {
+        guard let socialType = socialType?.rawValue, let socialId = socialId else { return nil }
+        let location = makeLocation()
+        let birthDate = makeBirthDate()
+        let height = makeHeight()
+        let selectedBefore = zip(beforePreferenceTypes, isBeforePreferenceTypesSelected)
+            .compactMap { (type, isSelected) in
+                isSelected ? type.type : nil
+            }
+        let selectedAfter = zip(afterPreferceTypes, isAfterPreferenceTypesSelected)
+            .compactMap { (type, isSelected) in
+                isSelected ? type.type : nil
+            }
+
+        guard let selectedEducationIndex = selectedEducationIndex else { return nil }
+        guard let selectedJobIndex = selectedJobIndex else { return  nil }
+        
+        // 선택된 민감 정보 파악하기
+        guard let lifeStyle = makeLifeStyle() else { return nil }
+
+        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-1155-3585", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: education[selectedEducationIndex].rawValue, educationDetail: schoolName, jobType: jobItmes[selectedJobIndex].type, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "socialId")
+        
+        return signUpRequest
+    }
+    
+    /// singup API에 보낼 이미지(유저 이미지)
+    func makeSignupImage() -> [AccountImage]? {
+        guard let selectedImage = selectedImage, let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return nil }
+        
+        let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImage", image: selectedImage), AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
+        
+        return userImageData
+    }
+    
+    /// 민감정보들이 전부 선택되었는지 확인
     func susceptibleInfoCompleteChecking() -> Bool {
         guard let drunkButtonSelected = lifeStyleButtonList["drinking"]?.contains(true) else { return false }
         guard let smokeButtonSelected = lifeStyleButtonList["smoking"]?.contains(true) else { return false }
@@ -107,6 +150,7 @@ class OnboardingViewModel: ObservableObject {
         return drunkButtonSelected && smokeButtonSelected && tattooButtonSelected && religionButtonSelected
     }
     
+    /// 선호 키워드가 3~7으로 선택되었는지 확인
     func setupBeforePreferenceBindings() {
         $isBeforePreferenceTypesSelected
             .sink { [weak self] newValue in
@@ -121,6 +165,7 @@ class OnboardingViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// 선호 키워드가 3~7으로 선택되었는지 확인
     func setupAfterPreferenceBindings() {
         $isAfterPreferenceTypesSelected
             .sink { [weak self] newValue in
@@ -135,6 +180,7 @@ class OnboardingViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// 선택한 이미지 viewModel에 저장
     func loadSelectedImage(imageType: ImageType, pickerItem: PhotosPickerItem) {
         pickerItem.loadTransferable(type: Data.self) { result in
             DispatchQueue.main.async { [weak self] in
@@ -170,9 +216,11 @@ class OnboardingViewModel: ObservableObject {
 }
 
 //MARK: - 서버 통신 관련
-extension OnboardingViewModel {
+extension AccountViewModel {
     /// 주소 데이터 가져오기
     func fetchAddressData(isFirstLoading: Bool = false, code: String? = nil, isDetailLocation: Bool = false) async {
+        loadingManager.isLoading = true
+        
         let signpost = httpTimeLog.fetchLocationData
                          .makeSignpost(name: #function, object: self)
         
@@ -186,8 +234,11 @@ extension OnboardingViewModel {
             case .success(let data):
                 if isDetailLocation {
                     self.detailLocationOption = data
+                    loadingManager.isLoading = false
+                    return
                 } else {
                     self.locationOption = data
+                    loadingManager.isLoading = false
                 }
                 
                 print(#fileID, #function, #line, "- self.locationOption: \(self.locationOption )")
@@ -203,59 +254,78 @@ extension OnboardingViewModel {
                 
             case .failure(let error):
                 print(#fileID, #function, #line, "- failure: \(error.localizedDescription)")
+                loadingManager.isLoading = false
             }
             
         } catch {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+            loadingManager.isLoading = false
         }
     }
 
     
     /// 러브웨이 키워드 선택 API
     func fetchPreferenceType(preferenceType: PreferenceType) async {
+        loadingManager.isLoading = true
         do {
             let result = try await accountNetworkManger.fetchPreferenceType(preferenceType.rawValue)
             switch result {
             case .success(let data):
                 switch preferenceType {
                 case .before:
-                    if beforePreferenceTypes == data { return }
+                    if beforePreferenceTypes == data {
+                        loadingManager.isLoading = false
+                        return
+                    }
                     beforePreferenceTypes = data
                     isBeforePreferenceTypesSelected = Array(repeating: false, count: data.count)
                     print(#fileID, #function, #line, "- preference data: \(data)")
                 case .after:
-                    if afterPreferceTypes == data { return }
+                    if afterPreferceTypes == data {
+                        loadingManager.isLoading = false
+                        return
+                    }
                     afterPreferceTypes = data
                     isAfterPreferenceTypesSelected = Array(repeating: false, count: data.count)
                 }
-                
+                loadingManager.isLoading = false
             case .failure(let error):
                 print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+                loadingManager.isLoading = false
             }
         } catch {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+            loadingManager.isLoading = false
         }
     }
     
     /// 직업 선택지 API
     func fetchJobType() async {
+        loadingManager.isLoading = true
         do {
             let result = try await accountNetworkManger.fetchJobType()
             switch result {
             case .success(let data):
-                if jobItmes == data { return }
+                if jobItmes == data {
+                    loadingManager.isLoading = false
+                    return
+                }
                 jobItmes = data
                 isJobButtonSelected = Array(repeating: false, count: data.count)
+                loadingManager.isLoading = false
             case .failure(let error):
                 print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+                loadingManager.isLoading = false
             }
         } catch {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+            loadingManager.isLoading = false
         }
     }
     
     /// 민감정보데이터 받아오기(흡연, 음주, 타투, 종교)
     func fetchLifeStyle() async {
+        loadingManager.isLoading = true
         do {
             let result = try await accountNetworkManger.fetchLifeStyleDatas()
             switch result {
@@ -269,108 +339,50 @@ extension OnboardingViewModel {
                     let tempButton = Array(repeating: false, count: lifeStyleContent.choices.count)
                     lifeStyleButtonList[lifeStyleContent.category] = tempButton
                 })
+                loadingManager.isLoading = false
             case .failure(let error):
                 print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
+                loadingManager.isLoading = false
             }
         } catch {
-            
+            loadingManager.isLoading = false
         }
     }
     
-    // 유저 정보 저장하기
+    /// 유저 정보 저장하기
     func postUserData() async -> Bool{
+        loadingManager.isLoading = true
         Log.debugPublic("유저 정보 저장 호출")
-        guard let socialType = socialType?.rawValue, let socialId = socialId else { return false }
-        let location = makeLocation()
-        let birthDate = makeBirthDate()
-        let height = makeHeight()
-        let selectedBefore = zip(beforePreferenceTypes, isBeforePreferenceTypesSelected)
-            .compactMap { (type, isSelected) in
-                isSelected ? type.type : nil
-            }
-        let selectedAfter = zip(afterPreferceTypes, isAfterPreferenceTypesSelected)
-            .compactMap { (type, isSelected) in
-                isSelected ? type.type : nil
-            }
-
-        guard let selectedEducationIndex = selectedEducationIndex else { return false }
-        guard let selectedJobIndex = selectedJobIndex else { return  false }
+        // 유저 정보 만들어주기
+        guard let signupRequest = makeSignupRequest(), let userImageData = makeSignupImage() else {
+            loadingManager.isLoading = false
+            return false
+        }
         
-        // 선택된 민감 정보 파악하기
-        guard let lifeStyle = makeLifeStyle() else { return false }
         
-        guard let selectedImage = selectedImage, let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return false }
-        
-        let userData = SignUpRequest(socialType: socialType, userSocialId: socialId, phoneNumber: "010-9988-3585", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: education[selectedEducationIndex].rawValue, educationDetail: schoolName, jobType: jobItmes[selectedJobIndex].type, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "socialId")
-        
-        let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImage", image: selectedImage), AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
-        
-        Log.debugPublic("유저 데이터", userData)
+        Log.debugPublic("유저 데이터", signupRequest)
         let identifier: String = UUID().uuidString
         let boundary: String = "Boundary-\(identifier)"
         
-        let signupData = createUploadBody(request: userData, images: userImageData, boundary: boundary)
+        let signupData = createUploadBody(request: signupRequest, images: userImageData, boundary: boundary)
         
         do {
-//            let result = try await OnboardingNetworkManager().postUserData(requestModel: userData, images: userImageData)
-            let result = try await OnboardingNetworkManager().postUserData(requestModel: signupData, boundaryString: boundary)
+            let result = try await AccountNetworkManager().postUserData(requestModel: signupData, boundaryString: boundary)
             switch result {
             case .success(let result):
                 Log.debugPublic("유저 정보 저장 성공", result)
+                loadingManager.isLoading = false
                 return true
             case .failure(let error):
                 Log.networkPublic("유저 정보 저장 실패", error)
+                loadingManager.isLoading = false
                 return false
             }
         } catch {
             Log.errorPublic("유저 정보 저장 실패", error.localizedDescription)
+            loadingManager.isLoading = false
             return false
         }
     }
-    
-    // 유저 정보 서버에 업데이트 해주기
-//    func updateUserProfileData<T>(updateType: UserDataUpdateType, data: T) async -> Bool {
-//        var newData = UserData(genderType: "", nickName: "", birthDate: "", height: 0, activeRegion: "", beforePreferenceTypeList: [], afterPreferenceTypeList: [], edcationType: "", educationDetail: "", jobType: "", jobDetail: "", lifeStyle: LifeStyle(drinking: "", smoking: "", tatto: "", religion: ""), introduction: "", fcmToken: "")
-//        
-//        switch updateType {
-//        case .gender:
-//            newData.genderType = data as? String ?? ""
-//        case .nickname:
-//            newData.nickName = data as? String ?? ""
-//        case .birth:
-//            newData.birthDate = data as? String ?? ""
-//        case .height:
-//            newData.height = data as? Int ?? 0
-//        case .location:
-//            newData.activeRegion = data as? String ?? ""
-//        case .loveKeyword:
-//            newData.beforePreferenceTypeList = data as? [String] ?? []
-//        case .highestEducation:
-//            newData.educationDetail = data as? String ?? ""
-//        case .job:
-//            newData.jobDetail = data as? String ?? ""
-//        case .sensitiveInfo:
-//            newData.lifeStyle = data as? LifeStyle ?? LifeStyle(drinking: "", smoking: "", tatto: "", religion: "")
-//        case .profileImage:
-////            newData. = data as? ProfileImage
-//            ""
-//        case .introduction:
-//            newData.introduction = data as? String ?? ""
-//        }
-//        
-//        do {
-//            let result = try await accountNetworkManger.patchUserData(userData: newData)
-//            switch result {
-//            case .success(let check):
-//                print(#fileID, #function, #line, "- check: \(check)")
-//                return check.result
-//            case .failure(let error):
-//                print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-//            }
-//        } catch {
-//            
-//        }
-//        return false
-//    }
 }
 

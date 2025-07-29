@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomRounedGradientProgressBar: View {
-    let currentScreen: Int
+    let currentProgress: Int
     let total: Int
     var colors: [Color] = [Color.init(hex: "#F7E2FF"), Color.init(hex:"#D3E4FF"), Color.init(hex:"#82A8FE")]
     var barWidth: CGFloat = 174
@@ -16,7 +16,7 @@ struct CustomRounedGradientProgressBar: View {
     
     // 현재 진행 정도 계산 (0.0 ~ 1.0)
     var progress: Double {
-        return Double(currentScreen) / Double(total)
+        return Double(currentProgress) / Double(total)
     }
     
     var body: some View {
@@ -32,7 +32,7 @@ struct CustomRounedGradientProgressBar: View {
                 .frame(width: CGFloat(self.progress) * barWidth, height: barHeight)
                 .foregroundStyle(
                     dynamicGradient(
-                        currentScreen: currentScreen,
+                        currentProgress: currentProgress,
                         totalScreens: total,
                         width: 174
                     )
@@ -43,12 +43,12 @@ struct CustomRounedGradientProgressBar: View {
     }
     
     // 동적으로 현재 화면에 맞는 그라데이션 계산
-    func dynamicGradient(currentScreen: Int, totalScreens: Int, width: CGFloat) -> LinearGradient {
+    func dynamicGradient(currentProgress: Int, totalScreens: Int, width: CGFloat) -> LinearGradient {
         // 그라데이션 스톱(stops) 동적 생성
         var gradientStops: [Gradient.Stop] = []
         
         // 현재 화면이 전체 화면의 몇 %까지 진행되었는지 계산 -> 화면 진행률 계산
-        let progressRatio = Double(currentScreen) / Double(totalScreens)
+        let progressRatio = Double(currentProgress) / Double(totalScreens)
         
         // 그라데이션에서 섞이는 색상 개수
         let totalColors = colors.count
@@ -57,8 +57,8 @@ struct CustomRounedGradientProgressBar: View {
         // ex) 4개의 화면, 3개의 색상, 1번째 화면(진행률 0.25) -> ceil(0.25) * 3 = 0.75 = 1개 색상 표시
 //        let visibleColorsCount = max(1, Int(ceil(progressRatio * Double(totalColors))))
         var visibleColorsCount = 1
-        if currentScreen == 1 || currentScreen == 2 { visibleColorsCount = 1 }
-        else if currentScreen == 3 || currentScreen == 4 || currentScreen == 5 {visibleColorsCount = 2}
+        if currentProgress == 1 || currentProgress == 2 { visibleColorsCount = 1 }
+        else if currentProgress == 3 || currentProgress == 4 || currentProgress == 5 {visibleColorsCount = 2}
         else { visibleColorsCount = 3}
         
         // 첫 번째 색상은 항상 보임

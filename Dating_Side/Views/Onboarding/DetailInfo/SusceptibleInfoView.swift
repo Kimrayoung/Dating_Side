@@ -9,19 +9,22 @@ import SwiftUI
 
 struct SusceptibleInfoView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State var possibleNext: Bool = false
     let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 12, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
-                .padding(.bottom, 48)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 12, total: onboardingPageCnt)
+            }
             Text("당신의 라이프스타일을 알려주세요")
                 .font(.pixel(20))
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
+                .padding(.top, 48)
                 .padding(.leading, 20)
                 .padding(.bottom, 48)
                 
@@ -150,5 +153,5 @@ struct SusceptibleInfoView: View {
 }
 
 #Preview {
-    SusceptibleInfoView(viewModel: OnboardingViewModel())
+    SusceptibleInfoView(viewModel: AccountViewModel())
 }

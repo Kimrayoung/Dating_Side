@@ -32,8 +32,7 @@ final class NetworkManager: NetworkProtocol {
     /// - Returns: 필요한 데이터의 형태로 나감
     func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes = .success) async -> Result<Value, Error> where Value: Decodable {
         do {
-            var request = try endpoint.urlRequest(baseURL: BASE_URL)
-            request.timeoutInterval = 300
+            let request = try endpoint.urlRequest(baseURL: BASE_URL)
 
             let (data, response) = try await session.data(for: request)
             
@@ -42,56 +41,41 @@ final class NetworkManager: NetworkProtocol {
                 throw APIError.unexpectedResponse
             }
             
-            if let requestHeader = request.allHTTPHeaderFields {
-                print(#fileID, #function, #line, "- requestHeader checking: \(requestHeader)")
-            }
-            
-            if let http = response as? HTTPURLResponse,
-               !(200..<300).contains(http.statusCode) {
-                print(#fileID, #function, #line, "- 실패: \(http.statusCode)")
-            } else {
-                let http = response as? HTTPURLResponse
-                print(#fileID, #function, #line, "- http: \(http?.statusCode)")
-            }
-            
-            if let sampleText = String(data: data, encoding: .utf8) {
-              print("Response body:\(sampleText) \n test")
-            }
-            
+            Log.debugPublic("http code 결과", code)
             // ✅ HTTP 상태코드 체크
             guard httpCodes.contains(code) else {
-                if code == HTTPCodes.badRequest || code == HTTPCodes.unauthorized || code == HTTPCodes.notFound || code == HTTPCodes.conflict {
+                if code == HTTPCodes.loginExpired { // 로그인 만료
+                    DispatchQueue.main.async {
+                        AppState.shared.setInit()
+                        AlertManager.shared.loginExpiredAlert()
+                    }
+                    throw APIError.loginExpired
+                } else if HTTPCodes.clientError.contains(code) { // 그 외 클라이언트 에러
                     let decoder = JSONDecoder()
                     if let errorResponse = try? decoder.decode(APIErrorResponse.self, from: data) {
                         throw APIError.apiError(errorResponse)
+                    } else {
+                        throw APIError.unexpectedResponse
                     }
+                } else if HTTPCodes.serverError.contains(code) { // 서버에러
+                    DispatchQueue.main.async {
+                        AlertManager.shared.serverAlert()
+                    }
+                    throw APIError.serverError(code)
                 }
                 throw APIError.httpCode(code)
             }
             
-            // Authorization 쿠키 추출
-            if let headerFields = httpResponse.allHeaderFields as? [String: String],
-               let url = request.url {
-                
-                // 응답에서 쿠키 추출
-                let cookies = HTTPCookie.cookies(withResponseHeaderFields: headerFields, for: url)
-                
-                // 저 응답에서 Authorization 쿠키를 찾음
-                let authCookieValue: String? = cookies.first(where: {
-                    $0.domain.contains("dating.tannding.com") && $0.name == "Authorization"
-                })?.value
-                
-                if let authCookieValue = authCookieValue {
-                    print("✅ Authorization 쿠키 발견: \(authCookieValue)")
-                    if !KeychainManager.shared.saveToken(token: authCookieValue, service: "com.loveway.auth", account: "accessToken") {
-                        return .failure(APIError.unexpectedResponse)
-                    }
-                } else {
-//                   print("새로운 Authorization 쿠키를 발급 안됨")
-                    // 필요 시 에러를 던지거나 기본값을 설정할 수 있음
+            // accessToken 저장
+            if let accessToken = httpResponse.value(forHTTPHeaderField: "x-access-token") {
+                Log.debugPrivate("Access Token: \(accessToken)")
+                if !KeychainManager.shared.saveToken(token: accessToken, service: "com.loveway.auth", account: "accessToken") {
+                    return .failure(APIError.unexpectedResponse)
                 }
+            } else {
+                Log.errorPublic("x-access-token not found in headers.")
             }
-            print(#fileID, #function, #line, "- 여기까지 성공")
+            
             if data.isEmpty {
                 // Value 타입이 VoidResponse일 때만 처리
                 if Value.self == VoidResponse.self {
@@ -101,6 +85,7 @@ final class NetworkManager: NetworkProtocol {
                 // 다른 타입인데 바디가 비어 있으면 에러 처리
                 throw APIError.unexpectedResponse
             }
+            
             // 실제 데이터 디코딩
             let decoder = JSONDecoder()
             let decodeData = try decoder.decode(Value.self, from: data)

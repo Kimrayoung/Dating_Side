@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AfterPreferenceKewordSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     
     let columns = [
             GridItem(.flexible()),
@@ -18,8 +18,11 @@ struct AfterPreferenceKewordSelectView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 7, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 7, total: onboardingPageCnt)
+            }
             TextWithColoredSubString(
                 text: "이제 러브웨이에서\n어떤 사랑을 하고 싶나요?",
                 highlight: "러브웨이",
@@ -93,5 +96,5 @@ struct AfterPreferenceKewordSelectView: View {
 }
 
 #Preview {
-    AfterPreferenceKewordSelectView(viewModel: OnboardingViewModel())
+    AfterPreferenceKewordSelectView(viewModel: AccountViewModel())
 }

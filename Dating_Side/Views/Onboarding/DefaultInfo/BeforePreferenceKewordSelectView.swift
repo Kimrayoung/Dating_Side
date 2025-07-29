@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BeforePreferenceKewordSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     
     let columns = [
             GridItem(.flexible()),
@@ -18,8 +18,11 @@ struct BeforePreferenceKewordSelectView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 6, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 6, total: onboardingPageCnt)
+            }
             Text("러브웨이를 만나기 전\n어떤 사랑을 해왔나요?")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -90,5 +93,5 @@ struct BeforePreferenceKewordSelectView: View {
 }
 
 #Preview {
-    BeforePreferenceKewordSelectView(viewModel: OnboardingViewModel())
+    BeforePreferenceKewordSelectView(viewModel: AccountViewModel())
 }

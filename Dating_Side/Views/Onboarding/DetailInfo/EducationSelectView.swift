@@ -9,19 +9,23 @@ import SwiftUI
 
 struct EducationSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     
     @State var possibleNext: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 8, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
-                .padding(.bottom, 48)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 8, total: onboardingPageCnt)
+            }
+            
             Text("마지막으로 공부한 곳이\n어디인가요?")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
+                .padding(.top, 48)
                 .padding(.leading, 20)
                 .padding(.bottom, 36)
                 
@@ -94,5 +98,5 @@ struct EducationSelectView: View {
 }
 
 #Preview {
-    EducationSelectView(viewModel: OnboardingViewModel())
+    EducationSelectView(viewModel: AccountViewModel())
 }

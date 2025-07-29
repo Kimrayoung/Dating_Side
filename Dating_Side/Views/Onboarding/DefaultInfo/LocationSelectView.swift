@@ -9,14 +9,16 @@ import SwiftUI
 
 struct LocationSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
-    
+    @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = true
     
     var body: some View {
         VStack(spacing: 0, content: {
-            CustomRounedGradientProgressBar(currentScreen: 5, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 5, total: onboardingPageCnt)
+            }
             Text("어느 지역의 사람들과\n만나고 싶나요?")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
@@ -93,5 +95,5 @@ struct LocationSelectView: View {
 }
 
 #Preview {
-    LocationSelectView(viewModel: OnboardingViewModel())
+    LocationSelectView(viewModel: AccountViewModel())
 }

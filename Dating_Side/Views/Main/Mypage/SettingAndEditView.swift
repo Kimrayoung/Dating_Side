@@ -10,7 +10,9 @@ import Kingfisher
 
 @MainActor
 struct SettingAndEditView: View {
+    @EnvironmentObject var appState: AppState
     var userImageURL: String?
+    
     var body: some View {
         VStack {
             Text("내 계정")
@@ -20,7 +22,7 @@ struct SettingAndEditView: View {
                 .padding(.leading, 24)
                 
             Button {
-                
+                appState.myPagePath.append(MyPage.profileEdit)
             } label: {
                 profileEditView
             }
@@ -35,25 +37,21 @@ struct SettingAndEditView: View {
                 .padding(.leading, 24)
                 .padding(.top, 16)
             pushNoti
-                .padding(.vertical, 32)
+                .frame(height: 48)
             avoidPerson
-                .padding(.bottom, 32)
-            ArrowNextRow(label: "게정", subTitle: nil, completion: {
-                
+                .frame(height: 48)
+            ArrowNextRow(label: "계정", subTitle: nil, completion: {
+                appState.myPagePath.append(MyPage.account)
             })
-            .padding(.bottom, 32)
             ArrowNextRow(label: "이용약관", subTitle: nil, completion: {
                 
             })
-            .padding(.bottom, 32)
             ArrowNextRow(label: "개인정보 처리방침", subTitle: nil, completion: {
                 
             })
-            .padding(.bottom, 32)
             ArrowNextRow(label: "문의하기", subTitle: nil, completion: {
                 
             })
-            .padding(.bottom, 32)
             Spacer()
         }
     }

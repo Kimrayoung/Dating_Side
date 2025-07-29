@@ -8,8 +8,9 @@
 import Foundation
 
 struct APIErrorResponse: Equatable, Codable {
-    var message: String
+    var path: String
     var error: String
     var status: String
+    var timestamp: Int
 }
 

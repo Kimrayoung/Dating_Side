@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HeightInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = false
     
     @FocusState private var focusedField: HeightFocusField?
@@ -17,8 +17,11 @@ struct HeightInputView: View {
     
     var body: some View {
         VStack {
-            CustomRounedGradientProgressBar(currentScreen: 4, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 4, total: onboardingPageCnt)
+            }
             Text("당신의 키를\n신중하게 선택해주세요")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
@@ -56,7 +59,7 @@ struct HeightInputView: View {
         .toolbar(content: {
 //            ToolbarItem(placement: .principal) {
 //                //                CustomProgressBar(progress: 1, total: onboardingPageCnt)
-//                CustomRounedGradientProgressBar(currentScreen: 2, total: onboardingPageCnt)
+//                CustomRounedGradientProgressBar(currentProgress: 2, total: onboardingPageCnt)
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
@@ -221,5 +224,5 @@ struct HeightInputView: View {
 }
 
 #Preview {
-    HeightInputView(viewModel: OnboardingViewModel())
+    HeightInputView(viewModel: AccountViewModel())
 }

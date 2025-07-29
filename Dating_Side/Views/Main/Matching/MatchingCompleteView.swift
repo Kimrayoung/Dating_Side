@@ -44,12 +44,12 @@ struct MatchingCompleteView: View {
                 })
             }
         })
-        .ignoresSafeArea(.container, edges: .bottom)
+//        .ignoresSafeArea(.container, edges: .bottom)
         .background(
             Image("matchingViewBg")
                 .resizable()
                 .scaledToFill()
-                .ignoresSafeArea()
+//                .ignoresSafeArea()
         )
     }
 }

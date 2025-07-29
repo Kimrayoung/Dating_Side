@@ -29,6 +29,7 @@ struct ArrowNextRow: View {
                 Image("rightArrow")
             })
         })
+        .frame(height: 48)
         .padding(.horizontal, 24)
     }
 }

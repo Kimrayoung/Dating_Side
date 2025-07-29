@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct secondMathcingView: View {
+struct SecondMathcingView: View {
     @State private var showProfileView: Bool = false
     var body: some View {
         VStack(content: {
@@ -37,11 +37,11 @@ struct secondMathcingView: View {
             Image("matchingViewBg")
                 .resizable()
                 .scaledToFill()
-                .ignoresSafeArea()
+//                .ignoresSafeArea()
         )
     }
 }
 
 #Preview {
-    secondMathcingView()
+    SecondMathcingView()
 }

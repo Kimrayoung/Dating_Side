@@ -29,7 +29,8 @@ struct SMSCodeRequest: Codable {
 }
 
 struct LoginRequest: Codable {
-    let userSocialId: String
+    let socialType: String
+    let socialAccessToken: String
 }
 
 enum SocialType: String {

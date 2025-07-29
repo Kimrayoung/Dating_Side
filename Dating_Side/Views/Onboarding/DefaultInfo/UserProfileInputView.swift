@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UserProfileInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     
     let titles: [String] = ["어떻게 당신을 불러드릴까요?", "생일을 알려주세요", "키를 알려주세요"]
     let subTitles: [String] = ["10글자 이내로 입력해주세요.", "생일은 변경이 불가하니 정확히 입력해주세요", ""]
@@ -185,5 +185,5 @@ struct UserProfileInputView: View {
 }
 
 #Preview {
-    UserProfileInputView(viewModel: OnboardingViewModel())
+    UserProfileInputView(viewModel: AccountViewModel())
 }

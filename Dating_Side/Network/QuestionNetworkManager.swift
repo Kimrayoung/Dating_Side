@@ -7,7 +7,8 @@
 
 import Foundation
 
-class MatchingNetworkManager {
+/// 질문과 관련된 network(오늘의 질문, 질문 대답들)
+class QuestionNetworkManager {
     private let networkManager: NetworkProtocol
     
     init(networkManager: NetworkProtocol = NetworkManager.shared) {
@@ -15,24 +16,22 @@ class MatchingNetworkManager {
     }
     
     func fetchTodayQuestions() async throws -> Result<TodayQuestionList, Error> {
-        return await networkManager.callWithAsync(endpoint: MatchingAPIManager.getTodayQuestions, httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: QuestionAPIManager.getTodayQuestions, httpCodes: .success)
     }
     
+    /// 두번째 매칭을 위해서 내가 보낼 질문
     func postMyQuestionAnswer(question: MyQuestion) async throws -> Result<VoidResponse, Error> {
-        return await networkManager.callWithAsync(endpoint: MatchingAPIManager.postMyQuestions(question: question), httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: QuestionAPIManager.postMyQuestions(question: question), httpCodes: .success)
     }
     
+    /// 오늘의 질문에 대한 답변
     func postTodayQuestionAnswer(answer: TodayQuestionAnswer) async throws -> Result<VoidResponse, Error> {
-        return await networkManager.callWithAsync(endpoint: MatchingAPIManager.postTodayQuestionAnswer(answer: answer), httpCodes: .success)
-    }
-    
-    func getUserAnswerList() async throws -> Result<UserAnswerList, Error> {
-        return await networkManager.callWithAsync(endpoint: MatchingAPIManager.getUserAnswerList, httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: QuestionAPIManager.postTodayQuestionAnswer(answer: answer), httpCodes: .success)
     }
     
 }
 
-enum MatchingAPIManager {
+enum QuestionAPIManager {
     /// 오늘의 질문 조회
     case getTodayQuestions
     /// 내가 보낼 질문
@@ -40,33 +39,32 @@ enum MatchingAPIManager {
     /// 오늘의 질문 답변한거 전송
     case postTodayQuestionAnswer(answer: TodayQuestionAnswer)
     /// 유저의 카테고리별 답변을 조회(ex. 연애관에 관련된 대답들)
-    case getUserAnswerList
+    
 }
 
-extension MatchingAPIManager: APIManager {
+extension QuestionAPIManager: APIManager {
     var path: String {
         switch self {
         case .getTodayQuestions, .postMyQuestions:
             return "questions"
-        case .postTodayQuestionAnswer, .getUserAnswerList:
+        case .postTodayQuestionAnswer:
             return "profile"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .getTodayQuestions, .getUserAnswerList: .get
+        case .getTodayQuestions: .get
         case .postMyQuestions, .postTodayQuestionAnswer: .post
         }
     }
     
     var headers: [String : String]? {
-        if let accessToken = KeychainManager.shared.getToken(service: "com.loveway.auth", account: "accessToken") {
-            return [
-                "Content-Type" : "application/json",
-                "SMS_Authorization" : "Bearer " + accessToken
-            ]
-        } else { return nil }
+        let accessToken = KeychainManager.shared.getAccessToken()
+        return [
+            "Content-Type" : "application/json",
+            "Authorization" : "Bearer " + accessToken
+        ]
     }
     
     func body() throws -> Data? {

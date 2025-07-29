@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GenderSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State private var womanSelected: Bool = true
     @State private var manSelected: Bool = false
     @State private var possibleNext: Bool = true
@@ -18,9 +18,12 @@ struct GenderSelectView: View {
     
     var body: some View {
         VStack(spacing: 0, content: {
-            CustomRounedGradientProgressBar(currentScreen: 1, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
-                .padding(.bottom, 48)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 1, total: onboardingPageCnt)
+                    .padding(.bottom, 48)
+            }
             Text("당신의 성별을\n신중하게 선택해주세요")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
@@ -47,7 +50,7 @@ struct GenderSelectView: View {
         .toolbar(content: {
             ToolbarItem(placement: .principal) {
 //                CustomProgressBar(progress: 1, total: onboardingPageCnt)
-//                CustomRounedGradientProgressBar(currentScreen: 1, total: onboardingPageCnt)
+//                CustomRounedGradientProgressBar(currentProgress: 1, total: onboardingPageCnt)
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
@@ -99,7 +102,7 @@ struct GenderSelectView: View {
 }
 
 #Preview {
-    GenderSelectView(viewModel: OnboardingViewModel())
+    GenderSelectView(viewModel: AccountViewModel())
 }
 
 

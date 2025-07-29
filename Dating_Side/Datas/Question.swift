@@ -5,6 +5,11 @@
 //  Created by 김라영 on 7/20/25.
 //
 
+struct Question: Hashable, Identifiable {
+    var id: Int
+    var text: String
+}
+
 struct MyQuestion: Codable {
     let category: String
     let question: String
@@ -26,4 +31,8 @@ struct UserAnswerList: Codable {
 struct UserAnswers: Codable {
     let category: String
     let contentList: [String]
+}
+
+enum UserAnswerCategory: String {
+    case LOVE = "연애관"
 }

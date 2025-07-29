@@ -9,11 +9,14 @@ import SwiftUI
 import KakaoSDKCommon
 import KakaoSDKAuth
 import NidThirdPartyLogin
+import Lottie
 
 @main
 struct Dating_SideApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var appState: AppState = AppState.shared
+    @StateObject private var loadingManager = LoadingManager.shared
+    @StateObject private var alertManager = AlertManager.shared
     
     init() {
         // Kakao SDK 초기화
@@ -25,12 +28,32 @@ struct Dating_SideApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(appState)
-                .environmentObject(AlertManager.shared)
-                .onOpenURL { url in
-                    handleOpenURL(url)
+            ZStack {
+                ContentView()
+                    .environmentObject(appState)
+                    .environmentObject(loadingManager)
+                    .onOpenURL { url in
+                        handleOpenURL(url)
+                    }
+                    .customAlert(
+                        isPresented: $alertManager.isPresented,
+                        title: alertManager.title,
+                        message: alertManager.message,
+                        primaryButtonText: alertManager.primaryButtonText,
+                        primaryButtonAction: alertManager.primaryButtonAction,
+                        primaryButtonColor: alertManager.primaryButtonColor,
+                        secondaryButtonText: alertManager.secondaryButtonText,
+                        secondaryButtonAction: alertManager.secondaryButtonAction,
+                        secondaryButtonColor: alertManager.secondaryButtonColor
+                    )
+
+                if loadingManager.isLoading {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                    LoadingView()
+                        .frame(width: 150, height: 150)
                 }
+            }
         }
     }
     

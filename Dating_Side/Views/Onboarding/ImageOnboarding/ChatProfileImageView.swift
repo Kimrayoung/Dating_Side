@@ -11,16 +11,15 @@ import PhotosUI
 /// 프로필 사진 등록 및 자기소개 등록
 struct ChatProfileImageView: View {
     @EnvironmentObject private var appState: AppState
-    @EnvironmentObject private var alertManager: AlertManager
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State var possibleNext: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
     @State var isImagePickerPresented: Bool = false
     @FocusState private var isFocused: Bool
+    @State private var showAlert: Bool = false
     
     var body: some View {
         ZStack {
-            // 2) 투명 배경을 탭하면 포커스 해제
             Color.clear
                 .contentShape(Rectangle())
                 .onTapGesture {
@@ -28,15 +27,16 @@ struct ChatProfileImageView: View {
                 }
             
             VStack {
-                CustomRounedGradientProgressBar(currentScreen: 13, total: onboardingPageCnt)
+                EmptyView()
                     .padding(.top, 30)
-                    .padding(.bottom, 48)
-                
+                if viewModel.isOnboarding {
+                    CustomRounedGradientProgressBar(currentProgress: 13, total: onboardingPageCnt)
+                }
                 Text("프로필 사진을 등록 해주세요")
                     .font(.pixel(24))
                     .foregroundStyle(Color.blackColor)
                     .multilineTextAlignment(.center)
-                
+                    .padding(.top, 48)
                 Text("매칭 때 보여지는 유일한 사진 입니다\n얼굴이 잘 나온 사진으로 등록해주세요")
                     .font(.pixel(14))
                     .foregroundStyle(Color.gray3)
@@ -76,13 +76,7 @@ struct ChatProfileImageView: View {
                 }
             }
         }
-        .alert(isPresented: $alertManager.isPresented) {
-            Alert(
-                title: Text(alertManager.title),
-                message: Text(alertManager.message),
-                dismissButton: alertManager.button
-            )
-        }
+        .customAlert(isPresented: $showAlert, title: "오류", message: "설정에서 접근 권한을 허용해주세요", primaryButtonText: "취소", primaryButtonAction: {}, secondaryButtonText: "설정으로 이동", secondaryButtonAction: {})
         .onChange(of: viewModel.selectedImage) { _, newValue in
             possibleNext = (newValue != nil)
         }
@@ -126,6 +120,7 @@ struct ChatProfileImageView: View {
             imageType: .mainProfile,
             isPresented: $isImagePickerPresented,
             selectedPickerImage: $selectedPickerImage,
+            showAlert: $showAlert,
             onImagePicked: { item in
                 viewModel.loadSelectedImage(imageType: .mainProfile, pickerItem: item)
             }) {
@@ -151,7 +146,7 @@ struct ChatProfileImageView: View {
                 .focused($isFocused)
                 .submitLabel(.done)
                 .font(.pixel(12))
-                .foregroundStyle(Color.gray01)
+                .foregroundStyle(Color.blackColor)
                 .padding([.top, .leading], 9)
                 .frame(height: 200)
                 .overlay {
@@ -177,6 +172,6 @@ struct ChatProfileImageView: View {
 }
 
 #Preview {
-    ChatProfileImageView(viewModel: OnboardingViewModel())
+    ChatProfileImageView(viewModel: AccountViewModel())
 }
 

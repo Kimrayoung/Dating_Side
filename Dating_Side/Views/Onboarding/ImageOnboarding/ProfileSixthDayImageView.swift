@@ -10,17 +10,20 @@ import PhotosUI
 
 struct ProfileSixthImageView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
 
     @State var sixthDayImageComplete: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
     @State var isImagePickerPresented: Bool = false
+    @State private var showAlert: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 16, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
-                .padding(.bottom, 48)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 16, total: onboardingPageCnt)
+            }
             TextWithColoredSubString(
                 text: "매칭된 상대에게 6일차에 공개할 사진을 등록해주세요",
                 highlight: "6일차",
@@ -28,6 +31,7 @@ struct ProfileSixthImageView: View {
             )
             .font(.pixel(24))
             .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.top, 48)
             .foregroundStyle(Color.blackColor)
             Text("흥미있는 대화를 위한 사진입니다.\n6일차에 보여주고 싶은 나의 모습을 등록해주세요")
                 .font(.pixel(14))
@@ -54,6 +58,7 @@ struct ProfileSixthImageView: View {
                 sixthDayImageComplete = true
             }
         }
+        .customAlert(isPresented: $showAlert, title: "오류", message: "설정에서 접근 권한을 허용해주세요", primaryButtonText: "취소", primaryButtonAction: {}, secondaryButtonText: "설정으로 이동", secondaryButtonAction: {})
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -73,6 +78,7 @@ struct ProfileSixthImageView: View {
             imageType: .sixthDay,
             isPresented: $isImagePickerPresented,
             selectedPickerImage: $selectedPickerImage,
+            showAlert: $showAlert,
             onImagePicked: { item in
                 viewModel.loadSelectedImage(imageType: .sixthDay, pickerItem: item)
             }) {
@@ -98,5 +104,5 @@ struct ProfileSixthImageView: View {
 }
 
 #Preview {
-    ProfileSixthImageView(viewModel: OnboardingViewModel())
+    ProfileSixthImageView(viewModel: AccountViewModel())
 }

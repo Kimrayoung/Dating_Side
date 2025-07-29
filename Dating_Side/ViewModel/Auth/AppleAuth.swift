@@ -60,7 +60,7 @@ class AppleAuth: NSObject, ObservableObject {
         let request = appleIDProvider.createRequest() //request만들기
         request.requestedScopes = [.fullName, .email]
         request.nonce = sha256(nonce)
-        
+        print(#fileID, #function, #line, "- request: \(request.user)")
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
         authorizationController.performRequests()

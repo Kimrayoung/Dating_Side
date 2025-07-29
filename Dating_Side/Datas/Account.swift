@@ -8,9 +8,10 @@
 import Foundation
 import UIKit
 
+
 struct SignUpRequest: Codable {
     let socialType: String
-    let userSocialId: String
+    let socialAccessToken: String
     let phoneNumber: String
     var genderType: String
     var nickName: String
@@ -40,26 +41,7 @@ struct AccountImage {
     var image: UIImage
 }
 
-
-struct UserData: Codable {
-    var genderType: String
-    var nickName: String
-    var birthDate: String
-    var height: Int
-    var activeRegion: String
-    var beforePreferenceTypeList: [KoreanData]
-    var afterPreferenceTypeList: [KoreanData]
-    var educationType: String
-    var educationDetail: String
-    var jobType: String
-    var jobDetail: String
-    var lifeStyle: LifeStyle
-    var introduction: String
-    var fcmToken: String
-}
-
-
-
+/// 주소 관련(code, 주소 이름)
 struct Address: Codable {
     let code: String
     let addrName: String
@@ -75,15 +57,21 @@ struct LifeStyleContent: Codable {
     let choices: [KoreanData]
 }
 
+/// 선호 키워드 종류(before, after)
 enum PreferenceType: String {
     case before = "BEFORE"
     case after = "AFTER"
 }
 
+/// ImageType(온보딩 사진 타입)
 enum ImageType {
+    /// 메인 프로필
     case mainProfile
+    /// 둘째날
     case secondDay
+    /// 넷째날
     case forthDay
+    /// 여섯째날
     case sixthDay
 }
 
@@ -93,6 +81,7 @@ struct KoreanData: Codable, Equatable, Hashable {
     let korean: String
 }
 
+/// 학력 영어 매핑
 enum EducationEnglish: String, CaseIterable {
     case highSchool           = "HIGH_SCHOOL"
     case universityEnrolled   = "UNIVERSITY_ENROLLED"
@@ -120,7 +109,7 @@ enum EducationEnglish: String, CaseIterable {
     }
 }
 
-
+/// 저장된 유저정보
 struct UserAccount: Codable {
     let id: Int
     let phoneNumber, genderType, nickName, birthDate: String
@@ -143,7 +132,7 @@ struct UserAccount: Codable {
     }
 }
 
-// MARK: - ProfileImageURLByDay
 struct ProfileImageURLByDay: Codable {
     let daySecond, dayFourth, daySixth: String
 }
+

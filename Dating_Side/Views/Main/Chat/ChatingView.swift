@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - 채팅 뷰
 struct ChatingView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject private var viewModel = ProfileViewModel()
     let buttonTitles: [String] = ["아주 좋아요", "좋아요", "보통이에요", "별로에요", "최악이에요"]
     let buttonColors: [Color] = [.mainColor, .subColor2, .gray01, .gray2, .gray3]
     @State private var username: String = "user"
@@ -62,7 +61,7 @@ struct ChatingView: View {
         }
         
         .sheet(isPresented: $showProfile, content: {
-            OnChatProfileView(viewModel: viewModel)
+            OnChatProfileView()
                 .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)

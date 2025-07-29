@@ -6,17 +6,25 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct ProfileView: View {
     @EnvironmentObject private var appState: AppState
-    @Binding var selfIntroduceText: String
+    var userData: UserAccount?
+    var simpleProfile: String
+    var educationString: String
+    var jobString: String
+    var valueList: [String : [String]]
+    /// Profile을 보여주는 화면이 어디인지(mypage -> 내 프로필, chat -> 상대방 프로필, matching -> 상대방프로필)
     var showProfileViewType: ShowProfileViewType
     
     var body: some View {
         VStack(spacing: 16) {
-            Text("프로필")
-                .font(.pixel(16))
-                .padding(.top, 20)
+            if showProfileViewType != .myPage {
+                Text("프로필")
+                    .font(.pixel(16))
+                    .padding(.top, 20)
+            }
             profile
             manner
             ScrollView(.horizontal) {
@@ -30,23 +38,32 @@ struct ProfileView: View {
             selfTextView
         }
         
+        
     }
     
     var profile: some View {
         HStack(spacing: 16, content: {
-            Image("sampleImage")
-                .resizable()
-                .frame(width: 72, height: 72)
-                .clipShape(Circle())
+            if let userProfileImage = userData?.profileImageURL {
+                KFImage(URL(string: userProfileImage))
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 72, height: 72)
+                    .clipShape(Circle())
+            } else {
+                Image("sampleImage")
+                    .resizable()
+                    .frame(width: 72, height: 72)
+                    .clipShape(Circle())
+            }
             VStack(spacing: 7, content: {
                 HStack(content: {
-                    Text("라영/1999/161cm")
+                    Text(simpleProfile)
                         .font(.pixel(16))
                     
                 })
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text("친구처럼 편안한 연애")
+                Text(userData?.keyword ?? "")
                     .foregroundStyle(Color.mainColor)
                     .font(.pixel(12))
                     .padding(.horizontal)
@@ -58,6 +75,7 @@ struct ProfileView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             })
         })
+        .padding(.horizontal, 24)
     }
     
     var manner: some View {
@@ -72,30 +90,29 @@ struct ProfileView: View {
             })
             .padding(.horizontal, 24)
             .frame(maxWidth: .infinity, alignment: .leading)
-            CustomRounedGradientProgressBar(currentScreen: 10, total: 100, barWidth: 345)
+            CustomRounedGradientProgressBar(currentProgress: userData?.mannerTemperature ?? 0, total: 100, barWidth: 345)
         })
     }
     
     var defaultProfileInfo: some View {
         VStack(spacing: 6, content: {
-            makeDefaultProfileInfo(11, "지역", "서울시 강남구")
-            makeDefaultProfileInfo(11, "학력", "대학 재학 중 / 서울대학교")
-            makeDefaultProfileInfo(11, "직업", "IT/개발, 네이버 개발자")
+            makeDefaultProfileInfo(11, "지역", userData?.activeRegion ?? "")
+            makeDefaultProfileInfo(11, "학력", educationString)
+            makeDefaultProfileInfo(11, "직업", jobString)
         })
         .padding(.vertical, 24)
         .padding(.horizontal, 20)
         .frame(width: 205, height: 107)
         .background(Color.subColor)
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        
     }
     
     var sensitiveInfo: some View {
         VStack(spacing: 3, content: {
-            makeDefaultProfileInfo(4, "음주", "가볍게 즐겨요")
-            makeDefaultProfileInfo(4, "학력", "비흡연자에요")
-            makeDefaultProfileInfo(4, "직업", "관심이있어요")
-            makeDefaultProfileInfo(4, "종교", "관심이있어요")
+            makeDefaultProfileInfo(4, "음주", userData?.lifeStyle.drinking ?? "")
+            makeDefaultProfileInfo(4, "흡연", userData?.lifeStyle.smoking ?? "")
+            makeDefaultProfileInfo(4, "타투", userData?.lifeStyle.tattoo ?? "")
+            makeDefaultProfileInfo(4, "종교", userData?.lifeStyle.religion ?? "")
         })
         .padding(.vertical, 24)
         .padding(.horizontal, 20)
@@ -165,8 +182,11 @@ struct ProfileView: View {
     }
     
     func profilePathCheck(valueType: ProfileValueType) {
+        
         if showProfileViewType == .chat {
-            appState.onChatProfilePath.append(OnChatProfilePath.profileValueList(valueType: valueType))
+            appState.onboardingPath.append(OnChatProfilePath.profileValueList(valueType: valueType.korean, valueDataList: valueList[valueType.english] ?? []))
+        } else if showProfileViewType == .myPage {
+            appState.myPagePath.append(MyPage.profileValueList(valueType: valueType.korean, valueDataList: valueList[valueType.english] ?? []))
         }
     }
     
@@ -175,15 +195,19 @@ struct ProfileView: View {
             Text("자기소개")
                 .font(.pixel(13))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            TextEditor(text: $selfIntroduceText)
-                .font(.pixel(12))
-                .padding(8) // 내부 여백
-                .background(Color.white) // 배경색 (필수: 테두리가 잘 보이게)
+            TextEditor(text: .constant(userData?.introduction ?? "sss"))
+                .font(.pixel(12)) // .pixel(12)이 커스텀 폰트라면 이렇게 적용
+                .frame(height: 200)
+                .frame(maxWidth: .infinity)
+                .padding(.leading, 8)
+                .background(Color.white)
+                .disabled(true) // 편집 불가능하게
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(Color.gray, lineWidth: 1)
                 )
-                .frame(height: 200)
+
+                
         })
         .padding(.horizontal, 24)
     }
@@ -192,5 +216,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(selfIntroduceText: .constant("hihih"), showProfileViewType: .chat)
+    ProfileView(userData: nil, simpleProfile: "라영/1999/163cm", educationString: "", jobString: "", valueList: [:], showProfileViewType: .chat)
 }

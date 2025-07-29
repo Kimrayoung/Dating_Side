@@ -13,11 +13,12 @@ struct MainContainerView: View {
     
     init() {
         UITabBar.appearance().unselectedItemTintColor = UIColor.init(hex: "#CBD8FB")
+        UITabBar.appearance().backgroundColor = .white
     }
     
     var body: some View {
         TabView(selection: $selection) {
-            NavigationStack(path: $appState.mainPath) {
+            NavigationStack(path: $appState.chatPath) {
                 ChatingView()
             }
             .tabItem {
@@ -25,16 +26,16 @@ struct MainContainerView: View {
                     .font(.pixel(8))
             }
             .tag(0)
-            NavigationStack(path: $appState.mainPath) {
-                ChatingView()
+            NavigationStack(path: $appState.matchingPath) {
+                MatchingRootView()
             }
             .tabItem {
                 Label("매칭", image: selection == 1 ? "matchSelected" : "matchNotSelected")
                     .font(.pixel(8))
             }
             .tag(1)
-            NavigationStack(path: $appState.mainPath) {
-                MyPageView()
+            NavigationStack(path: $appState.myPagePath) {
+                MyPageRootView()
             }
             .tabItem {
                 Label("마이페이지", image: selection == 2 ? "mypageSelected" : "mypageNotSelected")

@@ -10,17 +10,33 @@ import Kingfisher
 
 @MainActor
 struct MyPageView: View {
-    @State private var imageList: [String] = ["https://picsum.photos/id/1/200/300", "https://picsum.photos/id/2/200/300", "https://picsum.photos/id/3/200/300", "https://picsum.photos/200/300", "https://picsum.photos/200/300", ""]
-    @State var selfIntroductText: String = ""
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var profileViewModel: ProfileViewModel
     
     var body: some View {
         ScrollView {
             VStack {
-                #warning("MainPath생성할떄 ProfileViewModel 추가")
-                ProfileView(selfIntroduceText: $selfIntroductText, showProfileViewType: .myPage)
+                ProfileView(userData: profileViewModel.userData, simpleProfile: profileViewModel.makeSimpleProfile(), educationString: profileViewModel.makeSchoolString(), jobString: profileViewModel.makeJobString(), valueList: profileViewModel.userValueList, showProfileViewType: .myPage)
                 photoView
             }
         }
+        .task {
+            await profileViewModel.fetchUserAccountData()
+            await profileViewModel.fetchUserAnswerList()
+        }
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    appState.myPagePath.append(MyPage.settingProfile(userImageURL: profileViewModel.userData?.profileImageURL))
+                } label: {
+                    Image("myPageToast")
+                }
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Text("마이페이지")
+                    .font(.pixel(20))
+            }
+        })
     }
     
     var photoView: some View {
@@ -36,19 +52,22 @@ struct MyPageView: View {
     var myPhoto: some View {
         ScrollView(.horizontal) {
             HStack {
-                ForEach(imageList, id: \.self) { imageUrl in
-                    if let url = URL(string: imageUrl) {
-                        KFImage(url)
-                            .resizable()
-                            .frame(width: 240, height: 360)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                    } else {
-                        Image("checkerImage")
-                            .resizable()
-                            .frame(width: 240, height: 360)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                if let imageObj = profileViewModel.userData?.profileImageURLByDay {
+                    let images = [imageObj.daySecond, imageObj.dayFourth, imageObj.daySixth]
+                    ForEach(images, id: \.self) { imageUrl in
+                        if let url = URL(string: imageUrl) {
+                            KFImage(url)
+                                .resizable()
+                                .frame(width: 240, height: 360)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        } else {
+                            Image("checkerImage")
+                                .resizable()
+                                .frame(width: 240, height: 360)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
                     }
-                } //ForEach
+                } //if let
             } //HStack
         } //ScrollView
     }

@@ -9,14 +9,17 @@ import SwiftUI
 
 struct NicknameInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = false
-    @FocusState private var nicknameFocusField: NicknameFocusField?
+    @FocusState private var nicknameFocusField: Bool
     
     var body: some View {
         VStack(spacing: 0, content: {
-            CustomRounedGradientProgressBar(currentScreen: 2, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 2, total: onboardingPageCnt)
+            }
             Text("어떤 이름으로 활동하고 싶나요?")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
@@ -33,7 +36,7 @@ struct NicknameInputView: View {
                 if viewModel.nicknameInput.isEmpty {
                     return
                 }
-                nicknameFocusField = nil
+                nicknameFocusField = false
                 appState.onboardingPath.append(Onboarding.birth)
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
@@ -48,7 +51,7 @@ struct NicknameInputView: View {
         })
         .onAppear(perform: {
             DispatchQueue.main.async {
-                nicknameFocusField = .nickname
+                nicknameFocusField = true
             }
         })
         .navigationTitle("")
@@ -57,7 +60,7 @@ struct NicknameInputView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    nicknameFocusField = nil
+                    nicknameFocusField = false
                     appState.onboardingPath.removeLast()
                 } label: {
                     Image("navigationBackBtn")
@@ -71,7 +74,7 @@ struct NicknameInputView: View {
             ZStack(alignment: .center, content: {
                 TextField("닉네임을 입력해주세요", text: $viewModel.nicknameInput)
                     .multilineTextAlignment(.center)
-                    .focused($nicknameFocusField, equals: .nickname)
+                    .focused($nicknameFocusField)
                     .bottomBorder(color: Color.gray3, width: 2)
                     .font(.pixel(20))
                     .frame(width: 228)
@@ -92,5 +95,5 @@ struct NicknameInputView: View {
 }
 
 #Preview {
-    NicknameInputView(viewModel: OnboardingViewModel())
+    NicknameInputView(viewModel: AccountViewModel())
 }

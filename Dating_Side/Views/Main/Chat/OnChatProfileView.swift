@@ -9,14 +9,13 @@ import SwiftUI
 
 struct OnChatProfileView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: ProfileViewModel = ProfileViewModel()
+    @StateObject var viewModel: ProfileViewModel = ProfileViewModel()
     @State private var showAlert: Bool = false
-    @State var selfIntroductText: String = ""
     
     var body: some View {
         NavigationStack(path: $appState.onChatProfilePath) {
             VStack {
-                ProfileView(selfIntroduceText: $selfIntroductText, showProfileViewType: .chat)
+                ProfileView(userData: viewModel.userData, simpleProfile: viewModel.makeSimpleProfile(), educationString: viewModel.makeSchoolString(), jobString: viewModel.makeJobString(), valueList: viewModel.userValueList, showProfileViewType: .chat)
                 HStack(spacing: 5, content: {
                     skipButton
                     okButton
@@ -27,7 +26,8 @@ struct OnChatProfileView: View {
             .navigationDestination(for: OnChatProfilePath.self) { step in
                 switch step {
                 case .profileMain: OnChatProfileView(viewModel: viewModel)
-                case .profileValueList(let valueType): ValuesListView(viewModel: viewModel, valueType: valueType)
+                case .profileValueList(let valueType, let valueDataList):
+                    ValuesListView(valueType: valueType, valueDataList: valueDataList)
                 }
             }
         }
@@ -64,5 +64,5 @@ struct OnChatProfileView: View {
 }
 
 #Preview {
-    OnChatProfileView(viewModel: ProfileViewModel())
+    OnChatProfileView()
 }

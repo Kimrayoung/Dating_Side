@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BirthInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = false
     
     // 포커스 상태 관리
@@ -17,8 +17,11 @@ struct BirthInputView: View {
     
     var body: some View {
         VStack {
-            CustomRounedGradientProgressBar(currentScreen: 3, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 3, total: onboardingPageCnt)
+            }
             Text("당신의 생일을\n신중하게 선택해주세요")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
@@ -59,7 +62,7 @@ struct BirthInputView: View {
         .toolbar(content: {
 //            ToolbarItem(placement: .principal) {
 //                //                CustomProgressBar(progress: 1, total: onboardingPageCnt)
-//                CustomRounedGradientProgressBar(currentScreen: 2, total: onboardingPageCnt)
+//                CustomRounedGradientProgressBar(currentProgress: 2, total: onboardingPageCnt)
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
@@ -226,5 +229,5 @@ struct BirthInputView: View {
 }
 
 #Preview {
-    BirthInputView(viewModel: OnboardingViewModel())
+    BirthInputView(viewModel: AccountViewModel())
 }

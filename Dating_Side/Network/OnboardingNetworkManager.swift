@@ -1,5 +1,5 @@
 //
-//  OnboardingNetworkManager.swift
+//  AccountNetworkManager.swift
 //  Dating_Side
 //
 //  Created by 김라영 on 2025/05/07.
@@ -8,7 +8,7 @@
 import Foundation
 
 ///계정관련 Network(ex. 성별, 생년월일, 닉네임, 키, 지역, 등)
-class OnboardingNetworkManager {
+class AccountNetworkManager {
     private let networkManager: NetworkProtocol
     
     init(networkManager: NetworkProtocol = NetworkManager.shared) {
@@ -16,37 +16,65 @@ class OnboardingNetworkManager {
     }
     
     func postUserData(requestModel: Data, boundaryString: String) async throws -> Result<VoidResponse, Error> {
-        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.postUserProfileData(signupData: requestModel, boundaryString: boundaryString), httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.postUserProfileData(signupData: requestModel, boundaryString: boundaryString), httpCodes: .success)
     }
     
     func fetchAddressData(_ addrCode: String?) async throws -> Result<[Address], Error>  {
-        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.getAddressData(addrCode: addrCode), httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.getAddressData(addrCode: addrCode), httpCodes: .success)
     }
  
     func fetchJobType() async throws -> Result<[KoreanData], Error>  {
-        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.getJopTypes, httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.getJopTypes, httpCodes: .success)
     }
     
     func fetchPreferenceType(_ preferenceType: String) async throws -> Result<[KoreanData], Error>  {
-        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.getPreferenceTypes(preferenceType: preferenceType), httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.getPreferenceTypes(preferenceType: preferenceType), httpCodes: .success)
     }
     
     func fetchLifeStyleDatas() async throws -> Result<LifeStyleResponse, Error>  {
-        return await networkManager.callWithAsync(endpoint: OnboardingAPIManager.getLifeStyleDatas, httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.getLifeStyleDatas, httpCodes: .success)
+    }
+    
+    func patchUserData(userData: UserAccount) async throws -> Result<VoidResponse, Error>  {
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.patchUserProfileData(userData: userData), httpCodes: .success)
+    }
+    
+    func login(userSocialId: LoginRequest) async throws -> Result<VoidResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.login(userSocialId: userSocialId), httpCodes: .success)
+    }
+    
+    func logout() async throws -> Result<VoidResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.logout, httpCodes: .success)
+    }
+    
+    func deleteAccount() async throws -> Result<VoidResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.accountDelete, httpCodes: .success)
     }
 }
 
-enum OnboardingAPIManager {
+enum AccountAPIManager {
     case postUserProfileData(signupData: Data, boundaryString: String)
     case getAddressData(addrCode: String?)
     case getJopTypes
     case getLifeStyleDatas
     case getPreferenceTypes(preferenceType: String)
+    
+    case patchUserProfileData(userData: UserAccount)
+    /// 로그인(소셜로그인 -> 소셜로그인 accessToken 전달 -> 404: 계정 없음)
+    case login(userSocialId: LoginRequest)
+    case logout
+    case accountDelete
 }
 
-extension OnboardingAPIManager: APIManager {
+extension AccountAPIManager: APIManager {
     var path: String {
         switch self {
+        case .patchUserProfileData, .accountDelete:
+            return "account"
+        case .login:
+            return "account/login"
+        case .logout:
+            return "account/logout"
         case .postUserProfileData:
                 return "account/signup"
         case .getAddressData(let addrCode):
@@ -63,15 +91,24 @@ extension OnboardingAPIManager: APIManager {
     var method: HTTPMethod {
         switch self {
         case .getAddressData, .getJopTypes, .getLifeStyleDatas, .getPreferenceTypes: return .get
-        case .postUserProfileData: return .post
+        case .postUserProfileData, .login, .logout: return .post
+        case .patchUserProfileData: return .patch
+        case .accountDelete: return .delete
         }
     }
     
     var headers: [String : String]? {
+        let accessToken = KeychainManager.shared.getAccessToken()
+        Log.debugPrivate("accessToken: ", accessToken)
         switch self {
         case .postUserProfileData(_, let boundaryString):
             return [
                 "Content-Type" : "multipart/form-data; boundary=\(boundaryString)",
+            ]
+        case .logout, .patchUserProfileData, .accountDelete:
+            return [
+                "Authorization": "Bearer \(accessToken)",
+                "Content-Type" : "application/json",
             ]
         default:
             return [
@@ -82,10 +119,16 @@ extension OnboardingAPIManager: APIManager {
     
     func body() throws -> Data? {
         switch self {
-        case .getAddressData, .getJopTypes, .getLifeStyleDatas, .getPreferenceTypes:
-            return nil
+        case .patchUserProfileData(let userProfileData):
+            let patchDic = try userProfileData.asPatchJSON()
+            let jsonData = try JSONSerialization.data(withJSONObject: patchDic)
+            return jsonData
+        case .login(let loginRequest):
+            let jsonData = try JSONEncoder().encode(loginRequest)
+            return jsonData
         case .postUserProfileData(let signupData, _):
             return signupData
+        default: return nil
         }
     }
     

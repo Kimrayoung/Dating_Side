@@ -7,39 +7,42 @@
 
 import SwiftUI
 
-struct MathcingView: View {
-    var category: String = "연애"
-    var question: [String] = ["데이트날, 상대와 나의 꾸밈정도가 다르면 서운할 것 같으신가요?", "연락의 빈도가 연애에 큰 영향을 미친다고 생각하시나요?"]
+struct QuestionListView: View {
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var viewModel: QuestionViewModel
+    
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
-            Text("오늘의 카테고리는\n\(category)")
+            Text("오늘의 카테고리는\n\(viewModel.category)")
                 .font(.pixel(24))
                 .foregroundStyle(Color.white)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, 4)
-            Text("질문 \(question.count)개에 답장하고\n운명의 상대를 매칭받으세요")
+            Text("질문 \(viewModel.questionList.count)개에 답장하고\n운명의 상대를 매칭받으세요")
                 .font(.pixel(16))
                 .foregroundStyle(Color.white)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 48)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 14, content: {
-                    ForEach(question, id: \.self) { question in
-                        makeQuestionCard(questionTitle: "질문1", question: question)
+                    ForEach(viewModel.questionList, id: \.self) { question in
+                        makeQuestionCard(questionTitle: "질문 \(question.id)", question: question.text)
                     }
                 })
             }
             .padding(.leading, 24)
-            Spacer()
+            .padding(.bottom, 56)
             answerQuestion
+        }
+        .task {
+            await viewModel.fetchTodayQuestions()
         }
         .background(
             Image("matchingViewBg")
                 .resizable()
                 .scaledToFill()
-                .ignoresSafeArea()
+                .ignoresSafeArea(.container, edges: .top) // .bottom 대신 .top만!
         )
     }
     
@@ -70,6 +73,7 @@ struct MathcingView: View {
     var answerQuestion: some View {
         Button {
             print(#fileID, #function, #line, "- 답변화면으로 이동")
+            appState.matchingPath.append(Matching.questionAnswer)
         } label: {
             Text("답변하고 매칭받기")
                 .font(.pixel(16))
@@ -83,5 +87,5 @@ struct MathcingView: View {
 }
 
 #Preview {
-    MathcingView()
+    QuestionListView()
 }

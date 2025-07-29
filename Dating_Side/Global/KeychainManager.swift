@@ -68,4 +68,8 @@ class KeychainManager {
         let status = SecItemDelete(query as CFDictionary)
         return status == errSecSuccess || status == errSecItemNotFound
     }
+    
+    func getAccessToken() -> String {
+        return getToken(service: "com.loveway.auth", account: "accessToken") ?? ""
+    }
 }

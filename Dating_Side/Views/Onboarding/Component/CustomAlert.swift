@@ -12,8 +12,11 @@ struct CustomAlert: View {
     var message: String
     var primaryButtonText: String
     var primaryButtonAction: () -> Void
+    var primaryButtonColor: Color = Color.mainColor
     var secondaryButtonText: String?
-    var secondaryButtonAction: (() -> Void)?
+    var secondaryButtonAction: (() ->
+                                Void)?
+    var secondaryButtonColor: Color = Color.gray3
     var isPresented: Binding<Bool>
     
     var body: some View {
@@ -52,7 +55,7 @@ struct CustomAlert: View {
                                 .font(.pixel(16))
                                 .frame(minWidth: 0, maxWidth: .infinity)
                                 .padding()
-                                .foregroundStyle(Color.gray3)
+                                .foregroundStyle(secondaryButtonColor)
                                 .background(Color.gray0)
                                 .cornerRadius(10)
                         }
@@ -68,7 +71,7 @@ struct CustomAlert: View {
                             .frame(minWidth: 0, maxWidth: .infinity)
                             .padding()
                             .foregroundStyle(Color.white)
-                            .background(Color.mainColor)
+                            .background(primaryButtonColor)
                             .cornerRadius(10)
                     }
                 }
@@ -90,8 +93,10 @@ extension View {
         message: String,
         primaryButtonText: String,
         primaryButtonAction: @escaping () -> Void,
+        primaryButtonColor: Color = .mainColor,
         secondaryButtonText: String? = nil,
-        secondaryButtonAction: (() -> Void)? = nil
+        secondaryButtonAction: (() -> Void)? = nil,
+        secondaryButtonColor: Color = .gray3
     ) -> some View {
         ZStack {
             self
@@ -102,8 +107,10 @@ extension View {
                     message: message,
                     primaryButtonText: primaryButtonText,
                     primaryButtonAction: primaryButtonAction,
+                    primaryButtonColor: primaryButtonColor,
                     secondaryButtonText: secondaryButtonText,
                     secondaryButtonAction: secondaryButtonAction,
+                    secondaryButtonColor: secondaryButtonColor,
                     isPresented: isPresented
                 )
             }
@@ -112,5 +119,5 @@ extension View {
 }
 
 #Preview {
-    CustomAlert(title: "회원가입을 중단하고\n시작화면으로 나갈까요?", message: "나가면 입력한 정보가 저장되지 않아요", primaryButtonText: "나가기", primaryButtonAction: {}, secondaryButtonText: "취소", secondaryButtonAction: {}, isPresented: .constant(true))
+    CustomAlert(title: "회원가입을 중단하고\n시작화면으로 나갈까요?", message: "나가면 입력한 정보가 저장되지 않아요", primaryButtonText: "나가기", primaryButtonAction: {}, primaryButtonColor: Color.red, secondaryButtonText: "취소", secondaryButtonAction: {}, isPresented: .constant(true))
 }

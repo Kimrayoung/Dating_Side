@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OnboardingContainerView: View {
     @EnvironmentObject private var appState: AppState
-    @StateObject private var viewModel = OnboardingViewModel()
+    @StateObject private var viewModel = AccountViewModel()
     @StateObject private var smsViewModel = SMSViewModel()
     
     let socialType: SocialType

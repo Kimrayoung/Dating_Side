@@ -9,7 +9,7 @@ import SwiftUI
 
 struct JobSelectView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     
     let columns = [
             GridItem(.flexible()),
@@ -20,8 +20,11 @@ struct JobSelectView: View {
     
     var body: some View {
         VStack {
-            CustomRounedGradientProgressBar(currentScreen: 10, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 10, total: onboardingPageCnt)
+            }
             Text("어떤 일을 하고 계신가요?")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -94,5 +97,5 @@ struct JobSelectView: View {
 }
 
 #Preview {
-    JobSelectView(viewModel: OnboardingViewModel())
+    JobSelectView(viewModel: AccountViewModel())
 }

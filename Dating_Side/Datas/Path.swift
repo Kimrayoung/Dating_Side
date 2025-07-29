@@ -41,10 +41,25 @@ enum Onboarding {
 
 enum Main {
     case chat
-    case setting
-    case home
+    case matching
+    case mypage
 }
 
+enum MyPage: Hashable {
+    case mypage
+    case settingProfile(userImageURL: String?)
+    case profileValueList(valueType: String, valueDataList: [String]) // Changed for ProfileView type match
+    case profileEdit
+    case account
+}
+
+enum Matching: Hashable {
+    case questionList
+    case questionAnswer
+    case questionComplete
+    case matchingFail
+    case matchingSecondProfile
+}
 
 enum Path {
     case main
@@ -57,5 +72,5 @@ enum Path {
 ///채팅방에서 프로필 보기를 했을때의 경로
 enum OnChatProfilePath: Hashable {
     case profileMain
-    case profileValueList(valueType: ProfileValueType)
+    case profileValueList(valueType: String, valueDataList: [String]) // Changed for ProfileView type match
 }

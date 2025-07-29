@@ -17,7 +17,6 @@ struct LoginView: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            
             Text("이미 계정이 있으시다면 로그인")
                 .font(.pixel(12))
                 .foregroundColor(.black)
@@ -41,7 +40,7 @@ struct LoginView: View {
         Button {
             kakaoAuth.handleKakaoLogin()
             kakaoAuth.loginCompletion = { token in
-                loginHandler(sociaType: .kakao, token: token)
+                appState.login(socialType: .kakao, token: token)
             }
         } label: {
             Image("kakaoLogin")
@@ -53,7 +52,7 @@ struct LoginView: View {
         Button {
             appleAuth.startSignInWithAppleFlow()
             appleAuth.loginCompletion = { token in
-                loginHandler(sociaType: .apple, token: token)
+                appState.login(socialType: .apple, token: token)
             }
         } label: {
             Image("appleLogin")
@@ -65,31 +64,12 @@ struct LoginView: View {
         Button {
             naverAuth.handleNaverLogin()
             naverAuth.loginCompletion = { token in
-                loginHandler(sociaType: .naver, token: token)
+                appState.login(socialType: .naver, token: token)
             }
         } label: {
             Image("naverLogin")
         }
         .frame(width: 343, height: 50)
-    }
-    
-    func loginHandler(sociaType: SocialType, token: String) {
-        Task {
-            let loginRequest = LoginRequest(userSocialId: token)
-            let result = try await AccountNetworkManager().login(userSocialId: loginRequest)
-            switch result {
-            case .success:
-                Log.infoPrivate("로그인 성공", sociaType, token)
-                print(#fileID, #function, #line, "- success")
-            case .failure(let error):
-                let logger = Logger(subsystem: LogSubsystem, category: "Info")
-                logger.error("로그인 실패: \(token, privacy: .private)")
-                
-                Log.infoPublic("로그인 실패", token)
-                Log.infoPrivate("로그인 실패🔥", token)
-                appState.login(socialType: sociaType, socialId: token) // 로그인 completion 넘겨줌
-            }
-        }
     }
 }
 

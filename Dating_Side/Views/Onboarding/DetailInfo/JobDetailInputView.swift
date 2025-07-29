@@ -9,19 +9,22 @@ import SwiftUI
 
 struct JobDetailInputView: View {
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: AccountViewModel
     @FocusState var focusedJobDetail: Bool
     @State var possibleNext: Bool = true
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomRounedGradientProgressBar(currentScreen: 11, total: onboardingPageCnt)
+            EmptyView()
                 .padding(.top, 30)
-                .padding(.bottom, 48)
+            if viewModel.isOnboarding {
+                CustomRounedGradientProgressBar(currentProgress: 11, total: onboardingPageCnt)
+            }   
             Text("자세한 직업을 알려주면\n더 잘 어울리는 사람을\n찾을 수 있어요!")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
+                .padding(.top, 48)
                 .padding(.leading, 20)
                 .padding(.bottom, 72)
             jobInputView
@@ -85,5 +88,5 @@ struct JobDetailInputView: View {
 }
 
 #Preview {
-    JobDetailInputView(viewModel: OnboardingViewModel())
+    JobDetailInputView(viewModel: AccountViewModel())
 }
