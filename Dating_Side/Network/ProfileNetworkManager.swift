@@ -26,6 +26,7 @@ class ProfileNetworkManager {
 enum ProfileAPIManager {
     case getUserAnswerList
     case getUserProfile
+    
 }
 
 extension ProfileAPIManager: APIManager {
@@ -40,19 +41,26 @@ extension ProfileAPIManager: APIManager {
     
     var method: HTTPMethod {
         switch self {
-        case .getUserAnswerList, .getUserProfile: .get
+        case .getUserAnswerList, .getUserProfile: return .get
         }
     }
     
     var headers: [String : String]? {
         let accessToken = KeychainManager.shared.getAccessToken()
-        return [
-            "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + accessToken
-        ]
+        Log.debugPrivate("accessToken: ", accessToken)
+        switch self {
+        default:
+            return [
+                "Content-Type" : "application/json",
+                "Authorization" : "Bearer " + accessToken
+            ]
+        }
     }
     
     func body() throws -> Data? {
-        return nil
+        switch self {
+        default:
+            return nil
+        }
     }
 }

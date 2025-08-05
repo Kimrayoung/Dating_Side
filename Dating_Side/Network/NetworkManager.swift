@@ -46,7 +46,7 @@ final class NetworkManager: NetworkProtocol {
             guard httpCodes.contains(code) else {
                 if code == HTTPCodes.loginExpired { // 로그인 만료
                     DispatchQueue.main.async {
-                        AppState.shared.setInit()
+                        AppState.shared.offAuthenticated()
                         AlertManager.shared.loginExpiredAlert()
                     }
                     throw APIError.loginExpired

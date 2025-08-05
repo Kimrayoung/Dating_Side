@@ -22,9 +22,7 @@ struct JobSelectView: View {
         VStack {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
-                CustomRounedGradientProgressBar(currentProgress: 10, total: onboardingPageCnt)
-            }
+            CustomRounedGradientProgressBar(currentProgress: 10, total: onboardingPageCnt)
             Text("어떤 일을 하고 계신가요?")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity, alignment: .center)

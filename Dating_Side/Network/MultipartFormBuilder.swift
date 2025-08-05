@@ -1,7 +1,7 @@
 import UIKit
 
-func createUploadBody(
-    request: SignUpRequest,
+func createUploadBody<T: Encodable>(
+    request: T,
     images: [AccountImage],
     boundary: String
 ) -> Data {

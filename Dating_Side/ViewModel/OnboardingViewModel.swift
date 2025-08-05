@@ -12,21 +12,25 @@ import SwiftUI
 
 @MainActor
 class AccountViewModel: ObservableObject {
+    //MARK: - Data
     private var appState = AppState.shared
     let accountNetworkManger = AccountNetworkManager()
     private var cancellables = Set<AnyCancellable>()
     let loadingManager = LoadingManager.shared
     
-    var isOnboarding: Bool = false
+    var isOnboarding: AccountType = .onboarding
     var socialType: SocialType? = nil
     var socialId: String? = nil
+    
+    /// 기본 유저 정보(마이페이지에서 유저 수정할때 사용)
+    var defaultUserData: UserAccount?
     
     @Published var genderSelectedIndex: Int = 0
     
     @Published var locationOption: [Address] = []
+    @Published var locationSelected: Address? = nil
     @Published var detailLocationOption: [Address] = []
-    @Published var locationSelectedIndex: Int = 0
-    @Published var detailLocationSelectedIndex: Int = 0
+    @Published var detailLocationSelected: Address? = nil
     
     @Published var nicknameInput: String = ""
     @Published var birthYear: [String] = ["", "", "", ""]
@@ -64,35 +68,65 @@ class AccountViewModel: ObservableObject {
     @Published var selectedForthDayImage: UIImage?
     @Published var selectedSixthDayImage: UIImage?
     
-    /// birthDay가 하나라도 비어있지 않은지 체크
-    func checkBirthdayComplete() -> Bool {
-        return birthYear.allSatisfy { !$0.isEmpty } &&
-        birthMonth.allSatisfy { !$0.isEmpty } &&
-        birthDay.allSatisfy { !$0.isEmpty }
+    //MARK: - 공통 사용(회원 등록, 회원 수정)
+    /// 기본 유저 정보(온보딩에서 사용 x, 마이페이지에서 넘겨줘야 함)
+    init(userData: UserAccount? = nil) {
+        self.defaultUserData = userData
     }
     
-    /// height가 하나라도 비어있지 않은지 체크
-    func checkHeightComplete() -> Bool {
-        return height.allSatisfy { !$0.isEmpty }
-    }
-    
-    /// 생일정보 만들기
-    func makeBirthDate() -> String {
-        return birthYear.joined() + "-" + birthMonth.joined() + "-" + birthDay.joined()
-    }
-    
-    /// 키 정보 만들기
-    func makeHeight() -> Int {
-        return Int(height.joined()) ?? 00
+    func checkLocationData() -> Bool {
+        return locationSelected != nil && detailLocationSelected != nil ? true : false
     }
     
     /// 위치 정보 만들기
     func makeLocation() -> String {
-        return locationOption[locationSelectedIndex].addrName + "/" + detailLocationOption[detailLocationSelectedIndex].addrName
+        guard let locationSelected = locationSelected, let detailLocationSelected = detailLocationSelected else { return "" }
+        return locationSelected.addrName + "/" + detailLocationSelected.addrName
+    }
+    
+    func setEducation(selectedEducation: String?) {
+        if let selectedEducation = selectedEducation {
+            isEducationButtonSelected = education.map { selectedEducation.contains($0.korean)}
+            selectedEducationIndex = isEducationButtonSelected.firstIndex(of: true)
+        }
+    }
+    
+    func makeEducationType() -> EducationEnglish? {
+        guard let selectedEducationIndex = selectedEducationIndex else { return nil }
+        
+        if education.indices.contains(selectedEducationIndex) {
+            return education[selectedEducationIndex]
+        } else {
+            return nil
+        }
+    }
+    
+    func makeJobType() -> KoreanData? {
+        guard let selectedJobIndex = selectedJobIndex else { return  nil }
+        
+        if jobItmes.indices.contains(selectedJobIndex) {
+            return jobItmes[selectedJobIndex]
+        } else {
+            return nil
+        }
+    }
+    
+    func makeBeforePreference() -> [String] {
+        return zip(beforePreferenceTypes, isBeforePreferenceTypesSelected)
+            .compactMap { (type, isSelected) in
+                isSelected ? type.type : nil
+            }
+    }
+    
+    func makeAfterPreference() -> [String] {
+        return zip(afterPreferceTypes, isAfterPreferenceTypesSelected)
+            .compactMap { (type, isSelected) in
+                isSelected ? type.type : nil
+            }
     }
     
     /// 민감정보 만들기
-    func makeLifeStyle() -> LifeStyle? {
+    func makeLifeStyle(needKorean: Bool = false) -> LifeStyle? {
         guard let drunkIndex = lifeStyleButtonList["drinking"]?.firstIndex(of: true) else { return nil }
         guard let smokeIndex = lifeStyleButtonList["smoking"]?.firstIndex(of: true) else { return nil }
         guard let tattoIndex = lifeStyleButtonList["tattoo"]?.firstIndex(of: true) else { return nil }
@@ -102,42 +136,12 @@ class AccountViewModel: ObservableObject {
         guard let tattoTextOptions = lifeStyleOriginalList["tattoo"] else { return nil }
         guard let religionTextOptions = lifeStyleOriginalList["religion"] else { return nil }
         
-        return LifeStyle(drinking: drunkTextOptions[drunkIndex].type, smoking: smokeTextOptions[smokeIndex].type, tattoo: tattoTextOptions[tattoIndex].type, religion: religionTextOptions[religionIndex].type)
-    }
-    
-    /// signup api에 보낼 데이터 만들기
-    func makeSignupRequest() -> SignUpRequest? {
-        guard let socialType = socialType?.rawValue, let socialId = socialId else { return nil }
-        let location = makeLocation()
-        let birthDate = makeBirthDate()
-        let height = makeHeight()
-        let selectedBefore = zip(beforePreferenceTypes, isBeforePreferenceTypesSelected)
-            .compactMap { (type, isSelected) in
-                isSelected ? type.type : nil
-            }
-        let selectedAfter = zip(afterPreferceTypes, isAfterPreferenceTypesSelected)
-            .compactMap { (type, isSelected) in
-                isSelected ? type.type : nil
-            }
-
-        guard let selectedEducationIndex = selectedEducationIndex else { return nil }
-        guard let selectedJobIndex = selectedJobIndex else { return  nil }
+        if needKorean {
+            return LifeStyle(drinking: drunkTextOptions[drunkIndex].korean, smoking: smokeTextOptions[smokeIndex].korean, tattoo: tattoTextOptions[tattoIndex].korean, religion: religionTextOptions[religionIndex].korean)
+        } else {
+            return LifeStyle(drinking: drunkTextOptions[drunkIndex].type, smoking: smokeTextOptions[smokeIndex].type, tattoo: tattoTextOptions[tattoIndex].type, religion: religionTextOptions[religionIndex].type)
+        }
         
-        // 선택된 민감 정보 파악하기
-        guard let lifeStyle = makeLifeStyle() else { return nil }
-
-        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-1155-3585", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: education[selectedEducationIndex].rawValue, educationDetail: schoolName, jobType: jobItmes[selectedJobIndex].type, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "socialId")
-        
-        return signUpRequest
-    }
-    
-    /// singup API에 보낼 이미지(유저 이미지)
-    func makeSignupImage() -> [AccountImage]? {
-        guard let selectedImage = selectedImage, let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return nil }
-        
-        let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImage", image: selectedImage), AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
-        
-        return userImageData
     }
     
     /// 민감정보들이 전부 선택되었는지 확인
@@ -215,16 +219,201 @@ class AccountViewModel: ObservableObject {
     }
 }
 
+//MARK: - 프로필 등록일떄만 사용
+extension AccountViewModel {
+    /// birthDay가 하나라도 비어있지 않은지 체크
+    func checkBirthdayComplete() -> Bool {
+        return birthYear.allSatisfy { !$0.isEmpty } &&
+        birthMonth.allSatisfy { !$0.isEmpty } &&
+        birthDay.allSatisfy { !$0.isEmpty }
+    }
+    
+    /// height가 하나라도 비어있지 않은지 체크
+    func checkHeightComplete() -> Bool {
+        return height.allSatisfy { !$0.isEmpty }
+    }
+    
+    /// 생일정보 만들기
+    func makeBirthDate() -> String {
+        return birthYear.joined() + "-" + birthMonth.joined() + "-" + birthDay.joined()
+    }
+    
+    /// 키 정보 만들기
+    func makeHeight() -> Int {
+        return Int(height.joined()) ?? 00
+    }
+    
+    /// singup API에 보낼 이미지(유저 이미지)
+    func makeSignupImage() -> [AccountImage]? {
+        guard let selectedImage = selectedImage, let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return nil }
+        
+        let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImage", image: selectedImage), AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
+        
+        return userImageData
+    }
+    
+    func makeOnboardingCompleteData() -> UserAccount? {
+        guard let educationType = makeEducationType() else { return nil }
+        guard let jobType = makeJobType() else { return nil }
+        
+        let location = makeLocation()
+        let birthDate = makeBirthDate()
+        let height = makeHeight()
+        let selectedBefore = makeBeforePreference()
+        let selectedAfter = makeAfterPreference()
+        guard let lifeStyle = makeLifeStyle() else { return nil }
+        guard let educationType = makeEducationType()?.rawValue else { return nil }
+        guard let jobType = makeJobType()?.type else { return nil }
+        
+        return UserAccount(id: 0, phoneNumber: "", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, keyword: "", educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, profileImageURL: "", profileImageURLByDay: ProfileImageURLByDay(daySecond: "", dayFourth: "", daySixth: ""), introduction: "", mannerTemperature: 0)
+    }
+    
+    /// signup api에 보낼 데이터 만들기
+    func makeSignupRequest() -> SignUpRequest? {
+        guard let socialType = socialType?.rawValue, let socialId = socialId else { return nil }
+        let location = makeLocation()
+        let birthDate = makeBirthDate()
+        let height = makeHeight()
+        let selectedBefore = makeBeforePreference()
+        let selectedAfter = makeAfterPreference()
+
+        guard let educationType = makeEducationType()?.rawValue else { return nil }
+
+        guard let jobType = makeJobType()?.type else { return nil }
+        
+        // 선택된 민감 정보 파악하기
+        guard let lifeStyle = makeLifeStyle() else { return nil }
+
+        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-1155-3585", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "socialId")
+        
+        return signUpRequest
+    }
+}
+
+//MARK: - 프로필 수정일때만 사용
+extension AccountViewModel {
+    func applyUserLifeStyle(_ userLifeStyle: LifeStyle) {
+        let mirror = Mirror(reflecting: userLifeStyle)
+        for child in mirror.children {
+            guard let category = child.label, let selectedType = child.value as? String else { continue }
+            guard let choices = lifeStyleOriginalList[category] else { continue }
+            
+            if let idx = choices.firstIndex(where: { $0.korean == selectedType }) {
+                if var buttonArray = lifeStyleButtonList[category] {
+                    buttonArray = Array(repeating: false, count: buttonArray.count)
+                    buttonArray[idx] = true
+                    lifeStyleButtonList[category] = buttonArray
+                }
+            }
+        }
+    }
+    
+    /// 수정할때 사용하는 기본 데이터 만들기
+    func setUpdateUserData() -> PatchAccountRequest? {
+        guard let userData = defaultUserData else { return nil }
+        
+        return PatchAccountRequest(educationType: userData.educationType, nickName: userData.nickName, jobDetail: userData.jobDetail, afterPreferenceTypeList: userData.afterPreferenceTypeList, beforePreferenceTypeList: userData.beforePreferenceTypeList, lifeStyle: userData.lifeStyle, jobType: userData.jobType, phoneNumber: userData.phoneNumber, educationDetail: userData.educationDetail, introduction: userData.introduction, activeRegion: userData.activeRegion)
+        
+    }
+    
+    /// 닉네임 업데이트
+    func updateNickname() async {
+        guard var defaultUpdateUser = setUpdateUserData() else { return }
+        
+        defaultUpdateUser.nickName = nicknameInput
+        await patchUserAccountData(userPatchData: defaultUpdateUser)
+    }
+    
+    /// 학력 업데이트
+    func updateEducation() async {
+        guard var defaultUpdateUser = setUpdateUserData() else { return }
+        guard let educationType = makeEducationType() else { return }
+        defaultUpdateUser.educationType = educationType.rawValue
+        defaultUpdateUser.educationDetail = schoolName
+        
+        await patchUserAccountData(userPatchData: defaultUpdateUser)
+    }
+    
+    /// 직업 업데이트
+    func updateJob(jobType: String, jobDetail: String) async {
+        guard var defaultUpdateUser = setUpdateUserData() else { return }
+        guard let jobType = makeJobType() else { return }
+        defaultUpdateUser.jobType = jobType.type
+        defaultUpdateUser.jobDetail = jobDetail
+        
+        await patchUserAccountData(userPatchData: defaultUpdateUser)
+    }
+    
+    /// 거주지 업데이트
+    func updateLocation() async {
+        guard var defaultUpdateUser = setUpdateUserData() else { return }
+        var location = makeLocation()
+        
+        
+    }
+    
+    /// 선호키워드 업데이트
+    func updatePreference(preferenceType: PreferenceType) async {
+        guard var defaultUpdateUser = setUpdateUserData() else { return }
+        
+        switch preferenceType {
+        case .before:
+            let selectedBefore = makeBeforePreference()
+            defaultUpdateUser.afterPreferenceTypeList = selectedBefore
+        case .after:
+            let selectedAfter = makeAfterPreference()
+            defaultUpdateUser.afterPreferenceTypeList = selectedAfter
+        }
+
+        await patchUserAccountData(userPatchData: defaultUpdateUser)
+    }
+    
+    func updateLifeStyle() async {
+        guard var defaultUpdateUser = setUpdateUserData() else { return }
+        guard let lifeStyle = makeLifeStyle() else { return }
+        defaultUpdateUser.lifeStyle = lifeStyle
+        
+        await patchUserAccountData(userPatchData: defaultUpdateUser)
+    }
+    
+    /// 자기소개 및 기본 이미지 업데이트
+    func updateIntroduceAndDefaultImage() async {
+        guard var defaultUpdateUser = setUpdateUserData() else { return }
+        defaultUpdateUser.introduction = introduceText
+        guard let selectedImage = selectedImage else { return }
+        
+        let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImage", image: selectedImage)]
+        
+        await patchUserAccountData(userPatchData: defaultUpdateUser, userImage: userImageData)
+    }
+    
+    /// 추가 이미지 업데이트
+    func updateAdditionalImage() async {
+        guard let defaultUpdateUser = setUpdateUserData() else { return }
+        
+        guard let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return }
+        
+        let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
+        
+        await patchUserAccountData(userPatchData: defaultUpdateUser, userImage: userImageData)
+    }
+}
+
 //MARK: - 서버 통신 관련
 extension AccountViewModel {
     /// 주소 데이터 가져오기
-    func fetchAddressData(isFirstLoading: Bool = false, code: String? = nil, isDetailLocation: Bool = false) async {
+    /// - Parameters:
+    ///   - code: 주소 코드
+    ///   - isDetailLocation: 시/도 선택 후 구/군 정보 호출할때(시/도 선택 -> false, 구/군 선택 -> true)
+    func fetchAddressData(code: String? = nil, isDetailLocation: Bool = false, selectedLocation: String? = nil, selectedDetailLocation: String? = nil) async {
         loadingManager.isLoading = true
-        
+        defer {
+            loadingManager.isLoading = false
+        }
         let signpost = httpTimeLog.fetchLocationData
                          .makeSignpost(name: #function, object: self)
         
-        signpost.begin("code: %d, firstLoading: %d detail: %d", code ?? "nil", String(isFirstLoading), String(isDetailLocation))
+        signpost.begin("code: %d, firstLoading: %d detail: %d", code ?? "nil", String(isDetailLocation))
 
         defer { signpost.end() }
         
@@ -234,39 +423,36 @@ extension AccountViewModel {
             case .success(let data):
                 if isDetailLocation {
                     self.detailLocationOption = data
-                    loadingManager.isLoading = false
-                    return
                 } else {
                     self.locationOption = data
-                    loadingManager.isLoading = false
                 }
                 
+                if let selectedLocation = selectedLocation {
+                    self.locationSelected = data.first(where: { $0.addrName == selectedLocation })
+                }
+                
+                if let selectedDetailLocation = selectedDetailLocation {
+                    self.detailLocationSelected = data.first(where: { $0.addrName == selectedDetailLocation })
+                }
                 print(#fileID, #function, #line, "- self.locationOption: \(self.locationOption )")
-                
-                if isFirstLoading, let first = data.first {
-                    print(#fileID, #function, #line, "- firstLocation: \(first)")
-                    await self.fetchAddressData(
-                      isFirstLoading: false,
-                      code: first.code,
-                      isDetailLocation: true
-                    )
-                }
+
                 
             case .failure(let error):
                 print(#fileID, #function, #line, "- failure: \(error.localizedDescription)")
-                loadingManager.isLoading = false
             }
             
         } catch {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-            loadingManager.isLoading = false
         }
     }
 
     
     /// 러브웨이 키워드 선택 API
-    func fetchPreferenceType(preferenceType: PreferenceType) async {
+    func fetchPreferenceType(preferenceType: PreferenceType, preferences: [String]? = nil) async {
         loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
         do {
             let result = try await accountNetworkManger.fetchPreferenceType(preferenceType.rawValue)
             switch result {
@@ -274,58 +460,67 @@ extension AccountViewModel {
                 switch preferenceType {
                 case .before:
                     if beforePreferenceTypes == data {
-                        loadingManager.isLoading = false
                         return
                     }
                     beforePreferenceTypes = data
                     isBeforePreferenceTypesSelected = Array(repeating: false, count: data.count)
-                    print(#fileID, #function, #line, "- preference data: \(data)")
+                    if let preferences = preferences {
+                        isBeforePreferenceTypesSelected = data.map { preferences.contains($0.korean) }
+                    }
+                    
+                    print(#fileID, #function, #line, "- preference data: \(isBeforePreferenceTypesSelected)")
                 case .after:
                     if afterPreferceTypes == data {
-                        loadingManager.isLoading = false
                         return
                     }
                     afterPreferceTypes = data
                     isAfterPreferenceTypesSelected = Array(repeating: false, count: data.count)
+                    if let preferences = preferences {
+                        isAfterPreferenceTypesSelected = data.map { preferences.contains($0.korean) }
+                    }
                 }
-                loadingManager.isLoading = false
             case .failure(let error):
                 print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-                loadingManager.isLoading = false
             }
         } catch {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-            loadingManager.isLoading = false
         }
     }
     
     /// 직업 선택지 API
-    func fetchJobType() async {
+    func fetchJobType(selectedJobType: String? = nil) async {
         loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
         do {
             let result = try await accountNetworkManger.fetchJobType()
             switch result {
             case .success(let data):
                 if jobItmes == data {
-                    loadingManager.isLoading = false
                     return
                 }
                 jobItmes = data
                 isJobButtonSelected = Array(repeating: false, count: data.count)
-                loadingManager.isLoading = false
+                if let selectedJobType = selectedJobType {
+                    isJobButtonSelected = data.map { selectedJobType.contains($0.korean)}
+                    selectedJobIndex = isJobButtonSelected.firstIndex(of: true)
+                }
+                Log.debugPublic("jobItems, isJobSelected, selectedIndex", jobItmes, isJobButtonSelected, selectedJobIndex)
             case .failure(let error):
                 print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-                loadingManager.isLoading = false
             }
         } catch {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-            loadingManager.isLoading = false
         }
     }
     
     /// 민감정보데이터 받아오기(흡연, 음주, 타투, 종교)
-    func fetchLifeStyle() async {
+    func fetchLifeStyle(lifeStyle: LifeStyle? = nil) async {
         loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
         do {
             let result = try await accountNetworkManger.fetchLifeStyleDatas()
             switch result {
@@ -339,26 +534,30 @@ extension AccountViewModel {
                     let tempButton = Array(repeating: false, count: lifeStyleContent.choices.count)
                     lifeStyleButtonList[lifeStyleContent.category] = tempButton
                 })
-                loadingManager.isLoading = false
+                if let lifeStyle = lifeStyle {
+                    applyUserLifeStyle(lifeStyle)
+                }
+                
             case .failure(let error):
-                print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
-                loadingManager.isLoading = false
+                Log.errorPublic("민감정보 데이터 받아오기 에러", error.localizedDescription)
             }
         } catch {
-            loadingManager.isLoading = false
+            Log.errorPublic("민감정보 데이터 받아오기 에러", error.localizedDescription)
         }
     }
     
     /// 유저 정보 저장하기
-    func postUserData() async -> Bool{
+    func postUserData() async {
         loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
+        
         Log.debugPublic("유저 정보 저장 호출")
         // 유저 정보 만들어주기
         guard let signupRequest = makeSignupRequest(), let userImageData = makeSignupImage() else {
-            loadingManager.isLoading = false
-            return false
+            return
         }
-        
         
         Log.debugPublic("유저 데이터", signupRequest)
         let identifier: String = UUID().uuidString
@@ -371,17 +570,38 @@ extension AccountViewModel {
             switch result {
             case .success(let result):
                 Log.debugPublic("유저 정보 저장 성공", result)
-                loadingManager.isLoading = false
-                return true
+                appState.onAuthenticated()
             case .failure(let error):
                 Log.networkPublic("유저 정보 저장 실패", error)
-                loadingManager.isLoading = false
-                return false
             }
         } catch {
             Log.errorPublic("유저 정보 저장 실패", error.localizedDescription)
+        }
+    }
+    
+    @MainActor
+    func patchUserAccountData(userPatchData: PatchAccountRequest, userImage: [AccountImage] = []) async {
+        loadingManager.isLoading = true
+        defer {
             loadingManager.isLoading = false
-            return false
+        }
+        
+        let identifier: String = UUID().uuidString
+        let boundary: String = "Boundary-\(identifier)"
+        
+        let patchAccountData = createUploadBody(request: userPatchData, images: [], boundary: boundary)
+        
+        do {
+            let result = try await accountNetworkManger.patchUserData(requestModel: patchAccountData, boundaryString: boundary)
+            
+            switch result {
+            case .success(let result):
+                Log.debugPublic("유저 수정 성공", result)
+            case .failure(let error):
+                Log.errorPublic("유저 수정 실패", error)
+            }
+        } catch {
+            Log.errorPublic("유저 수정 실패", error)
         }
     }
 }

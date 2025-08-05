@@ -16,9 +16,9 @@ struct MatchingAnswerView: View {
     
     var body: some View {
         VStack {
-            Text("질문 \(viewModel.currentIndex)")
+            Text("질문 \(viewModel.currentQuestion.id)")
                 .font(.pixel(12))
-            Text("데이트 날에 상대와 나의 꾸밈정도가 다르면 서운할 것 같으신가요?")
+            Text(viewModel.currentQuestion.text)
                 .font(.pixel(20))
                 .padding(.horizontal, 53)
                 .padding(.bottom, 36)
@@ -31,14 +31,21 @@ struct MatchingAnswerView: View {
         .onChange(of: viewModel.currentIndex, { _, newValue in
             answer = viewModel.answers[newValue] ?? ""
         })
+        .onChange(of: answer, { oldValue, newValue in
+            if newValue == "" {
+                possibleNext[viewModel.currentIndex] = false
+            } else {
+                possibleNext[viewModel.currentIndex] = true
+            }
+        })
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    if viewModel.currentIndex == 1 {
-                        appState.onboardingPath.removeLast()
+                    if viewModel.currentIndex == 0 {
+                        appState.matchingPath.removeLast()
                     } else {
                         viewModel.currentIndex -= 1
                     }
@@ -92,13 +99,28 @@ struct MatchingAnswerView: View {
     
     var nextAnswerButton: some View {
         Button {
-            viewModel.currentIndex += 1
+            if answer == "" {
+                return
+            }
+            viewModel.answers[viewModel.currentIndex] = answer
+            
+            if viewModel.isLastQuestion {
+                Task {
+                    await viewModel.postTodayQuetionAnswers(completion: { result in
+                        guard result else { return }
+                        appState.matchingPath.append(Matching.questionComplete)
+                    })
+                }
+            } else {
+                viewModel.currentIndex += 1
+            }
         } label: {
             SelectButtonLabel(isSelected: Binding(
                 get: { possibleNext[viewModel.currentIndex] ?? false },  // nil일 때 false로 반환
                 set: { possibleNext[viewModel.currentIndex] = $0 }     // 값 업데이트
             ), height: 42, text: "다음답변", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
         }
+        .padding(.horizontal, 24)
 
     }
 }

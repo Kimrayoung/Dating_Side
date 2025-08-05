@@ -12,7 +12,7 @@ enum AppScreen {
     case main
 }
 
-enum Onboarding {
+enum Onboarding: Hashable {
     /// 핸드폰 번호 입력
     case phoneNumber
     /// 인증코드 입력
@@ -37,6 +37,10 @@ enum Onboarding {
     case forthDayPhoto
     /// 추가사진 - 6일차
     case sixthDayPhoto
+    case onboardingComplete
+    case profileEdit
+    case editEducation
+    case editJob
 }
 
 enum Main {
@@ -51,6 +55,13 @@ enum MyPage: Hashable {
     case profileValueList(valueType: String, valueDataList: [String]) // Changed for ProfileView type match
     case profileEdit
     case account
+    case defaultProfileImage
+    case nicknameInput(nickname: String?)
+    case locationSelect(location: String?)
+    case job(jobType: String?, jobDetail: String?)
+    case education(educationType: String?, schoolName: String?)
+    case preferences(keywords: [String])
+    case susceptible(lifeStyle: LifeStyle)
 }
 
 enum Matching: Hashable {

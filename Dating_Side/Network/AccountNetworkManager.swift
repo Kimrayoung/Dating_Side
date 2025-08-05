@@ -19,6 +19,10 @@ class AccountNetworkManager {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.postUserProfileData(signupData: requestModel, boundaryString: boundaryString), httpCodes: .success)
     }
     
+    func patchUserData(requestModel: Data, boundaryString: String) async throws -> Result<VoidResponse, Error>  {
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.patchUserProfileData(userData: requestModel, boundaryString: boundaryString), httpCodes: .success)
+    }
+    
     func fetchAddressData(_ addrCode: String?) async throws -> Result<[Address], Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getAddressData(addrCode: addrCode), httpCodes: .success)
     }
@@ -33,10 +37,6 @@ class AccountNetworkManager {
     
     func fetchLifeStyleDatas() async throws -> Result<LifeStyleResponse, Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getLifeStyleDatas, httpCodes: .success)
-    }
-    
-    func patchUserData(userData: UserAccount) async throws -> Result<VoidResponse, Error>  {
-        return await networkManager.callWithAsync(endpoint: AccountAPIManager.patchUserProfileData(userData: userData), httpCodes: .success)
     }
     
     func login(userSocialId: LoginRequest) async throws -> Result<VoidResponse, Error> {
@@ -54,12 +54,11 @@ class AccountNetworkManager {
 
 enum AccountAPIManager {
     case postUserProfileData(signupData: Data, boundaryString: String)
+    case patchUserProfileData(userData: Data, boundaryString: String)
     case getAddressData(addrCode: String?)
     case getJopTypes
     case getLifeStyleDatas
     case getPreferenceTypes(preferenceType: String)
-    
-    case patchUserProfileData(userData: UserAccount)
     /// 로그인(소셜로그인 -> 소셜로그인 accessToken 전달 -> 404: 계정 없음)
     case login(userSocialId: LoginRequest)
     case logout
@@ -69,7 +68,7 @@ enum AccountAPIManager {
 extension AccountAPIManager: APIManager {
     var path: String {
         switch self {
-        case .patchUserProfileData, .accountDelete:
+        case .accountDelete, .patchUserProfileData:
             return "account"
         case .login:
             return "account/login"
@@ -101,11 +100,11 @@ extension AccountAPIManager: APIManager {
         let accessToken = KeychainManager.shared.getAccessToken()
         Log.debugPrivate("accessToken: ", accessToken)
         switch self {
-        case .postUserProfileData(_, let boundaryString):
+        case .postUserProfileData(_, let boundaryString), .patchUserProfileData(_, let boundaryString):
             return [
                 "Content-Type" : "multipart/form-data; boundary=\(boundaryString)",
             ]
-        case .logout, .patchUserProfileData, .accountDelete:
+        case .logout, .accountDelete:
             return [
                 "Authorization": "Bearer \(accessToken)",
                 "Content-Type" : "application/json",
@@ -119,15 +118,13 @@ extension AccountAPIManager: APIManager {
     
     func body() throws -> Data? {
         switch self {
-        case .patchUserProfileData(let userProfileData):
-            let patchDic = try userProfileData.asPatchJSON()
-            let jsonData = try JSONSerialization.data(withJSONObject: patchDic)
-            return jsonData
         case .login(let loginRequest):
             let jsonData = try JSONEncoder().encode(loginRequest)
             return jsonData
         case .postUserProfileData(let signupData, _):
             return signupData
+        case .patchUserProfileData(let userData, _):
+            return userData
         default: return nil
         }
     }

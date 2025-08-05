@@ -10,23 +10,31 @@ import Kingfisher
 
 struct ProfileView: View {
     @EnvironmentObject private var appState: AppState
-    var userData: UserAccount?
     var simpleProfile: String
     var educationString: String
     var jobString: String
+    var location: String
+    var lifeStyle: LifeStyle?
+    var keyword: String?
+    var mannerTemperature: Int?
     var valueList: [String : [String]]
+    var defaultImageUrl: String? = nil
+    var onboardingDefaultImageData: UIImage? = nil
+    var introduceText: String? = nil
     /// Profile을 보여주는 화면이 어디인지(mypage -> 내 프로필, chat -> 상대방 프로필, matching -> 상대방프로필)
     var showProfileViewType: ShowProfileViewType
     
     var body: some View {
         VStack(spacing: 16) {
-            if showProfileViewType != .myPage {
+            if showProfileViewType == .chat {
                 Text("프로필")
                     .font(.pixel(16))
                     .padding(.top, 20)
             }
             profile
-            manner
+            if showProfileViewType != .onboarding {
+                manner
+            }
             ScrollView(.horizontal) {
                 HStack(content: {
                     defaultProfileInfo
@@ -34,7 +42,9 @@ struct ProfileView: View {
                 })
             }
             .padding(.horizontal, 24)
-            valuesProfileInfo
+            if showProfileViewType != .onboarding {
+                valuesProfileInfo
+            }
             selfTextView
         }
         
@@ -43,7 +53,19 @@ struct ProfileView: View {
     
     var profile: some View {
         HStack(spacing: 16, content: {
-            if let userProfileImage = userData?.profileImageURL {
+            if showProfileViewType == .onboarding {
+                onboardingProfileImageView
+            } else {
+                profileImageView
+            }
+            simpleProfileView
+        })
+        .padding(.horizontal, 24)
+    }
+    
+    var profileImageView: some View {
+        Group {
+            if let userProfileImage = defaultImageUrl {
                 KFImage(URL(string: userProfileImage))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -55,15 +77,36 @@ struct ProfileView: View {
                     .frame(width: 72, height: 72)
                     .clipShape(Circle())
             }
-            VStack(spacing: 7, content: {
-                HStack(content: {
-                    Text(simpleProfile)
-                        .font(.pixel(16))
-                    
-                })
-                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    var onboardingProfileImageView: some View {
+        Group {
+            if let userProfileImage = onboardingDefaultImageData {
+                Image(uiImage: userProfileImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 72, height: 72)
+                    .clipShape(Circle())
+            } else {
+                Image("sampleImage")
+                    .resizable()
+                    .frame(width: 72, height: 72)
+                    .clipShape(Circle())
+            }
+        }
+    }
+    
+    var simpleProfileView: some View {
+        VStack(spacing: 7, content: {
+            HStack(content: {
+                Text(simpleProfile)
+                    .font(.pixel(16))
                 
-                Text(userData?.keyword ?? "")
+            })
+            .frame(maxWidth: .infinity, alignment: .leading)
+            if showProfileViewType != .onboarding {
+                Text(keyword ?? "")
                     .foregroundStyle(Color.mainColor)
                     .font(.pixel(12))
                     .padding(.horizontal)
@@ -73,9 +116,8 @@ struct ProfileView: View {
                             .stroke(Color.mainColor)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-            })
+            }
         })
-        .padding(.horizontal, 24)
     }
     
     var manner: some View {
@@ -90,13 +132,13 @@ struct ProfileView: View {
             })
             .padding(.horizontal, 24)
             .frame(maxWidth: .infinity, alignment: .leading)
-            CustomRounedGradientProgressBar(currentProgress: userData?.mannerTemperature ?? 0, total: 100, barWidth: 345)
+            CustomRounedGradientProgressBar(currentProgress: mannerTemperature ?? 0, total: 100, barWidth: 345)
         })
     }
     
     var defaultProfileInfo: some View {
         VStack(spacing: 6, content: {
-            makeDefaultProfileInfo(11, "지역", userData?.activeRegion ?? "")
+            makeDefaultProfileInfo(11, "지역", location)
             makeDefaultProfileInfo(11, "학력", educationString)
             makeDefaultProfileInfo(11, "직업", jobString)
         })
@@ -109,10 +151,10 @@ struct ProfileView: View {
     
     var sensitiveInfo: some View {
         VStack(spacing: 3, content: {
-            makeDefaultProfileInfo(4, "음주", userData?.lifeStyle.drinking ?? "")
-            makeDefaultProfileInfo(4, "흡연", userData?.lifeStyle.smoking ?? "")
-            makeDefaultProfileInfo(4, "타투", userData?.lifeStyle.tattoo ?? "")
-            makeDefaultProfileInfo(4, "종교", userData?.lifeStyle.religion ?? "")
+            makeDefaultProfileInfo(4, "음주", lifeStyle?.drinking ?? "")
+            makeDefaultProfileInfo(4, "흡연", lifeStyle?.smoking ?? "")
+            makeDefaultProfileInfo(4, "타투", lifeStyle?.tattoo ?? "")
+            makeDefaultProfileInfo(4, "종교", lifeStyle?.religion ?? "")
         })
         .padding(.vertical, 24)
         .padding(.horizontal, 20)
@@ -195,7 +237,7 @@ struct ProfileView: View {
             Text("자기소개")
                 .font(.pixel(13))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            TextEditor(text: .constant(userData?.introduction ?? "sss"))
+            TextEditor(text: .constant(introduceText ?? "sss"))
                 .font(.pixel(12)) // .pixel(12)이 커스텀 폰트라면 이렇게 적용
                 .frame(height: 200)
                 .frame(maxWidth: .infinity)
@@ -216,5 +258,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(userData: nil, simpleProfile: "라영/1999/163cm", educationString: "", jobString: "", valueList: [:], showProfileViewType: .chat)
+    ProfileView(simpleProfile: "라영/1999/163cm", educationString: "", jobString: "", location: "", valueList: [:], introduceText: "", showProfileViewType: .chat)
 }

@@ -20,7 +20,7 @@ struct GenderSelectView: View {
         VStack(spacing: 0, content: {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
+            if viewModel.isOnboarding == .onboarding {
                 CustomRounedGradientProgressBar(currentProgress: 1, total: onboardingPageCnt)
                     .padding(.bottom, 48)
             }

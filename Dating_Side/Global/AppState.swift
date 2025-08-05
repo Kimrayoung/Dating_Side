@@ -65,13 +65,7 @@ class AppState: ObservableObject {
                 switch result {
                 case .success:
                     Log.infoPrivate("로그인 성공", socialType, token)
-                    isLoggedIn = true
-                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                    currentScreen = .main
-                    onboardingPath = NavigationPath()
-                    let accessToken = KeychainManager.shared.getAccessToken()
-                    Log.debugPrivate("accessToken checking", accessToken)
-                    
+                    onAuthenticated()
                 case .failure(let error):
                     if case let APIError.serverError(code) = error {
                         Log.infoPrivate("서버 에러 발생🔥: \(code)", token)
@@ -97,7 +91,7 @@ class AppState: ObservableObject {
             
             switch result {
             case .success:
-                setInit()
+                offAuthenticated()
                 
             case .failure(let error):
                 Log.errorPublic("logout error", error.localizedDescription)
@@ -107,6 +101,7 @@ class AppState: ObservableObject {
         }
     }
     
+    /// 계정탈퇴
     func accountDelete() async {
         loadingManager.isLoading = true
         defer {
@@ -117,7 +112,7 @@ class AppState: ObservableObject {
             
             switch result {
             case .success:
-                setInit()
+                offAuthenticated()
             case .failure(let error):
                 Log.errorPublic("account Delete error", error.localizedDescription)
             }
@@ -126,11 +121,21 @@ class AppState: ObservableObject {
         }
     }
     
-    func setInit() {
+    /// 앱 초기화
+    func offAuthenticated() {
         UserDefaults.standard.set(false, forKey: "isLoggedIn")
         chatPath = NavigationPath()
         matchingPath = NavigationPath()
         myPagePath = NavigationPath()
         currentScreen = .login
+    }
+    
+    func onAuthenticated() {
+        isLoggedIn = true
+        UserDefaults.standard.set(true, forKey: "isLoggedIn")
+        currentScreen = .main
+        onboardingPath = NavigationPath()
+        let accessToken = KeychainManager.shared.getAccessToken()
+        Log.debugPrivate("accessToken checking", accessToken)
     }
 }

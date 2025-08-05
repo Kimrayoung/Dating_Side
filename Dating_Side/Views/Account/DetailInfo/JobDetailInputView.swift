@@ -17,9 +17,7 @@ struct JobDetailInputView: View {
         VStack(spacing: 0) {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
-                CustomRounedGradientProgressBar(currentProgress: 11, total: onboardingPageCnt)
-            }   
+            CustomRounedGradientProgressBar(currentProgress: 11, total: onboardingPageCnt)
             Text("자세한 직업을 알려주면\n더 잘 어울리는 사람을\n찾을 수 있어요!")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity)
@@ -58,32 +56,10 @@ struct JobDetailInputView: View {
     }
     
     var jobInputView: some View {
-        VStack(spacing: 4, content: {
-            TextField("선택사항 입니다", text: $viewModel.jobDetail)
-                .focused($focusedJobDetail)
-                .multilineTextAlignment(.center)
-                .bottomBorder(color: Color.gray3, width: 2)
-                .font(.pixel(20))
-                .frame(maxWidth: .infinity, alignment: .center)
-                .overlay(
-                    Rectangle()
-                      .frame(height: 2)
-                      .foregroundStyle(Color.gray3),
-                    alignment: .bottom
-                  )
-                .frame(width: 228)
-                .padding(.horizontal, 20)
-            HStack {
-                Text("최대 10자")
-                    .font(.pixel(12))
-                    .foregroundStyle(Color.gray3)
-                Spacer()
-                Text("\(viewModel.jobDetail.count)/10")
-                    .font(.pixel(12))
-                    .foregroundStyle(Color.gray3)
-            }
-            .frame(width: 228)
-        })
+        CustomInputField(
+            text: $viewModel.jobDetail,
+            isFocused: $focusedJobDetail
+        )
     }
 }
 

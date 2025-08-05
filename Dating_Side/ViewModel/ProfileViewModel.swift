@@ -35,6 +35,7 @@ class ProfileViewModel: ObservableObject {
 }
 
 extension ProfileViewModel {
+    /// 유저 정보 가져오기
     @MainActor
     func fetchUserAccountData() async {
         loadingManager.isLoading = true
@@ -57,6 +58,7 @@ extension ProfileViewModel {
         }
     }
     
+    /// 유저의 답변리스트 가져오기
     @MainActor
     func fetchUserAnswerList() async {
         loadingManager.isLoading = true
@@ -79,5 +81,4 @@ extension ProfileViewModel {
             Log.errorPublic("유저 가치관 정보 가져오기 오류", error.localizedDescription)
         }
     }
-    
 }

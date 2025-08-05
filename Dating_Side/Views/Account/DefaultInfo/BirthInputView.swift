@@ -19,9 +19,7 @@ struct BirthInputView: View {
         VStack {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
-                CustomRounedGradientProgressBar(currentProgress: 3, total: onboardingPageCnt)
-            }
+            CustomRounedGradientProgressBar(currentProgress: 3, total: onboardingPageCnt)
             Text("당신의 생일을\n신중하게 선택해주세요")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)

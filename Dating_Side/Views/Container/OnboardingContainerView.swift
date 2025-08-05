@@ -40,11 +40,19 @@ struct OnboardingContainerView: View {
                     case .secondDayPhoto: ProfileSecondImageView(viewModel: viewModel)
                     case .forthDayPhoto: ProfileForthImageView(viewModel: viewModel)
                     case .sixthDayPhoto: ProfileSixthImageView(viewModel: viewModel)
+                    case .onboardingComplete: OnboardingCompleteView(viewModel: viewModel)
+                    case .profileEdit:
+                        ProfileEditView(isOnboarding: true)
+                    case .editEducation:
+                        EducationEditView(viewModel: viewModel)
+                    case .editJob:
+                        JobEditView(viewModel: viewModel)
                     }
                 }
                 .onAppear {
                     viewModel.socialType = socialType
                     viewModel.socialId = socialId
+                    viewModel.isOnboarding = .onboarding
                 }
         }
     }

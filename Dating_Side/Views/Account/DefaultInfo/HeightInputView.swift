@@ -19,9 +19,7 @@ struct HeightInputView: View {
         VStack {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
-                CustomRounedGradientProgressBar(currentProgress: 4, total: onboardingPageCnt)
-            }
+            CustomRounedGradientProgressBar(currentProgress: 4, total: onboardingPageCnt)
             Text("당신의 키를\n신중하게 선택해주세요")
                 .font(.pixel(24))
                 .multilineTextAlignment(.center)
@@ -162,6 +160,7 @@ struct HeightInputView: View {
             Text("변경 불가능한 정보들을\n마지막으로 확인 해주세요")
                 .font(.pixel(16))
                 .padding(.top, 32)
+                .multilineTextAlignment(.center)
             Text("\(viewModel.nicknameInput) / \(getDateString()) / \(getHeightString())")
                 .font(.pixel(24))
                 .padding(.top, 16)

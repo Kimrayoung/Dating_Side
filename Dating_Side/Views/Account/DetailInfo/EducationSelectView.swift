@@ -17,10 +17,7 @@ struct EducationSelectView: View {
         VStack(spacing: 0) {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
-                CustomRounedGradientProgressBar(currentProgress: 8, total: onboardingPageCnt)
-            }
-            
+            CustomRounedGradientProgressBar(currentProgress: 8, total: onboardingPageCnt)
             Text("마지막으로 공부한 곳이\n어디인가요?")
                 .font(.pixel(24))
                 .frame(maxWidth: .infinity)

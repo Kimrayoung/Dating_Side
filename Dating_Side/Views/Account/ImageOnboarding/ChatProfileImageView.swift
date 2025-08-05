@@ -29,7 +29,7 @@ struct ChatProfileImageView: View {
             VStack {
                 EmptyView()
                     .padding(.top, 30)
-                if viewModel.isOnboarding {
+                if viewModel.isOnboarding == .onboarding {
                     CustomRounedGradientProgressBar(currentProgress: 13, total: onboardingPageCnt)
                 }
                 Text("프로필 사진을 등록 해주세요")
@@ -59,9 +59,14 @@ struct ChatProfileImageView: View {
                 
                 Button {
                     guard viewModel.selectedImage != nil else { return }
-                    appState.onboardingPath.append(Onboarding.secondDayPhoto)
+                    if viewModel.isOnboarding == .onboarding {
+                        appState.onboardingPath.append(Onboarding.secondDayPhoto)
+                    } else if viewModel.isOnboarding == .onboardingEdit {
+                        
+                    }
+                    
                 } label: {
-                    SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                    SelectButtonLabel(isSelected: $possibleNext, height: 48, text: viewModel.isOnboarding == .onboarding ? "다음" : "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom)

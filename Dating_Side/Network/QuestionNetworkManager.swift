@@ -61,6 +61,7 @@ extension QuestionAPIManager: APIManager {
     
     var headers: [String : String]? {
         let accessToken = KeychainManager.shared.getAccessToken()
+        Log.debugPrivate("accessToken: ", accessToken)
         return [
             "Content-Type" : "application/json",
             "Authorization" : "Bearer " + accessToken

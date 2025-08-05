@@ -12,12 +12,13 @@ struct NicknameInputView: View {
     @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = false
     @FocusState private var nicknameFocusField: Bool
+    var originalNickname: String? = nil
     
     var body: some View {
         VStack(spacing: 0, content: {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
+            if viewModel.isOnboarding == .onboarding {
                 CustomRounedGradientProgressBar(currentProgress: 2, total: onboardingPageCnt)
             }
             Text("어떤 이름으로 활동하고 싶나요?")
@@ -37,9 +38,15 @@ struct NicknameInputView: View {
                     return
                 }
                 nicknameFocusField = false
-                appState.onboardingPath.append(Onboarding.birth)
+                if viewModel.isOnboarding == .onboarding {
+                    appState.onboardingPath.append(Onboarding.birth)
+                } else if viewModel.isOnboarding == .mypageEdit {
+                    Task {
+                        await viewModel.updateNickname()
+                    }
+                }
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: viewModel.isOnboarding == .onboarding ? "다음" : "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
@@ -51,6 +58,10 @@ struct NicknameInputView: View {
         })
         .onAppear(perform: {
             DispatchQueue.main.async {
+                if let nicknameInput = originalNickname {
+                    viewModel.isOnboarding = .mypageEdit
+                    viewModel.nicknameInput = nicknameInput
+                }
                 nicknameFocusField = true
             }
         })
@@ -61,7 +72,12 @@ struct NicknameInputView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     nicknameFocusField = false
-                    appState.onboardingPath.removeLast()
+                    if viewModel.isOnboarding == .onboarding || viewModel.isOnboarding == .onboardingEdit {
+                        appState.onboardingPath.removeLast()
+                    } else {
+                        appState.myPagePath.removeLast()
+                    }
+                    
                 } label: {
                     Image("navigationBackBtn")
                 }

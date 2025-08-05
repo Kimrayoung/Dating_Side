@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct MatchingFailView: View {
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var viewModel: QuestionViewModel
+    
     @State private var showQuestionModal: Bool = false
     @State private var selectCategory: [Bool] = [true, false, false, false]
+    
     @State private var questionContent: String = ""
     @State private var sendQuestion: Bool = false
     
@@ -90,14 +94,19 @@ struct MatchingFailView: View {
                 .font(.pixel(13))
                 .frame(maxWidth: .infinity, alignment: .leading)
             HStack {
-                makeValueProfileView(imageString: "loveView", text: "연애", num: 0)
-                makeValueProfileView(imageString: "marryView", text: "결혼", num: 1)
-                makeValueProfileView(imageString: "workView", text: "직장", num: 2)
-                makeValueProfileView(imageString: "lifeView", text: "생활", num: 3)
+                makeValueProfileView(category: UserAnswerCategory.LOVE)
+                makeValueProfileView(category: UserAnswerCategory.MARRIAGE)
+                makeValueProfileView(category: UserAnswerCategory.WORK)
+                makeValueProfileView(category: UserAnswerCategory.LIFE)
             }
             questionContentEditor
             Button(action: {
-                
+                guard let selectedIndex = selectCategory.firstIndex(where: { $0 }) else { return }
+                guard let selectedCategory = UserAnswerCategory(index: selectedIndex) else { return }
+                let question = MyQuestion(category: selectedCategory.rawValue, question: questionContent)
+                Task {
+                    await viewModel.postMyQuestion(question: question)
+                }
             }, label: {
                 SelectButtonLabel(isSelected: $sendQuestion, height: 42, text: "제출하기", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
@@ -105,21 +114,21 @@ struct MatchingFailView: View {
         .padding(.horizontal, 24)
     }
     
-    func makeValueProfileView(imageString: String, text: String, num: Int) -> some View {
+    func makeValueProfileView(category: UserAnswerCategory) -> some View {
         return Button(action: {
             for i in 0..<selectCategory.count {
-                selectCategory[i] = i == num ? true : false
+                selectCategory[i] = i == category.index ? true : false
             }
         }, label: {
             ZStack {
-                Text(text)
+                Text(category.korean)
                     .font(.pixel(12))
                     .foregroundStyle(Color.white)
-                Image(imageString)
+                Image(category.imageString)
                     .resizable()
                     .frame(width: 80, height: 80)
             }
-            .background(selectCategory[num] ? Color.mainColor : Color.init(hex: "#C6D4FB"))
+            .background(selectCategory[category.index] ? Color.mainColor : Color.init(hex: "#C6D4FB"))
             .clipShape(RoundedRectangle(cornerRadius: 8))
         })
     }

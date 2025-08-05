@@ -12,15 +12,14 @@ struct SusceptibleInfoView: View {
     @ObservedObject var viewModel: AccountViewModel
     @State var possibleNext: Bool = false
     let screenWidth = UIScreen.main.bounds.width
+    var lifeStyle: LifeStyle? = nil
     
     var body: some View {
         VStack(spacing: 0) {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
-                CustomRounedGradientProgressBar(currentProgress: 12, total: onboardingPageCnt)
-            }
-            Text("당신의 라이프스타일을 알려주세요")
+            CustomRounedGradientProgressBar(currentProgress: 12, total: onboardingPageCnt)
+            Text("당신의 라이프스타일을 선택해주세요")
                 .font(.pixel(20))
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
@@ -31,16 +30,23 @@ struct SusceptibleInfoView: View {
             infoView
             Spacer()
             Button(action: {
-                if possibleNext {
-                    appState.onboardingPath.append(Onboarding.chatProfileImage)
+                if viewModel.isOnboarding == .onboarding {
+                    if possibleNext {
+                        appState.onboardingPath.append(Onboarding.chatProfileImage)
+                    }
+                } else if viewModel.isOnboarding == .mypageEdit {
+                    Task {
+                        await viewModel.updateLifeStyle()
+                    }
                 }
+                
             }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: viewModel.isOnboarding == .onboarding ? "다음" : "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
         }
         .task {
-            await viewModel.fetchLifeStyle()
+            await viewModel.fetchLifeStyle(lifeStyle: lifeStyle)
         }
         .padding(.horizontal, 24)
         .navigationTitle("")

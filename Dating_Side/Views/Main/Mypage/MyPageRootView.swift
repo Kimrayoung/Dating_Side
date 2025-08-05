@@ -24,9 +24,24 @@ struct MyPageRootView: View {
                 case .profileValueList(let valueType, let valueDataList):
                     ValuesListView(valueType: valueType, valueDataList: valueDataList)
                 case .profileEdit:
-                    ProfileEditView()
+                    ProfileEditView(isOnboarding: false)
+                        .environmentObject(profileViewModel)
                 case .account:
                     AccountView()
+                case .nicknameInput(let nickname):
+                    NicknameInputView(viewModel: AccountViewModel(), originalNickname: nickname)
+                case .defaultProfileImage:
+                    ChatProfileImageView(viewModel: AccountViewModel())
+                case let .locationSelect(location):
+                    LocationSelectView(viewModel: AccountViewModel(), location: location)
+                case let .job(jobType, jobDetail):
+                    JobEditView(viewModel: AccountViewModel(), jobType: jobType, jobDetail: jobDetail)
+                case let .education(educationType, schoolName):
+                    EducationEditView(viewModel: AccountViewModel(), educationType: educationType, schoolName: schoolName)
+                case .preferences(let keywords):
+                    BeforePreferenceKewordSelectView(viewModel: AccountViewModel(), preferences: keywords)
+                case .susceptible(let lifeStyle):
+                    SusceptibleInfoView(viewModel: AccountViewModel(), lifeStyle: lifeStyle)
                 }
             }
     }

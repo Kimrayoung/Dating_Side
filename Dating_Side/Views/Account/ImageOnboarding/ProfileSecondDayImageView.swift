@@ -8,11 +8,10 @@
 import SwiftUI
 import PhotosUI
 
-struct ProfileSixthImageView: View {
+struct ProfileSecondImageView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: AccountViewModel
-
-    @State var sixthDayImageComplete: Bool = false
+    @State var secondDayImageComplete: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
     @State var isImagePickerPresented: Bool = false
     @State private var showAlert: Bool = false
@@ -21,41 +20,41 @@ struct ProfileSixthImageView: View {
         VStack(spacing: 0) {
             EmptyView()
                 .padding(.top, 30)
-            if viewModel.isOnboarding {
-                CustomRounedGradientProgressBar(currentProgress: 16, total: onboardingPageCnt)
-            }
+            CustomRounedGradientProgressBar(currentProgress: 14, total: onboardingPageCnt)
             TextWithColoredSubString(
-                text: "매칭된 상대에게 6일차에 공개할 사진을 등록해주세요",
-                highlight: "6일차",
+                text: "매칭된 상대에게 2일차에 공개할 사진을 등록해주세요",
+                highlight: "2일차",
                 gradientColors: [.mainColor]
             )
             .font(.pixel(24))
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.top, 48)
             .foregroundStyle(Color.blackColor)
-            Text("흥미있는 대화를 위한 사진입니다.\n6일차에 보여주고 싶은 나의 모습을 등록해주세요")
+            Text("흥미있는 대화를 위한 사진입니다.\n2일차에 보여주고 싶은 나의 모습을 등록해주세요")
                 .font(.pixel(14))
                 .frame(maxWidth: .infinity, alignment: .center)
                 .foregroundStyle(Color.gray3)
                 .padding(.bottom, 36)
-            sixthDayImage
-                .padding(.bottom, 70)
+            ZStack {
+                sixthDayImage
+                forthDayImage
+                secondDayImage
+            }
+            .padding(.bottom, 70)
             Button(action: {
-                if viewModel.selectedSixthDayImage == nil {
+                if viewModel.selectedSeconDayImage == nil {
                     return
                 }
-                Task {
-                    await viewModel.postUserData()
-                }
+                appState.onboardingPath.append(Onboarding.forthDayPhoto)
             }, label: {
-                SelectButtonLabel(isSelected: $sixthDayImageComplete, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                SelectButtonLabel(isSelected: $secondDayImageComplete, height: 48, text: "다음", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
             })
             .padding(.bottom)
             .padding(.horizontal, 24)
         }
         .onAppear {
-            if viewModel.selectedSixthDayImage != nil {
-                sixthDayImageComplete = true
+            if viewModel.selectedSeconDayImage != nil {
+                secondDayImageComplete = true
             }
         }
         .customAlert(isPresented: $showAlert, title: "오류", message: "설정에서 접근 권한을 허용해주세요", primaryButtonText: "취소", primaryButtonAction: {}, secondaryButtonText: "설정으로 이동", secondaryButtonAction: {})
@@ -73,17 +72,17 @@ struct ProfileSixthImageView: View {
         })
     }
     
-    var sixthDayImage: some View {
+    var secondDayImage: some View {
         PhotoPickerButton(
-            imageType: .sixthDay,
+            imageType: .secondDay,
             isPresented: $isImagePickerPresented,
             selectedPickerImage: $selectedPickerImage,
             showAlert: $showAlert,
             onImagePicked: { item in
-                viewModel.loadSelectedImage(imageType: .sixthDay, pickerItem: item)
+                viewModel.loadSelectedImage(imageType: .secondDay, pickerItem: item)
             }) {
                 Group {
-                    if let image = viewModel.selectedSixthDayImage {
+                    if let image = viewModel.selectedSeconDayImage {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFill()
@@ -95,14 +94,28 @@ struct ProfileSixthImageView: View {
                     }
                 }
             }
-            .onChange(of: viewModel.selectedSixthDayImage) {
-                if viewModel.selectedSixthDayImage != nil {
-                    sixthDayImageComplete = true
+            .onChange(of: viewModel.selectedSeconDayImage) {
+                if viewModel.selectedSeconDayImage != nil {
+                    secondDayImageComplete = true
                 }
             }
+    }
+    
+    var forthDayImage: some View {
+        RoundedRectangle(cornerRadius: 9.57)
+            .fill(Color.subColor)
+            .frame(width: 240, height: 360)
+            .padding(.leading, 16)
+    }
+    
+    var sixthDayImage: some View {
+        RoundedRectangle(cornerRadius: 9.57)
+            .fill(Color.subColor1)
+            .frame(width: 240, height: 360)
+            .padding(.leading, 30)
     }
 }
 
 #Preview {
-    ProfileSixthImageView(viewModel: AccountViewModel())
+    ProfileSecondImageView(viewModel: AccountViewModel())
 }

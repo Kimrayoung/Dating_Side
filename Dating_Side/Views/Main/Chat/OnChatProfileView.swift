@@ -15,7 +15,7 @@ struct OnChatProfileView: View {
     var body: some View {
         NavigationStack(path: $appState.onChatProfilePath) {
             VStack {
-                ProfileView(userData: viewModel.userData, simpleProfile: viewModel.makeSimpleProfile(), educationString: viewModel.makeSchoolString(), jobString: viewModel.makeJobString(), valueList: viewModel.userValueList, showProfileViewType: .chat)
+                ProfileView(simpleProfile: viewModel.makeSimpleProfile(), educationString: viewModel.makeSchoolString(), jobString: viewModel.makeJobString(), location: viewModel.userData?.activeRegion ?? "", valueList: viewModel.userValueList, defaultImageUrl: viewModel.userData?.profileImageURL, introduceText: viewModel.userData?.introduction, showProfileViewType: .chat)
                 HStack(spacing: 5, content: {
                     skipButton
                     okButton
