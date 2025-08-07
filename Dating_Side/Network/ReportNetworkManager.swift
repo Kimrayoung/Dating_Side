@@ -6,10 +6,10 @@
 //
 import Foundation
 
-class ReportNetworkManager {
-    private let networkManager: NetworkManager
+struct ReportNetworkManager {
+    private let networkManager: NetworkProtocol
     
-    init(networkManager: NetworkManager) {
+    init(networkManager: NetworkProtocol = NetworkManager.shared) {
         self.networkManager = networkManager
     }
     

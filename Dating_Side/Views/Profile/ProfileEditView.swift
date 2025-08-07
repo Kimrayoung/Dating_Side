@@ -40,7 +40,7 @@ struct ProfileEditView: View {
                     appState.myPagePath.append(MyPage.locationSelect(location: profileViewModel.userData?.activeRegion))
                 }
             }
-            ArrowNextRow(label: "학력 \(profileViewModel.userData?.educationType ?? "")/\(profileViewModel.userData?.educationDetail ?? "")", subTitle: nil) {
+            ArrowNextRow(label: "학력 \(profileViewModel.userData?.educationDetail != "" ? profileViewModel.userData?.educationDetail ?? "" : profileViewModel.userData?.educationType ?? "")", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.editEducation)
                 } else {
@@ -48,7 +48,7 @@ struct ProfileEditView: View {
                 }
                 
             }
-            ArrowNextRow(label: "직업 \(profileViewModel.userData?.jobType ?? "")/\(profileViewModel.userData?.jobDetail ?? "")", subTitle: nil) {
+            ArrowNextRow(label: "직업 \(profileViewModel.userData?.jobDetail != "" ? profileViewModel.userData?.jobDetail ?? "" : profileViewModel.userData?.jobType ?? profileViewModel.userData?.jobType ?? "")", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.editJob)
                 } else {

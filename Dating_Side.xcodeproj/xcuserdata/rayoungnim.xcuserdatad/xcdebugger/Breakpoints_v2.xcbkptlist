@@ -62,54 +62,10 @@
             filePath = "Dating_Side/ViewModel/OnboardingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "538"
-            endingLineNumber = "538"
+            startingLineNumber = "527"
+            endingLineNumber = "527"
             landmarkName = "fetchLifeStyle(lifeStyle:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "7C79328A-4C9C-4049-A92E-56580AF5532A - 21a0cd1435913517"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Dating_Side.AccountViewModel.fetchLifeStyle(lifeStyle: Swift.Optional&lt;Dating_Side.LifeStyle&gt;) async -&gt; ()"
-                  moduleName = "Dating_Side.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/Dating_Side/Dating_Side/ViewModel/OnboardingViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "538"
-                  endingLineNumber = "538">
-               </Location>
-               <Location
-                  uuid = "7C79328A-4C9C-4049-A92E-56580AF5532A - 21a0cd1435913517"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Dating_Side.AccountViewModel.fetchLifeStyle(lifeStyle: Swift.Optional&lt;Dating_Side.LifeStyle&gt;) async -&gt; ()"
-                  moduleName = "Dating_Side.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/Dating_Side/Dating_Side/ViewModel/OnboardingViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "538"
-                  endingLineNumber = "538">
-               </Location>
-               <Location
-                  uuid = "7C79328A-4C9C-4049-A92E-56580AF5532A - 21a0cd1435913517"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Dating_Side.AccountViewModel.fetchLifeStyle(lifeStyle: Swift.Optional&lt;Dating_Side.LifeStyle&gt;) async -&gt; ()"
-                  moduleName = "Dating_Side.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/Dating_Side/Dating_Side/ViewModel/OnboardingViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "538"
-                  endingLineNumber = "538">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -138,54 +94,42 @@
             filePath = "Dating_Side/ViewModel/OnboardingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
+            startingLineNumber = "425"
+            endingLineNumber = "425"
             landmarkName = "fetchAddressData(code:isDetailLocation:selectedLocation:selectedDetailLocation:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "745020C1-2298-4A57-B8D6-2D74ECF1ECB4 - 333567985198cec3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Dating_Side.AccountViewModel.fetchAddressData(code: Swift.Optional&lt;Swift.String&gt;, isDetailLocation: Swift.Bool, selectedLocation: Swift.Optional&lt;Swift.String&gt;, selectedDetailLocation: Swift.Optional&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "Dating_Side.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/Dating_Side/Dating_Side/ViewModel/OnboardingViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "436"
-                  endingLineNumber = "436">
-               </Location>
-               <Location
-                  uuid = "745020C1-2298-4A57-B8D6-2D74ECF1ECB4 - c5b71e75b8f44d59"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Dating_Side.Address) -&gt; Swift.Bool in Dating_Side.AccountViewModel.fetchAddressData(code: Swift.Optional&lt;Swift.String&gt;, isDetailLocation: Swift.Bool, selectedLocation: Swift.Optional&lt;Swift.String&gt;, selectedDetailLocation: Swift.Optional&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "Dating_Side.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/Dating_Side/Dating_Side/ViewModel/OnboardingViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "436"
-                  endingLineNumber = "436">
-               </Location>
-               <Location
-                  uuid = "745020C1-2298-4A57-B8D6-2D74ECF1ECB4 - 333567985198cec3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Dating_Side.AccountViewModel.fetchAddressData(code: Swift.Optional&lt;Swift.String&gt;, isDetailLocation: Swift.Bool, selectedLocation: Swift.Optional&lt;Swift.String&gt;, selectedDetailLocation: Swift.Optional&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "Dating_Side.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/Dating_Side/Dating_Side/ViewModel/OnboardingViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "436"
-                  endingLineNumber = "436">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E8F5774B-CADB-49CC-B48C-96EE065EB43C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dating_Side/Views/Account/DetailInfo/EducationEditView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "04BD88A6-675E-4C06-957C-788F14CE44CA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dating_Side/ViewModel/OnboardingViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "313"
+            endingLineNumber = "313"
+            landmarkName = "updateEducation()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

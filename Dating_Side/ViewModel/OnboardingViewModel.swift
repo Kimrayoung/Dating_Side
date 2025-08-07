@@ -22,9 +22,6 @@ class AccountViewModel: ObservableObject {
     var socialType: SocialType? = nil
     var socialId: String? = nil
     
-    /// 기본 유저 정보(마이페이지에서 유저 수정할때 사용)
-    var defaultUserData: UserAccount?
-    
     @Published var genderSelectedIndex: Int = 0
     
     @Published var locationOption: [Address] = []
@@ -69,10 +66,6 @@ class AccountViewModel: ObservableObject {
     @Published var selectedSixthDayImage: UIImage?
     
     //MARK: - 공통 사용(회원 등록, 회원 수정)
-    /// 기본 유저 정보(온보딩에서 사용 x, 마이페이지에서 넘겨줘야 함)
-    init(userData: UserAccount? = nil) {
-        self.defaultUserData = userData
-    }
     
     func checkLocationData() -> Bool {
         return locationSelected != nil && detailLocationSelected != nil ? true : false
@@ -308,94 +301,90 @@ extension AccountViewModel {
         }
     }
     
-    /// 수정할때 사용하는 기본 데이터 만들기
-    func setUpdateUserData() -> PatchAccountRequest? {
-        guard let userData = defaultUserData else { return nil }
-        
-        return PatchAccountRequest(educationType: userData.educationType, nickName: userData.nickName, jobDetail: userData.jobDetail, afterPreferenceTypeList: userData.afterPreferenceTypeList, beforePreferenceTypeList: userData.beforePreferenceTypeList, lifeStyle: userData.lifeStyle, jobType: userData.jobType, phoneNumber: userData.phoneNumber, educationDetail: userData.educationDetail, introduction: userData.introduction, activeRegion: userData.activeRegion)
-        
-    }
-    
-    /// 닉네임 업데이트
     func updateNickname() async {
-        guard var defaultUpdateUser = setUpdateUserData() else { return }
-        
-        defaultUpdateUser.nickName = nicknameInput
-        await patchUserAccountData(userPatchData: defaultUpdateUser)
+        let updateNickname: [String : Any] = [
+            PatchUserType.nickname.rawValue : nicknameInput,
+                                                ]
+        await patchUserAccountData(userPatchData: updateNickname)
     }
     
     /// 학력 업데이트
     func updateEducation() async {
-        guard var defaultUpdateUser = setUpdateUserData() else { return }
         guard let educationType = makeEducationType() else { return }
-        defaultUpdateUser.educationType = educationType.rawValue
-        defaultUpdateUser.educationDetail = schoolName
-        
-        await patchUserAccountData(userPatchData: defaultUpdateUser)
+        let updateEducation: [String : Any] = [
+            PatchUserType.educationType.rawValue : educationType.rawValue,
+            PatchUserType.educationDetail.rawValue : schoolName
+                                                ]
+        await patchUserAccountData(userPatchData: updateEducation)
     }
     
     /// 직업 업데이트
     func updateJob(jobType: String, jobDetail: String) async {
-        guard var defaultUpdateUser = setUpdateUserData() else { return }
         guard let jobType = makeJobType() else { return }
-        defaultUpdateUser.jobType = jobType.type
-        defaultUpdateUser.jobDetail = jobDetail
-        
-        await patchUserAccountData(userPatchData: defaultUpdateUser)
+        let udpateJobType: [String : Any] = [
+            PatchUserType.jobType.rawValue : jobType.type,
+            PatchUserType.jobDetail.rawValue : jobDetail
+                                            ]
+        await patchUserAccountData(userPatchData: udpateJobType)
     }
     
     /// 거주지 업데이트
     func updateLocation() async {
-        guard var defaultUpdateUser = setUpdateUserData() else { return }
         var location = makeLocation()
-        
-        
+        let updateLocation: [String : Any] = [
+            PatchUserType.activeRegion.rawValue : location
+        ]
+        await patchUserAccountData(userPatchData: updateLocation)
     }
     
     /// 선호키워드 업데이트
     func updatePreference(preferenceType: PreferenceType) async {
-        guard var defaultUpdateUser = setUpdateUserData() else { return }
+        var updatePreference: [String : Any] = [:]
         
         switch preferenceType {
         case .before:
             let selectedBefore = makeBeforePreference()
-            defaultUpdateUser.afterPreferenceTypeList = selectedBefore
+            updatePreference = [PatchUserType.beforePreferenceTypeList.rawValue : selectedBefore]
         case .after:
             let selectedAfter = makeAfterPreference()
-            defaultUpdateUser.afterPreferenceTypeList = selectedAfter
+            updatePreference = [PatchUserType.afterPreferenceTypeList.rawValue : selectedAfter]
         }
 
-        await patchUserAccountData(userPatchData: defaultUpdateUser)
+        await patchUserAccountData(userPatchData: updatePreference)
     }
     
     func updateLifeStyle() async {
-        guard var defaultUpdateUser = setUpdateUserData() else { return }
         guard let lifeStyle = makeLifeStyle() else { return }
-        defaultUpdateUser.lifeStyle = lifeStyle
+        let updateLifeStyle: [String : Any] = [
+            PatchUserType.lifeStyle.rawValue : lifeStyle
+        ]
         
-        await patchUserAccountData(userPatchData: defaultUpdateUser)
+        await patchUserAccountData(userPatchData: updateLifeStyle)
     }
     
     /// 자기소개 및 기본 이미지 업데이트
     func updateIntroduceAndDefaultImage() async {
-        guard var defaultUpdateUser = setUpdateUserData() else { return }
-        defaultUpdateUser.introduction = introduceText
+        
+        let updateIntroduceText: [String : Any] = [
+            PatchUserType.introduction.rawValue : introduceText
+        ]
+        
         guard let selectedImage = selectedImage else { return }
         
         let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImage", image: selectedImage)]
         
-        await patchUserAccountData(userPatchData: defaultUpdateUser, userImage: userImageData)
+        await patchUserAccountData(userPatchData: updateIntroduceText, userImage: userImageData)
     }
     
     /// 추가 이미지 업데이트
     func updateAdditionalImage() async {
-        guard let defaultUpdateUser = setUpdateUserData() else { return }
+        let updateDefaultData: [String : Any] = [:]
         
         guard let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return }
         
         let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
         
-        await patchUserAccountData(userPatchData: defaultUpdateUser, userImage: userImageData)
+        await patchUserAccountData(userPatchData: updateDefaultData, userImage: userImageData)
     }
 }
 
@@ -580,7 +569,7 @@ extension AccountViewModel {
     }
     
     @MainActor
-    func patchUserAccountData(userPatchData: PatchAccountRequest, userImage: [AccountImage] = []) async {
+    func patchUserAccountData(userPatchData: [String : Any], userImage: [AccountImage] = []) async {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -589,6 +578,7 @@ extension AccountViewModel {
         let identifier: String = UUID().uuidString
         let boundary: String = "Boundary-\(identifier)"
         
+       
         let patchAccountData = createUploadBody(request: userPatchData, images: [], boundary: boundary)
         
         do {

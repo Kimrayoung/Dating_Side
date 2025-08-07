@@ -16,10 +16,12 @@ struct PatchAccountRequest: Codable {
     var activeRegion: String
 }
 
-enum PatchUserType {
-    case education
+enum PatchUserType: String {
+    case educationType
+    case educationDetail
     case nickname
-    case job
+    case jobType
+    case jobDetail
     case afterPreferenceTypeList
     case beforePreferenceTypeList
     case lifeStyle
@@ -178,4 +180,22 @@ enum AccountType {
     case onboarding
     case onboardingEdit
     case mypageEdit
+}
+
+/// 내게 다가온 사람 & 내가 다가간 사람
+struct AttractionAccount: Codable {
+    let id: Int
+    let nickName, birthYear: String
+    let height: Int
+    let activeRegion, keyword, educationType, educationDetail: String
+    let jobType, jobDetail: String
+    let lifeStyle: LifeStyle
+    let profileImageURL, introduction: String
+    let mannerTemperature: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id, nickName, birthYear, height, activeRegion, keyword, educationType, educationDetail, jobType, jobDetail, lifeStyle
+        case profileImageURL = "profileImageUrl"
+        case introduction, mannerTemperature
+    }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 /// 질문과 관련된 network(오늘의 질문, 질문 대답들)
-class QuestionNetworkManager {
+struct QuestionNetworkManager {
     private let networkManager: NetworkProtocol
     
     init(networkManager: NetworkProtocol = NetworkManager.shared) {

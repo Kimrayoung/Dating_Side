@@ -48,6 +48,37 @@ func createUploadBody<T: Encodable>(
     return body
 }
 
+func createUploadBody(
+    request: [String: Any],
+    images: [AccountImage],
+    boundary: String
+) -> Data {
+    var body = Data()
+    let crlf = "\r\n"
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: request, options: []),
+          let jsonString = String(data: jsonData, encoding: .utf8) else {
+        return Data()
+    }
+    body.appendString("--\(boundary)\(crlf)")
+    body.appendString("Content-Disposition: form-data; name=\"request\"\(crlf)\(crlf)")
+    body.appendString(jsonString)
+    body.appendString(crlf)
+    // 이미지 등 추가
+    for imageInfo in images {
+        guard let imageData = imageInfo.image.jpegData(compressionQuality: 0.7) else { continue }
+        let filename = "\(imageInfo.imageTitle).jpg"
+        body.appendString("--\(boundary)\(crlf)")
+        body.appendString(
+          "Content-Disposition: form-data; name=\"\(imageInfo.imageTitle)\"; filename=\"\(filename)\"\(crlf)"
+        )
+        body.appendString("Content-Type: image/jpeg\(crlf)\(crlf)")
+        body.append(imageData)
+        body.appendString(crlf)
+    }
+    body.appendString("--\(boundary)--\(crlf)")
+    return body
+}
+
 extension Data {
     mutating func appendString(_ string: String) {
         if let d = string.data(using: .utf8) {

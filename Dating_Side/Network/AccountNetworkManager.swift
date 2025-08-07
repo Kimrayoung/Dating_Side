@@ -8,7 +8,7 @@
 import Foundation
 
 ///계정관련 Network(ex. 성별, 생년월일, 닉네임, 키, 지역, 등)
-class AccountNetworkManager {
+struct AccountNetworkManager {
     private let networkManager: NetworkProtocol
     
     init(networkManager: NetworkProtocol = NetworkManager.shared) {
@@ -100,9 +100,14 @@ extension AccountAPIManager: APIManager {
         let accessToken = KeychainManager.shared.getAccessToken()
         Log.debugPrivate("accessToken: ", accessToken)
         switch self {
-        case .postUserProfileData(_, let boundaryString), .patchUserProfileData(_, let boundaryString):
+        case .postUserProfileData(_, let boundaryString):
             return [
                 "Content-Type" : "multipart/form-data; boundary=\(boundaryString)",
+            ]
+        case let .patchUserProfileData(_, boundaryString):
+            return [
+                "Content-Type" : "multipart/form-data; boundary=\(boundaryString)",
+                "Authorization": "Bearer \(accessToken)"
             ]
         case .logout, .accountDelete:
             return [

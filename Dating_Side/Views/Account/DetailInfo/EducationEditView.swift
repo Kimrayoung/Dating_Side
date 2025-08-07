@@ -27,8 +27,6 @@ struct EducationEditView: View {
             Spacer()
             Button(action: {
                 if viewModel.isOnboarding == .mypageEdit {
-                    guard let jobType = viewModel.makeJobType()?.type else { return }
-                    
                     Task {
                         await viewModel.updateEducation()
                     }

@@ -82,6 +82,9 @@
 		4D8353232E3F8A230031B0ED /* OnboardingCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8353222E3F8A230031B0ED /* OnboardingCompleteView.swift */; };
 		4D8353252E40F9C80031B0ED /* BeforePreferenceKeywordComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8353242E40F9B50031B0ED /* BeforePreferenceKeywordComponent.swift */; };
 		4D8353272E40FCA20031B0ED /* AfterPreferenceKeywordComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8353262E40FCA20031B0ED /* AfterPreferenceKeywordComponent.swift */; };
+		4D83532B2E44E9C30031B0ED /* MatchingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D83532A2E44E9B40031B0ED /* MatchingViewModel.swift */; };
+		4D83532D2E44EAC10031B0ED /* AttractionNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D83532C2E44EAB00031B0ED /* AttractionNetworkManager.swift */; };
+		4D83532F2E44EEA80031B0ED /* Attraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D83532E2E44EEA40031B0ED /* Attraction.swift */; };
 		4D86FD432E37ABE500CD1687 /* MyPageRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D86FD422E37ABDB00CD1687 /* MyPageRootView.swift */; };
 		4D86FD472E37D16600CD1687 /* MatchingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D86FD462E37D15E00CD1687 /* MatchingRootView.swift */; };
 		4D86FD492E37D3B300CD1687 /* MatchingAnswerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D86FD482E37D3B300CD1687 /* MatchingAnswerView.swift */; };
@@ -228,6 +231,9 @@
 		4D8353222E3F8A230031B0ED /* OnboardingCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCompleteView.swift; sourceTree = "<group>"; };
 		4D8353242E40F9B50031B0ED /* BeforePreferenceKeywordComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforePreferenceKeywordComponent.swift; sourceTree = "<group>"; };
 		4D8353262E40FCA20031B0ED /* AfterPreferenceKeywordComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfterPreferenceKeywordComponent.swift; sourceTree = "<group>"; };
+		4D83532A2E44E9B40031B0ED /* MatchingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingViewModel.swift; sourceTree = "<group>"; };
+		4D83532C2E44EAB00031B0ED /* AttractionNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttractionNetworkManager.swift; sourceTree = "<group>"; };
+		4D83532E2E44EEA40031B0ED /* Attraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attraction.swift; sourceTree = "<group>"; };
 		4D86FD422E37ABDB00CD1687 /* MyPageRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageRootView.swift; sourceTree = "<group>"; };
 		4D86FD462E37D15E00CD1687 /* MatchingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingRootView.swift; sourceTree = "<group>"; };
 		4D86FD482E37D3B300CD1687 /* MatchingAnswerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingAnswerView.swift; sourceTree = "<group>"; };
@@ -367,6 +373,7 @@
 		4D6119602D75CC8000715B9E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				4D83532A2E44E9B40031B0ED /* MatchingViewModel.swift */,
 				4D389C332E25330600B56F84 /* Auth */,
 				4D389C4F2E2CECCA00B56F84 /* QuestionViewModel.swift */,
 				4D6119612D75CC9100715B9E /* OnboardingViewModel.swift */,
@@ -470,6 +477,7 @@
 		4D6D18732D63586200698E5D /* Datas */ = {
 			isa = PBXGroup;
 			children = (
+				4D83532E2E44EEA40031B0ED /* Attraction.swift */,
 				4D5E45942E3F2A2300A3B60C /* Report.swift */,
 				4D389C532E2CEF4700B56F84 /* Question.swift */,
 				4DCB1A672D75A14700676BCE /* UserProfileField.swift */,
@@ -503,6 +511,7 @@
 		4D6D18752D63589E00698E5D /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				4D83532C2E44EAB00031B0ED /* AttractionNetworkManager.swift */,
 				4D5E45922E3F297E00A3B60C /* ReportNetworkManager.swift */,
 				4D8762B32E39263E00A9503C /* ProfileNetworkManager.swift */,
 				4D389C512E2CEE3500B56F84 /* QuestionNetworkManager.swift */,
@@ -860,6 +869,7 @@
 				4D5E45912E3BC3C500A3B60C /* ProfileEditView.swift in Sources */,
 				4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */,
 				4DD577582D7EC638001B0ED5 /* SMSViewModel.swift in Sources */,
+				4D83532B2E44E9C30031B0ED /* MatchingViewModel.swift in Sources */,
 				4D6119522D75AA8700715B9E /* UnitLabel.swift in Sources */,
 				4D3AD6E62DE4A99B00436A4B /* ProfileViewModel.swift in Sources */,
 				4D8762B42E39264800A9503C /* ProfileNetworkManager.swift in Sources */,
@@ -875,6 +885,7 @@
 				4DB5827B2DDB4F87001952D0 /* ProfileSecondDayImageView.swift in Sources */,
 				4D95FAD12D5A1DED00D0E4D7 /* ContentView.swift in Sources */,
 				4D6D186E2D63540900698E5D /* Path.swift in Sources */,
+				4D83532D2E44EAC10031B0ED /* AttractionNetworkManager.swift in Sources */,
 				4D0122A52DEC90B4003E72B0 /* WriteAnswerView.swift in Sources */,
 				4D389C4E2E2A59AA00B56F84 /* Data+Ext.swift in Sources */,
 				4DFAFB972E12CB63006E3B5F /* AccountView.swift in Sources */,
@@ -903,6 +914,7 @@
 				4DFAFB932E12C7D7006E3B5F /* ArrowNextRow.swift in Sources */,
 				4DF329EC2D87EEE200DBB823 /* VerificationNumber.swift in Sources */,
 				4DF329D92D87157F00DBB823 /* CustomRounedGradientProgressBar.swift in Sources */,
+				4D83532F2E44EEA80031B0ED /* Attraction.swift in Sources */,
 				4D61195B2D75B24300715B9E /* MainContainerView.swift in Sources */,
 				4D6D187B2D6358EE00698E5D /* Error.swift in Sources */,
 				4DCB70582DA80C10006C120C /* OneDigitTextField.swift in Sources */,

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 /// 핸드폰 인증 관련
-class SMSNetworkManager: ObservableObject {
+struct SMSNetworkManager {
     private let networkManager: NetworkProtocol
     
     init(networkManager: NetworkProtocol = NetworkManager.shared) {
