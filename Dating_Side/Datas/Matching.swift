@@ -5,6 +5,6 @@
 //  Created by 김라영 on 8/7/25.
 //
 
-struct AttractionRequest: Codable {
+struct PartnerRequest: Codable {
     let partnerId: Int
 }
