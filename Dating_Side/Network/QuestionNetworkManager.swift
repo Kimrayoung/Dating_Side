@@ -25,8 +25,13 @@ struct QuestionNetworkManager {
     }
     
     /// 오늘의 질문에 대한 답변
-    func postTodayQuestionAnswer(answer: TodayQuestionAnswer) async throws -> Result<VoidResponse, Error> {
+    func postTodayQuestionAnswer(answer: TodayQuestionAnswer) async throws -> Result<TodayQuestionResponse, Error> {
         return await networkManager.callWithAsync(endpoint: QuestionAPIManager.postTodayQuestionAnswer(answer: answer), httpCodes: .success)
+    }
+    
+    /// 추가 질문 보냈는지 확인
+    func fetchDidSendTodayQuestion() async throws -> Result<VoidResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: QuestionAPIManager.didSendTodayQuestion, httpCodes: .success)
     }
     
 }
@@ -38,6 +43,8 @@ enum QuestionAPIManager {
     case postMyQuestions(question: MyQuestion)
     /// 오늘의 질문 답변한거 전송
     case postTodayQuestionAnswer(answer: TodayQuestionAnswer)
+    /// 오늘의 질문 보냈는지 확인
+    case didSendTodayQuestion
     /// 유저의 카테고리별 답변을 조회(ex. 연애관에 관련된 대답들)
     
 }
@@ -45,8 +52,10 @@ enum QuestionAPIManager {
 extension QuestionAPIManager: APIManager {
     var path: String {
         switch self {
-        case .getTodayQuestions, .postMyQuestions:
+        case .postMyQuestions, .didSendTodayQuestion:
             return "questions"
+        case .getTodayQuestions:
+            return "questions/today"
         case .postTodayQuestionAnswer:
             return "profile"
         }
@@ -54,7 +63,7 @@ extension QuestionAPIManager: APIManager {
     
     var method: HTTPMethod {
         switch self {
-        case .getTodayQuestions: .get
+        case .getTodayQuestions, .didSendTodayQuestion: .get
         case .postMyQuestions, .postTodayQuestionAnswer: .post
         }
     }

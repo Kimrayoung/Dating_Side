@@ -29,7 +29,7 @@ struct LoginView: View {
                 .padding(.bottom, 88)
         }
         .background(
-            Image("bgImg")
+            Image("heartBG")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
         )

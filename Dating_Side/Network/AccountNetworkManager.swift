@@ -23,15 +23,15 @@ struct AccountNetworkManager {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.patchUserProfileData(userData: requestModel, boundaryString: boundaryString), httpCodes: .success)
     }
     
-    func fetchAddressData(_ addrCode: String?) async throws -> Result<[Address], Error>  {
+    func fetchAddressData(_ addrCode: String?) async throws -> Result<AddressResponse, Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getAddressData(addrCode: addrCode), httpCodes: .success)
     }
  
-    func fetchJobType() async throws -> Result<[KoreanData], Error>  {
+    func fetchJobType() async throws -> Result<JobTypeResponse, Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getJopTypes, httpCodes: .success)
     }
     
-    func fetchPreferenceType(_ preferenceType: String) async throws -> Result<[KoreanData], Error>  {
+    func fetchPreferenceType(_ preferenceType: String) async throws -> Result<PreferenceTypeResponse, Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getPreferenceTypes(preferenceType: preferenceType), httpCodes: .success)
     }
     

@@ -16,7 +16,7 @@ struct MyPageView: View {
     var body: some View {
         ScrollView {
             VStack {
-                ProfileView(simpleProfile: profileViewModel.makeSimpleProfile(), educationString: profileViewModel.makeSchoolString(), jobString: profileViewModel.makeJobString(), location: profileViewModel.userData?.activeRegion ?? "", lifeStyle: profileViewModel.userData?.lifeStyle, keyword: profileViewModel.userData?.keyword, valueList: profileViewModel.userValueList, defaultImageUrl: profileViewModel.userData?.profileImageURL, introduceText: profileViewModel.userData?.introduction, showProfileViewType: .myPage)
+                ProfileView(simpleProfile: profileViewModel.makeSimpleProfile(userData: profileViewModel.userData), educationString: profileViewModel.makeSchoolString(userData: profileViewModel.userData), jobString: profileViewModel.makeJobString(userData: profileViewModel.userData), location: profileViewModel.userData?.activeRegion ?? "", lifeStyle: profileViewModel.userData?.lifeStyle, keyword: profileViewModel.userData?.keyword, valueList: profileViewModel.userValueList, defaultImageUrl: profileViewModel.userData?.profileImageURL, introduceText: profileViewModel.userData?.introduction, showProfileViewType: .myPage)
                 photoView
             }
         }

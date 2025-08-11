@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @MainActor
-class SMSViewModel: ObservableObject {
+final class SMSViewModel: ObservableObject {
     let smsNetworkManger = SMSNetworkManager()
     var smsBaseToken: String = ""
     

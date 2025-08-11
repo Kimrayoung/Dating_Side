@@ -15,24 +15,24 @@ struct AttractionNetworkManager {
     }
     
     /// 내가 다가가기
-    func attraction(attraction: AttractionRequest) async -> Result<VoidResponse, Error> {
+    func attraction(attraction: PartnerRequest) async -> Result<VoidResponse, Error> {
         return await networkManager.callWithAsync(endpoint: AttractionAPIManager.attraction(attraction: attraction), httpCodes: .success)
     }
     
     /// 내게 다가온 사람 조회
-    func senderAttraction() async -> Result<AttractionAccount, Error> {
+    func senderAttraction() async -> Result<AttractionAccountResponse, Error> {
         return await networkManager.callWithAsync(endpoint: AttractionAPIManager.senderAttraction, httpCodes: .success)
     }
     
     /// 내가 다가간 사람 조회
-    func receiverAttraction() async -> Result<AttractionAccount, Error> {
+    func receiverAttraction() async -> Result<AttractionAccountResponse, Error> {
         return await networkManager.callWithAsync(endpoint: AttractionAPIManager.senderAttraction, httpCodes: .success)
     }
 }
 
 enum AttractionAPIManager {
     /// 내가 다가가기
-    case attraction(attraction: AttractionRequest)
+    case attraction(attraction: PartnerRequest)
     /// 내게 다가온 사람
     case senderAttraction
     /// 내가 다가간 사람

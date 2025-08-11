@@ -24,13 +24,22 @@ struct TodayQuestionAnswer: Codable {
     let answerList: [String]
 }
 
+struct TodayQuestionResponse: Codable {
+    let result: String
+}
+
 struct UserAnswerList: Codable {
     let profileList: [UserAnswers]
 }
 
-struct UserAnswers: Codable {
+struct UserAnswers: Codable, Hashable {
     let category: String
-    let contentList: [String]
+    let profileList: [Answer]
+}
+
+struct Answer: Codable, Hashable {
+    let content: String
+    let date: String
 }
 
 enum UserAnswerCategory: String {

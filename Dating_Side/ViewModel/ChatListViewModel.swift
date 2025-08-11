@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ChatListViewModel: ObservableObject {
+final class ChatListViewModel: ObservableObject {
     @Published var timeString: String = "24:00"
     var timer: Timer?
     var totalSeconds: Int = 24 * 60 * 60

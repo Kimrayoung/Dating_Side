@@ -11,7 +11,7 @@ import PhotosUI
 import SwiftUI
 
 @MainActor
-class AccountViewModel: ObservableObject {
+final class AccountViewModel: ObservableObject {
     //MARK: - Data
     private var appState = AppState.shared
     let accountNetworkManger = AccountNetworkManager()
@@ -245,21 +245,21 @@ extension AccountViewModel {
         return userImageData
     }
     
-    func makeOnboardingCompleteData() -> UserAccount? {
-        guard let educationType = makeEducationType() else { return nil }
-        guard let jobType = makeJobType() else { return nil }
-        
-        let location = makeLocation()
-        let birthDate = makeBirthDate()
-        let height = makeHeight()
-        let selectedBefore = makeBeforePreference()
-        let selectedAfter = makeAfterPreference()
-        guard let lifeStyle = makeLifeStyle() else { return nil }
-        guard let educationType = makeEducationType()?.rawValue else { return nil }
-        guard let jobType = makeJobType()?.type else { return nil }
-        
-        return UserAccount(id: 0, phoneNumber: "", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, keyword: "", educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, profileImageURL: "", profileImageURLByDay: ProfileImageURLByDay(daySecond: "", dayFourth: "", daySixth: ""), introduction: "", mannerTemperature: 0)
-    }
+//    func makeOnboardingCompleteData() -> UserAccount? {
+//        guard let educationType = makeEducationType() else { return nil }
+//        guard let jobType = makeJobType() else { return nil }
+//        
+//        let location = makeLocation()
+//        let birthDate = makeBirthDate()
+//        let height = makeHeight()
+//        let selectedBefore = makeBeforePreference()
+//        let selectedAfter = makeAfterPreference()
+//        guard let lifeStyle = makeLifeStyle() else { return nil }
+//        guard let educationType = makeEducationType()?.rawValue else { return nil }
+//        guard let jobType = makeJobType()?.type else { return nil }
+//        
+//        return UserAccount(id: 0, phoneNumber: "", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, keyword: "", educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, profileImageURL: "", profileImageURLByDay: ProfileImageURLByDay(daySecond: "", dayFourth: "", daySixth: ""), introduction: "", mannerTemperature: 0)
+//    }
     
     /// signup api에 보낼 데이터 만들기
     func makeSignupRequest() -> SignUpRequest? {
@@ -411,17 +411,17 @@ extension AccountViewModel {
             switch result {
             case .success(let data):
                 if isDetailLocation {
-                    self.detailLocationOption = data
+                    self.detailLocationOption = data.result
                 } else {
-                    self.locationOption = data
+                    self.locationOption = data.result
                 }
                 
                 if let selectedLocation = selectedLocation {
-                    self.locationSelected = data.first(where: { $0.addrName == selectedLocation })
+                    self.locationSelected = data.result.first(where: { $0.addrName == selectedLocation })
                 }
                 
                 if let selectedDetailLocation = selectedDetailLocation {
-                    self.detailLocationSelected = data.first(where: { $0.addrName == selectedDetailLocation })
+                    self.detailLocationSelected = data.result.first(where: { $0.addrName == selectedDetailLocation })
                 }
                 print(#fileID, #function, #line, "- self.locationOption: \(self.locationOption )")
 
@@ -448,24 +448,24 @@ extension AccountViewModel {
             case .success(let data):
                 switch preferenceType {
                 case .before:
-                    if beforePreferenceTypes == data {
+                    if beforePreferenceTypes == data.result {
                         return
                     }
-                    beforePreferenceTypes = data
-                    isBeforePreferenceTypesSelected = Array(repeating: false, count: data.count)
+                    beforePreferenceTypes = data.result
+                    isBeforePreferenceTypesSelected = Array(repeating: false, count: data.result.count)
                     if let preferences = preferences {
-                        isBeforePreferenceTypesSelected = data.map { preferences.contains($0.korean) }
+                        isBeforePreferenceTypesSelected = data.result.map { preferences.contains($0.korean) }
                     }
                     
                     print(#fileID, #function, #line, "- preference data: \(isBeforePreferenceTypesSelected)")
                 case .after:
-                    if afterPreferceTypes == data {
+                    if afterPreferceTypes == data.result {
                         return
                     }
-                    afterPreferceTypes = data
-                    isAfterPreferenceTypesSelected = Array(repeating: false, count: data.count)
+                    afterPreferceTypes = data.result
+                    isAfterPreferenceTypesSelected = Array(repeating: false, count: data.result.count)
                     if let preferences = preferences {
-                        isAfterPreferenceTypesSelected = data.map { preferences.contains($0.korean) }
+                        isAfterPreferenceTypesSelected = data.result.map { preferences.contains($0.korean) }
                     }
                 }
             case .failure(let error):
@@ -482,17 +482,18 @@ extension AccountViewModel {
         defer {
             loadingManager.isLoading = false
         }
+        
         do {
             let result = try await accountNetworkManger.fetchJobType()
             switch result {
             case .success(let data):
-                if jobItmes == data {
+                if jobItmes == data.result {
                     return
                 }
-                jobItmes = data
-                isJobButtonSelected = Array(repeating: false, count: data.count)
+                jobItmes = data.result
+                isJobButtonSelected = Array(repeating: false, count: data.result.count)
                 if let selectedJobType = selectedJobType {
-                    isJobButtonSelected = data.map { selectedJobType.contains($0.korean)}
+                    isJobButtonSelected = data.result.map { selectedJobType.contains($0.korean)}
                     selectedJobIndex = isJobButtonSelected.firstIndex(of: true)
                 }
                 Log.debugPublic("jobItems, isJobSelected, selectedIndex", jobItmes, isJobButtonSelected, selectedJobIndex)

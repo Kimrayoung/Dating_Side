@@ -11,13 +11,23 @@ struct BeforePreferenceKewordSelectView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: AccountViewModel
     
-    var preferences: [String] = []
+     
 
     var body: some View {
         VStack(spacing: 0) {
             EmptyView()
                 .padding(.top, 30)
             CustomRounedGradientProgressBar(currentProgress: 6, total: onboardingPageCnt)
+            Text("러브웨이를 만나기 전\n어떤 사랑을 해왔나요?")
+                .font(.pixel(24))
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 48)
+            Text("끌리는 키워드를 최대 7개까지 선택해주세요")
+                .font(.pixel(14))
+                .foregroundStyle(Color.gray3)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.bottom, 36)
+            
             BeforePreferenceKeywordComponent(viewModel: viewModel)
             Button(action: {
                 if !viewModel.isBeforePreferenceTypeComplete {
@@ -45,7 +55,6 @@ struct BeforePreferenceKewordSelectView: View {
         }
         .task {
             viewModel.setupBeforePreferenceBindings()
-            await viewModel.fetchPreferenceType(preferenceType: .before, preferences: preferences)
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)

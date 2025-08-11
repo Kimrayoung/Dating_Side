@@ -22,6 +22,7 @@ struct SettingAndEditView: View {
                 .padding(.leading, 24)
                 
             Button {
+                
                 appState.myPagePath.append(MyPage.profileEdit)
             } label: {
                 profileEditView
@@ -44,13 +45,13 @@ struct SettingAndEditView: View {
                 appState.myPagePath.append(MyPage.account)
             })
             ArrowNextRow(label: "이용약관", subTitle: nil, completion: {
-                
+                appState.myPagePath.append(MyPage.webView(url: "https://ivy-soapwort-586.notion.site/22280646722e80d3ba4cfe89d2270d51?source=copy_link"))
             })
             ArrowNextRow(label: "개인정보 처리방침", subTitle: nil, completion: {
-                
+                appState.myPagePath.append(MyPage.webView(url: "https://ivy-soapwort-586.notion.site/22280646722e809ba584f1828e663f74?source=copy_link"))
             })
             ArrowNextRow(label: "문의하기", subTitle: nil, completion: {
-                
+                appState.myPagePath.append(MyPage.webView(url: "https://ivy-soapwort-586.notion.site/22280646722e80d3ba4cfe89d2270d51?source=copy_link"))
             })
             Spacer()
         }

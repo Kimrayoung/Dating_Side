@@ -94,8 +94,6 @@ struct LocationSelectView: View {
                     if location != nil {
                         viewModel.isOnboarding = .mypageEdit
                         appState.myPagePath.removeLast()
-                    } else {
-                        appState.onboardingPath.removeLast()
                     }
                     
                 } label: {

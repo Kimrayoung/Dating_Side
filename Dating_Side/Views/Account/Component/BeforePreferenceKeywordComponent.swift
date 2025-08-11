@@ -16,15 +16,6 @@ struct BeforePreferenceKeywordComponent: View {
     
     var body: some View {
         VStack {
-            Text("러브웨이를 만나기 전\n어떤 사랑을 해왔나요?")
-                .font(.pixel(24))
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 48)
-            Text("끌리는 키워드를 최대 7개까지 선택해주세요")
-                .font(.pixel(14))
-                .foregroundStyle(Color.gray3)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.bottom, 36)
             
             gridView
         }

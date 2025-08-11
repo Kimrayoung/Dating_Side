@@ -27,7 +27,7 @@ struct SecondMathcingView: View {
             Spacer()
         })
         .sheet(isPresented: $showProfileView, content: {
-            OnChatProfileView()
+            OnChatProfileView(profileShow: $showProfileView)
                 .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)

@@ -7,30 +7,47 @@
 
 import Foundation
 
-class ProfileViewModel: ObservableObject {
+final class ProfileViewModel: ObservableObject {
     let loadingManager = LoadingManager.shared
     let profileNetworkManager = ProfileNetworkManager()
     @Published var valueList: [String] = []
     @Published var userData: UserAccount? = nil
-    @Published var userValueList: [String : [String]] = [:]
+    @Published var userValueList: [String : [Answer]] = [:]
     
     /// 이름/나이/키
-    func makeSimpleProfile() -> String{
+    func makeSimpleProfile(userData: UserAccount?) -> String{
         guard let userData = userData else { return "" }
         let birthYear = userData.birthDate.components(separatedBy: "-").first ?? ""
         return "\(userData.nickName)/\(birthYear)/1\(userData.height)cm"
     }
     
-    func makeSchoolString() -> String {
+    func makeSchoolString(userData: UserAccount?) -> String {
         guard let userData = userData else { return "" }
+        if userData.educationDetail == "" {
+            return "\(userData.educationType)"
+        } else {
+            return "\(userData.educationType), \(userData.educationDetail)"
+        }
         
-        return "\(userData.educationType), \(userData.educationDetail)"
     }
     
-    func makeJobString() -> String{
+    func makeJobString(userData: UserAccount?) -> String {
         guard let userData = userData else { return "" }
         
-        return "\(userData.jobType), \(userData.jobDetail)"
+        if userData.jobDetail == "" {
+            return "\(userData.jobType), \(userData.jobDetail)"
+        } else {
+            return "\(userData.jobType), \(userData.jobDetail)"
+        }
+    }
+    
+    func getTodayAnswer() -> String {
+        let today = Date().todayString
+        for categoryItem in userValueList {
+            let todayAnswers = categoryItem.value.filter { $0.date == today }
+            return todayAnswers.first?.content ?? ""
+        }
+        return ""
     }
 }
 
@@ -71,7 +88,7 @@ extension ProfileViewModel {
             switch result {
             case .success(let userAnswerList):
                 userAnswerList.profileList.forEach { profile in
-                    userValueList[profile.category] = profile.contentList
+                    userValueList[profile.category] = profile.profileList
                 }
                 Log.debugPublic("유저 가치관 정보: ", userAnswerList)
             case .failure(let error):

@@ -61,7 +61,7 @@ struct ChatingView: View {
         }
         
         .sheet(isPresented: $showProfile, content: {
-            OnChatProfileView()
+            OnChatProfileView(profileShow: $showProfile)
                 .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)

@@ -76,7 +76,7 @@ struct MatchingFailView: View {
     
     var finishMatching: some View {
         Button(action: {
-            
+            appState.myPagePath.append(Matching.questionComplete)
         }, label: {
             Text("매칭 끝내기")
                 .font(.pixel(16))

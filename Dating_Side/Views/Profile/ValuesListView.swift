@@ -10,12 +10,12 @@ import SwiftUI
 /// 가치관 목록 리스트
 struct ValuesListView: View {
     var valueType: String
-    var valueDataList: [String]
+    var valueDataList: [Answer]
     
     
     var body: some View {
         List(valueDataList, id:\.self) { value in
-            valueText(text: value)
+            valueText(text: value.content)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
         }

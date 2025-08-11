@@ -17,7 +17,7 @@ struct ProfileView: View {
     var lifeStyle: LifeStyle?
     var keyword: String?
     var mannerTemperature: Int?
-    var valueList: [String : [String]]
+    var valueList: [String : [Answer]]
     var defaultImageUrl: String? = nil
     var onboardingDefaultImageData: UIImage? = nil
     var introduceText: String? = nil
@@ -72,7 +72,7 @@ struct ProfileView: View {
                     .frame(width: 72, height: 72)
                     .clipShape(Circle())
             } else {
-                Image("sampleImage")
+                Image("defaultProfileImage")
                     .resizable()
                     .frame(width: 72, height: 72)
                     .clipShape(Circle())

@@ -17,19 +17,7 @@ struct AfterPreferenceKeywordComponent: View {
     
     var body: some View {
         VStack {
-            TextWithColoredSubString(
-                text: "이제 러브웨이에서\n어떤 사랑을 하고 싶나요?",
-                highlight: "러브웨이",
-                gradientColors: [.mainColor]
-            )
-            .font(.pixel(24))
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.top, 48)
-            Text("끌리는 키워드를 최대 7개까지 선택해주세요")
-                .font(.pixel(14))
-                .foregroundStyle(Color.gray3)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.bottom, 36)
+            
             gridView
         }
     }

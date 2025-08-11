@@ -9,11 +9,14 @@ import SwiftUI
 
 /// 매칭 완성 뷰
 struct MatchingCompleteView: View {
+    @EnvironmentObject private var appState: AppState
+    @EnvironmentObject var viewModel: MatchingViewModel
+    @ObservedObject var questionViewModel: QuestionViewModel = QuestionViewModel()
     @State private var showModal = false
     @State private var bottomSheetStartHeight: CGFloat = 0.45
-   @State private var dragOffset: CGFloat = 0
+    @State private var dragOffset: CGFloat = 0
     
-    var profileContent: String = "당신은 안정적이며 의지할 수 있는 관계를 중요하게 생각합니다. 연애에서는 함께 시간을 보내는 것과 서로의 안정을 우선시하고, 공감하고 이해해주는 파트너를 선호합니다. 이전 연애에서는 아마도 깊은 유대감을 형성하려 했을 것이며, 앞으로도 의지할 수 있는 관계를 추구할 것으로 보입니다. 감정표현에서는 행동으로 마음을 전하는 경향이 있습니다. "
+    @State var profileContent: String = ""
     
     var body: some View {
         ZStack(content: {
@@ -35,26 +38,34 @@ struct MatchingCompleteView: View {
                     .padding(.horizontal, 38.5)
                 Spacer()
                 BottomSheet(showModal: $showModal, currentHeightRatio: $bottomSheetStartHeight)
-                .sheet(isPresented: $showModal, onDismiss: {
-                    bottomSheetStartHeight = 0.45
-                }, content: {
-                    OnChatProfileView(viewModel: ProfileViewModel())
-                        .presentationDetents([.fraction(0.99)])
-                        .presentationCornerRadius(10)
-                        .presentationDragIndicator(.visible)
-                })
+                    .sheet(isPresented: $showModal, onDismiss: {
+                        bottomSheetStartHeight = 0.45
+                    }, content: {
+                        OnChatProfileView(profileShow: $showModal)
+                            .presentationDetents([.fraction(0.99)])
+                            .presentationCornerRadius(10)
+                            .presentationDragIndicator(.visible)
+                    })
             }
         })
-//        .ignoresSafeArea(.container, edges: .bottom)
+        .task {
+            profileContent = await questionViewModel.postTodayQuetionAnswers()
+            await viewModel.matchingRequest()
+        }
+//                .ignoresSafeArea(.container, edges: .bottom)
         .background(
             Image("matchingViewBg")
                 .resizable()
                 .scaledToFill()
-//                .ignoresSafeArea()
+//                            .ignoresSafeArea()
         )
+    }
+    
+    private func goToMatchingFailView() {
+        appState.matchingPath.append(Matching.matchingFail)
     }
 }
 
 #Preview {
-    MatchingCompleteView()
+    MatchingCompleteView(questionViewModel: QuestionViewModel())
 }

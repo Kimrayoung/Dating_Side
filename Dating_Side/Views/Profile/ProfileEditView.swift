@@ -11,6 +11,7 @@ struct ProfileEditView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var profileViewModel: ProfileViewModel
     var isOnboarding: Bool
+    var userData: ProfileEditUserAccount?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -33,14 +34,14 @@ struct ProfileEditView: View {
                 
                 
             }
-            ArrowNextRow(label: "지역 \(profileViewModel.userData?.activeRegion ?? "")", subTitle: nil) {
+            ArrowNextRow(label: "지역 \(isOnboarding ? userData?.address ?? "" : profileViewModel.userData?.activeRegion ?? "")", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.locationSelect)
                 } else {
                     appState.myPagePath.append(MyPage.locationSelect(location: profileViewModel.userData?.activeRegion))
                 }
             }
-            ArrowNextRow(label: "학력 \(profileViewModel.userData?.educationDetail != "" ? profileViewModel.userData?.educationDetail ?? "" : profileViewModel.userData?.educationType ?? "")", subTitle: nil) {
+            ArrowNextRow(label: "학력 \(isOnboarding ? (userData?.educationDetail != "" ? userData?.educationDetail ?? "" : userData?.educationType ?? "") : (profileViewModel.userData?.educationDetail != "" ? profileViewModel.userData?.educationDetail ?? "" : profileViewModel.userData?.educationType ?? ""))", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.editEducation)
                 } else {
@@ -48,7 +49,7 @@ struct ProfileEditView: View {
                 }
                 
             }
-            ArrowNextRow(label: "직업 \(profileViewModel.userData?.jobDetail != "" ? profileViewModel.userData?.jobDetail ?? "" : profileViewModel.userData?.jobType ?? profileViewModel.userData?.jobType ?? "")", subTitle: nil) {
+            ArrowNextRow(label: "직업 \(isOnboarding ? (userData?.jobDetail != "" ? userData?.jobDetail ?? "" : userData?.jobType ?? profileViewModel.userData?.jobType ?? "") : (profileViewModel.userData?.jobDetail != "" ? profileViewModel.userData?.jobDetail ?? "" : profileViewModel.userData?.jobType ?? profileViewModel.userData?.jobType ?? ""))", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.editJob)
                 } else {
@@ -68,8 +69,9 @@ struct ProfileEditView: View {
                 if isOnboarding {
 //                    appState.onboardingPath.append(Onboarding.)
                 } else {
-                    guard let loveKeywords = profileViewModel.userData?.beforePreferenceTypeList else { return }
-                    appState.myPagePath.append(MyPage.preferences(keywords: loveKeywords))
+                    guard let beforeLoveKeywords = profileViewModel.userData?.beforePreferenceTypeList, let afterLoveKeywords = profileViewModel.userData?.afterPreferenceTypeList else { return }
+                    
+                    appState.myPagePath.append(MyPage.preferences(beforeKeywords: beforeLoveKeywords, afterKeywords: afterLoveKeywords))
                 }
             }
             Spacer()

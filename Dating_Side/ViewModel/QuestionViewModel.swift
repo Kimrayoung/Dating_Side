@@ -24,9 +24,18 @@ class QuestionViewModel: ObservableObject {
         currentIndex == questionList.count - 1
     }
     
-    func next() {
+    var isFirstQuestion: Bool {
+        currentIndex == 0
+    }
+    
+    func nextQuestion() {
         guard !isLastQuestion else { return }
         currentIndex += 1
+    }
+    
+    func previousQuestion() {
+        guard !isFirstQuestion else { return }
+        currentIndex -= 1
     }
 }
 
@@ -55,7 +64,7 @@ extension QuestionViewModel {
     }
     
     @MainActor
-    func postTodayQuetionAnswers(completion: @escaping (Bool) -> Void) async {
+    func postTodayQuetionAnswers() async -> String {
         let answerList = self.answers.map { $0.value }
         let todayQuestionAnswers = TodayQuestionAnswer(answerList: answerList)
         loadingManager.isLoading = true
@@ -66,17 +75,16 @@ extension QuestionViewModel {
         do {
             let result = try await questionNetworkmanager.postTodayQuestionAnswer(answer: todayQuestionAnswers)
             switch result {
-            case .success:
+            case .success(let answer):
                 Log.debugPublic("postTodayQuetionAnswres success")
-                completion(true)
+                return answer.result
             case .failure(let error):
                 Log.errorPublic("postTodayQuetionAnswres error: \(error)")
-                completion(false)
             }
         } catch {
             Log.errorPublic("postTodayQuetionAnswres error: \(error)")
-            completion(false)
         }
+        return ""
     }
     
     func postMyQuestion(question: MyQuestion) async {

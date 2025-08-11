@@ -16,12 +16,41 @@ struct MatchingAnswerView: View {
     
     var body: some View {
         VStack {
-            Text("질문 \(viewModel.currentQuestion.id)")
-                .font(.pixel(12))
-            Text(viewModel.currentQuestion.text)
-                .font(.pixel(20))
-                .padding(.horizontal, 53)
-                .padding(.bottom, 36)
+            HStack {
+                Button {
+                    if viewModel.isFirstQuestion {
+                        return
+                    } else {
+                        viewModel.nextQuestion()
+                    }
+                } label: {
+                    Image("leftWhiteArrow")
+                        .frame(width: 24, height: 24)
+                        .background(viewModel.isFirstQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
+                        .clipShape(Circle())
+                }
+                VStack {
+                    Text("질문 \(viewModel.currentQuestion.id)")
+                        .font(.pixel(12))
+                    Text(viewModel.currentQuestion.text)
+                        .font(.pixel(20))
+                        .padding(.horizontal)
+                }
+                Button {
+                    if viewModel.isFirstQuestion {
+                        return
+                    } else {
+                        viewModel.previousQuestion()
+                    }
+                } label: {
+                    Image("rightWhiteArrow")
+                        .frame(width: 24, height: 24)
+                        .background(viewModel.isLastQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
+                        .clipShape(Circle())
+                }
+            }
+            .padding(.horizontal, 53)
+            .padding(.bottom, 36)
             answerTextEditor
             nextAnswerButton
         }
@@ -106,11 +135,9 @@ struct MatchingAnswerView: View {
             
             if viewModel.isLastQuestion {
                 Task {
-                    await viewModel.postTodayQuetionAnswers(completion: { result in
-                        guard result else { return }
-                        appState.matchingPath.append(Matching.questionComplete)
-                    })
+                    await viewModel.postTodayQuetionAnswers()
                 }
+                appState.matchingPath.append(Matching.questionComplete)
             } else {
                 viewModel.currentIndex += 1
             }

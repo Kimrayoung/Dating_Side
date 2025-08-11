@@ -9,23 +9,40 @@ import SwiftUI
 
 struct OnChatProfileView: View {
     @EnvironmentObject private var appState: AppState
-    @StateObject var viewModel: ProfileViewModel = ProfileViewModel()
+    @StateObject var matchingViewModel: MatchingViewModel = MatchingViewModel()
     @State private var showAlert: Bool = false
+    @State private var valueList: [String : [Answer]] = [:]
+    @Binding var profileShow: Bool
     
     var body: some View {
         NavigationStack(path: $appState.onChatProfilePath) {
             VStack {
-                ProfileView(simpleProfile: viewModel.makeSimpleProfile(), educationString: viewModel.makeSchoolString(), jobString: viewModel.makeJobString(), location: viewModel.userData?.activeRegion ?? "", valueList: viewModel.userValueList, defaultImageUrl: viewModel.userData?.profileImageURL, introduceText: viewModel.userData?.introduction, showProfileViewType: .chat)
+                ProfileView(
+                    simpleProfile: matchingViewModel.makeSimpleProfile() ,
+                    educationString: matchingViewModel.makeSchoolString(),
+                    jobString: matchingViewModel.makeJobString(),
+                    location: matchingViewModel.matchingPartnerAccount?.activeRegion ?? "",
+                    valueList: valueList,
+                    defaultImageUrl: matchingViewModel.matchingPartnerAccount?.profileImageURL,
+                    introduceText: matchingViewModel.matchingPartnerAccount?.introduction,
+                    showProfileViewType: .chat)
                 HStack(spacing: 5, content: {
                     skipButton
                     okButton
                 })
                 .padding(.horizontal, 24)
             }
-            .customAlert(isPresented: $showAlert, title: "이 분을 영영 볼 수 없어도 괜찮나요?", message: "대화 해보면 잘 맞을지도 몰라요", primaryButtonText: "다시 봐볼게요", primaryButtonAction: {}, secondaryButtonText: "괜찮아요", secondaryButtonAction: {})
+            .task {
+                await matchingViewModel.matchingRequest()
+            }
+            .customAlert(isPresented: $showAlert, title: "이 분을 다시 만나지 못할 수 있어요", message: "상대방의 매력을 다시 확인해볼까요?", primaryButtonText: "괜찮아요", primaryButtonAction: {
+                appState.matchingPath.append(Matching.questionComplete)
+            }, secondaryButtonText: "다시 봐볼께요", secondaryButtonAction: {
+                profileShow = false
+            })
             .navigationDestination(for: OnChatProfilePath.self) { step in
                 switch step {
-                case .profileMain: OnChatProfileView(viewModel: viewModel)
+                case .profileMain: OnChatProfileView(profileShow: $profileShow)
                 case .profileValueList(let valueType, let valueDataList):
                     ValuesListView(valueType: valueType, valueDataList: valueDataList)
                 }
@@ -50,7 +67,9 @@ struct OnChatProfileView: View {
     
     var okButton: some View {
         Button(action: {
-            
+            Task {
+                await matchingViewModel.attraction()
+            }
         }, label: {
             Text("대화 해볼래요")
                 .font(.pixel(16))
@@ -64,5 +83,5 @@ struct OnChatProfileView: View {
 }
 
 #Preview {
-    OnChatProfileView()
+    OnChatProfileView(profileShow: .constant(false))
 }

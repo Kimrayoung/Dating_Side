@@ -55,6 +55,14 @@ struct SignUpRequest: Codable {
     var fcmToken: String
 }
 
+struct ProfileEditUserAccount: Hashable {
+    let educationType: String
+    let educationDetail: String
+    let jobType: String
+    let jobDetail: String
+    let address: String
+}
+
 /// 주소 관련(code, 주소 이름)
 struct Address: Codable, Equatable, Hashable {
     let code: String
@@ -115,6 +123,19 @@ extension KoreanData: Identifiable, CustomStringConvertible {
     var description: String { self.korean }
 }
 
+struct AddressResponse: Codable {
+    let result: [Address]
+}
+
+struct JobTypeResponse: Codable {
+    let result: [KoreanData]
+}
+
+struct PreferenceTypeResponse: Codable {
+    let result: [KoreanData]
+}
+
+
 /// 학력 영어 매핑
 enum EducationEnglish: String, CaseIterable {
     case highSchool           = "HIGH_SCHOOL"
@@ -150,6 +171,24 @@ extension EducationEnglish: Identifiable, CustomStringConvertible {
 
 
 /// 저장된 유저정보
+struct PartnerAccount: Codable, Hashable {
+    let id: Int
+    let nickName, birthYear: String
+    let height: Int
+    let activeRegion, keyword, educationType, educationDetail: String
+    let jobType, jobDetail: String
+    let lifeStyle: LifeStyle
+    let profileImageURL, introduction: String
+    let profile: UserAnswers
+    let mannerTemperature: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case id, nickName, birthYear, height, activeRegion, keyword, educationType, educationDetail, jobType, jobDetail, lifeStyle
+        case profileImageURL = "profileImageUrl"
+        case introduction, profile, mannerTemperature
+    }
+}
+
 struct UserAccount: Codable {
     let id: Int
     let phoneNumber, genderType, nickName, birthDate: String
@@ -172,7 +211,7 @@ struct UserAccount: Codable {
     }
 }
 
-struct ProfileImageURLByDay: Codable {
+struct ProfileImageURLByDay: Codable, Hashable {
     let daySecond, dayFourth, daySixth: String
 }
 
@@ -180,6 +219,10 @@ enum AccountType {
     case onboarding
     case onboardingEdit
     case mypageEdit
+}
+
+struct AttractionAccountResponse: Codable {
+    let result: [AttractionAccount]
 }
 
 /// 내게 다가온 사람 & 내가 다가간 사람

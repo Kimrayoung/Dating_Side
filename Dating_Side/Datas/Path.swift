@@ -38,9 +38,10 @@ enum Onboarding: Hashable {
     /// 추가사진 - 6일차
     case sixthDayPhoto
     case onboardingComplete
-    case profileEdit
+    case profileEdit(userData: ProfileEditUserAccount)
     case editEducation
     case editJob
+    case editPreference
 }
 
 enum Main {
@@ -52,7 +53,7 @@ enum Main {
 enum MyPage: Hashable {
     case mypage
     case settingProfile(userImageURL: String?)
-    case profileValueList(valueType: String, valueDataList: [String]) // Changed for ProfileView type match
+    case profileValueList(valueType: String, valueDataList: [Answer]) // Changed for ProfileView type match
     case profileEdit
     case account
     case defaultProfileImage
@@ -60,8 +61,9 @@ enum MyPage: Hashable {
     case locationSelect(location: String?)
     case job(jobType: String?, jobDetail: String?)
     case education(educationType: String?, schoolName: String?)
-    case preferences(keywords: [String])
+    case preferences(beforeKeywords: [String], afterKeywords: [String])
     case susceptible(lifeStyle: LifeStyle)
+    case webView(url: String)
 }
 
 enum Matching: Hashable {
@@ -83,5 +85,5 @@ enum Path {
 ///채팅방에서 프로필 보기를 했을때의 경로
 enum OnChatProfilePath: Hashable {
     case profileMain
-    case profileValueList(valueType: String, valueDataList: [String]) // Changed for ProfileView type match
+    case profileValueList(valueType: String, valueDataList: [Answer]) // Changed for ProfileView type match
 }

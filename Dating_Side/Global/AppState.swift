@@ -59,6 +59,7 @@ class AppState: ObservableObject {
             defer {
                 loadingManager.isLoading = false
             }
+            Log.debugPublic("로그인 시도")
             do {
                 let loginRequest = LoginRequest(socialType: socialType.rawValue, socialAccessToken: token)
                 let result = try await accountNetworkManger.login(userSocialId: loginRequest)

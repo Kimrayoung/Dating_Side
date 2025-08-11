@@ -66,7 +66,8 @@ struct OnboardingCompleteView: View {
     
     var editProfileButton: some View {
         Button {
-            appState.onboardingPath.append(Onboarding.profileEdit)
+            let userAccount = ProfileEditUserAccount(educationType: viewModel.makeEducationType()?.korean ?? "", educationDetail: viewModel.schoolName, jobType: viewModel.makeJobType()?.korean ?? "", jobDetail: viewModel.jobDetail, address: viewModel.makeLocation())
+            appState.onboardingPath.append(Onboarding.profileEdit(userData: userAccount))
         } label: {
             Text("프로필 편집")
                 .font(.pixel(16))
