@@ -178,37 +178,50 @@ final class AccountViewModel: ObservableObject {
     }
     
     /// 선택한 이미지 viewModel에 저장
-    func loadSelectedImage(imageType: ImageType, pickerItem: PhotosPickerItem) {
-        pickerItem.loadTransferable(type: Data.self) { result in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                switch result {
-                case .success(let data):
-                    if let data = data, let image = UIImage(data: data) {
-                        // 압축/리사이즈 적용 (예: 1024픽셀 기준, 품질 0.7)
-                        let reducedImage: UIImage
-                        if let resizedData = image.resizedAndCompressedJPEGData(toWidth: 1024, quality: 0.2),
-                           let resizedImage = UIImage(data: resizedData) {
-                            reducedImage = resizedImage
-                        } else {
-                            reducedImage = image
-                        }
-                        switch imageType {
-                        case .mainProfile:
-                            self.selectedImage = reducedImage
-                        case .secondDay:
-                            self.selectedSeconDayImage = reducedImage
-                        case .forthDay:
-                            self.selectedForthDayImage = reducedImage
-                        case .sixthDay:
-                            self.selectedSixthDayImage = reducedImage
-                        }
+    @MainActor
+    func loadSelectedImage(imageType: ImageType, pickerItem: [PhotosPickerItem]) async {
+        var result: [UIImage] = []
+        result.reserveCapacity(pickerItem.count)
+        
+        for item in pickerItem {
+            do {
+                if let data = try await item.loadTransferable(type: Data.self),
+                   let image = UIImage(data: data) {
+                    // 압축/리사이즈 (예: 1024px, quality 0.2)
+                    let reducedImage: UIImage
+                    if let resizedData = image.resizedAndCompressedJPEGData(toWidth: 1024, quality: 0.2),
+                       let resized = UIImage(data: resizedData) {
+                        reducedImage = resized
+                    } else {
+                        reducedImage = image
                     }
-                case .failure(let error):
-                    print("load error:", error)
+                    result.append(reducedImage)
                 }
+            } catch {
+                print("load error:", error)
             }
         }
+        
+        switch imageType {
+        case .mainProfile:
+            self.selectedImage = result.first
+        case .secondDay:
+            self.selectedSeconDayImage = result.first
+        case .forthDay:
+            self.selectedForthDayImage = result.first
+        case .sixthDay:
+            self.selectedSixthDayImage = result.first
+        case .additionalImageEdit:
+            for (index, image) in result.enumerated() {
+                if index == 0 {
+                    self.selectedSeconDayImage = image
+                } else if index == 1{
+                    self.selectedForthDayImage = image
+                } else if index == 2 {
+                    self.selectedSixthDayImage = image
+                }
+            }
+        } // imageType
     }
 }
 
@@ -380,9 +393,20 @@ extension AccountViewModel {
     func updateAdditionalImage() async {
         let updateDefaultData: [String : Any] = [:]
         
-        guard let selectedSeconDayImage = selectedSeconDayImage, let selectedForthDayImage = selectedForthDayImage, let selectedSixthDayImage = selectedSixthDayImage else { return }
+        var userImageData: [AccountImage] = []
+        if let selectedSeconDayImage = selectedSeconDayImage {
+            let secondImage = AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage)
+            userImageData.append(secondImage)
+        }
+        if let selectedForthDayImage = selectedForthDayImage {
+            let forthDayImage = AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage)
+            userImageData.append(forthDayImage)
+        }
         
-        let userImageData: [AccountImage] = [AccountImage(imageTitle: "profileImageDaySecond", image: selectedSeconDayImage), AccountImage(imageTitle: "profileImageDayFourth", image: selectedForthDayImage), AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)]
+        if let selectedSixthDayImage = selectedSixthDayImage {
+            let sixthDayImage = AccountImage(imageTitle: "profileImageDaySixth", image: selectedSixthDayImage)
+            userImageData.append(sixthDayImage)
+        }
         
         await patchUserAccountData(userPatchData: updateDefaultData, userImage: userImageData)
     }

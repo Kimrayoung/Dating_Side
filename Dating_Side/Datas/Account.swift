@@ -100,6 +100,8 @@ enum ImageType {
     case forthDay
     /// 여섯째날
     case sixthDay
+    /// 추가 이미지 편집
+    case additionalImageEdit
 }
 
 struct LifeStyleResponse: Codable {

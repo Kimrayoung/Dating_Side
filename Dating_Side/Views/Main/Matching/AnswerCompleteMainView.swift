@@ -9,6 +9,9 @@ import SwiftUI
 /// 답변완료시 메인 화면
 
 struct AnswerCompleteMainView: View {
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject private var viewModel: QuestionViewModel
+    
     var body: some View {
         VStack {
             Text("당신의 답변을 토대로\n오늘의 카드가 완성 되었어요")

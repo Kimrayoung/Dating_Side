@@ -1,5 +1,5 @@
 //
-//  MatchingCompleteView.swift
+//  MatchingAnswerCompleteView.swift
 //  Dating_Side
 //
 //  Created by 김라영 on 2025/06/15.
@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-/// 매칭 완성 뷰
-struct MatchingCompleteView: View {
+/// 프로필 완성 뷰(오늘의 질문 답변 완료시 -> 매칭 프로필 확인 및 답변을 통한 카드완성)
+struct MatchingAnswerCompleteView: View {
     @EnvironmentObject private var appState: AppState
-    @EnvironmentObject var viewModel: MatchingViewModel
-    @ObservedObject var questionViewModel: QuestionViewModel = QuestionViewModel()
+    @EnvironmentObject var questionViewModel: QuestionViewModel
+    @ObservedObject var viewModel: MatchingViewModel = MatchingViewModel()
     @State private var showModal = false
     @State private var bottomSheetStartHeight: CGFloat = 0.45
     @State private var dragOffset: CGFloat = 0
@@ -41,7 +41,8 @@ struct MatchingCompleteView: View {
                     .sheet(isPresented: $showModal, onDismiss: {
                         bottomSheetStartHeight = 0.45
                     }, content: {
-                        OnChatProfileView(profileShow: $showModal)
+                        // 내 프로필을 통해서 매칭 상대를 찾음
+                        PartnerProfileView(profileShow: $showModal, needMathcingRequest: true)
                             .presentationDetents([.fraction(0.99)])
                             .presentationCornerRadius(10)
                             .presentationDragIndicator(.visible)
@@ -50,7 +51,6 @@ struct MatchingCompleteView: View {
         })
         .task {
             profileContent = await questionViewModel.postTodayQuetionAnswers()
-            await viewModel.matchingRequest()
         }
 //                .ignoresSafeArea(.container, edges: .bottom)
         .background(
@@ -67,5 +67,5 @@ struct MatchingCompleteView: View {
 }
 
 #Preview {
-    MatchingCompleteView(questionViewModel: QuestionViewModel())
+    MatchingAnswerCompleteView(viewModel: MatchingViewModel())
 }

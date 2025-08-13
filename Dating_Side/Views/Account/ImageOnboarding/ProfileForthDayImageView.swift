@@ -79,7 +79,9 @@ struct ProfileForthImageView: View {
             selectedPickerImage: $selectedPickerImage,
             showAlert: $showAlert,
             onImagePicked: { item in
-                viewModel.loadSelectedImage(imageType: .forthDay, pickerItem: item)
+                Task {
+                    await viewModel.loadSelectedImage(imageType: .forthDay, pickerItem: item)
+                }
             }) {
                 Group {
                     if let image = viewModel.selectedForthDayImage {

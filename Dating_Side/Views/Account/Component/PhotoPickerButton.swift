@@ -18,7 +18,8 @@ struct PhotoPickerButton<Label: View>: View {
     @Binding var isPresented: Bool
     @Binding var selectedPickerImage: [PhotosPickerItem]
     @Binding var showAlert: Bool
-    let onImagePicked: (PhotosPickerItem) -> Void
+    var maxSelectionCount: Int = 1
+    let onImagePicked: ([PhotosPickerItem]) -> Void
     let label: () -> Label
 
     var body: some View {
@@ -41,8 +42,7 @@ struct PhotoPickerButton<Label: View>: View {
             photoLibrary: .shared()
         )
         .onChange(of: selectedPickerImage) { oldValue, newValue in
-            guard let selectedImageItem = newValue.first else { return }
-            onImagePicked(selectedImageItem)
+            onImagePicked(newValue)
         }
         
     }

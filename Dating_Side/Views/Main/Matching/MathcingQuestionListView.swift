@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct QuestionListView: View {
+/// 매칭을 받기 위한 오늘의 질문 확인 뷰
+struct  MatchingQuestionListView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var viewModel: QuestionViewModel
     
@@ -87,5 +88,5 @@ struct QuestionListView: View {
 }
 
 #Preview {
-    QuestionListView()
+     MatchingQuestionListView()
 }

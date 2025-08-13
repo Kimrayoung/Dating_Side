@@ -79,7 +79,9 @@ struct ProfileSecondImageView: View {
             selectedPickerImage: $selectedPickerImage,
             showAlert: $showAlert,
             onImagePicked: { item in
-                viewModel.loadSelectedImage(imageType: .secondDay, pickerItem: item)
+                Task {
+                    await viewModel.loadSelectedImage(imageType: .secondDay, pickerItem: item)
+                }
             }) {
                 Group {
                     if let image = viewModel.selectedSeconDayImage {

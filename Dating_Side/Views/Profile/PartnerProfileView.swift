@@ -1,5 +1,5 @@
 //
-//  OnChatProfileView.swift
+//  PartnerProfileView.swift
 //  Dating_Side
 //
 //  Created by 김라영 on 2025/07/02.
@@ -7,24 +7,26 @@
 
 import SwiftUI
 
-struct OnChatProfileView: View {
+struct PartnerProfileView: View {
     @EnvironmentObject private var appState: AppState
     @StateObject var matchingViewModel: MatchingViewModel = MatchingViewModel()
     @State private var showAlert: Bool = false
     @State private var valueList: [String : [Answer]] = [:]
+    @State var matchingPartnerAccount: PartnerAccount? = nil
     @Binding var profileShow: Bool
+    var needMathcingRequest: Bool
     
     var body: some View {
         NavigationStack(path: $appState.onChatProfilePath) {
             VStack {
                 ProfileView(
-                    simpleProfile: matchingViewModel.makeSimpleProfile() ,
-                    educationString: matchingViewModel.makeSchoolString(),
-                    jobString: matchingViewModel.makeJobString(),
-                    location: matchingViewModel.matchingPartnerAccount?.activeRegion ?? "",
+                    simpleProfile: matchingViewModel.makeSimpleProfile(matchingPartnerAccount: matchingPartnerAccount) ,
+                    educationString: matchingViewModel.makeSchoolString(matchingPartnerAccount: matchingPartnerAccount),
+                    jobString: matchingViewModel.makeJobString(matchingPartnerAccount: matchingPartnerAccount),
+                    location: matchingPartnerAccount?.activeRegion ?? "",
                     valueList: valueList,
-                    defaultImageUrl: matchingViewModel.matchingPartnerAccount?.profileImageURL,
-                    introduceText: matchingViewModel.matchingPartnerAccount?.introduction,
+                    defaultImageUrl: matchingPartnerAccount?.profileImageURL,
+                    introduceText: matchingPartnerAccount?.introduction,
                     showProfileViewType: .chat)
                 HStack(spacing: 5, content: {
                     skipButton
@@ -33,7 +35,14 @@ struct OnChatProfileView: View {
                 .padding(.horizontal, 24)
             }
             .task {
-                await matchingViewModel.matchingRequest()
+                // 내 아이디를 통해서 매칭 상대를 찾아야 함(매칭할 수 있는 상대의 데이터를 보내줌)
+                if needMathcingRequest {
+                    matchingPartnerAccount = await matchingViewModel.matchingRequest()
+                } else {
+                    // 매칭된 상대의 프로필을 확인
+                    matchingPartnerAccount = await matchingViewModel.matchingPartner()
+                }
+                
             }
             .customAlert(isPresented: $showAlert, title: "이 분을 다시 만나지 못할 수 있어요", message: "상대방의 매력을 다시 확인해볼까요?", primaryButtonText: "괜찮아요", primaryButtonAction: {
                 appState.matchingPath.append(Matching.questionComplete)
@@ -42,7 +51,7 @@ struct OnChatProfileView: View {
             })
             .navigationDestination(for: OnChatProfilePath.self) { step in
                 switch step {
-                case .profileMain: OnChatProfileView(profileShow: $profileShow)
+                case .profileMain: PartnerProfileView(profileShow: $profileShow, needMathcingRequest: needMathcingRequest)
                 case .profileValueList(let valueType, let valueDataList):
                     ValuesListView(valueType: valueType, valueDataList: valueDataList)
                 }
@@ -68,7 +77,7 @@ struct OnChatProfileView: View {
     var okButton: some View {
         Button(action: {
             Task {
-                await matchingViewModel.attraction()
+                await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
             }
         }, label: {
             Text("대화 해볼래요")
@@ -83,5 +92,5 @@ struct OnChatProfileView: View {
 }
 
 #Preview {
-    OnChatProfileView(profileShow: .constant(false))
+    PartnerProfileView(profileShow: .constant(false), needMathcingRequest: false)
 }

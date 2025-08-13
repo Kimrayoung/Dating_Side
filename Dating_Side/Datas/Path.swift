@@ -72,6 +72,8 @@ enum Matching: Hashable {
     case questionComplete
     case matchingFail
     case matchingSecondProfile
+    /// 답변완료시 메인 화면
+    case answerCompleteMain
 }
 
 enum Path {

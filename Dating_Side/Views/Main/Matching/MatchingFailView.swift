@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 매칭 실패시 뷰(매칭 끝내기 or 질문 보내기 선택 뷰)
 struct MatchingFailView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var viewModel: QuestionViewModel
@@ -29,7 +30,7 @@ struct MatchingFailView: View {
                 .font(.pixel(12))
                 .foregroundStyle(Color.whiteColor)
             Spacer()
-            ProfileMiniView(isDefault: true, userImageURL: nil  )
+            ProfileMiniView(isDefault: true, userImageURL: nil)
                 .clipShape(RoundedRectangle(cornerRadius: 8.85))
                 .frame(width: 180, height: 180)
             Spacer()
@@ -76,7 +77,8 @@ struct MatchingFailView: View {
     
     var finishMatching: some View {
         Button(action: {
-            appState.myPagePath.append(Matching.questionComplete)
+            /// 답변완료시 메인화면으로 이동
+            appState.myPagePath.append(Matching.answerCompleteMain)
         }, label: {
             Text("매칭 끝내기")
                 .font(.pixel(16))
@@ -100,6 +102,7 @@ struct MatchingFailView: View {
                 makeValueProfileView(category: UserAnswerCategory.LIFE)
             }
             questionContentEditor
+            // 질문 제출
             Button(action: {
                 guard let selectedIndex = selectCategory.firstIndex(where: { $0 }) else { return }
                 guard let selectedCategory = UserAnswerCategory(index: selectedIndex) else { return }

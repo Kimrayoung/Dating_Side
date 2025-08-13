@@ -7,28 +7,31 @@
 import SwiftUI
 
 struct MatchingRootView: View {
-    @StateObject private var matchingViewModel = QuestionViewModel()
+    @StateObject private var questionViewModel = QuestionViewModel()
     
     var body: some View {
-        QuestionListView()
-            .environmentObject(matchingViewModel)
+         MatchingQuestionListView()
+            .environmentObject(questionViewModel)
             .navigationDestination(for: Matching.self) { step in
                 switch step {
                 case .questionList:
-                    QuestionListView()
-                        .environmentObject(matchingViewModel)
+                     MatchingQuestionListView()
+                        .environmentObject(questionViewModel)
                 case .questionAnswer:
                     MatchingAnswerView()
-                        .environmentObject(matchingViewModel)
+                        .environmentObject(questionViewModel)
                 case .questionComplete:
-                    MatchingCompleteView()
-                        .environmentObject(matchingViewModel)
+                    MatchingAnswerCompleteView()
+                        .environmentObject(questionViewModel)
                 case .matchingFail:
                     MatchingFailView()
-                        .environmentObject(matchingViewModel)
+                        .environmentObject(questionViewModel)
                 case .matchingSecondProfile:
                     SecondMathcingView()
-                        .environmentObject(matchingViewModel)
+                        .environmentObject(questionViewModel)
+                case .answerCompleteMain:
+                    AnswerCompleteMainView()
+                        .environmentObject(questionViewModel)
                 }
             }
     }

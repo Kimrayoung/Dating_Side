@@ -127,7 +127,9 @@ struct ChatProfileImageView: View {
             selectedPickerImage: $selectedPickerImage,
             showAlert: $showAlert,
             onImagePicked: { item in
-                viewModel.loadSelectedImage(imageType: .mainProfile, pickerItem: item)
+                Task {
+                    await viewModel.loadSelectedImage(imageType: .mainProfile, pickerItem: item)
+                }
             }) {
                 Text("사진 선택하기")
                     .foregroundStyle(Color.black)

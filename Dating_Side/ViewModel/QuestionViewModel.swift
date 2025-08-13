@@ -42,6 +42,7 @@ class QuestionViewModel: ObservableObject {
 
 extension QuestionViewModel {
     @MainActor
+    /// 오늘의 질문 리스트
     func fetchTodayQuestions() async {
         loadingManager.isLoading = true
         defer {
@@ -64,6 +65,7 @@ extension QuestionViewModel {
     }
     
     @MainActor
+    /// 오늘의 질문 리스트에 대한 답변
     func postTodayQuetionAnswers() async -> String {
         let answerList = self.answers.map { $0.value }
         let todayQuestionAnswers = TodayQuestionAnswer(answerList: answerList)
@@ -87,6 +89,7 @@ extension QuestionViewModel {
         return ""
     }
     
+    /// 추가 매칭을 위한 질문 보내기
     func postMyQuestion(question: MyQuestion) async {
         loadingManager.isLoading = true
         defer {

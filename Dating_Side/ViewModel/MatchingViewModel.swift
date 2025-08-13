@@ -7,18 +7,18 @@
 
 import Combine
 
+/// 매칭 및 매칭 상대 확인
 final class MatchingViewModel: ObservableObject {
     let loadingManager = LoadingManager.shared
     let attractionNetwork = AttractionNetworkManager()
     let matchingNetwork = MatchingNetworkManager()
-    @Published var matchingPartnerAccount: PartnerAccount? = nil
     
-    func makeSimpleProfile() -> String{
+    func makeSimpleProfile(matchingPartnerAccount: PartnerAccount?) -> String{
         guard let userData = matchingPartnerAccount else { return "" }
         return "\(userData.nickName)/\(userData.birthYear)/1\(userData.height)cm"
     }
     
-    func makeSchoolString() -> String {
+    func makeSchoolString(matchingPartnerAccount: PartnerAccount?) -> String {
         guard let userData = matchingPartnerAccount else { return "" }
         if userData.educationDetail == "" {
             return "\(userData.educationType)"
@@ -28,7 +28,7 @@ final class MatchingViewModel: ObservableObject {
         
     }
     
-    func makeJobString() -> String{
+    func makeJobString(matchingPartnerAccount: PartnerAccount?) -> String{
         guard let userData = matchingPartnerAccount else { return "" }
         
         if userData.jobDetail == "" {
@@ -40,9 +40,10 @@ final class MatchingViewModel: ObservableObject {
     
 }
 
+
 extension MatchingViewModel {
     /// 내가 다가가기
-    func attraction() async {
+    func attraction(matchingPartnerAccount: PartnerAccount?) async {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -117,7 +118,7 @@ extension MatchingViewModel {
     }
     
     /// 매칭 요청 -> 매칭 시도(프로필 완성 뷰)
-    func matchingRequest() async {
+    func matchingRequest() async -> PartnerAccount? {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -128,13 +129,14 @@ extension MatchingViewModel {
             switch result {
             case .success(let partnerData):
                 Log.debugPublic("매칭 요청 성공", partnerData.result)
-                self.matchingPartnerAccount = partnerData.result
+                return partnerData.result
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)
             }
         } catch {
             Log.errorPublic(error.localizedDescription)
         }
+        return nil
     }
     
     /// 매칭 취소
@@ -181,7 +183,7 @@ extension MatchingViewModel {
     }
     
     /// 매칭 상대 조회
-    func matchingPartner() async {
+    func matchingPartner() async -> PartnerAccount? {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -198,6 +200,7 @@ extension MatchingViewModel {
         } catch {
             Log.errorPublic(error.localizedDescription)
         }
+        return nil
     }
     
     func matchingPartnerPhoto() async {

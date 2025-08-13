@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SecondMathcingView: View {
     @State private var showProfileView: Bool = false
+    
     var body: some View {
         VStack(content: {
             Text("질문 주셔서 감사합니다.\n당신에게 딱 맞는 두번쨰 상대입니다.")
@@ -27,7 +28,7 @@ struct SecondMathcingView: View {
             Spacer()
         })
         .sheet(isPresented: $showProfileView, content: {
-            OnChatProfileView(profileShow: $showProfileView)
+            PartnerProfileView(profileShow: $showProfileView, needMathcingRequest: true)
                 .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
