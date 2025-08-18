@@ -10,6 +10,9 @@ import Foundation
 
 class QuestionViewModel: ObservableObject {
     @Published var category: String = ""
+    /// 이미 오늘의 질문 리스트에 답변을 전부 했을 경우
+    @Published var questionComplete: Bool = false
+    @Published var todayQuestionAnswer: String = ""
     @Published var questionList: [Question] = []
     @Published var answers: [Int: String] = [:] // [question.id: 답변]
     @Published var currentIndex: Int = 0        // 현재 질문 인덱스
@@ -52,7 +55,7 @@ extension QuestionViewModel {
             let result = try await questionNetworkmanager.fetchTodayQuestions()
             switch result {
             case .success(let questions):
-                self.category = questions.category
+                self.category = questions.categoryType.korean
                 self.questionList = questions.questions.enumerated().map { idx, text in
                     Question(id: idx + 1, text: text)
                 }
@@ -90,7 +93,8 @@ extension QuestionViewModel {
     }
     
     /// 추가 매칭을 위한 질문 보내기
-    func postMyQuestion(question: MyQuestion) async {
+    @MainActor
+    func postMyQuestion(question: MyQuestion) async -> Bool {
         loadingManager.isLoading = true
         defer {
             self.loadingManager.isLoading = false
@@ -100,11 +104,81 @@ extension QuestionViewModel {
             switch result {
             case .success:
                 Log.debugPublic("postMyQuetionAnswres success")
+                return true
             case .failure(let error):
                 Log.errorPublic("postMyQuetionAnswres error: \(error)")
             }
         } catch {
             Log.errorPublic("postMyQuetionAnswres error: \(error)")
         }
+        return false
+    }
+    
+    @MainActor
+    /// 추가 매칭을 위한 오늘 질문 보내기를 했는지
+    func alreadySendTodayQuestion() async -> Bool {
+        loadingManager.isLoading = true
+        defer {
+            self.loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await questionNetworkmanager.fetchDidSendTodayQuestion()
+            switch result {
+            case .success(let result):
+                return result.result
+            case .failure(let error):
+                Log.errorPublic("alreadySendTodayQuestion error: \(error)")
+                return false
+            }
+        } catch {
+            Log.errorPublic("error", error.localizedDescription)
+        }
+        return false
+    }
+    
+    @MainActor
+    /// 오늘의 질문들에 답변했는지(기본으로 오는 오늘의 질문에)
+    func checkingTodayQuestionAnswer() async -> Bool {
+        Log.debugPublic("오늘 질문들에 답변했는지 : ")
+        let profileNetworkManager = ProfileNetworkManager()
+        
+        loadingManager.isLoading = true
+        defer {
+            self.loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await profileNetworkManager.getUserAnswerList()
+            
+            switch result {
+            case .success(let userAnswerList):
+                
+                let today = Date().todayString
+                var answerList: [UserAnswerCategory : [Answer]] = [:]
+                userAnswerList.profileList.forEach { profile in
+                    answerList[profile.categoryType] = profile.profileList
+                }
+                Log.debugPublic("오늘 질문들에 답변했는지 : ", userAnswerList)
+                for category in answerList {
+                    for item in category.value {
+                        if item.dateString == today {
+                            self.category = category.key.korean
+                            todayQuestionAnswer = item.content
+                            return true
+                        }
+                    }
+                }
+                
+                return false
+            case .failure(let error):
+                Log.errorPublic("오늘 질문들에 답변했는지 ", error.localizedDescription)
+                return false
+            }
+        } catch {
+            Log.errorPublic("유저 가치관 정보 가져오기 오류", error.localizedDescription)
+        }
+        
+        return false
     }
 }

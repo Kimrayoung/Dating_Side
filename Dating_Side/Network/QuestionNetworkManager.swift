@@ -30,7 +30,7 @@ struct QuestionNetworkManager {
     }
     
     /// 추가 질문 보냈는지 확인
-    func fetchDidSendTodayQuestion() async throws -> Result<VoidResponse, Error> {
+    func fetchDidSendTodayQuestion() async throws -> Result<BoolResponse, Error> {
         return await networkManager.callWithAsync(endpoint: QuestionAPIManager.didSendTodayQuestion, httpCodes: .success)
     }
     

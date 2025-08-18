@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BottomSheet: View {
+struct ProfileCheckBottomSheet: View {
     @Binding var showModal: Bool
     @State private var dragOffset: CGFloat = 0.0
     @Binding var currentHeightRatio: CGFloat // 시작 높이: 화면 높이의 20%

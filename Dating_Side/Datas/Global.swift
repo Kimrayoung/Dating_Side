@@ -16,3 +16,7 @@ public protocol OneDigitalTextField: Hashable, Equatable {
 struct VoidResponse: Codable {
     
 }
+
+struct BoolResponse: Codable {
+    let result: Bool
+}

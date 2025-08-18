@@ -37,11 +37,11 @@ struct MatchingAnswerCompleteView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(.horizontal, 38.5)
                 Spacer()
-                BottomSheet(showModal: $showModal, currentHeightRatio: $bottomSheetStartHeight)
+                ProfileCheckBottomSheet(showModal: $showModal, currentHeightRatio: $bottomSheetStartHeight)
                     .sheet(isPresented: $showModal, onDismiss: {
                         bottomSheetStartHeight = 0.45
                     }, content: {
-                        // 내 프로필을 통해서 매칭 상대를 찾음
+                        // 내 프로필을 통해서 매칭 상대를 찾아야 하므로 needMatchingRequest가 true
                         PartnerProfileView(profileShow: $showModal, needMathcingRequest: true)
                             .presentationDetents([.fraction(0.99)])
                             .presentationCornerRadius(10)
@@ -51,6 +51,7 @@ struct MatchingAnswerCompleteView: View {
         })
         .task {
             profileContent = await questionViewModel.postTodayQuetionAnswers()
+//            _ = await viewModel.matchingRequest()
         }
 //                .ignoresSafeArea(.container, edges: .bottom)
         .background(

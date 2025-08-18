@@ -96,6 +96,10 @@
 		4D909AA42E0D8A5D00F19AD0 /* MessageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */; };
 		4D909AA72E12C23900F19AD0 /* SettingAndEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D909AA62E12C23900F19AD0 /* SettingAndEditView.swift */; };
 		4D90B83B2E4CA43800323D8B /* ProfileAddImageEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B83A2E4CA43800323D8B /* ProfileAddImageEditView.swift */; };
+		4D90B83D2E51A9A400323D8B /* SendQuestionModalSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B83C2E51A98E00323D8B /* SendQuestionModalSheet.swift */; };
+		4D90B83F2E51ACC000323D8B /* MatchingProfileCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B83E2E51ACC000323D8B /* MatchingProfileCheckView.swift */; };
+		4D90B8412E51B10200323D8B /* CustomToastPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B8402E51B10200323D8B /* CustomToastPopup.swift */; };
+		4D90B8442E51B1AE00323D8B /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B8432E51B1AB00323D8B /* View+Ext.swift */; };
 		4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FACE2D5A1DED00D0E4D7 /* Dating_SideApp.swift */; };
 		4D95FAD12D5A1DED00D0E4D7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D95FAD02D5A1DED00D0E4D7 /* ContentView.swift */; };
 		4D95FAD32D5A1DEE00D0E4D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D95FAD22D5A1DEE00D0E4D7 /* Assets.xcassets */; };
@@ -250,6 +254,10 @@
 		4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComponent.swift; sourceTree = "<group>"; };
 		4D909AA62E12C23900F19AD0 /* SettingAndEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAndEditView.swift; sourceTree = "<group>"; };
 		4D90B83A2E4CA43800323D8B /* ProfileAddImageEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAddImageEditView.swift; sourceTree = "<group>"; };
+		4D90B83C2E51A98E00323D8B /* SendQuestionModalSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendQuestionModalSheet.swift; sourceTree = "<group>"; };
+		4D90B83E2E51ACC000323D8B /* MatchingProfileCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingProfileCheckView.swift; sourceTree = "<group>"; };
+		4D90B8402E51B10200323D8B /* CustomToastPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToastPopup.swift; sourceTree = "<group>"; };
+		4D90B8432E51B1AB00323D8B /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 		4D95FACB2D5A1DED00D0E4D7 /* Dating_Side.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dating_Side.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D95FACE2D5A1DED00D0E4D7 /* Dating_SideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dating_SideApp.swift; sourceTree = "<group>"; };
 		4D95FAD02D5A1DED00D0E4D7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -385,6 +393,7 @@
 			isa = PBXGroup;
 			children = (
 				4D83532A2E44E9B40031B0ED /* MatchingViewModel.swift */,
+				4D90B8402E51B10200323D8B /* CustomToastPopup.swift */,
 				4D389C332E25330600B56F84 /* Auth */,
 				4D389C4F2E2CECCA00B56F84 /* QuestionViewModel.swift */,
 				4D6119612D75CC9100715B9E /* OnboardingViewModel.swift */,
@@ -408,7 +417,6 @@
 				4DD577552D7EC5A8001B0ED5 /* LoginField.swift */,
 				4DF329DC2D87182600DBB823 /* BottomBorderViewModifier.swift */,
 				4DF329E42D87E9C700DBB823 /* TextWithColoredSubString.swift */,
-				4DB5B3182D9045AF0060D4C6 /* CustomAlert.swift */,
 				4DCB70572DA80C10006C120C /* OneDigitTextField.swift */,
 				4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */,
 				4D5E45A22E3F50CD00A3B60C /* CityPickerModal.swift */,
@@ -542,6 +550,7 @@
 		4D6D187C2D63597B00698E5D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				4D90B8432E51B1AB00323D8B /* View+Ext.swift */,
 				4D389C4D2E2A59A400B56F84 /* Data+Ext.swift */,
 				4D6D185A2D63408F00698E5D /* Color+Ext.swift */,
 				4D6D18692D6343B600698E5D /* Font+Ext.swift */,
@@ -654,6 +663,7 @@
 				4D9E95212E365D3900B007DF /* LoadingView.swift */,
 				4DFAFB922E12C7D7006E3B5F /* ArrowNextRow.swift */,
 				4D8353322E48C0EF0031B0ED /* WebView.swift */,
+				4DB5B3182D9045AF0060D4C6 /* CustomAlert.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -669,7 +679,9 @@
 		4DEB5A722E0C2929009BE55B /* Matching */ = {
 			isa = PBXGroup;
 			children = (
+				4D90B83C2E51A98E00323D8B /* SendQuestionModalSheet.swift */,
 				4DC7DD9A2E4A2C6D0052FECB /* AnswerCompleteMainView.swift */,
+				4D90B83E2E51ACC000323D8B /* MatchingProfileCheckView.swift */,
 				4D86FD482E37D3B300CD1687 /* MatchingAnswerView.swift */,
 				4DEB5A6C2E0AD412009BE55B /* CoupleMatchingView.swift */,
 				4D6119562D75B20B00715B9E /* ChatListView.swift */,
@@ -884,6 +896,7 @@
 				4D909AA42E0D8A5D00F19AD0 /* MessageComponent.swift in Sources */,
 				4D5E45912E3BC3C500A3B60C /* ProfileEditView.swift in Sources */,
 				4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */,
+				4D90B83F2E51ACC000323D8B /* MatchingProfileCheckView.swift in Sources */,
 				4DD577582D7EC638001B0ED5 /* SMSViewModel.swift in Sources */,
 				4D83532B2E44E9C30031B0ED /* MatchingViewModel.swift in Sources */,
 				4D6119522D75AA8700715B9E /* UnitLabel.swift in Sources */,
@@ -895,6 +908,7 @@
 				4D5E45932E3F298700A3B60C /* ReportNetworkManager.swift in Sources */,
 				4D6119502D75AA2900715B9E /* BirthTextField.swift in Sources */,
 				4D6119592D75B21E00715B9E /* MyPageView.swift in Sources */,
+				4D90B8412E51B10200323D8B /* CustomToastPopup.swift in Sources */,
 				4D61196A2D75EFC900715B9E /* EducationSelectView.swift in Sources */,
 				4D443BAB2DCCE15F00F4B9EB /* KeychainManager.swift in Sources */,
 				4D5E459D2E3F485400A3B60C /* EducationEditView.swift in Sources */,
@@ -928,6 +942,7 @@
 				4D389C4C2E2A58E800B56F84 /* MultipartFormBuilder.swift in Sources */,
 				4D6D185B2D63408F00698E5D /* Color+Ext.swift in Sources */,
 				4DF329DB2D87170300DBB823 /* NicknameInputView.swift in Sources */,
+				4D90B8442E51B1AE00323D8B /* View+Ext.swift in Sources */,
 				4DFAFB932E12C7D7006E3B5F /* ArrowNextRow.swift in Sources */,
 				4DF329EC2D87EEE200DBB823 /* VerificationNumber.swift in Sources */,
 				4DF329D92D87157F00DBB823 /* CustomRounedGradientProgressBar.swift in Sources */,
@@ -947,6 +962,7 @@
 				4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */,
 				4DC7DD9B2E4A2C770052FECB /* AnswerCompleteMainView.swift in Sources */,
 				4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */,
+				4D90B83D2E51A9A400323D8B /* SendQuestionModalSheet.swift in Sources */,
 				4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */,
 				4D389C352E25331800B56F84 /* NaverAuth.swift in Sources */,
 				4D6119622D75CC9100715B9E /* OnboardingViewModel.swift in Sources */,
@@ -1177,7 +1193,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1212,7 +1228,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

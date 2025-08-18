@@ -10,8 +10,8 @@ import SwiftUI
 struct ProfileEditView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    var isOnboarding: Bool
     var userData: ProfileEditUserAccount?
+    var isOnboarding: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -34,14 +34,14 @@ struct ProfileEditView: View {
                 
                 
             }
-            ArrowNextRow(label: "지역 \(isOnboarding ? userData?.address ?? "" : profileViewModel.userData?.activeRegion ?? "")", subTitle: nil) {
+            ArrowNextRow(label: "지역 변경", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.locationSelect)
                 } else {
                     appState.myPagePath.append(MyPage.locationSelect(location: profileViewModel.userData?.activeRegion))
                 }
             }
-            ArrowNextRow(label: "학력 \(isOnboarding ? (userData?.educationDetail != "" ? userData?.educationDetail ?? "" : userData?.educationType ?? "") : (profileViewModel.userData?.educationDetail != "" ? profileViewModel.userData?.educationDetail ?? "" : profileViewModel.userData?.educationType ?? ""))", subTitle: nil) {
+            ArrowNextRow(label: "학력 변경", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.editEducation)
                 } else {
@@ -49,7 +49,7 @@ struct ProfileEditView: View {
                 }
                 
             }
-            ArrowNextRow(label: "직업 \(isOnboarding ? (userData?.jobDetail != "" ? userData?.jobDetail ?? "" : userData?.jobType ?? profileViewModel.userData?.jobType ?? "") : (profileViewModel.userData?.jobDetail != "" ? profileViewModel.userData?.jobDetail ?? "" : profileViewModel.userData?.jobType ?? profileViewModel.userData?.jobType ?? ""))", subTitle: nil) {
+            ArrowNextRow(label: "직업 변경", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.editJob)
                 } else {
@@ -67,7 +67,7 @@ struct ProfileEditView: View {
             }
             ArrowNextRow(label: "러브심볼", subTitle: nil) {
                 if isOnboarding {
-//                    appState.onboardingPath.append(Onboarding.)
+                    appState.onboardingPath.append(Onboarding.editPreference)
                 } else {
                     guard let beforeLoveKeywords = profileViewModel.userData?.beforePreferenceTypeList, let afterLoveKeywords = profileViewModel.userData?.afterPreferenceTypeList else { return }
                     
@@ -82,7 +82,12 @@ struct ProfileEditView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.onboardingPath.removeLast()
+                    if isOnboarding {
+                        appState.onboardingPath.removeLast()
+                    } else {
+                        appState.myPagePath.removeLast()
+                    }
+                    
                 } label: {
                     Image("navigationBackBtn")
                 }

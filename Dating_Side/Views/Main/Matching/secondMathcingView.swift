@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SecondMathcingView: View {
     @State private var showProfileView: Bool = false
+    @ObservedObject var viewModel = MatchingViewModel()
+    @State private var matchingProfile: PartnerAccount? = nil
     
     var body: some View {
         VStack(content: {
@@ -19,14 +21,23 @@ struct SecondMathcingView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 6)
             Spacer()
-            ProfileMiniView(isDefault: false, userImageURL: "https://picsum.photos/200/300", userName: "운명의 상대", userType: "따뜻한 연애")
-                .clipShape(RoundedRectangle(cornerRadius: 8.85))
-                .frame(width: 180, height: 180)
-                .onTapGesture {
-                    showProfileView.toggle()
-                }
+            if let matchingProfile = matchingProfile {
+                ProfileMiniView(isDefault: false, userImageURL: matchingProfile.profileImageURL, userName: matchingProfile.nickName, userType: matchingProfile.keyword)
+                    .clipShape(RoundedRectangle(cornerRadius: 8.85))
+                    .frame(width: 180, height: 180)
+                    .onTapGesture {
+                        showProfileView.toggle()
+                    }
+            } else {
+                ProfileMiniView(isDefault: false, userImageURL: nil, userName: "???", userType: "???")
+                    .clipShape(RoundedRectangle(cornerRadius: 8.85))
+                    .frame(width: 180, height: 180)
+            }
             Spacer()
         })
+        .task {
+            matchingProfile = await viewModel.matchingRequest()
+        }
         .sheet(isPresented: $showProfileView, content: {
             PartnerProfileView(profileShow: $showProfileView, needMathcingRequest: true)
                 .presentationDetents([.fraction(0.99)])

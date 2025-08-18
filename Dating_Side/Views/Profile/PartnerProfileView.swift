@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PartnerProfileView: View {
     @EnvironmentObject private var appState: AppState
-    @StateObject var matchingViewModel: MatchingViewModel = MatchingViewModel()
+    @ObservedObject var matchingViewModel: MatchingViewModel = MatchingViewModel()
     @State private var showAlert: Bool = false
     @State private var valueList: [String : [Answer]] = [:]
     @State var matchingPartnerAccount: PartnerAccount? = nil
@@ -24,6 +24,8 @@ struct PartnerProfileView: View {
                     educationString: matchingViewModel.makeSchoolString(matchingPartnerAccount: matchingPartnerAccount),
                     jobString: matchingViewModel.makeJobString(matchingPartnerAccount: matchingPartnerAccount),
                     location: matchingPartnerAccount?.activeRegion ?? "",
+                    lifeStyle: matchingPartnerAccount?.lifeStyle,
+                    keyword: matchingPartnerAccount?.keyword,
                     valueList: valueList,
                     defaultImageUrl: matchingPartnerAccount?.profileImageURL,
                     introduceText: matchingPartnerAccount?.introduction,
@@ -45,9 +47,11 @@ struct PartnerProfileView: View {
                 
             }
             .customAlert(isPresented: $showAlert, title: "이 분을 다시 만나지 못할 수 있어요", message: "상대방의 매력을 다시 확인해볼까요?", primaryButtonText: "괜찮아요", primaryButtonAction: {
-                appState.matchingPath.append(Matching.questionComplete)
+                showAlert = false
+                profileShow = false // 프로필 모달 자체를 내림
+                appState.matchingPath.append(Matching.matchingFail)
             }, secondaryButtonText: "다시 봐볼께요", secondaryButtonAction: {
-                profileShow = false
+                showAlert = false
             })
             .navigationDestination(for: OnChatProfilePath.self) { step in
                 switch step {

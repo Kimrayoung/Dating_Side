@@ -42,13 +42,13 @@ struct OnboardingContainerView: View {
                     case .sixthDayPhoto: ProfileSixthImageView(viewModel: viewModel)
                     case .onboardingComplete: OnboardingCompleteView(viewModel: viewModel)
                     case .profileEdit(let userData):
-                        ProfileEditView(isOnboarding: true, userData: userData)
+                        ProfileEditView(userData: userData, isOnboarding: true)
                     case .editEducation:
                         EducationEditView(viewModel: viewModel)
                     case .editJob:
                         JobEditView(viewModel: viewModel)
                     case .editPreference:
-                        PreferenceKeywordsEditView(viewModel: viewModel)
+                        PreferenceKeywordsEditView(viewModel: viewModel, isOnboarding: true)
                     }
                 }
                 .onAppear {

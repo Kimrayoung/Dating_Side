@@ -24,7 +24,7 @@ struct MyPageRootView: View {
                 case .profileValueList(let valueType, let valueDataList):
                     ValuesListView(valueType: valueType, valueDataList: valueDataList)
                 case .profileEdit:
-                    ProfileEditView(isOnboarding: false, userData: nil)
+                    ProfileEditView(userData: nil, isOnboarding: false)
                         .environmentObject(profileViewModel)
                 case .account:
                     AccountView()
@@ -33,7 +33,7 @@ struct MyPageRootView: View {
                 case .defaultProfileImage:
                     ChatProfileImageView(viewModel: AccountViewModel())
                 case let .locationSelect(location):
-                    LocationSelectView(viewModel: AccountViewModel(), location: location)
+                    LocationSelectView(viewModel: AccountViewModel(), location: location, isOnboarding: false)
                 case let .job(jobType, jobDetail):
                     JobEditView(viewModel: AccountViewModel(), jobType: jobType, jobDetail: jobDetail)
                 case let .education(educationType, schoolName):

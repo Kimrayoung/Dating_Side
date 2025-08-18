@@ -16,7 +16,6 @@ struct BeforePreferenceKeywordComponent: View {
     
     var body: some View {
         VStack {
-            
             gridView
         }
     }

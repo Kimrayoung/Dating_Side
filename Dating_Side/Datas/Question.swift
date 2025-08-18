@@ -18,6 +18,9 @@ struct MyQuestion: Codable {
 struct TodayQuestionList: Codable {
     let category: String
     let questions: [String]
+    var categoryType: UserAnswerCategory {
+        UserAnswerCategory.from(category)
+    }
 }
 
 struct TodayQuestionAnswer: Codable {
@@ -28,26 +31,46 @@ struct TodayQuestionResponse: Codable {
     let result: String
 }
 
-struct UserAnswerList: Codable {
+struct UserAnswersResponse: Codable, Hashable {
     let profileList: [UserAnswers]
 }
 
 struct UserAnswers: Codable, Hashable {
     let category: String
     let profileList: [Answer]
+    var categoryType: UserAnswerCategory {
+        UserAnswerCategory.from(category)
+    }
 }
 
 struct Answer: Codable, Hashable {
     let content: String
-    let date: String
+    let date: [Int]
+    
+    var dateString: String {
+        guard date.count >= 3 else { return "" }
+        let y = date[0], m = date[1], d = date[2]
+        return String(format: "%04d-%02d-%02d", y, m, d) // 0채움
+    }
 }
 
 enum UserAnswerCategory: String {
-    case LOVE = "연애"
-    case MARRIAGE = "결혼"
-    case WORK = "직장"
-    case LIFE = "생활"
-    case ETC = "기타"
+    case LOVE
+    case MARRIAGE
+    case WORK
+    case LIFE
+    case ETC
+    
+    // 양방향 매핑용
+    var code: String {
+        switch self {
+        case .LOVE: return "LOVE"
+        case .MARRIAGE: return "MARRIAGE"
+        case .WORK: return "WORK"
+        case .LIFE: return "LIFE"
+        case .ETC: return "ETC"
+        }
+    }
     
     var korean: String {
         switch self {
@@ -91,6 +114,18 @@ enum UserAnswerCategory: String {
             return 3
         case .ETC:
             return 4
+        }
+    }
+    
+    // 편의 생성자 (대소문자/한글 모두 매핑)
+    static func from(_ s: String) -> Self {
+        switch s.uppercased() {
+        case "LOVE", "연애".uppercased(): return .LOVE
+        case "MARRIAGE", "결혼".uppercased(): return .MARRIAGE
+        case "WORK", "직장".uppercased(): return .WORK
+        case "LIFE", "생활".uppercased(): return .LIFE
+        case "ETC", "기타".uppercased(): return .ETC
+        default: return .ETC
         }
     }
 }

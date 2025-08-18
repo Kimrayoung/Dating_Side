@@ -18,7 +18,8 @@ final class ProfileViewModel: ObservableObject {
     func makeSimpleProfile(userData: UserAccount?) -> String{
         guard let userData = userData else { return "" }
         let birthYear = userData.birthDate.components(separatedBy: "-").first ?? ""
-        return "\(userData.nickName)/\(birthYear)/1\(userData.height)cm"
+        let height = String(userData.height).count >= 3 ? "\(userData.height)" : "1\(userData.height)"
+        return "\(userData.nickName)/\(birthYear)/\(height)cm"
     }
     
     func makeSchoolString(userData: UserAccount?) -> String {
@@ -44,7 +45,7 @@ final class ProfileViewModel: ObservableObject {
     func getTodayAnswer() -> String {
         let today = Date().todayString
         for categoryItem in userValueList {
-            let todayAnswers = categoryItem.value.filter { $0.date == today }
+            let todayAnswers = categoryItem.value.filter { $0.dateString == today }
             return todayAnswers.first?.content ?? ""
         }
         return ""

@@ -15,7 +15,7 @@ final class MatchingViewModel: ObservableObject {
     
     func makeSimpleProfile(matchingPartnerAccount: PartnerAccount?) -> String{
         guard let userData = matchingPartnerAccount else { return "" }
-        return "\(userData.nickName)/\(userData.birthYear)/1\(userData.height)cm"
+        return "\(userData.nickName)/\(userData.birthYear)/\(userData.height)cm"
     }
     
     func makeSchoolString(matchingPartnerAccount: PartnerAccount?) -> String {
@@ -61,6 +61,7 @@ extension MatchingViewModel {
         }
     }
     
+    @MainActor
     /// 내게 다가온 사람 조회
     func senderAttraction() async {
         loadingManager.isLoading = true
@@ -79,6 +80,7 @@ extension MatchingViewModel {
         }
     }
     
+    @MainActor
     /// 내가 다가간 사람 조회
     func receiverAttraction() async {
         loadingManager.isLoading = true
@@ -97,6 +99,7 @@ extension MatchingViewModel {
         }
     }
     
+    @MainActor
     /// 매칭 상태 조회
     func fetchMatchingStauts() async {
         loadingManager.isLoading = true
@@ -118,6 +121,7 @@ extension MatchingViewModel {
     }
     
     /// 매칭 요청 -> 매칭 시도(프로필 완성 뷰)
+    @MainActor
     func matchingRequest() async -> PartnerAccount? {
         loadingManager.isLoading = true
         defer {
@@ -182,6 +186,7 @@ extension MatchingViewModel {
         }
     }
     
+    @MainActor
     /// 매칭 상대 조회
     func matchingPartner() async -> PartnerAccount? {
         loadingManager.isLoading = true

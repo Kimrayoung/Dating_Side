@@ -19,7 +19,7 @@ struct PatchAccountRequest: Codable {
 enum PatchUserType: String {
     case educationType
     case educationDetail
-    case nickname
+    case nickName
     case jobType
     case jobDetail
     case afterPreferenceTypeList
@@ -43,7 +43,8 @@ struct SignUpRequest: Codable {
     var nickName: String
     var birthDate: String
     var height: Int
-    var activeRegion: String
+    var districtRegion: String
+    var cityRegion: String
     var beforePreferenceTypeList: [String]
     var afterPreferenceTypeList: [String]
     var educationType: String
@@ -181,7 +182,7 @@ struct PartnerAccount: Codable, Hashable {
     let jobType, jobDetail: String
     let lifeStyle: LifeStyle
     let profileImageURL, introduction: String
-    let profile: UserAnswers
+    let profile: UserAnswersResponse
     let mannerTemperature: Int
     
     enum CodingKeys: String, CodingKey {

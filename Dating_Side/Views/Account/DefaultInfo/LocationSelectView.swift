@@ -14,6 +14,7 @@ struct LocationSelectView: View {
     @State private var showCityPickerModel: Bool = false
     @State private var showDetailCityPickerModel: Bool = false
     var location: String? = nil
+    var isOnboarding: Bool = true
     
     var body: some View {
         VStack(spacing: 0, content: {
@@ -43,6 +44,8 @@ struct LocationSelectView: View {
                     Task {
                         await viewModel.updateLocation()
                     }
+                } else {
+                    appState.onboardingPath.removeLast()
                 }
                 
             }, label: {
@@ -56,7 +59,7 @@ struct LocationSelectView: View {
             
         })
         .task {
-            if let selectedLocationString = location?.trimmingCharacters(in: .whitespaces).components(separatedBy: "/") {
+            if let selectedLocationString = location?.trimmingCharacters(in: .whitespaces).components(separatedBy: " ") {
                 Log.debugPublic("selectedLocationString first, last", location, selectedLocationString.first, selectedLocationString.last)
                 await viewModel.fetchAddressData(selectedLocation: selectedLocationString.first)
                 await viewModel.fetchAddressData(code: viewModel.locationSelected?.code, isDetailLocation: true, selectedDetailLocation: selectedLocationString.last)
@@ -76,6 +79,10 @@ struct LocationSelectView: View {
                 .presentationDetents([.height(450)])
                 .presentationCornerRadius(24)
         })
+        .onAppear {
+            viewModel.isOnboarding = isOnboarding ? .onboarding : .mypageEdit
+            print(#fileID, #function, #line, "- location: \(location)")
+        }
         .onChange(of: viewModel.locationSelected, { oldValue, newValue in
             Task {
                 await viewModel.fetchAddressData(code: newValue?.code, isDetailLocation: true)
@@ -92,12 +99,16 @@ struct LocationSelectView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     if location != nil {
-                        viewModel.isOnboarding = .mypageEdit
-                        appState.myPagePath.removeLast()
+                        if viewModel.isOnboarding == .mypageEdit {
+                            appState.myPagePath.removeLast()
+                        } else if viewModel.isOnboarding == .onboardingEdit {
+                            appState.onboardingPath.removeLast()
+                        } else {
+                            
+                        }
                     }
-                    
                 } label: {
-                    Image("navigationBackBtn")
+                    viewModel.isOnboarding != .onboarding ? Image("navigationBackBtn") : nil
                 }
             }
         })

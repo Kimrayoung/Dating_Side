@@ -35,13 +35,14 @@ struct ProfileMiniView: View {
                 .font(.pixel(12))
                 .foregroundStyle(Color.mainColor)
                 .padding(10)
+                .frame(maxWidth: .infinity)
                 .overlay(content: {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.mainColor, lineWidth: 1.11)
                 })
         }
-//        .padding(.vertical, 19)
-//        .padding(.horizontal, 17)
+        .padding(.vertical, 19)
+        .padding(.horizontal, 17)
         .frame(width: widthSize, height: heightSize)
         .background(Color.white)
         

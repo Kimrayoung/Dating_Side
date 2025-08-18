@@ -82,6 +82,7 @@ class AppState: ObservableObject {
         }
     }
     
+    @MainActor
     func logout() async {
         loadingManager.isLoading = true
         defer {
@@ -103,6 +104,7 @@ class AppState: ObservableObject {
     }
     
     /// 계정탈퇴
+    @MainActor
     func accountDelete() async {
         loadingManager.isLoading = true
         defer {

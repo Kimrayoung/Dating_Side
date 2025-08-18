@@ -24,9 +24,9 @@ struct CustomAlert: View {
             // 배경 오버레이
             Color.black.opacity(0.68)
                 .edgesIgnoringSafeArea(.all)
-                .onTapGesture {
-                     isPresented.wrappedValue = false
-                }
+//                .onTapGesture {
+//                     isPresented.wrappedValue = false
+//                }
             
             // 알림창 본문
             VStack(spacing: 0) {
@@ -85,38 +85,6 @@ struct CustomAlert: View {
     }
 }
 
-// 뷰 수정자로 사용하기 위한 확장
-extension View {
-    func customAlert(
-        isPresented: Binding<Bool>,
-        title: String,
-        message: String,
-        primaryButtonText: String,
-        primaryButtonAction: @escaping () -> Void,
-        primaryButtonColor: Color = .mainColor,
-        secondaryButtonText: String? = nil,
-        secondaryButtonAction: (() -> Void)? = nil,
-        secondaryButtonColor: Color = .gray3
-    ) -> some View {
-        ZStack {
-            self
-            
-            if isPresented.wrappedValue {
-                CustomAlert(
-                    title: title,
-                    message: message,
-                    primaryButtonText: primaryButtonText,
-                    primaryButtonAction: primaryButtonAction,
-                    primaryButtonColor: primaryButtonColor,
-                    secondaryButtonText: secondaryButtonText,
-                    secondaryButtonAction: secondaryButtonAction,
-                    secondaryButtonColor: secondaryButtonColor,
-                    isPresented: isPresented
-                )
-            }
-        }
-    }
-}
 
 #Preview {
     CustomAlert(title: "회원가입을 중단하고\n시작화면으로 나갈까요?", message: "나가면 입력한 정보가 저장되지 않아요", primaryButtonText: "나가기", primaryButtonAction: {}, primaryButtonColor: Color.red, secondaryButtonText: "취소", secondaryButtonAction: {}, isPresented: .constant(true))

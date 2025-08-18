@@ -11,22 +11,32 @@ import SwiftUI
 struct AnswerCompleteMainView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject private var viewModel: QuestionViewModel
+    @State private var alreadySendTodayQuestion: Bool = false
+    @State private var showQuestionModal: Bool = false
+    @State private var selectCategory: [Bool] = [true, false, false, false]
+    @State private var questionContent: String = ""
+    @State private var sendQuestion: Bool = false
+    @State private var showToastPopup: Bool = false
     
     var body: some View {
         VStack {
             Text("당신의 답변을 토대로\n오늘의 카드가 완성 되었어요")
                 .multilineTextAlignment(.center)
                 .font(.pixel(20))
+                .padding(.top, 50)
             Text("전체 카드는 마이페이지에서 확인 하세요")
                 .font(.pixel(12))
-            VStack {
-                Text("[연애]")
-                    .font(.pixel(12))
-                    .padding(.bottom, 16)
-                Text("당신은 안정적이며 의지할 수 있는 관계를 중요하게 생각합니다.\n\n연애에서는 함께 시간을 보내는 것과 서로의 안정을 우선시하고, 공감하고 이해해주는 파트너를 선호합니다. \n\n이전 연애에서는 아마도 깊은 유대감을 형성하려 했을 것이며, 앞으로도 의지할 수 있는 관계를 추구할 것으로 보입니다. 감정 표현에서는 행동으로 마음을 전하는 경향이 있습니다.")
-                    .font(.pixel(16))
-                    
+            ScrollView {
+                VStack {
+                    Text("[\(viewModel.category)]")
+                        .font(.pixel(12))
+                        .padding(.bottom, 16)
+                    Text(viewModel.todayQuestionAnswer)
+                        .font(.pixel(16))
+                        
+                }
             }
+            .frame(height: 330)
             .padding(.horizontal, 38.5)
             .padding(.vertical, 15)
             .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -59,11 +69,20 @@ struct AnswerCompleteMainView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .padding(.horizontal, 49)
             .padding(.top, 51)
-            sendQuestion
+            sendQuestionBtn
                 .padding(.top, 43)
                 .padding(.bottom, 12)
             confirmPartner
+                .padding(.bottom, 44)
         }
+        .customToastPopup(isPresented: $showToastPopup, title: "오늘은 이미 질문을 작성했어요", message: "")
+        .sheet(isPresented: $showQuestionModal, content: {
+            SendQuestionModalSheet(viewModel: viewModel, showQuestionModal: $showQuestionModal, selectCategory: $selectCategory, questionContent: $questionContent, sendQuestion: $sendQuestion)
+//                .presentationDetents([.fraction(0.99)])
+                .presentationDetents([.medium])
+                .presentationCornerRadius(10)
+                .presentationDragIndicator(.visible)
+        })
         .ignoresSafeArea(.container, edges: .bottom)
         .background(
             Image("matchingViewBg")
@@ -73,11 +92,18 @@ struct AnswerCompleteMainView: View {
         )
     }
     
-    var sendQuestion: some View {
+    var sendQuestionBtn: some View {
         Button {
-            
+            Task {
+                alreadySendTodayQuestion = await viewModel.alreadySendTodayQuestion()
+                if alreadySendTodayQuestion {
+                    showToastPopup = true
+                } else {
+                    showQuestionModal.toggle()
+                }
+            }
         } label: {
-            Text("질문 보내기")
+            Text("질문 보내주기")
                 .font(.pixel(16))
                 .foregroundStyle(Color.mainColor)
                 .frame(maxWidth: .infinity)
@@ -90,7 +116,7 @@ struct AnswerCompleteMainView: View {
     
     var confirmPartner: some View {
         Button {
-            
+            appState.matchingPath.append(Matching.matchingProfileCheckView)
         } label: {
             Text("매칭 상대 확인하기")
                 .font(.pixel(16))

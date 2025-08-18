@@ -67,13 +67,19 @@ enum MyPage: Hashable {
 }
 
 enum Matching: Hashable {
+    /// 오늘의 질문 리스트 확인하기
     case questionList
+    /// 오늘의 질문에 답변하기
     case questionAnswer
+    /// 오늘의 질문 완료해서 매칭 상대 받음
     case questionComplete
+    /// 매칭 거절
     case matchingFail
     case matchingSecondProfile
     /// 답변완료시 메인 화면
     case answerCompleteMain
+    /// 유저가 답변 해서 오늘의 질문에 대한 답변 확인 -> 매칭상대 확인하기 눌렀을때
+    case matchingProfileCheckView
 }
 
 enum Path {

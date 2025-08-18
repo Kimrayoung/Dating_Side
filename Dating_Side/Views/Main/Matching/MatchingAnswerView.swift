@@ -16,41 +16,7 @@ struct MatchingAnswerView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Button {
-                    if viewModel.isFirstQuestion {
-                        return
-                    } else {
-                        viewModel.nextQuestion()
-                    }
-                } label: {
-                    Image("leftWhiteArrow")
-                        .frame(width: 24, height: 24)
-                        .background(viewModel.isFirstQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
-                        .clipShape(Circle())
-                }
-                VStack {
-                    Text("질문 \(viewModel.currentQuestion.id)")
-                        .font(.pixel(12))
-                    Text(viewModel.currentQuestion.text)
-                        .font(.pixel(20))
-                        .padding(.horizontal)
-                }
-                Button {
-                    if viewModel.isFirstQuestion {
-                        return
-                    } else {
-                        viewModel.previousQuestion()
-                    }
-                } label: {
-                    Image("rightWhiteArrow")
-                        .frame(width: 24, height: 24)
-                        .background(viewModel.isLastQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
-                        .clipShape(Circle())
-                }
-            }
-            .padding(.horizontal, 53)
-            .padding(.bottom, 36)
+            questionText
             answerTextEditor
             nextAnswerButton
         }
@@ -83,6 +49,48 @@ struct MatchingAnswerView: View {
                 }
             }
         })
+    }
+    
+    var questionText: some View {
+        HStack(spacing: 0) {
+            Button {
+                if viewModel.isFirstQuestion {
+                    return
+                } else {
+                    viewModel.nextQuestion()
+                }
+            } label: {
+                Image("leftWhiteArrow")
+                    .frame(width: 24, height: 24)
+                    .background(viewModel.isFirstQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
+                    .clipShape(Circle())
+            }
+            VStack(spacing: 0) {
+                Text("질문 \(viewModel.currentQuestion.id)")
+                    .font(.pixel(12))
+                    .padding(.bottom, 4)
+                Text(viewModel.currentQuestion.text)
+                    .multilineTextAlignment(.center)
+                    .font(.pixel(20))
+                    .padding(.horizontal)
+            }
+            .frame(maxWidth: .infinity)
+            Button {
+                if viewModel.isFirstQuestion {
+                    return
+                } else {
+                    viewModel.previousQuestion()
+                }
+            } label: {
+                Image("rightWhiteArrow")
+                    .frame(width: 24, height: 24)
+                    .background(viewModel.isLastQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
+                    .clipShape(Circle())
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 24)
+        .padding(.bottom, 36)
     }
     
     var answerTextEditor: some View {

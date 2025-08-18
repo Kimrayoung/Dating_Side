@@ -14,7 +14,7 @@ class ProfileNetworkManager {
         self.networkManager = networkManager
     }
     
-    func getUserAnswerList() async throws -> Result<UserAnswerList, Error> {
+    func getUserAnswerList() async throws -> Result<UserAnswersResponse, Error> {
         return await networkManager.callWithAsync(endpoint: ProfileAPIManager.getUserAnswerList, httpCodes: .success)
     }
     

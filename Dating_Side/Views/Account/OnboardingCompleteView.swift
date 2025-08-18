@@ -14,7 +14,7 @@ struct OnboardingCompleteView: View {
     var body: some View {
         ScrollView {
             VStack {
-                ProfileView(simpleProfile: "\(viewModel.nicknameInput)/\(viewModel.birthYear.joined())/1\(viewModel.makeHeight())cm", educationString: "\(viewModel.makeEducationType()?.korean ?? "")\(viewModel.schoolName != "" ? "," : "") \(viewModel.schoolName)", jobString: "\(viewModel.makeJobType()?.korean ?? "")\(viewModel.jobDetail != "" ? "," : "") \(viewModel.jobDetail)", location: viewModel.makeLocation(), lifeStyle: viewModel.makeLifeStyle(needKorean: true), valueList: [:], onboardingDefaultImageData: viewModel.selectedImage, showProfileViewType: .onboarding)
+                ProfileView(simpleProfile: "\(viewModel.nicknameInput)/\(viewModel.birthYear.joined())/1\(viewModel.makeHeight())cm", educationString: "\(viewModel.makeEducationType()?.korean ?? "")\(viewModel.schoolName != "" ? "," : "") \(viewModel.schoolName)", jobString: "\(viewModel.makeJobType()?.korean ?? "")\(viewModel.jobDetail != "" ? "," : "") \(viewModel.jobDetail)", location: viewModel.makeLocation(), lifeStyle: viewModel.makeLifeStyle(needKorean: true), valueList: [:], onboardingDefaultImageData: viewModel.selectedImage, introduceText: viewModel.introduceText, showProfileViewType: .onboarding)
                 photoView
                     .padding(.bottom, 20)
                 HStack {
@@ -66,7 +66,7 @@ struct OnboardingCompleteView: View {
     
     var editProfileButton: some View {
         Button {
-            let userAccount = ProfileEditUserAccount(educationType: viewModel.makeEducationType()?.korean ?? "", educationDetail: viewModel.schoolName, jobType: viewModel.makeJobType()?.korean ?? "", jobDetail: viewModel.jobDetail, address: viewModel.makeLocation())
+            guard let userAccount = viewModel.makeOnboardingCompleteData() else { return }
             appState.onboardingPath.append(Onboarding.profileEdit(userData: userAccount))
         } label: {
             Text("프로필 편집")
@@ -86,7 +86,6 @@ struct OnboardingCompleteView: View {
             Task {
                 await viewModel.postUserData()
             }
-            
         } label: {
             Text("확인 완료")
                 .font(.pixel(16))

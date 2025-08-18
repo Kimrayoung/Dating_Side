@@ -12,6 +12,7 @@ struct NicknameInputView: View {
     @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = false
     @FocusState private var nicknameFocusField: Bool
+    @State private var showToastPopup: Bool = false
     var originalNickname: String? = nil
     
     var body: some View {
@@ -34,13 +35,19 @@ struct NicknameInputView: View {
                 .padding(.top, 72)
             Spacer()
             Button(action: {
-                if viewModel.nicknameInput.isEmpty {
+                if viewModel.nicknameInput != "" && (viewModel.nicknameInput.count >= 2 && viewModel.nicknameInput.count <= 10) {
+                    possibleNext = true
+                } else if viewModel.nicknameInput.count < 2 || viewModel.nicknameInput.count > 10 {
+                    showToastPopup = true
                     return
                 }
                 nicknameFocusField = false
                 if viewModel.isOnboarding == .onboarding {
                     appState.onboardingPath.append(Onboarding.birth)
-                } else if viewModel.isOnboarding == .mypageEdit {
+                } else if viewModel.isOnboarding == .onboardingEdit {
+                    appState.onboardingPath.removeLast()
+                }
+                else if viewModel.isOnboarding == .mypageEdit {
                     Task {
                         await viewModel.updateNickname()
                     }
@@ -51,8 +58,14 @@ struct NicknameInputView: View {
             .padding(.bottom)
             .padding(.horizontal, 24)
         })
+        .customToastPopup(isPresented: $showToastPopup, title: "닉네임을 확인해주세요", message: "글자수는 최소 2자 최대 10자 입니다.")
+        .onAppear(perform: {
+            if viewModel.nicknameInput != "" {
+                possibleNext = true
+            }
+        })
         .onChange(of: viewModel.nicknameInput, { oldValue, newValue in
-            if newValue != "" {
+            if newValue != "" && (newValue.count >= 2 && newValue.count <= 10) {
                 possibleNext = true
             }
         })

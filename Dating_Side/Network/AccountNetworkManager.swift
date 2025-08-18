@@ -129,6 +129,12 @@ extension AccountAPIManager: APIManager {
         case .postUserProfileData(let signupData, _):
             return signupData
         case .patchUserProfileData(let userData, _):
+            if let userStringData = String(data: userData, encoding: .utf8) {
+                Log.debugPrivate("patchUserProfileData", userStringData)
+            } else {
+                Log.debugPrivate("patchUserProfileData 실패")
+            }
+            
             return userData
         default: return nil
         }

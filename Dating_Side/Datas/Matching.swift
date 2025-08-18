@@ -24,7 +24,13 @@ struct UserImage: Codable {
 }
 
 struct MatchingStatusResponse: Codable {
-    let result: Bool
+    let matchingStatus: String
+    let scoreFromPartner: PartnerEvaluation
+}
+
+struct PartnerEvaluation: Codable {
+    let score: Int
+    let comment: String
 }
 
 struct MatchingAccountResponse: Codable {

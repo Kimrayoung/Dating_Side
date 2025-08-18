@@ -258,26 +258,21 @@ extension AccountViewModel {
         return userImageData
     }
     
-//    func makeOnboardingCompleteData() -> UserAccount? {
-//        guard let educationType = makeEducationType() else { return nil }
-//        guard let jobType = makeJobType() else { return nil }
-//        
-//        let location = makeLocation()
-//        let birthDate = makeBirthDate()
-//        let height = makeHeight()
-//        let selectedBefore = makeBeforePreference()
-//        let selectedAfter = makeAfterPreference()
-//        guard let lifeStyle = makeLifeStyle() else { return nil }
-//        guard let educationType = makeEducationType()?.rawValue else { return nil }
-//        guard let jobType = makeJobType()?.type else { return nil }
-//        
-//        return UserAccount(id: 0, phoneNumber: "", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, keyword: "", educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, profileImageURL: "", profileImageURLByDay: ProfileImageURLByDay(daySecond: "", dayFourth: "", daySixth: ""), introduction: "", mannerTemperature: 0)
-//    }
+    func makeOnboardingCompleteData() -> ProfileEditUserAccount? {
+        return ProfileEditUserAccount(educationType: makeEducationType()?.korean ?? "", educationDetail: schoolName, jobType: makeJobType()?.korean ?? "", jobDetail: jobDetail, address: makeLocation())
+    }
+    
+    func makeRandomNumber() -> String {
+        let unique = Array(0...9).shuffled().prefix(4)
+        let uniqueString = unique.map { String($0) }
+        return uniqueString.joined()
+    }
     
     /// signup api에 보낼 데이터 만들기
     func makeSignupRequest() -> SignUpRequest? {
         guard let socialType = socialType?.rawValue, let socialId = socialId else { return nil }
-        let location = makeLocation()
+        guard let locationSelected = locationSelected, let detailLocationSelected = detailLocationSelected else { return nil }
+        
         let birthDate = makeBirthDate()
         let height = makeHeight()
         let selectedBefore = makeBeforePreference()
@@ -289,8 +284,10 @@ extension AccountViewModel {
         
         // 선택된 민감 정보 파악하기
         guard let lifeStyle = makeLifeStyle() else { return nil }
+        let tempPhoneNumber1 = makeRandomNumber()
+        let tempPhoneNumber2 = makeRandomNumber()
 
-        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-1155-3585", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, activeRegion: location, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "socialId")
+        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-\(tempPhoneNumber1)-\(tempPhoneNumber2)", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, districtRegion: locationSelected.addrName, cityRegion: detailLocationSelected.addrName, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "socialId")
         
         return signUpRequest
     }
@@ -316,7 +313,7 @@ extension AccountViewModel {
     
     func updateNickname() async {
         let updateNickname: [String : Any] = [
-            PatchUserType.nickname.rawValue : nicknameInput,
+            PatchUserType.nickName.rawValue : nicknameInput,
                                                 ]
         await patchUserAccountData(userPatchData: updateNickname)
     }

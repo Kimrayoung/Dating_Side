@@ -33,7 +33,8 @@ struct JobEditView: View {
                     Task {
                         await viewModel.updateJob(jobType: jobType, jobDetail: viewModel.jobDetail)
                     }
-                    
+                } else if viewModel.isOnboarding == .onboardingEdit {
+                    appState.onboardingPath.removeLast()
                 }
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)

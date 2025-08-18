@@ -14,6 +14,7 @@ struct PreferenceKeywordsEditView: View {
     @State var preferenceType: PreferenceType = .before
     var beforePreferences: [String] = []
     var afterPreferences: [String] = []
+    var isOnboarding: Bool = false
     
     var body: some View {
         VStack {
@@ -63,8 +64,16 @@ struct PreferenceKeywordsEditView: View {
             }
         }
         .task {
-            await viewModel.fetchPreferenceType(preferenceType: .before, preferences: beforePreferences)
-            await viewModel.fetchPreferenceType(preferenceType: .after, preferences: afterPreferences)
+            if isOnboarding {
+                let beforePreferences = viewModel.makeBeforePreference()
+                let afterPreferences = viewModel.makeAfterPreference()
+                await viewModel.fetchPreferenceType(preferenceType: .before, preferences: beforePreferences)
+                await viewModel.fetchPreferenceType(preferenceType: .after, preferences: afterPreferences)
+            } else {
+                await viewModel.fetchPreferenceType(preferenceType: .before, preferences: beforePreferences)
+                await viewModel.fetchPreferenceType(preferenceType: .after, preferences: afterPreferences)
+            }
+            
         }
     }
 }
