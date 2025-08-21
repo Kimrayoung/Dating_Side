@@ -25,7 +25,8 @@ struct ChatListView: View {
     var body: some View {
         VStack {
             formme
-            tome
+//            tome
+            matchingSuccessImageView
         }
         .toolbar(content: {
             ToolbarItem(placement: .topBarLeading) {
@@ -127,6 +128,69 @@ struct ChatListView: View {
         }, label: {
             ProfileMiniView(isDefault: false, userImageURL: imageUrl, userName: profileName, userType: userType)
         })
+    }
+    
+    var matchingSuccessImageView: some View {
+        VStack {
+            Text("윈터님과 매칭 된 지 1일차")
+                .font(.pixel(20))
+                .foregroundStyle(Color.blackColor)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 24)
+            Text("상대의 의미있는 순간들 입니다:) 깊은 대화에 도움이 될거에요.")
+                .font(.pixel(12))
+                .foregroundStyle(Color.gray3)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding([.leading, .bottom], 24)
+            ZStack {
+                sixthDayImage
+                forthDayImage
+                secondDayImage
+                firstDayImage
+            }
+        }
+    }
+    
+    var firstDayImage: some View {
+        ZStack {
+            VStack {
+                Spacer()
+                Text("2일차 부터\n상대의 사진이 보여요")
+                    .font(.pixel(16))
+                    .foregroundStyle(Color.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.trailing, 70)
+                Spacer()
+            }
+            Image("matchingAdditioanlFirstImage")
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 9.57)
+                .fill(Color.mainColor)
+        )
+        .frame(width: 240, height: 360)
+            
+    }
+    
+    var secondDayImage: some View {
+        RoundedRectangle(cornerRadius: 9.57)
+            .fill(Color.subColor)
+            .frame(width: 240, height: 360)
+            .padding(.leading, 16)
+    }
+    
+    var forthDayImage: some View {
+        RoundedRectangle(cornerRadius: 9.57)
+            .fill(Color.subColor1)
+            .frame(width: 240, height: 360)
+            .padding(.leading, 32)
+    }
+    
+    var sixthDayImage: some View {
+        RoundedRectangle(cornerRadius: 9.57)
+            .fill(Color.subColor2)
+            .frame(width: 240, height: 360)
+            .padding(.leading, 48)
     }
     
 }

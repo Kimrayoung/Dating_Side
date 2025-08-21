@@ -687,7 +687,6 @@
 				4D90B83E2E51ACC000323D8B /* MatchingProfileCheckView.swift */,
 				4D86FD482E37D3B300CD1687 /* MatchingAnswerView.swift */,
 				4DEB5A6C2E0AD412009BE55B /* CoupleMatchingView.swift */,
-				4D6119562D75B20B00715B9E /* ChatListView.swift */,
 				4D0122A02DEC812E003E72B0 /* MathcingQuestionListView.swift */,
 				4DF855742DFEE5AF00D429F6 /* MatchingAnswerCompleteView.swift */,
 				4DF855782DFF03C200D429F6 /* MatchingFailView.swift */,
@@ -734,6 +733,7 @@
 				4DDF23632E0C29CB006A0096 /* ChatingView.swift */,
 				4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */,
 				4DFAFB992E1435AF006E3B5F /* Tempchat.swift */,
+				4D6119562D75B20B00715B9E /* ChatListView.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
