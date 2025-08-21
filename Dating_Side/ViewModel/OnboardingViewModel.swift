@@ -348,18 +348,16 @@ extension AccountViewModel {
     }
     
     /// 선호키워드 업데이트
-    func updatePreference(preferenceType: PreferenceType) async {
+    func updatePreference() async {
         var updatePreference: [String : Any] = [:]
-        
-        switch preferenceType {
-        case .before:
-            let selectedBefore = makeBeforePreference()
-            updatePreference = [PatchUserType.beforePreferenceTypeList.rawValue : selectedBefore]
-        case .after:
-            let selectedAfter = makeAfterPreference()
-            updatePreference = [PatchUserType.afterPreferenceTypeList.rawValue : selectedAfter]
-        }
+        let selectedBefore = makeBeforePreference()
+        let selectedAfter = makeAfterPreference()
 
+        updatePreference = [
+            PatchUserType.beforePreferenceTypeList.rawValue: selectedBefore,
+            PatchUserType.afterPreferenceTypeList.rawValue: selectedAfter
+        ]
+        Log.debugPublic("selecte Before", updatePreference)
         await patchUserAccountData(userPatchData: updatePreference)
     }
     

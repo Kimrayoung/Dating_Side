@@ -12,6 +12,7 @@ struct PreferenceKeywordsEditView: View {
     @ObservedObject var viewModel: AccountViewModel
     
     @State var preferenceType: PreferenceType = .before
+    @State var possibleNext: Bool = true
     var beforePreferences: [String] = []
     var afterPreferences: [String] = []
     var isOnboarding: Bool = false
@@ -23,7 +24,7 @@ struct PreferenceKeywordsEditView: View {
                     if preferenceType == .before {
                         return
                     } else {
-                        preferenceType = .after
+                        preferenceType = .before
                     }
                 } label: {
                     Image("leftWhiteArrow")
@@ -43,10 +44,11 @@ struct PreferenceKeywordsEditView: View {
                         .padding(.bottom, 36)
                 }
                 Button {
-                    if preferenceType == .after {
-                        return
+                    Log.debugPublic("here")
+                    if preferenceType == .before {
+                        preferenceType = .after
                     } else {
-                        preferenceType = .before
+                        return
                     }
                 } label: {
                     Image("rightWhiteArrow")
@@ -62,6 +64,7 @@ struct PreferenceKeywordsEditView: View {
             case .after:
                 AfterPreferenceKeywordComponent(viewModel: viewModel)
             }
+            saveButton
         }
         .task {
             if isOnboarding {
@@ -76,6 +79,23 @@ struct PreferenceKeywordsEditView: View {
             
         }
     }
+    
+    var saveButton: some View {
+        Button {
+            if isOnboarding {
+                
+            } else {
+                Task {
+                    await viewModel.updatePreference()
+                }
+                
+            }
+        } label: {
+            SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+        }
+
+    }
+    
 }
 
 #Preview {

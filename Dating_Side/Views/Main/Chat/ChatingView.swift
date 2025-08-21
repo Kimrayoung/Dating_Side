@@ -59,7 +59,9 @@ struct ChatingView: View {
             // 입력창
             sendTextField
         }
-        
+        .onTapGesture {
+            UIApplication.shared.hideKeyboard()
+        }
         .sheet(isPresented: $showProfile, content: {
             PartnerProfileView(profileShow: $showProfile, needMathcingRequest: false)
                 .presentationDetents([.fraction(0.99)])
