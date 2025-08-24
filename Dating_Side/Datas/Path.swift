@@ -95,3 +95,8 @@ enum OnChatProfilePath: Hashable {
     case profileMain
     case profileValueList(valueType: String, valueDataList: [Answer]) // Changed for ProfileView type match
 }
+
+enum Chating: Hashable {
+    case chatList
+    case chatRoom(roomId: String)
+}

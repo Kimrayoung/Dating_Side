@@ -122,6 +122,10 @@
 		4DB5B3172D903D600060D4C6 /* JobDetailInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3162D903D600060D4C6 /* JobDetailInputView.swift */; };
 		4DB5B3192D9045AF0060D4C6 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3182D9045AF0060D4C6 /* CustomAlert.swift */; };
 		4DC7DD9B2E4A2C770052FECB /* AnswerCompleteMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7DD9A2E4A2C6D0052FECB /* AnswerCompleteMainView.swift */; };
+		4DC7E9A32E5AD3CF00823DC3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A22E5AD3CF00823DC3 /* GoogleService-Info.plist */; };
+		4DC7E9A52E5ADFC500823DC3 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A42E5ADFC500823DC3 /* WebSocketManager.swift */; };
+		4DC7E9A72E5AE18800823DC3 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A62E5AE18800823DC3 /* ChatViewModel.swift */; };
+		4DC7E9A92E5B462300823DC3 /* ChatingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A82E5B461900823DC3 /* ChatingRootView.swift */; };
 		4DCB1A662D759FF300676BCE /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB1A652D759FF300676BCE /* Global.swift */; };
 		4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB1A672D75A14700676BCE /* UserProfileField.swift */; };
 		4DCB70582DA80C10006C120C /* OneDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB70572DA80C10006C120C /* OneDigitTextField.swift */; };
@@ -130,7 +134,7 @@
 		4DD577582D7EC638001B0ED5 /* SMSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD577572D7EC638001B0ED5 /* SMSViewModel.swift */; };
 		4DDF23642E0C29CB006A0096 /* ChatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDF23632E0C29CB006A0096 /* ChatingView.swift */; };
 		4DEB5A6D2E0AD412009BE55B /* CoupleMatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEB5A6C2E0AD412009BE55B /* CoupleMatchingView.swift */; };
-		4DEB5A6F2E0AD56D009BE55B /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEB5A6E2E0AD56D009BE55B /* Message.swift */; };
+		4DEB5A6F2E0AD56D009BE55B /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEB5A6E2E0AD56D009BE55B /* Chat.swift */; };
 		4DEB5A712E0ADACB009BE55B /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEB5A702E0ADACB009BE55B /* Date+Ext.swift */; };
 		4DF329D92D87157F00DBB823 /* CustomRounedGradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329D82D87157F00DBB823 /* CustomRounedGradientProgressBar.swift */; };
 		4DF329DB2D87170300DBB823 /* NicknameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF329DA2D87170300DBB823 /* NicknameInputView.swift */; };
@@ -283,6 +287,10 @@
 		4DB5B3162D903D600060D4C6 /* JobDetailInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobDetailInputView.swift; sourceTree = "<group>"; };
 		4DB5B3182D9045AF0060D4C6 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		4DC7DD9A2E4A2C6D0052FECB /* AnswerCompleteMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerCompleteMainView.swift; sourceTree = "<group>"; };
+		4DC7E9A22E5AD3CF00823DC3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4DC7E9A42E5ADFC500823DC3 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		4DC7E9A62E5AE18800823DC3 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		4DC7E9A82E5B461900823DC3 /* ChatingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatingRootView.swift; sourceTree = "<group>"; };
 		4DCB1A652D759FF300676BCE /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		4DCB1A672D75A14700676BCE /* UserProfileField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileField.swift; sourceTree = "<group>"; };
 		4DCB70572DA80C10006C120C /* OneDigitTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneDigitTextField.swift; sourceTree = "<group>"; };
@@ -291,7 +299,7 @@
 		4DD577572D7EC638001B0ED5 /* SMSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSViewModel.swift; sourceTree = "<group>"; };
 		4DDF23632E0C29CB006A0096 /* ChatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatingView.swift; sourceTree = "<group>"; };
 		4DEB5A6C2E0AD412009BE55B /* CoupleMatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoupleMatchingView.swift; sourceTree = "<group>"; };
-		4DEB5A6E2E0AD56D009BE55B /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		4DEB5A6E2E0AD56D009BE55B /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		4DEB5A702E0ADACB009BE55B /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		4DF329D82D87157F00DBB823 /* CustomRounedGradientProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRounedGradientProgressBar.swift; sourceTree = "<group>"; };
 		4DF329DA2D87170300DBB823 /* NicknameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameInputView.swift; sourceTree = "<group>"; };
@@ -402,6 +410,7 @@
 				4DD577572D7EC638001B0ED5 /* SMSViewModel.swift */,
 				4D3AD6E52DE4A99B00436A4B /* ProfileViewModel.swift */,
 				4D33EA182E0995B600B2661B /* ChatListViewModel.swift */,
+				4DC7E9A62E5AE18800823DC3 /* ChatViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -430,6 +439,7 @@
 		4D6119662D75D92100715B9E /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				4DC7E9A82E5B461900823DC3 /* ChatingRootView.swift */,
 				4D86FD422E37ABDB00CD1687 /* MyPageRootView.swift */,
 				4D61195C2D75B2A300715B9E /* OnboardingContainerView.swift */,
 				4D61195A2D75B24300715B9E /* MainContainerView.swift */,
@@ -511,7 +521,7 @@
 				4DCB1A652D759FF300676BCE /* Global.swift */,
 				4D0B3BE42DA6B47F006206F1 /* SMSandLogin.swift */,
 				4D3AD6E72DE4AA2600436A4B /* Profile.swift */,
-				4DEB5A6E2E0AD56D009BE55B /* Message.swift */,
+				4DEB5A6E2E0AD56D009BE55B /* Chat.swift */,
 			);
 			path = Datas;
 			sourceTree = "<group>";
@@ -545,6 +555,7 @@
 				4D0B3BE22DA6B05D006206F1 /* LoginNetworkManager.swift */,
 				4D6D18762D6358A700698E5D /* NetworkManager.swift */,
 				4D6D18782D6358C700698E5D /* APIManager.swift */,
+				4DC7E9A42E5ADFC500823DC3 /* WebSocketManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -592,6 +603,7 @@
 		4D95FAC22D5A1DED00D0E4D7 = {
 			isa = PBXGroup;
 			children = (
+				4DC7E9A22E5AD3CF00823DC3 /* GoogleService-Info.plist */,
 				4DFAFBA02E16BD2E006E3B5F /* KakaoConfig.xcconfig */,
 				4D95FACD2D5A1DED00D0E4D7 /* Dating_Side */,
 				4D95FADE2D5A1DEF00D0E4D7 /* Dating_SideTests */,
@@ -858,6 +870,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D6D18632D63432200698E5D /* Moneygraphy-Rounded.ttf in Resources */,
+				4DC7E9A32E5AD3CF00823DC3 /* GoogleService-Info.plist in Resources */,
 				4D95FAD62D5A1DEE00D0E4D7 /* Preview Assets.xcassets in Resources */,
 				4D6D18672D63433600698E5D /* Moneygraphy-Pixel.otf in Resources */,
 				4D95FAD32D5A1DEE00D0E4D7 /* Assets.xcassets in Resources */,
@@ -925,7 +938,7 @@
 				4DFAFB972E12CB63006E3B5F /* AccountView.swift in Sources */,
 				4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */,
 				4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */,
-				4DEB5A6F2E0AD56D009BE55B /* Message.swift in Sources */,
+				4DEB5A6F2E0AD56D009BE55B /* Chat.swift in Sources */,
 				4D301E952E2E610E001FA1A1 /* PhotoPickerButton.swift in Sources */,
 				4D0B3BE52DA6B47F006206F1 /* SMSandLogin.swift in Sources */,
 				4D389C522E2CEE3D00B56F84 /* QuestionNetworkManager.swift in Sources */,
@@ -957,6 +970,7 @@
 				4DF855792DFF03C200D429F6 /* MatchingFailView.swift in Sources */,
 				4D389C2C2E1E9DB800B56F84 /* Account.swift in Sources */,
 				4D6D18792D6358C700698E5D /* APIManager.swift in Sources */,
+				4DC7E9A52E5ADFC500823DC3 /* WebSocketManager.swift in Sources */,
 				4D4056922D66160500F95ACF /* UserProfileInputView.swift in Sources */,
 				4D8353232E3F8A230031B0ED /* OnboardingCompleteView.swift in Sources */,
 				4D389C482E2A46CC00B56F84 /* ProfileForthDayImageView.swift in Sources */,
@@ -1009,11 +1023,13 @@
 				4D5E45A12E3F4DBF00A3B60C /* JobEditView.swift in Sources */,
 				4D6D186C2D6353E600698E5D /* Service.swift in Sources */,
 				4D8353252E40F9C80031B0ED /* BeforePreferenceKeywordComponent.swift in Sources */,
+				4DC7E9A72E5AE18800823DC3 /* ChatViewModel.swift in Sources */,
 				4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */,
 				4D8353312E4701210031B0ED /* MatchingNetworkManager.swift in Sources */,
 				4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */,
 				4D61195D2D75B2A300715B9E /* OnboardingContainerView.swift in Sources */,
 				4DF855772DFEEF6B00D429F6 /* BottomSheet.swift in Sources */,
+				4DC7E9A92E5B462300823DC3 /* ChatingRootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1197,7 +1213,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.02;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1232,7 +1248,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.02;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

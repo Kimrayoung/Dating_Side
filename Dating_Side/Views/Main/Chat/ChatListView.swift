@@ -20,13 +20,13 @@ struct ChatListView: View {
             GridItem(.flexible())
         ]
     
-    let toMeArr: [TomeUserProfile] = [TomeUserProfile(userName: "user1", userImage: "https://picsum.photos/200/300", userType: "따뜻하게 배려하는 연애"), TomeUserProfile(userName: "user2", userImage: "https://picsum.photos/200/300", userType: "따뜻하게 배려하는 연애"), TomeUserProfile(userName: "user3", userImage: "https://picsum.photos/200/300", userType: "따뜻하게 배려하는 연애"), TomeUserProfile(userName: "user4", userImage: "https://picsum.photos/200/300", userType: "따뜻하게 배려하는 연애"), TomeUserProfile(userName: "user5", userImage: "https://picsum.photos/200/300", userType: "따뜻하게 배려하는 연애"), TomeUserProfile(userName: "user6", userImage: "https://picsum.photos/200/300", userType: "따뜻하게 배려하는 연애")]
+    @State var toMeArr: [AttractionAccount] = []
     
     var body: some View {
         VStack {
             formme
-//            tome
-            matchingSuccessImageView
+            tome
+//            matchingSuccessImageView
         }
         .toolbar(content: {
             ToolbarItem(placement: .topBarLeading) {
@@ -41,6 +41,9 @@ struct ChatListView: View {
                 })
             }
         })
+        .task {
+            toMeArr = await viewModel.senderAttraction()
+        }
     }
     
     // 내가 다가간 사람
@@ -112,7 +115,7 @@ struct ChatListView: View {
                 ScrollView {
                     LazyVGrid(columns: columns, content: {
                         ForEach(toMeArr, id: \.self) { userProfile in
-                            ProfileMiniView(isDefault: false, userImageURL: userProfile.userImage, userName: userProfile.userName, userType: userProfile.userType, widthSize: (UIScreen.main.bounds.width - (24 * 2)) / 2, heightSize: 160)
+                            ProfileMiniView(isDefault: false, userImageURL: userProfile.profileImageURL, userName: userProfile.nickName, userType: userProfile.keyword, widthSize: (UIScreen.main.bounds.width - (24 * 2)) / 2, heightSize: 160)
                         }
                     })
                 }

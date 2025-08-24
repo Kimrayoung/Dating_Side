@@ -66,7 +66,7 @@ class AppState: ObservableObject {
                 switch result {
                 case .success:
                     Log.infoPrivate("로그인 성공", socialType, token)
-                    onAuthenticated()
+                    await onAuthenticated()
                 case .failure(let error):
                     if case let APIError.serverError(code) = error {
                         Log.infoPrivate("서버 에러 발생🔥: \(code)", token)
@@ -133,11 +133,13 @@ class AppState: ObservableObject {
         currentScreen = .login
     }
     
-    func onAuthenticated() {
+    @MainActor
+    func onAuthenticated() async {
         isLoggedIn = true
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
         currentScreen = .main
         onboardingPath = NavigationPath()
+        await ProfileViewModel().fetchUserAccountData()
         let accessToken = KeychainManager.shared.getAccessToken()
         Log.debugPrivate("accessToken checking", accessToken)
     }

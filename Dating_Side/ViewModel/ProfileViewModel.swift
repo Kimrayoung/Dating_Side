@@ -60,12 +60,14 @@ extension ProfileViewModel {
         defer {
             loadingManager.isLoading = false
         }
+        
         do {
             let result = try await profileNetworkManager.fetchUserAccount()
             
             switch result {
             case .success(let userData):
                 self.userData = userData
+                UserDefaults.standard.set(userData.id, forKey: "userId")
                 Log.debugPrivate("유저 정보: ", userData)
                 
             case .failure(let error):

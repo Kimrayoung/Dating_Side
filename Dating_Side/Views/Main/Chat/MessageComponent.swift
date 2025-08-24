@@ -11,10 +11,11 @@ import SwiftUI
 struct MessageBubble: View {
     @Binding var showProfile: Bool
     let message: ChatMessage
+    let userID = UserDefaults.standard.integer(forKey: "userId")
     
     var body: some View {
         HStack {
-            if !message.isCurrentUser { // 상대방 프로필 (본인의 프로필은 보이지 않음)
+            if message.sender != userID { // 상대방 프로필 (본인의 프로필은 보이지 않음)
                 Circle()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: 40, height: 40)
@@ -26,16 +27,15 @@ struct MessageBubble: View {
                         showProfile.toggle()
                         
                     }
-                
             }
-            Text(message.text)
+            Text(message.content)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)
                 .background(
                     RoundedRectangle(cornerRadius: 18)
-                        .fill(message.isCurrentUser ? Color.mainColor : Color.subColor)
+                        .fill(message.sender == userID ? Color.mainColor : Color.subColor)
                 )
-                .foregroundColor(message.isCurrentUser ? .white : .primary)
+                .foregroundColor(message.sender == userID ? .white : .primary)
                 
         }
     }
@@ -45,11 +45,12 @@ struct MessageBubble: View {
 struct MessageRow: View {
     let message: ChatMessage
     let showTimestamp: Bool
+    let userID = UserDefaults.standard.integer(forKey: "userId")
     @Binding var showProfile: Bool
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 4) {
-            if message.isCurrentUser {
+            if message.sender ==  userID {
                 Spacer()
                 MessageBubble(showProfile: $showProfile, message: message)
                     .offset(x: showTimestamp ? -40 : 0)

@@ -8,6 +8,8 @@
 import Foundation
 
 final class ChatListViewModel: ObservableObject {
+    let loadingManager = LoadingManager.shared
+    let attractionNetwork = AttractionNetworkManager()
     @Published var timeString: String = "24:00"
     var timer: Timer?
     var totalSeconds: Int = 24 * 60 * 60
@@ -38,5 +40,53 @@ final class ChatListViewModel: ObservableObject {
         let minutes = (totalSeconds % 3600) / 60
         
         timeString = String(format: "%02d:%02d", hours, minutes)
+    }
+}
+
+extension ChatListViewModel {
+   
+    
+    @MainActor
+    /// 내게 다가온 사람 조회
+    func senderAttraction() async -> [AttractionAccount] {
+        loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await attractionNetwork.senderAttraction()
+            switch result {
+            case .success(let userAccount):
+                Log.debugPublic("내게 다가온 사람 프로필", userAccount)
+                return userAccount.result
+            case .failure(let failure):
+                Log.debugPublic(failure.localizedDescription)
+            }
+        } catch {
+            Log.debugPublic(error.localizedDescription)
+        }
+        return []
+    }
+    
+    @MainActor
+    /// 내가 다가간 사람 조회
+    func receiverAttraction() async {
+        loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await attractionNetwork.receiverAttraction()
+            switch result {
+            case .success(let userAccount):
+                Log.debugPublic("내가 다가간 사람 프로필", userAccount)
+            case .failure(let error):
+                Log.debugPublic(error.localizedDescription)
+            }
+        } catch {
+            Log.debugPublic(error.localizedDescription)
+        }
     }
 }

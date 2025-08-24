@@ -229,7 +229,7 @@ struct AttractionAccountResponse: Codable {
 }
 
 /// 내게 다가온 사람 & 내가 다가간 사람
-struct AttractionAccount: Codable {
+struct AttractionAccount: Codable, Hashable {
     let id: Int
     let nickName, birthYear: String
     let height: Int

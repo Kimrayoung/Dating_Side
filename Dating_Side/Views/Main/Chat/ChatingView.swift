@@ -7,19 +7,14 @@
 
 import SwiftUI
 
-// MARK: - 채팅 뷰
 struct ChatingView: View {
     @EnvironmentObject private var appState: AppState
+    @StateObject private var vm = ChatViewModel(roomId: "1234") // 실제 서버로 교체
+
     let buttonTitles: [String] = ["아주 좋아요", "좋아요", "보통이에요", "별로에요", "최악이에요"]
     let buttonColors: [Color] = [.mainColor, .subColor2, .gray01, .gray2, .gray3]
-    @State private var username: String = "user"
-    @State private var messages: [ChatMessage] = [
-        ChatMessage(text: "안녕하세요^^", isCurrentUser: false, timestamp: Date().addingTimeInterval(-300)),
-        ChatMessage(text: "반가워요! 테스트 중입니다.\n멀티라인 테스트", isCurrentUser: true, timestamp: Date().addingTimeInterval(-240)),
-        ChatMessage(text: "넵 확인했습니다!", isCurrentUser: false, timestamp: Date().addingTimeInterval(-180)),
-        ChatMessage(text: "좋아요~", isCurrentUser: true, timestamp: Date().addingTimeInterval(-120)),
-    ]
 
+    @State private var username: String = "user"
     @State private var showTimestamps = false
     @State private var messageText = ""
     @State private var showProfile: Bool = false
@@ -27,14 +22,27 @@ struct ChatingView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            ScrollViewReader { _ in
+            ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(spacing: 12) {
-                        ForEach(messages) { message in
-                            MessageRow(message: message, showTimestamp: showTimestamps, showProfile: $showProfile)
+                        ForEach(vm.messages) { message in
+                            MessageRow(
+                                message: message,
+                                showTimestamp: showTimestamps,
+                                showProfile: $showProfile
+                            )
+                            .id(message.id)
                         }
                     }
                     .padding(.top)
+                }
+                .onChange(of: vm.messages) { _, newValue in
+                    // 마지막 메시지로 스크롤
+                    if let last = newValue.last {
+                        withAnimation {
+                            proxy.scrollTo(last.id, anchor: .bottom)
+                        }
+                    }
                 }
             }
             .gesture(
@@ -44,32 +52,27 @@ struct ChatingView: View {
                     }
                     .onChanged { value in
                         if value.translation.width < -30 {
-                            withAnimation {
-                                showTimestamps = true
-                            }
+                            withAnimation { showTimestamps = true }
                         }
                     }
                     .onEnded { _ in
-                        withAnimation {
-                            showTimestamps = false
-                        }
+                        withAnimation { showTimestamps = false }
                     }
             )
 
-            // 입력창
             sendTextField
         }
-        .onTapGesture {
-            UIApplication.shared.hideKeyboard()
-        }
-        .sheet(isPresented: $showProfile, content: {
+        .onAppear { vm.connect() }
+        .onDisappear { vm.disconnect() }
+        .onTapGesture { UIApplication.shared.hideKeyboard() }
+        .sheet(isPresented: $showProfile) {
             PartnerProfileView(profileShow: $showProfile, needMathcingRequest: false)
                 .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
-        })
+        }
     }
-    
+
     var sendTextField: some View {
         ZStack {
             TextField("메세지 보내기", text: $messageText)
@@ -85,26 +88,20 @@ struct ChatingView: View {
             .padding(.top, 3)
             .padding(.bottom, 3)
             .frame(maxWidth: .infinity, alignment: .trailing)
-            
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        
     }
 
     private func sendMessage() {
-        guard !messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-
-        let newMessage = ChatMessage(
-            text: messageText,
-            isCurrentUser: true,
-            timestamp: Date()
-        )
-
-        messages.append(newMessage)
+        let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        let userID = UserDefaults.standard.integer(forKey: "userId")
+        vm.send(content: text, sender: userID)   // 0 = 나
         messageText = ""
     }
-    
+
+    // (옵션) 하단 만족도 영역 – 필요 시 원하는 곳에 배치
     var afterAssessment: some View {
         VStack {
             Text("[\(username)님과 대화는 어땠나요?]")
@@ -116,20 +113,18 @@ struct ChatingView: View {
             }
         }
     }
-    
+
     func assessmentBtn(_ title: String, _ index: Int) -> some View {
         Button(action: {
-            
-        }, label: {
+            // TODO: 후속 처리
+        }) {
             Text(title)
                 .font(.pixel(12))
                 .foregroundStyle(Color.whiteColor)
-        })
+        }
         .background(buttonColors[index])
     }
-    
 }
-
 
 #Preview {
     ChatingView()
@@ -143,10 +138,10 @@ struct MyTextFieldStyle: TextFieldStyle {
             .padding(.top, 3)
             .padding(.bottom, 4)
             .frame(height: 43)
-        .background(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.gray0)
-        )
-        .padding(.vertical)
+            .background(
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(Color.gray0)
+            )
+            .padding(.vertical)
     }
 }

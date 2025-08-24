@@ -579,7 +579,7 @@ extension AccountViewModel {
             switch result {
             case .success(let result):
                 Log.debugPublic("유저 정보 저장 성공", result)
-                appState.onAuthenticated()
+                await appState.onAuthenticated()
             case .failure(let error):
                 Log.networkPublic("유저 정보 저장 실패", error)
             }

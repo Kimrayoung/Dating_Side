@@ -19,7 +19,7 @@ struct MainContainerView: View {
     var body: some View {
         TabView(selection: $selection) {
             NavigationStack(path: $appState.chatPath) {
-                ChatingView()
+                ChatingRootView()
             }
             .tabItem {
                 Label("채팅", image: selection == 0 ? "chatSelected" : "chatNotSelected")

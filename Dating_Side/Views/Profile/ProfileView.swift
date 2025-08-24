@@ -237,7 +237,7 @@ struct ProfileView: View {
             Text("자기소개")
                 .font(.pixel(13))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            TextEditor(text: .constant(introduceText ?? "sss"))
+            TextEditor(text: .constant(introduceText ?? ""))
                 .font(.pixel(12)) // .pixel(12)이 커스텀 폰트라면 이렇게 적용
                 .frame(height: 200)
                 .frame(maxWidth: .infinity)

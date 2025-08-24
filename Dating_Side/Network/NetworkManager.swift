@@ -33,7 +33,7 @@ final class NetworkManager: NetworkProtocol {
     func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes = .success) async -> Result<Value, Error> where Value: Decodable {
         do {
             let request = try endpoint.urlRequest(baseURL: BASE_URL)
-
+            Log.debugPublic("request", request.url)
             let (data, response) = try await session.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse,

@@ -15,17 +15,17 @@ struct AttractionNetworkManager {
     }
     
     /// 내가 다가가기
-    func attraction(attraction: PartnerRequest) async -> Result<VoidResponse, Error> {
+    func attraction(attraction: PartnerRequest) async throws -> Result<VoidResponse, Error> {
         return await networkManager.callWithAsync(endpoint: AttractionAPIManager.attraction(attraction: attraction), httpCodes: .success)
     }
     
     /// 내게 다가온 사람 조회
-    func senderAttraction() async -> Result<AttractionAccountResponse, Error> {
+    func senderAttraction() async throws -> Result<AttractionAccountResponse, Error> {
         return await networkManager.callWithAsync(endpoint: AttractionAPIManager.senderAttraction, httpCodes: .success)
     }
     
     /// 내가 다가간 사람 조회
-    func receiverAttraction() async -> Result<AttractionAccountResponse, Error> {
+    func receiverAttraction() async throws -> Result<AttractionAccountResponse, Error> {
         return await networkManager.callWithAsync(endpoint: AttractionAPIManager.senderAttraction, httpCodes: .success)
     }
 }
@@ -42,11 +42,11 @@ enum AttractionAPIManager {
 extension AttractionAPIManager: APIManager {
     var path: String {
         switch self {
-        case .attraction: return "/attraction"
+        case .attraction: return "attraction"
         case .receiverAttraction:
-            return "/attraction/receiver"
+            return "attraction/receiver"
         case .senderAttraction:
-            return "/attraction/sender"
+            return "attraction/sender"
         }
     }
     
@@ -59,6 +59,7 @@ extension AttractionAPIManager: APIManager {
     
     var headers: [String : String]? {
         let accessToken = KeychainManager.shared.getAccessToken()
+        Log.debugPublic("accessToken", accessToken)
         return [
             "Content-Type" : "application/json",
             "Authorization" : "Bearer " + accessToken

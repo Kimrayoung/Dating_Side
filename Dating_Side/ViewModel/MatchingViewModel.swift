@@ -43,6 +43,7 @@ final class MatchingViewModel: ObservableObject {
 
 extension MatchingViewModel {
     /// 내가 다가가기
+    @MainActor
     func attraction(matchingPartnerAccount: PartnerAccount?) async {
         loadingManager.isLoading = true
         defer {
@@ -51,51 +52,15 @@ extension MatchingViewModel {
         guard let matchingPartnerAccount = matchingPartnerAccount else { return }
         let PartnerRequest = PartnerRequest(partnerId: matchingPartnerAccount.id)
         do {
-            let result = await attractionNetwork.attraction(attraction: PartnerRequest)
+            let result = try await attractionNetwork.attraction(attraction: PartnerRequest)
             switch result {
             case .success:
                 Log.debugPublic("result true")
             case .failure(let error):
                 Log.debugPublic("result error: \(error.localizedDescription)")
             }
-        }
-    }
-    
-    @MainActor
-    /// 내게 다가온 사람 조회
-    func senderAttraction() async {
-        loadingManager.isLoading = true
-        defer {
-            loadingManager.isLoading = false
-        }
-        
-        do {
-            let result = await attractionNetwork.senderAttraction()
-            switch result {
-            case .success(let userAccount):
-                Log.debugPublic("내게 다가온 사람 프로필", userAccount)
-            case .failure(let failure):
-                Log.debugPublic(failure.localizedDescription)
-            }
-        }
-    }
-    
-    @MainActor
-    /// 내가 다가간 사람 조회
-    func receiverAttraction() async {
-        loadingManager.isLoading = true
-        defer {
-            loadingManager.isLoading = false
-        }
-        
-        do {
-            let result = await attractionNetwork.receiverAttraction()
-            switch result {
-            case .success(let userAccount):
-                Log.debugPublic("내가 다가간 사람 프로필", userAccount)
-            case .failure(let error):
-                Log.debugPublic(error.localizedDescription)
-            }
+        } catch {
+            Log.debugPublic("result error: \(error.localizedDescription)")
         }
     }
     
