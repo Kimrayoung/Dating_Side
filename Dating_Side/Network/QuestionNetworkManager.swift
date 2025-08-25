@@ -69,8 +69,13 @@ extension QuestionAPIManager: APIManager {
     }
     
     var headers: [String : String]? {
-        let accessToken = KeychainManager.shared.getAccessToken()
-        Log.debugPrivate("accessToken: ", accessToken)
+        guard let accessToken = KeychainManager.shared.getAccessToken() else {
+            Log.errorPublic("accessToken이 없음")
+            AppState.shared.offAuthenticated()
+            AlertManager.shared.loginExpiredAlert()
+            return nil
+        }
+        Log.debugPublic("accessToken", accessToken)
         return [
             "Content-Type" : "application/json",
             "Authorization" : "Bearer " + accessToken

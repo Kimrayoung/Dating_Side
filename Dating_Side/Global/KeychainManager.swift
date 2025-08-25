@@ -69,7 +69,7 @@ class KeychainManager {
         return status == errSecSuccess || status == errSecItemNotFound
     }
     
-    func getAccessToken() -> String {
-        return getToken(service: "com.loveway.auth", account: "accessToken") ?? ""
+    func getAccessToken() -> String? {
+        return getToken(service: "com.loveway.auth", account: "accessToken")
     }
 }

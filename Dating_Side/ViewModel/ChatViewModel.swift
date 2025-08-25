@@ -21,7 +21,7 @@ final class ChatViewModel: ObservableObject {
     init(roomId: String) {
         self.roomId = roomId
         let accessToken = KeychainManager.shared.getAccessToken()
-        self.jwt = accessToken
+        self.jwt = accessToken ?? ""
         self.client = WebSocketClient(endpoint: "wss://donvolo.shop/api/chat", jwt: accessToken)
     }
 

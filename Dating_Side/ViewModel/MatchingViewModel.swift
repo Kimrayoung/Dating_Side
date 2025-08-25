@@ -64,26 +64,7 @@ extension MatchingViewModel {
         }
     }
     
-    @MainActor
-    /// 매칭 상태 조회
-    func fetchMatchingStauts() async {
-        loadingManager.isLoading = true
-        defer {
-            loadingManager.isLoading = false
-        }
-        
-        do {
-            let result = try await matchingNetwork.fetchMatchingStatus()
-            switch result {
-            case .success:
-                Log.debugPublic("매칭 상태 조회 성공")
-            case .failure(let error):
-                Log.errorPublic(error.localizedDescription)
-            }
-        } catch {
-            Log.errorPublic(error.localizedDescription)
-        }
-    }
+    
     
     /// 매칭 요청 -> 매칭 시도(프로필 완성 뷰)
     @MainActor

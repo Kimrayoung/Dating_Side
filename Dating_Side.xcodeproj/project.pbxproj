@@ -126,6 +126,7 @@
 		4DC7E9A52E5ADFC500823DC3 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A42E5ADFC500823DC3 /* WebSocketManager.swift */; };
 		4DC7E9A72E5AE18800823DC3 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A62E5AE18800823DC3 /* ChatViewModel.swift */; };
 		4DC7E9A92E5B462300823DC3 /* ChatingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A82E5B461900823DC3 /* ChatingRootView.swift */; };
+		4DC7E9AB2E5B4F2000823DC3 /* ChatingNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7E9AA2E5B4F1900823DC3 /* ChatingNetworkManager.swift */; };
 		4DCB1A662D759FF300676BCE /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB1A652D759FF300676BCE /* Global.swift */; };
 		4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB1A672D75A14700676BCE /* UserProfileField.swift */; };
 		4DCB70582DA80C10006C120C /* OneDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB70572DA80C10006C120C /* OneDigitTextField.swift */; };
@@ -291,6 +292,7 @@
 		4DC7E9A42E5ADFC500823DC3 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		4DC7E9A62E5AE18800823DC3 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		4DC7E9A82E5B461900823DC3 /* ChatingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatingRootView.swift; sourceTree = "<group>"; };
+		4DC7E9AA2E5B4F1900823DC3 /* ChatingNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatingNetworkManager.swift; sourceTree = "<group>"; };
 		4DCB1A652D759FF300676BCE /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		4DCB1A672D75A14700676BCE /* UserProfileField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileField.swift; sourceTree = "<group>"; };
 		4DCB70572DA80C10006C120C /* OneDigitTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneDigitTextField.swift; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 		4D6D18752D63589E00698E5D /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				4DC7E9AA2E5B4F1900823DC3 /* ChatingNetworkManager.swift */,
 				4D8353302E4701170031B0ED /* MatchingNetworkManager.swift */,
 				4D83532C2E44EAB00031B0ED /* AttractionNetworkManager.swift */,
 				4D5E45922E3F297E00A3B60C /* ReportNetworkManager.swift */,
@@ -980,6 +983,7 @@
 				4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */,
 				4DC7DD9B2E4A2C770052FECB /* AnswerCompleteMainView.swift in Sources */,
 				4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */,
+				4DC7E9AB2E5B4F2000823DC3 /* ChatingNetworkManager.swift in Sources */,
 				4D90B83D2E51A9A400323D8B /* SendQuestionModalSheet.swift in Sources */,
 				4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */,
 				4D389C352E25331800B56F84 /* NaverAuth.swift in Sources */,

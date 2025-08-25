@@ -39,7 +39,7 @@ struct MatchingAnswerCompleteView: View {
                 Spacer()
                 ProfileCheckBottomSheet(showModal: $showModal, currentHeightRatio: $bottomSheetStartHeight)
                     .sheet(isPresented: $showModal, onDismiss: {
-                        bottomSheetStartHeight = 0.45
+                        bottomSheetStartHeight = 0.5
                     }, content: {
                         // 내 프로필을 통해서 매칭 상대를 찾아야 하므로 needMatchingRequest가 true
                         PartnerProfileView(profileShow: $showModal, needMathcingRequest: true)
@@ -58,7 +58,7 @@ struct MatchingAnswerCompleteView: View {
             Image("matchingViewBg")
                 .resizable()
                 .scaledToFill()
-//                            .ignoresSafeArea()
+                .ignoresSafeArea()
         )
     }
     

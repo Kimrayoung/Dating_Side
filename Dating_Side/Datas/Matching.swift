@@ -26,6 +26,17 @@ struct UserImage: Codable {
 struct MatchingStatusResponse: Codable {
     let matchingStatus: String
     let scoreFromPartner: PartnerEvaluation
+    
+    var matchingStatusType: MatchingStatusType {
+        switch matchingStatus {
+        case "LEFT":
+            return .LEFT
+        case "MATCHED":
+            return .MATCHED
+        default:
+            return .UNMATCHED
+        }
+    }
 }
 
 struct PartnerEvaluation: Codable {
@@ -35,4 +46,11 @@ struct PartnerEvaluation: Codable {
 
 struct MatchingAccountResponse: Codable {
     let result: PartnerAccount
+}
+
+
+enum MatchingStatusType: String{
+    case UNMATCHED
+    case MATCHED
+    case LEFT
 }

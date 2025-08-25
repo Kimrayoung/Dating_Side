@@ -49,7 +49,7 @@ struct SecondMathcingView: View {
             Image("matchingViewBg")
                 .resizable()
                 .scaledToFill()
-//                .ignoresSafeArea()
+                .ignoresSafeArea()
         )
     }
 }

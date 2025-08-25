@@ -1,40 +1,45 @@
 //
-//  ReportNetworkManager.swift
+//  ChatingNetworkManager.swift
 //  Dating_Side
 //
-//  Created by 김라영 on 8/3/25.
+//  Created by 김라영 on 8/24/25.
 //
+
 import Foundation
 
-struct ReportNetworkManager {
+struct ChattingNetworkManager {
     private let networkManager: NetworkProtocol
     
     init(networkManager: NetworkProtocol = NetworkManager.shared) {
         self.networkManager = networkManager
     }
     
-    /// 유저 신고하기
-    func userReport(report: ReportRequest) async throws -> Result<VoidResponse, Error> {
-        return await networkManager.callWithAsync(endpoint: ReportAPIManager.userReport(report: report), httpCodes: .success)
+    func chatting() async throws -> Result<[ChatMessage], Error> {
+        return await networkManager.callWithAsync(endpoint: ChatingNetworkManager.chatting, httpCodes: .success)
+    }
+    
+    func chattingRoom() async throws -> Result<ChattingRoomResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: ChatingNetworkManager.chattingRoom, httpCodes: .success)
     }
 }
 
-enum ReportAPIManager {
-    case userReport(report: ReportRequest)
+enum ChatingNetworkManager {
+    case chatting
+    case chattingRoom
 }
 
-extension ReportAPIManager: APIManager {
+extension ChatingNetworkManager: APIManager {
     var path: String {
         switch self {
-        case .userReport:
-            return "report"
+        case .chatting:
+            return "chatting"
+        case .chattingRoom:
+            return "chatting/chatroom"
         }
     }
     
     var method: HTTPMethod {
-        switch self {
-        case .userReport: .post
-        }
+        return .get
     }
     
     var headers: [String : String]? {
@@ -52,10 +57,6 @@ extension ReportAPIManager: APIManager {
     }
     
     func body() throws -> Data? {
-        switch self {
-        case .userReport(let report):
-            let jsonEncoder = JSONEncoder()
-            return try jsonEncoder.encode(report)
-        }
+        return nil
     }
 }

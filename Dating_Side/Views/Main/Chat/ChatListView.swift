@@ -12,21 +12,27 @@ import Kingfisher
 struct ChatListView: View {
     @StateObject var viewModel = ChatListViewModel()
     
-    let existFromme: Bool = true
-    let imageURL: URL = URL(string: "https://picsum.photos/200/300")!
-    let fromMeName: String = "일이삼사오육칠팔"
     let columns = [
             GridItem(.flexible()),
             GridItem(.flexible())
         ]
     
+    @State var matchingStatus: MatchingStatusType? = nil
     @State var toMeArr: [AttractionAccount] = []
+    @State var formMeAccount: AttractionAccount? = nil
+    @State var chattingRoomData: ChattingRoomResponse? = nil
     
     var body: some View {
         VStack {
-            formme
-            tome
-//            matchingSuccessImageView
+            if matchingStatus == .UNMATCHED {
+                formme
+                tome
+            } else if matchingStatus == .MATCHED , let chattingRoomData = chattingRoomData {
+                matchingSimpleProfile(chattingRoomData: chattingRoomData)
+                matchingSuccessImageView
+            } else {
+                EmptyView()
+            }
         }
         .toolbar(content: {
             ToolbarItem(placement: .topBarLeading) {
@@ -43,6 +49,11 @@ struct ChatListView: View {
         })
         .task {
             toMeArr = await viewModel.senderAttraction()
+            formMeAccount = await viewModel.receiverAttraction().first
+            matchingStatus = await viewModel.fetchMatchingStauts()
+            if matchingStatus == .MATCHED {
+                chattingRoomData = await viewModel.chattingRoomRequest()
+            }
         }
     }
     
@@ -53,8 +64,8 @@ struct ChatListView: View {
                 .font(.pixel(12))
                 .foregroundStyle(Color.gray3)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            if existFromme {
-                simpleProfile
+            if let profile = formMeAccount {
+                simpleProfile(profile)
                     .padding(.vertical, 17)
             } else {
                 Text("아직 다가간 사람이 없어요")
@@ -69,23 +80,27 @@ struct ChatListView: View {
         
     }
     
-    
-    var simpleProfile: some View {
-        HStack {
-            KFImage(imageURL)
+    func simpleProfile(_ userAccount: AttractionAccount) -> some View {
+        return HStack {
+            KFImage(URL(string: userAccount.profileImageURL))
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 72, height: 72)
                 .clipShape(Circle())
             VStack(spacing: 4) {
-                Text(fromMeName)
+                Text("\(userAccount.nickName)/\(userAccount.birthYear)/\(userAccount.height)")
                     .font(.pixel(16))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .lineLimit(1)
-                Text("안녕하세요")
-                    .lineLimit(1)
-                    .font(.system(size: 15))
-                    .foregroundStyle(Color.gray3)
+                Text(userAccount.keyword)
+                    .foregroundStyle(Color.mainColor)
+                    .font(.pixel(12))
+                    .padding(.horizontal)
+                    .padding(.vertical, 5)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.mainColor)
+                    }
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 13)
@@ -131,6 +146,33 @@ struct ChatListView: View {
         }, label: {
             ProfileMiniView(isDefault: false, userImageURL: imageUrl, userName: profileName, userType: userType)
         })
+    }
+    
+    func matchingSimpleProfile(chattingRoomData: ChattingRoomResponse) -> some View {
+        return HStack {
+            KFImage(URL(string: "https://picsum.photos/200/300"))
+            VStack {
+                Text(chattingRoomData.partnerNickName)
+                    .font(.pixel(16))
+                Text(chattingRoomData.lastMessage)
+                    .font(.system(size: 15))
+                    .foregroundStyle(Color.gray3)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            VStack {
+                Text(chattingRoomData.lastMessageTime.hourAndMinuteString)
+                    .font(.pixel(12))
+                    .foregroundStyle(Color.gray3)
+                if chattingRoomData.notReadMessageCount > 0 {
+                    Text("\(chattingRoomData.notReadMessageCount)")
+                        .font(.pixel(14))
+                        .foregroundStyle(Color.whiteColor)
+                        .frame(width: 28, height: 28)
+                        .background(Color.mainColor)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .trailing)
+        }
     }
     
     var matchingSuccessImageView: some View {

@@ -114,6 +114,7 @@ struct AnswerCompleteMainView: View {
         .padding(.horizontal, 25.5)
     }
     
+    /// 매칭상대 확인하기
     var confirmPartner: some View {
         Button {
             appState.matchingPath.append(Matching.matchingProfileCheckView)

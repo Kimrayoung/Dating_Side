@@ -46,7 +46,7 @@ struct MatchingFailView: View {
             Image("matchingViewBg")
                 .resizable()
                 .scaledToFill()
-//                .ignoresSafeArea()
+                .ignoresSafeArea()
         )
     }
     

@@ -10,6 +10,9 @@ import Foundation
 final class ChatListViewModel: ObservableObject {
     let loadingManager = LoadingManager.shared
     let attractionNetwork = AttractionNetworkManager()
+    let matchingNetwork = MatchingNetworkManager()
+    let chatNetwork = ChattingNetworkManager()
+    
     @Published var timeString: String = "24:00"
     var timer: Timer?
     var totalSeconds: Int = 24 * 60 * 60
@@ -44,7 +47,28 @@ final class ChatListViewModel: ObservableObject {
 }
 
 extension ChatListViewModel {
-   
+    @MainActor
+    /// 매칭 상태 조회
+    func fetchMatchingStauts() async -> MatchingStatusType {
+        loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await matchingNetwork.fetchMatchingStatus()
+            switch result {
+            case .success(let matchStatusData):
+                Log.debugPublic("매칭 상태 조회 성공", matchStatusData)
+                return matchStatusData.matchingStatusType
+            case .failure(let error):
+                Log.errorPublic(error.localizedDescription)
+            }
+        } catch {
+            Log.errorPublic(error.localizedDescription)
+        }
+        return .UNMATCHED
+    }
     
     @MainActor
     /// 내게 다가온 사람 조회
@@ -71,7 +95,7 @@ extension ChatListViewModel {
     
     @MainActor
     /// 내가 다가간 사람 조회
-    func receiverAttraction() async {
+    func receiverAttraction() async -> [AttractionAccount] {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -82,11 +106,34 @@ extension ChatListViewModel {
             switch result {
             case .success(let userAccount):
                 Log.debugPublic("내가 다가간 사람 프로필", userAccount)
+                return userAccount.result
             case .failure(let error):
                 Log.debugPublic(error.localizedDescription)
             }
         } catch {
             Log.debugPublic(error.localizedDescription)
         }
+        return []
+    }
+    
+    @MainActor
+    func chattingRoomRequest() async -> ChattingRoomResponse? {
+        loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await chatNetwork.chattingRoom()
+            switch result {
+            case .success(let chattingRomData):
+                return chattingRomData
+            case .failure(let error):
+                Log.errorPublic("채팅 방 데이터 요청 에러", error.localizedDescription)
+            }
+        } catch {
+            Log.errorPublic("채팅 방 데이터 요청 에러", error.localizedDescription)
+        }
+        return nil
     }
 }

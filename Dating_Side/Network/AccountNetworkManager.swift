@@ -98,7 +98,8 @@ extension AccountAPIManager: APIManager {
     
     var headers: [String : String]? {
         let accessToken = KeychainManager.shared.getAccessToken()
-        Log.debugPrivate("accessToken: ", accessToken)
+        Log.debugPublic("accessToken: ", accessToken)
+        
         switch self {
         case .postUserProfileData(_, let boundaryString):
             return [

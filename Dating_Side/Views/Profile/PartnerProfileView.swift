@@ -38,13 +38,18 @@ struct PartnerProfileView: View {
             }
             .task {
                 // 내 아이디를 통해서 매칭 상대를 찾아야 함(매칭할 수 있는 상대의 데이터를 보내줌)
-                if needMathcingRequest {
-                    matchingPartnerAccount = await matchingViewModel.matchingRequest()
-                } else {
+                if !needMathcingRequest {
                     // 매칭된 상대의 프로필을 확인
                     matchingPartnerAccount = await matchingViewModel.matchingPartner()
+
+                } else {
+                    matchingPartnerAccount = await matchingViewModel.matchingRequest()
                 }
                 
+                if matchingPartnerAccount == nil {
+                    profileShow = false
+                    appState.matchingPath.append(Matching.matchingProfileCheckView)
+                }
             }
             .customAlert(isPresented: $showAlert, title: "이 분을 다시 만나지 못할 수 있어요", message: "상대방의 매력을 다시 확인해볼까요?", primaryButtonText: "괜찮아요", primaryButtonAction: {
                 showAlert = false
