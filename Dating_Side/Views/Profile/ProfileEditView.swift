@@ -15,13 +15,6 @@ struct ProfileEditView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ArrowNextRow(label: "닉네임 변경", subTitle: nil) {
-                if isOnboarding {
-                    appState.onboardingPath.append(Onboarding.nickname)
-                } else {
-                    appState.myPagePath.append(MyPage.nicknameInput(nickname: profileViewModel.userData?.nickName))
-                }
-            }
             ArrowNextRow(label: "프로필 사진, 자기소개", subTitle: nil) {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.chatProfileImage)

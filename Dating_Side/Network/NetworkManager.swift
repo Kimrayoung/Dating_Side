@@ -38,7 +38,7 @@ final class NetworkManager: NetworkProtocol {
             
             guard let httpResponse = response as? HTTPURLResponse,
                   let code = httpResponse.statusCode as Int? else {
-                throw APIError.unexpectedResponse
+                throw APIError.unexpectedResponse(nil)
             }
             
             Log.debugPublic("http code 결과", code)
@@ -55,7 +55,7 @@ final class NetworkManager: NetworkProtocol {
                     if let errorResponse = try? decoder.decode(APIErrorResponse.self, from: data) {
                         throw APIError.apiError(errorResponse)
                     } else {
-                        throw APIError.unexpectedResponse
+                        throw APIError.unexpectedResponse(code)
                     }
                 } else if HTTPCodes.serverError.contains(code) { // 서버에러
                     DispatchQueue.main.async {
@@ -70,7 +70,7 @@ final class NetworkManager: NetworkProtocol {
             if let accessToken = httpResponse.value(forHTTPHeaderField: "x-access-token") {
                 Log.debugPrivate("Access Token: \(accessToken)")
                 if !KeychainManager.shared.saveToken(token: accessToken, service: "com.loveway.auth", account: "accessToken") {
-                    return .failure(APIError.unexpectedResponse)
+                    return .failure(APIError.unexpectedResponse(nil))
                 }
             } else {
                 Log.errorPublic("x-access-token not found in headers.")
@@ -83,7 +83,7 @@ final class NetworkManager: NetworkProtocol {
                     return .success(VoidResponse() as! Value)
                 }
                 // 다른 타입인데 바디가 비어 있으면 에러 처리
-                throw APIError.unexpectedResponse
+                throw APIError.unexpectedResponse(nil)
             }
             
             // 실제 데이터 디코딩

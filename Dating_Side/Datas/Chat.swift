@@ -21,6 +21,7 @@ struct ChatMessage: Identifiable, Codable, Hashable {
 
 struct ChattingRoomResponse: Codable {
     let partnerNickName: String
+    let partnerProfileImageUrl: String
     let lastMessage: String
     let lastMessageTime: Date
     let notReadMessageCount: Int
