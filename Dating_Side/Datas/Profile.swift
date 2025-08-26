@@ -50,3 +50,10 @@ enum ShowProfileViewType {
     case matcing
     case onboarding
 }
+
+enum PartnerProfileViewType {
+    /// 매칭시도
+    case matching
+    case chattingRequestMatch
+    case matchComplete
+}

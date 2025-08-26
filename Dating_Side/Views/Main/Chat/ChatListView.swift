@@ -18,9 +18,11 @@ struct ChatListView: View {
         ]
     
     @State var matchingStatus: MatchingStatusType? = nil
-    @State var toMeArr: [AttractionAccount] = []
-    @State var formMeAccount: AttractionAccount? = nil
+    @State var toMeArr: [PartnerAccount] = []
+    @State var selectedPartner: PartnerAccount? = nil
+    @State var formMeAccount: PartnerAccount? = nil
     @State var chattingRoomData: ChattingRoomResponse? = nil
+    @State private var showProfile: Bool = false
     
     var body: some View {
         VStack {
@@ -48,12 +50,23 @@ struct ChatListView: View {
             }
         })
         .task {
+            selectedPartner = nil
             toMeArr = await viewModel.senderAttraction()
             formMeAccount = await viewModel.receiverAttraction().first
             matchingStatus = await viewModel.fetchMatchingStauts()
             if matchingStatus == .MATCHED {
                 chattingRoomData = await viewModel.chattingRoomRequest()
             }
+        }
+        .sheet(item: $selectedPartner) { partner in
+            PartnerProfileView(
+                profileShow: .constant(false),
+                needMathcingRequest: .chattingRequestMatch,
+                matchingPartnerTempAccount: partner
+            )
+            .presentationDetents([.fraction(0.99)])
+            .presentationCornerRadius(10)
+            .presentationDragIndicator(.visible)
         }
     }
     
@@ -80,7 +93,7 @@ struct ChatListView: View {
         
     }
     
-    func simpleProfile(_ userAccount: AttractionAccount) -> some View {
+    func simpleProfile(_ userAccount: PartnerAccount) -> some View {
         return HStack {
             KFImage(URL(string: userAccount.profileImageURL))
                 .resizable()
@@ -130,7 +143,7 @@ struct ChatListView: View {
                 ScrollView {
                     LazyVGrid(columns: columns, content: {
                         ForEach(toMeArr, id: \.self) { userProfile in
-                            ProfileMiniView(isDefault: false, userImageURL: userProfile.profileImageURL, userName: userProfile.nickName, userType: userProfile.keyword, widthSize: (UIScreen.main.bounds.width - (24 * 2)) / 2, heightSize: 160)
+                            simpleTomeProfile(userProfile)
                         }
                     })
                 }
@@ -140,11 +153,11 @@ struct ChatListView: View {
         .padding(.horizontal, 24)
     }
     
-    func simpleProfile(_ imageUrl: String, _ profileName: String, _ userType: String) -> some View {
+    func simpleTomeProfile(_ partnerAccount: PartnerAccount) -> some View {
         return Button(action: {
-            
+            selectedPartner = partnerAccount
         }, label: {
-            ProfileMiniView(isDefault: false, userImageURL: imageUrl, userName: profileName, userType: userType)
+            ProfileMiniView(isDefault: false, userImageURL: partnerAccount.profileImageURL, userName: partnerAccount.nickName, userType: partnerAccount.keyword)
         })
     }
     

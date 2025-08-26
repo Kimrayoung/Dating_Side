@@ -42,7 +42,7 @@ struct MatchingAnswerCompleteView: View {
                         bottomSheetStartHeight = 0.5
                     }, content: {
                         // 내 프로필을 통해서 매칭 상대를 찾아야 하므로 needMatchingRequest가 true
-                        PartnerProfileView(profileShow: $showModal, needMathcingRequest: true)
+                        PartnerProfileView(profileShow: $showModal, needMathcingRequest: .matching)
                             .presentationDetents([.fraction(0.99)])
                             .presentationCornerRadius(10)
                             .presentationDragIndicator(.visible)

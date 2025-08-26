@@ -14,7 +14,8 @@ struct PartnerProfileView: View {
     @State private var valueList: [String : [Answer]] = [:]
     @State var matchingPartnerAccount: PartnerAccount? = nil
     @Binding var profileShow: Bool
-    var needMathcingRequest: Bool
+    var needMathcingRequest: PartnerProfileViewType
+    var matchingPartnerTempAccount: PartnerAccount? = nil
     
     var body: some View {
         NavigationStack(path: $appState.onChatProfilePath) {
@@ -38,12 +39,15 @@ struct PartnerProfileView: View {
             }
             .task {
                 // 내 아이디를 통해서 매칭 상대를 찾아야 함(매칭할 수 있는 상대의 데이터를 보내줌)
-                if !needMathcingRequest {
+                if needMathcingRequest == .matching {
                     // 매칭된 상대의 프로필을 확인
                     matchingPartnerAccount = await matchingViewModel.matchingPartner()
 
-                } else {
+                } else if needMathcingRequest == .matchComplete{
                     matchingPartnerAccount = await matchingViewModel.matchingRequest()
+                } else {
+                    matchingPartnerAccount = matchingPartnerTempAccount
+                    Log.debugPublic("matching partner checking", matchingPartnerTempAccount)
                 }
                 
                 if matchingPartnerAccount == nil {
@@ -101,5 +105,5 @@ struct PartnerProfileView: View {
 }
 
 #Preview {
-    PartnerProfileView(profileShow: .constant(false), needMathcingRequest: false)
+    PartnerProfileView(profileShow: .constant(false), needMathcingRequest: .chattingRequestMatch, matchingPartnerTempAccount: nil)
 }

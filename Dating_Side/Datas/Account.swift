@@ -174,7 +174,7 @@ extension EducationEnglish: Identifiable, CustomStringConvertible {
 
 
 /// 저장된 유저정보
-struct PartnerAccount: Codable, Hashable {
+struct PartnerAccount: Codable, Hashable, Identifiable {
     let id: Int
     let nickName, birthYear: String
     let height: Int
@@ -225,23 +225,5 @@ enum AccountType {
 }
 
 struct AttractionAccountResponse: Codable {
-    let result: [AttractionAccount]
-}
-
-/// 내게 다가온 사람 & 내가 다가간 사람
-struct AttractionAccount: Codable, Hashable {
-    let id: Int
-    let nickName, birthYear: String
-    let height: Int
-    let activeRegion, keyword, educationType, educationDetail: String
-    let jobType, jobDetail: String
-    let lifeStyle: LifeStyle
-    let profileImageURL, introduction: String
-    let mannerTemperature: Int
-
-    enum CodingKeys: String, CodingKey {
-        case id, nickName, birthYear, height, activeRegion, keyword, educationType, educationDetail, jobType, jobDetail, lifeStyle
-        case profileImageURL = "profileImageUrl"
-        case introduction, mannerTemperature
-    }
+    let result: [PartnerAccount]
 }

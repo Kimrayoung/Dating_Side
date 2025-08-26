@@ -66,7 +66,7 @@ struct ChatingView: View {
         .onDisappear { vm.disconnect() }
         .onTapGesture { UIApplication.shared.hideKeyboard() }
         .sheet(isPresented: $showProfile) {
-            PartnerProfileView(profileShow: $showProfile, needMathcingRequest: false)
+            PartnerProfileView(profileShow: $showProfile, needMathcingRequest: .matchComplete)
                 .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)

@@ -72,7 +72,7 @@ extension ChatListViewModel {
     
     @MainActor
     /// 내게 다가온 사람 조회
-    func senderAttraction() async -> [AttractionAccount] {
+    func senderAttraction() async -> [PartnerAccount] {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -95,7 +95,7 @@ extension ChatListViewModel {
     
     @MainActor
     /// 내가 다가간 사람 조회
-    func receiverAttraction() async -> [AttractionAccount] {
+    func receiverAttraction() async -> [PartnerAccount] {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false

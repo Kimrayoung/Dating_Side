@@ -39,7 +39,7 @@ struct SecondMathcingView: View {
             matchingProfile = await viewModel.matchingRequest()
         }
         .sheet(isPresented: $showProfileView, content: {
-            PartnerProfileView(profileShow: $showProfileView, needMathcingRequest: true)
+            PartnerProfileView(profileShow: $showProfileView, needMathcingRequest: .matchComplete)
                 .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)

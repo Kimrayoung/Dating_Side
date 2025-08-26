@@ -26,7 +26,7 @@ struct AttractionNetworkManager {
     
     /// 내가 다가간 사람 조회
     func receiverAttraction() async throws -> Result<AttractionAccountResponse, Error> {
-        return await networkManager.callWithAsync(endpoint: AttractionAPIManager.senderAttraction, httpCodes: .success)
+        return await networkManager.callWithAsync(endpoint: AttractionAPIManager.receiverAttraction, httpCodes: .success)
     }
 }
 
