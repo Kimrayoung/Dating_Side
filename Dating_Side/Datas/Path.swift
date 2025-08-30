@@ -13,6 +13,7 @@ enum AppScreen {
 }
 
 enum Onboarding: Hashable {
+    case termAgree
     /// 핸드폰 번호 입력
     case phoneNumber
     /// 인증코드 입력
@@ -42,6 +43,7 @@ enum Onboarding: Hashable {
     case editEducation
     case editJob
     case editPreference
+    case webView(url: String)
 }
 
 enum Main {

@@ -17,11 +17,10 @@ struct OnboardingContainerView: View {
     
     var body: some View {
         NavigationStack(path: $appState.onboardingPath) {
-//            ChatProfileImageView(viewModel: viewModel)
-            GenderSelectView(viewModel: viewModel)
-//            LocationSelectView(viewModel: viewModel)
+            AgreeAndTermsView()
                 .navigationDestination(for: Onboarding.self) { step in
                     switch step {
+                    case .termAgree: AgreeAndTermsView()
                     case .phoneNumber: PhoneNumberView(viewModel: smsViewModel)
                     case .verifySMSCode: VerificationNumber(viewModel: smsViewModel)
                     case .genderSelect: GenderSelectView(viewModel: viewModel)
@@ -49,6 +48,8 @@ struct OnboardingContainerView: View {
                         JobEditView(viewModel: viewModel)
                     case .editPreference:
                         PreferenceKeywordsEditView(viewModel: viewModel, isOnboarding: true)
+                    case .webView(let url):
+                        WebView(urlString: url)
                     }
                 }
                 .onAppear {
