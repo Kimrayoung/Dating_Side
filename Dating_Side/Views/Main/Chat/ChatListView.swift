@@ -23,17 +23,18 @@ struct ChatListView: View {
     @State var formMeAccount: PartnerAccount? = nil
     @State var chattingRoomData: ChattingRoomResponse? = nil
     @State private var showProfile: Bool = false
+    @State private var showGoodByeView: Bool = false
+    @State private var showLeaveAlert: Bool = false
+    @State private var allowGoodbyeDismiss: Bool = false
     
     var body: some View {
         VStack {
-            if matchingStatus == .UNMATCHED {
+            if matchingStatus == .UNMATCHED || matchingStatus == .LEFT {
                 formme
                 tome
             } else if matchingStatus == .MATCHED , let chattingRoomData = chattingRoomData {
                 matchingSimpleProfile(chattingRoomData: chattingRoomData)
                 matchingSuccessImageView
-            } else {
-                EmptyView()
             }
         }
         .toolbar(content: {
@@ -56,8 +57,14 @@ struct ChatListView: View {
             matchingStatus = await viewModel.fetchMatchingStauts()
             if matchingStatus == .MATCHED {
                 chattingRoomData = await viewModel.chattingRoomRequest()
+            } else if matchingStatus == .LEFT {
+                showLeaveAlert = true
             }
         }
+        .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "상대에게 마지막 인사를 남겨주세요", primaryButtonText: "확인", primaryButtonAction: {
+            allowGoodbyeDismiss = true // 확인 누를 때만 닫히도록
+            showGoodByeView = true
+        })
         .sheet(item: $selectedPartner) { partner in
             PartnerProfileView(
                 profileShow: .constant(false),
@@ -67,6 +74,16 @@ struct ChatListView: View {
             .presentationDetents([.fraction(0.99)])
             .presentationCornerRadius(10)
             .presentationDragIndicator(.visible)
+            .interactiveDismissDisabled(!allowGoodbyeDismiss)
+            .onSubmit {
+                allowGoodbyeDismiss = false
+            }
+        }
+        .sheet(isPresented: $showGoodByeView) {
+            SayGoodbyeView()
+                .presentationDetents([.height(200)])
+                .presentationCornerRadius(10)
+                .presentationDragIndicator(.visible)
         }
     }
     

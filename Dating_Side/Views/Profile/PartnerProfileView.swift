@@ -13,6 +13,7 @@ struct PartnerProfileView: View {
     @State private var showAlert: Bool = false
     @State private var valueList: [String : [Answer]] = [:]
     @State var matchingPartnerAccount: PartnerAccount? = nil
+    @State var showToastPopup: Bool = false
     @Binding var profileShow: Bool
     var needMathcingRequest: PartnerProfileViewType
     var matchingPartnerTempAccount: PartnerAccount? = nil
@@ -62,6 +63,7 @@ struct PartnerProfileView: View {
             }, secondaryButtonText: "다시 봐볼께요", secondaryButtonAction: {
                 showAlert = false
             })
+            .customToastPopup(isPresented: $showToastPopup, title: "\(matchingPartnerAccount?.nickName ?? "")과 매칭에 성공했습니다", message: "채팅방이 열렸습니다.")
             .navigationDestination(for: OnChatProfilePath.self) { step in
                 switch step {
                 case .profileMain: PartnerProfileView(profileShow: $profileShow, needMathcingRequest: needMathcingRequest)
@@ -90,7 +92,12 @@ struct PartnerProfileView: View {
     var okButton: some View {
         Button(action: {
             Task {
-                await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
+                if needMathcingRequest == .chattingRequestMatch { // 내게 다가온 사람이랑 매칭
+                    guard let partnerId = matchingPartnerAccount?.id else { return }
+                    await matchingViewModel.matchingComplete(partnerId: partnerId)
+                } else if needMathcingRequest == .matching { // 내가 다가가기(즉, 매칭 요청)
+                    await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
+                }
             }
         }, label: {
             Text("대화 해볼래요")

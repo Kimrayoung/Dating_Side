@@ -125,6 +125,7 @@
 		4DB922BA2E5DC98500A87023 /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4DB922B92E5DC98500A87023 /* FirebaseAnalyticsCore */; };
 		4DB922BC2E5DC98500A87023 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 4DB922BB2E5DC98500A87023 /* FirebaseAppCheck */; };
 		4DB922BE2E5DC98500A87023 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 4DB922BD2E5DC98500A87023 /* FirebaseMessaging */; };
+		4DB922C02E62A3B400A87023 /* SayGoodbyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB922BF2E62A3B400A87023 /* SayGoodbyeView.swift */; };
 		4DC7DD9B2E4A2C770052FECB /* AnswerCompleteMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7DD9A2E4A2C6D0052FECB /* AnswerCompleteMainView.swift */; };
 		4DC7E9A32E5AD3CF00823DC3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A22E5AD3CF00823DC3 /* GoogleService-Info.plist */; };
 		4DC7E9A52E5ADFC500823DC3 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7E9A42E5ADFC500823DC3 /* WebSocketManager.swift */; };
@@ -291,6 +292,7 @@
 		4DB5B3142D903B220060D4C6 /* JobSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobSelectView.swift; sourceTree = "<group>"; };
 		4DB5B3162D903D600060D4C6 /* JobDetailInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobDetailInputView.swift; sourceTree = "<group>"; };
 		4DB5B3182D9045AF0060D4C6 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
+		4DB922BF2E62A3B400A87023 /* SayGoodbyeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SayGoodbyeView.swift; sourceTree = "<group>"; };
 		4DC7DD9A2E4A2C6D0052FECB /* AnswerCompleteMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerCompleteMainView.swift; sourceTree = "<group>"; };
 		4DC7E9A22E5AD3CF00823DC3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4DC7E9A42E5ADFC500823DC3 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
@@ -753,10 +755,11 @@
 		4DFAFB982E142B3B006E3B5F /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				4D6119562D75B20B00715B9E /* ChatListView.swift */,
 				4DDF23632E0C29CB006A0096 /* ChatingView.swift */,
 				4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */,
 				4DFAFB992E1435AF006E3B5F /* Tempchat.swift */,
-				4D6119562D75B20B00715B9E /* ChatListView.swift */,
+				4DB922BF2E62A3B400A87023 /* SayGoodbyeView.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1030,6 +1033,7 @@
 				4DF855752DFEE5AF00D429F6 /* MatchingAnswerCompleteView.swift in Sources */,
 				4DB5827D2DDB5B86001952D0 /* ProfileView.swift in Sources */,
 				4D61195F2D75B2F500715B9E /* PhoneNumberView.swift in Sources */,
+				4DB922C02E62A3B400A87023 /* SayGoodbyeView.swift in Sources */,
 				4D4056902D64D20800F95ACF /* BeforePreferenceKewordSelectView.swift in Sources */,
 				4DDF23642E0C29CB006A0096 /* ChatingView.swift in Sources */,
 				4DEB5A712E0ADACB009BE55B /* Date+Ext.swift in Sources */,

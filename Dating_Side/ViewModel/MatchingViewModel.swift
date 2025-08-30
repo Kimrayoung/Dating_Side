@@ -90,13 +90,13 @@ extension MatchingViewModel {
     }
     
     /// 매칭 취소
-    func matchingCancel(score: Int) async {
+    func matchingCancel(score: Int, comment: String) async {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
         }
         
-        let score = PartnerScore(socre: score)
+        let score = PartnerScore(socre: score, comment: comment)
         
         do {
             let result = try await matchingNetwork.matchingCancel(score: score)

@@ -18,6 +18,10 @@ struct ChatingView: View {
     @State private var showTimestamps = false
     @State private var messageText = ""
     @State private var showProfile: Bool = false
+    @State private var showAlert: Bool = false
+    @State private var showLeaveAlert: Bool = false
+    @State private var showGoodByeView: Bool = false
+    
     @GestureState private var dragOffset: CGFloat = 0
 
     var body: some View {
@@ -71,6 +75,23 @@ struct ChatingView: View {
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
         }
+        .customAlert(isPresented: $showAlert, title: "헤어지시겠어요?\n영영 볼 수 없게 됩니다", message: "더 대화하다 보면 다를 지도 몰라요", primaryButtonText: "헤어질래요", primaryButtonAction: {
+            showGoodByeView = true
+        }, secondaryButtonText: "더 대화 해볼게요")
+        .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "", primaryButtonText: "확인", primaryButtonAction: {
+            
+        })
+        .sheet(isPresented: $showGoodByeView) {
+            SayGoodbyeView()
+                .presentationDetents([.height(200)])
+                .presentationCornerRadius(10)
+                .presentationDragIndicator(.visible)
+        }
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarLeading) {
+                navigationTrailingMenu
+            }
+        })
     }
 
     var sendTextField: some View {
@@ -123,6 +144,25 @@ struct ChatingView: View {
                 .foregroundStyle(Color.whiteColor)
         }
         .background(buttonColors[index])
+    }
+    
+    var navigationTrailingMenu: some View {
+        Menu {
+            Button(action: {
+                showAlert = true
+            }) {
+                Text("헤어지기")
+            }
+            Button(action: {
+                
+            }) {
+                Text("신고하기")
+                    .foregroundStyle(Color.red)
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.headline)
+        }
     }
 }
 

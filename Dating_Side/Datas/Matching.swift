@@ -11,6 +11,7 @@ struct PartnerRequest: Codable {
 
 struct PartnerScore: Codable {
     let socre: Int
+    let comment: String
 }
 
 struct UserImage: Codable {
@@ -40,8 +41,8 @@ struct MatchingStatusResponse: Codable {
 }
 
 struct PartnerEvaluation: Codable {
-    let score: Int
-    let comment: String
+    let score: Int?
+    let comment: String?
 }
 
 struct MatchingAccountResponse: Codable {
