@@ -32,20 +32,25 @@ struct PartnerProfileView: View {
                     defaultImageUrl: matchingPartnerAccount?.profileImageURL,
                     introduceText: matchingPartnerAccount?.introduction,
                     showProfileViewType: .chat)
-                HStack(spacing: 5, content: {
-                    skipButton
-                    okButton
-                })
-                .padding(.horizontal, 24)
+                .padding(.top, 30)
+                Spacer()
+                if needMathcingRequest == .matching || needMathcingRequest == .chattingRequestMatch {
+                    HStack(spacing: 5, content: {
+                        skipButton
+                        okButton
+                    })
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 30)
+                }
             }
             .task {
                 // 내 아이디를 통해서 매칭 상대를 찾아야 함(매칭할 수 있는 상대의 데이터를 보내줌)
                 if needMathcingRequest == .matching {
-                    // 매칭된 상대의 프로필을 확인
-                    matchingPartnerAccount = await matchingViewModel.matchingPartner()
-
-                } else if needMathcingRequest == .matchComplete{
+                    // 매칭된 상대방의 프로필 조회(매칭 성사 x) ->즉, 매칭가능한 상대방을 찾음
                     matchingPartnerAccount = await matchingViewModel.matchingRequest()
+                } else if needMathcingRequest == .matchComplete {
+                    // 매칭 성사된
+                    matchingPartnerAccount = await matchingViewModel.matchingPartner()
                 } else {
                     matchingPartnerAccount = matchingPartnerTempAccount
                     Log.debugPublic("matching partner checking", matchingPartnerTempAccount)
@@ -96,7 +101,10 @@ struct PartnerProfileView: View {
                     guard let partnerId = matchingPartnerAccount?.id else { return }
                     await matchingViewModel.matchingComplete(partnerId: partnerId)
                 } else if needMathcingRequest == .matching { // 내가 다가가기(즉, 매칭 요청)
-                    await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
+                    let result = await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
+                    if result {
+                        
+                    }
                 }
             }
         }, label: {

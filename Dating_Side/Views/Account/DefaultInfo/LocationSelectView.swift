@@ -61,8 +61,8 @@ struct LocationSelectView: View {
         .task {
             if let selectedLocationString = location?.trimmingCharacters(in: .whitespaces).components(separatedBy: " ") {
                 Log.debugPublic("selectedLocationString first, last", location, selectedLocationString.first, selectedLocationString.last)
-                await viewModel.fetchAddressData(selectedLocation: selectedLocationString.first)
-                await viewModel.fetchAddressData(code: viewModel.locationSelected?.code, isDetailLocation: true, selectedDetailLocation: selectedLocationString.last)
+                await viewModel.fetchAddressData(selectedLocation: selectedLocationString.last)
+                await viewModel.fetchAddressData(code: viewModel.locationSelected?.code, isDetailLocation: true, selectedDetailLocation: selectedLocationString.first)
             } else {
                 await viewModel.fetchAddressData()
             }

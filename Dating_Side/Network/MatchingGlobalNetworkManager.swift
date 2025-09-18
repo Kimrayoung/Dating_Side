@@ -1,41 +1,37 @@
 //
-//  ReportNetworkManager.swift
+//  MatchingGlobalNetworkManager.swift
 //  Dating_Side
 //
-//  Created by 김라영 on 8/3/25.
+//  Created by 김라영 on 9/13/25.
 //
-import Foundation
-import Logging
 
-struct ReportNetworkManager {
+import Foundation
+
+/// Matching관련에서 전체 앱에서 사용할 API
+struct MatchingGlobalNetworkManager {
     private let networkManager: NetworkProtocol
     
     init(networkManager: NetworkProtocol = NetworkManager.shared) {
         self.networkManager = networkManager
     }
     
-    /// 유저 신고하기
-    func userReport(report: ReportRequest) async throws -> Result<VoidResponse, Error> {
-        return await networkManager.callWithAsync(endpoint: ReportAPIManager.userReport(report: report), httpCodes: .success)
+    func fetchMatchingStatus() async throws -> Result<MatchingStatusResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: MatchingGlobalAPIManager.matchingStatus, httpCodes: .success)
     }
 }
 
-enum ReportAPIManager {
-    case userReport(report: ReportRequest)
+enum MatchingGlobalAPIManager {
+    /// 매칭 상태 조회
+    case matchingStatus
 }
 
-extension ReportAPIManager: APIManager {
+extension MatchingGlobalAPIManager: APIManager {
     var path: String {
-        switch self {
-        case .userReport:
-            return "report"
-        }
+        return "matching"
     }
     
     var method: HTTPMethod {
-        switch self {
-        case .userReport: .post
-        }
+        return .get
     }
     
     var headers: [String : String]? {
@@ -53,10 +49,6 @@ extension ReportAPIManager: APIManager {
     }
     
     func body() throws -> Data? {
-        switch self {
-        case .userReport(let report):
-            let jsonEncoder = JSONEncoder()
-            return try jsonEncoder.encode(report)
-        }
+        return nil
     }
 }

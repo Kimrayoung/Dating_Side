@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Logging
 
 protocol NetworkProtocol {
     func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes) async -> Result<Value, Error> where Value: Decodable

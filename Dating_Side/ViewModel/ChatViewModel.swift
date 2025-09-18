@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import Logging
 
 @MainActor
 final class ChatViewModel: ObservableObject {
+    let chatNetwork = ChattingNetworkManager()
+    
     @Published var messages: [ChatMessage] = []
     @Published var isConnected = false
     @Published var connectionStatus: String = "연결 대기 중..."
@@ -22,17 +25,18 @@ final class ChatViewModel: ObservableObject {
         self.roomId = roomId
         let accessToken = KeychainManager.shared.getAccessToken()
         self.jwt = accessToken ?? ""
-        self.client = WebSocketClient(endpoint: "wss://donvolo.shop/api/chat", jwt: accessToken)
+        self.client = WebSocketClient(endpoint: "wss://donvolo.shop/api/chat", jwt: accessToken, roomId: roomId)
     }
 
     func connect() {
         guard listenTask == nil else { return } // 이미 연결 중이면 무시
         
         connectionStatus = "연결 중..."
-        
+        Log.debugPublic("connectionStatus",connectionStatus)
         listenTask = Task {
             do {
                 await client.connect(jwt: jwt)
+                await client.waitUntilStompConnected()
                 connectionStatus = "구독 중..."
                 
                 // STOMP 연결 완료 대기 시간 단축
@@ -57,26 +61,25 @@ final class ChatViewModel: ObservableObject {
         }
     }
 
-    func send(content: String, sender: Int) {
+    func send(content: String) {
         guard isConnected else {
             print("⚠️ Cannot send message: not connected")
             return
         }
         
-        let chat = ChatMessage(content: content, sender: sender, timestamp: Date())
-        
-        // 즉시 UI에 추가 (optimistic update)
-        messages.append(chat)
+        let chat = SocketMessage(content: content, roomId: roomId)
         
         Task {
             do {
-                try await client.sendMessage(chat, roomId: roomId)
+                print("📤 About to call client.sendMessage...")
+                try await client.sendMessage(chat)
+                print("📤 client.sendMessage completed")
             } catch {
                 print("❌ Send failed: \(error)")
                 // 전송 실패 시 메시지 제거 또는 실패 표시
-                if let index = messages.firstIndex(where: { $0.id == chat.id }) {
-                    messages.remove(at: index)
-                }
+//                if let index = messages.firstIndex(where: { $0.id == chat.id }) {
+//                    messages.remove(at: index)
+//                }
             }
         }
     }
@@ -95,5 +98,21 @@ final class ChatViewModel: ObservableObject {
     
     deinit {
         listenTask?.cancel()
+    }
+    
+    @MainActor
+    func fetchChattingData() async {
+        do {
+            let result = try await chatNetwork.chatting()
+            switch result {
+            case .success(let chatData):
+                Log.debugPublic("채팅 기록", chatData)
+                messages.append(contentsOf: chatData)
+            case .failure(let error):
+                Log.errorPublic("채팅 방 데이터 요청 에러", error.localizedDescription)
+            }
+        } catch {
+            Log.errorPublic("채팅 방 데이터 요청 에러", error.localizedDescription)
+        }
     }
 }

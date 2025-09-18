@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import PhotosUI
 import SwiftUI
+import Logging
 
 @MainActor
 final class AccountViewModel: ObservableObject {
@@ -286,8 +287,9 @@ extension AccountViewModel {
         guard let lifeStyle = makeLifeStyle() else { return nil }
         let tempPhoneNumber1 = makeRandomNumber()
         let tempPhoneNumber2 = makeRandomNumber()
-
-        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-\(tempPhoneNumber1)-\(tempPhoneNumber2)", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, districtRegion: locationSelected.addrName, cityRegion: detailLocationSelected.addrName, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: "socialId")
+        let fcmToken = UserDefaults.standard.string(forKey: "FCMToken") ?? ""
+        
+        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-\(tempPhoneNumber1)-\(tempPhoneNumber2)", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, districtRegion: locationSelected.addrName, cityRegion: detailLocationSelected.addrName, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: fcmToken)
         
         return signUpRequest
     }
@@ -295,6 +297,7 @@ extension AccountViewModel {
 
 //MARK: - 프로필 수정일때만 사용
 extension AccountViewModel {
+    // 프로필 수정할 때 기존에 선택한 라이프스타일을 표시
     func applyUserLifeStyle(_ userLifeStyle: LifeStyle) {
         let mirror = Mirror(reflecting: userLifeStyle)
         for child in mirror.children {
@@ -418,12 +421,6 @@ extension AccountViewModel {
         defer {
             loadingManager.isLoading = false
         }
-        let signpost = httpTimeLog.fetchLocationData
-                         .makeSignpost(name: #function, object: self)
-        
-        signpost.begin("code: %d, firstLoading: %d detail: %d", code ?? "nil", String(isDetailLocation))
-
-        defer { signpost.end() }
         
         do {
             let result = try await accountNetworkManger.fetchAddressData(code)
@@ -472,6 +469,7 @@ extension AccountViewModel {
                     }
                     beforePreferenceTypes = data.result
                     isBeforePreferenceTypesSelected = Array(repeating: false, count: data.result.count)
+                    
                     if let preferences = preferences {
                         isBeforePreferenceTypesSelected = data.result.map { preferences.contains($0.korean) }
                     }
@@ -575,7 +573,7 @@ extension AccountViewModel {
         let signupData = createUploadBody(request: signupRequest, images: userImageData, boundary: boundary)
         
         do {
-            let result = try await AccountNetworkManager().postUserData(requestModel: signupData, boundaryString: boundary)
+            let result = try await accountNetworkManger.postUserData(requestModel: signupData, boundaryString: boundary)
             switch result {
             case .success(let result):
                 Log.debugPublic("유저 정보 저장 성공", result)

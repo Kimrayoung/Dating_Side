@@ -71,6 +71,8 @@ actor WebSocketClient {
     private var reconnectAttempts = 0
     private var isManuallyClosed = false
     private var isStompConnected = false
+    private var roomId: String = ""
+    private var stompWaiters: [CheckedContinuation<Void, Never>] = []
 
     // 외부 스트림 (ChatMessage)
     private var continuation: AsyncStream<ChatMessage>.Continuation?
@@ -80,7 +82,7 @@ actor WebSocketClient {
 
     private let wsDelegate = WSDelegate()
 
-    init(endpoint: String, jwt: String? = nil) {
+    init(endpoint: String, jwt: String? = nil, roomId: String) {
         let config = URLSessionConfiguration.default
         config.waitsForConnectivity = true
         config.timeoutIntervalForRequest = 0  // 무제한
@@ -99,7 +101,22 @@ actor WebSocketClient {
 
         self.session = URLSession(configuration: config, delegate: wsDelegate, delegateQueue: .main)
         self.endpointURL = URL(string: endpoint)!.forcingWebSocketScheme()
+        self.roomId = roomId
     }
+    
+    /// STOMP CONNECTED 될 때까지 suspend
+        func waitUntilStompConnected() async {
+            if isStompConnected { return }
+            await withCheckedContinuation { cont in
+                stompWaiters.append(cont)
+            }
+        }
+    
+    private func resumeStompWaiters() {
+            let waiters = stompWaiters
+            stompWaiters.removeAll()
+            for w in waiters { w.resume() }
+        }
 
     // MARK: Public
 
@@ -157,6 +174,8 @@ actor WebSocketClient {
     func subscribe(roomId: String) async {
         guard task != nil, isStompConnected else {
             print("⚠️ Cannot subscribe: not connected")
+            Log.debugPublic("task checking", task)
+            Log.debugPublic("isStompConnected", isStompConnected)
             return
         }
         
@@ -166,7 +185,7 @@ actor WebSocketClient {
             command: .subscribe,
             headers: [
                 "id": "sub-\(subIdSeed)",
-                "destination": "/sub/chat/room/\(roomId)",
+                "destination": "/user/sub/chat/room/\(roomId)",
                 "ack": "auto"
             ],
             body: ""
@@ -175,28 +194,15 @@ actor WebSocketClient {
         print("📤 SUBSCRIBE sent for room: \(roomId)")
     }
 
-    func sendMessage(_ message: ChatMessage, roomId: String) async throws {
+    func sendMessage(_ message: SocketMessage) async throws {
         guard isStompConnected else {
             throw NSError(domain: "STOMP", code: -1, userInfo: [NSLocalizedDescriptionKey: "Not connected"])
         }
         
-        struct Outgoing: Codable {
-            let roomId: String
-            let content: String
-            let sender: Int
-            let timestamp: Date
-        }
-        
-        let payload = Outgoing(
-            roomId: roomId,
-            content: message.content,
-            sender: message.sender,
-            timestamp: message.timestamp
-        )
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
-        let data = try encoder.encode(payload)
+        let data = try encoder.encode(message)
         let body = String(data: data, encoding: .utf8) ?? "{}"
 
         let f = StompFrame(
@@ -238,7 +244,7 @@ actor WebSocketClient {
         guard let t = task else { return }
         do {
             try await t.send(.string(text))
-            print("📤 Sent: \(text.replacingOccurrences(of: "\0", with: "\\0"))")
+            print("📤 Sent success: \(text.replacingOccurrences(of: "\0", with: "\\0"))")
         } catch {
             print("❌ Send error: \(error)")
         }
@@ -298,11 +304,17 @@ actor WebSocketClient {
             isStompConnected = true
             print("✅ STOMP Connected!")
             startPing()
-            
+            resumeStompWaiters()
         case .message:
             if let data = body.data(using: .utf8),
-               let chat = try? decoder.decode(ChatMessage.self, from: data) {
-                continuation?.yield(chat)
+               let chat = try? decoder.decode(ChatPayload.self, from: data) {
+                let chatData = ChatMessage(
+                    id: UUID(),
+                    content: chat.content,
+                    sender: chat.sender,
+                    timestamp:  Date().toIntArray// 수신 시각으로 채움
+                )
+                continuation?.yield(chatData)
             } else {
                 print("❌ Failed to decode message: \(body)")
             }
@@ -310,9 +322,8 @@ actor WebSocketClient {
         case .error:
             print("❌ STOMP Error: \(body)")
             let errorMessage = ChatMessage(
-                content: "서버 오류: \(body)",
-                sender: -1,
-                timestamp: Date()
+                content: "서버 오류: \(body)", sender: 0,
+                timestamp: []
             )
             continuation?.yield(errorMessage)
             

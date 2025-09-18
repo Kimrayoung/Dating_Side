@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Logging
 
 /// 매칭 및 매칭 상대 확인
 final class MatchingViewModel: ObservableObject {
@@ -44,24 +45,26 @@ final class MatchingViewModel: ObservableObject {
 extension MatchingViewModel {
     /// 내가 다가가기
     @MainActor
-    func attraction(matchingPartnerAccount: PartnerAccount?) async {
+    func attraction(matchingPartnerAccount: PartnerAccount?) async -> Bool {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
         }
-        guard let matchingPartnerAccount = matchingPartnerAccount else { return }
+        guard let matchingPartnerAccount = matchingPartnerAccount else { return false }
         let PartnerRequest = PartnerRequest(partnerId: matchingPartnerAccount.id)
         do {
             let result = try await attractionNetwork.attraction(attraction: PartnerRequest)
             switch result {
             case .success:
                 Log.debugPublic("result true")
+                return true
             case .failure(let error):
                 Log.debugPublic("result error: \(error.localizedDescription)")
             }
         } catch {
             Log.debugPublic("result error: \(error.localizedDescription)")
         }
+        return false
     }
     
     
@@ -90,6 +93,7 @@ extension MatchingViewModel {
     }
     
     /// 매칭 취소
+    @MainActor
     func matchingCancel(score: Int, comment: String) async {
         loadingManager.isLoading = true
         defer {
@@ -112,6 +116,7 @@ extension MatchingViewModel {
     }
     
     /// 매칭 확정
+    @MainActor
     func matchingComplete(partnerId: Int) async {
         loadingManager.isLoading = true
         defer {
@@ -145,6 +150,7 @@ extension MatchingViewModel {
             switch result {
             case .success(let userAccount):
                 Log.debugPublic("매칭 요청 성공", userAccount)
+                return userAccount.result
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)
             }

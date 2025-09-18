@@ -29,7 +29,6 @@ struct ProfileView: View {
             if showProfileViewType == .chat {
                 Text("프로필")
                     .font(.pixel(16))
-                    .padding(.top, 20)
             }
             profile
             if showProfileViewType != .onboarding {

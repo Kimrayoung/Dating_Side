@@ -54,7 +54,9 @@ struct AgreeAndTermsView: View {
                 
                 // 다음 버튼
                 Button {
-                
+                    if allRequiredAgreed {
+                        appState.onboardingPath.append(Onboarding.genderSelect)
+                    }
                 } label: {
                     Text("다음")
                         .font(.pixel(16).weight(.semibold))

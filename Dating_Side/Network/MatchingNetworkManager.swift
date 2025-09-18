@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Logging
 
 struct MatchingNetworkManager {
     private let networkManager: NetworkProtocol
@@ -13,11 +14,7 @@ struct MatchingNetworkManager {
     init(networkManager: NetworkProtocol = NetworkManager.shared) {
         self.networkManager = networkManager
     }
-    
-    func fetchMatchingStatus() async throws -> Result<MatchingStatusResponse, Error> {
-        return await networkManager.callWithAsync(endpoint: MatchingAPIManager.matchingStatus, httpCodes: .success)
-    }
-    
+
     func matchingRequest() async throws -> Result<MatchingAccountResponse, Error> {
         return await networkManager.callWithAsync(endpoint: MatchingAPIManager.matchingRequest, httpCodes: .success)
     }
@@ -40,8 +37,6 @@ struct MatchingNetworkManager {
 }
 
 enum MatchingAPIManager {
-    /// 매칭 상태 조회
-    case matchingStatus
     /// 매칭 요청
     case matchingRequest
     /// 매칭삭제
@@ -70,7 +65,7 @@ extension MatchingAPIManager: APIManager {
     
     var method: HTTPMethod {
         switch self {
-        case .matchingStatus, .matchingPartner, .matchingPartnerPhoto:
+        case .matchingPartner, .matchingPartnerPhoto:
             return .get
         case .matchingCancel:
             return .delete

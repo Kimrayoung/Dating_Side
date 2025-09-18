@@ -6,11 +6,11 @@
 //
 
 import Foundation
+import Logging
 
 final class ChatListViewModel: ObservableObject {
     let loadingManager = LoadingManager.shared
     let attractionNetwork = AttractionNetworkManager()
-    let matchingNetwork = MatchingNetworkManager()
     let chatNetwork = ChattingNetworkManager()
     
     @Published var timeString: String = "24:00"
@@ -48,31 +48,8 @@ final class ChatListViewModel: ObservableObject {
 
 extension ChatListViewModel {
     @MainActor
-    /// 매칭 상태 조회
-    func fetchMatchingStauts() async -> MatchingStatusType {
-        loadingManager.isLoading = true
-        defer {
-            loadingManager.isLoading = false
-        }
-        
-        do {
-            let result = try await matchingNetwork.fetchMatchingStatus()
-            switch result {
-            case .success(let matchStatusData):
-                Log.debugPublic("매칭 상태 조회 성공", matchStatusData)
-                return matchStatusData.matchingStatusType
-            case .failure(let error):
-                Log.errorPublic(error.localizedDescription)
-            }
-        } catch {
-            Log.errorPublic(error.localizedDescription)
-        }
-        return .UNMATCHED
-    }
-    
-    @MainActor
     /// 내게 다가온 사람 조회
-    func senderAttraction() async -> [PartnerAccount] {
+    func senderAttraction() async -> [AttractionPartnerData] {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -82,7 +59,7 @@ extension ChatListViewModel {
             let result = try await attractionNetwork.senderAttraction()
             switch result {
             case .success(let userAccount):
-                Log.debugPublic("내게 다가온 사람 프로필", userAccount)
+                Log.debugPublic("내게 다가온 사람 프로필",userAccount)
                 return userAccount.result
             case .failure(let failure):
                 Log.debugPublic(failure.localizedDescription)
@@ -95,7 +72,7 @@ extension ChatListViewModel {
     
     @MainActor
     /// 내가 다가간 사람 조회
-    func receiverAttraction() async -> [PartnerAccount] {
+    func receiverAttraction() async -> [AttractionPartnerData] {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -127,6 +104,7 @@ extension ChatListViewModel {
             let result = try await chatNetwork.chattingRoom()
             switch result {
             case .success(let chattingRomData):
+                Log.debugPublic("채팅방 데이터", chattingRomData)
                 return chattingRomData
             case .failure(let error):
                 Log.errorPublic("채팅 방 데이터 요청 에러", error.localizedDescription)

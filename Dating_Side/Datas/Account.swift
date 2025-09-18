@@ -192,6 +192,11 @@ struct PartnerAccount: Codable, Hashable, Identifiable {
     }
 }
 
+struct AttractionPartnerData: Codable, Hashable {
+    let createdAt: [Int]
+    let partnerInfo: PartnerAccount
+}
+
 struct UserAccount: Codable {
     let id: Int
     let phoneNumber, genderType, nickName, birthDate: String
@@ -225,5 +230,5 @@ enum AccountType {
 }
 
 struct AttractionAccountResponse: Codable {
-    let result: [PartnerAccount]
+    let result: [AttractionPartnerData]
 }

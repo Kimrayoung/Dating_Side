@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Logging
 
 /// 질문과 관련된 network(오늘의 질문, 질문 대답들)
 struct QuestionNetworkManager {

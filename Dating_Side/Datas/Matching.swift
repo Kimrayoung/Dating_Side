@@ -26,6 +26,7 @@ struct UserImage: Codable {
 
 struct MatchingStatusResponse: Codable {
     let matchingStatus: String
+    let matchedAt: [Int]?
     let scoreFromPartner: PartnerEvaluation
     
     var matchingStatusType: MatchingStatusType {

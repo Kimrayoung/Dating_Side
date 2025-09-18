@@ -50,6 +50,8 @@ struct OnboardingContainerView: View {
                         PreferenceKeywordsEditView(viewModel: viewModel, isOnboarding: true)
                     case .webView(let url):
                         WebView(urlString: url)
+                    case .additionalImageEdit:
+                        AdditionalImageEditView(isOnboarding: true)
                     }
                 }
                 .onAppear {

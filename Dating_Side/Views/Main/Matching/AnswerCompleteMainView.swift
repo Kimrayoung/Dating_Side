@@ -6,17 +6,24 @@
 //
 
 import SwiftUI
-/// 답변완료시 메인 화면
 
+/// 답변완료시 메인 화면
 struct AnswerCompleteMainView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject private var viewModel: QuestionViewModel
     @State private var alreadySendTodayQuestion: Bool = false
     @State private var showQuestionModal: Bool = false
+    @State private var showProfileModal: Bool = false
     @State private var selectCategory: [Bool] = [true, false, false, false]
     @State private var questionContent: String = ""
     @State private var sendQuestion: Bool = false
     @State private var showToastPopup: Bool = false
+    @AppStorage("matchingStatus") private var matchingStatusRaw: String = MatchingStatusType.UNMATCHED.rawValue
+    
+    private var matchingStatus: MatchingStatusType {
+        get { MatchingStatusType(rawValue: matchingStatusRaw) ?? .UNMATCHED }
+        set { matchingStatusRaw = newValue.rawValue }
+    }
     
     var body: some View {
         VStack {
@@ -69,9 +76,11 @@ struct AnswerCompleteMainView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .padding(.horizontal, 49)
             .padding(.top, 51)
-            sendQuestionBtn
-                .padding(.top, 43)
-                .padding(.bottom, 12)
+            if matchingStatus != .MATCHED {
+                sendQuestionBtn
+                    .padding(.top, 43)
+                    .padding(.bottom, 12)
+            }
             confirmPartner
                 .padding(.bottom, 44)
         }
@@ -80,6 +89,12 @@ struct AnswerCompleteMainView: View {
             SendQuestionModalSheet(viewModel: viewModel, showQuestionModal: $showQuestionModal, selectCategory: $selectCategory, questionContent: $questionContent, sendQuestion: $sendQuestion)
 //                .presentationDetents([.fraction(0.99)])
                 .presentationDetents([.medium])
+                .presentationCornerRadius(10)
+                .presentationDragIndicator(.visible)
+        })
+        .sheet(isPresented: $showProfileModal, content: {
+            PartnerProfileView(profileShow: $showProfileModal, needMathcingRequest: .matchComplete)
+                .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
         })
@@ -117,7 +132,12 @@ struct AnswerCompleteMainView: View {
     /// 매칭상대 확인하기
     var confirmPartner: some View {
         Button {
-            appState.matchingPath.append(Matching.matchingProfileCheckView)
+            if matchingStatus != .MATCHED {
+                
+            } else {
+                appState.matchingPath.append(Matching.matchingProfileCheckView)
+            }
+            
         } label: {
             Text("매칭 상대 확인하기")
                 .font(.pixel(16))

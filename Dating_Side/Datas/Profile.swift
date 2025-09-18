@@ -52,8 +52,12 @@ enum ShowProfileViewType {
 }
 
 enum PartnerProfileViewType {
-    /// 매칭시도
+    /// 매칭시도(대화하기 필요)
     case matching
+    /// 채팅 탭에서 특정 사용자의 프로필을 누름(대화하기 필요)
     case chattingRequestMatch
+    /// 매칭완료(대화하기 불필요)
     case matchComplete
+    /// 매칭 시도 완료(대화하기 불필요)
+    case matchingRequestComplete
 }

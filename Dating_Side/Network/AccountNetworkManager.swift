@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Logging
 
 ///계정관련 Network(ex. 성별, 생년월일, 닉네임, 키, 지역, 등)
 struct AccountNetworkManager {

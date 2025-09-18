@@ -23,4 +23,22 @@ extension Date {
         return formatter.string(from: Date())
     }
 
+    /// [Int] → Date
+        /// 입력: [year, month, day, hour, minute, second, nanosecond]
+    var toIntArray: [Int] {
+        let comps = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second, .nanosecond],
+            from: self
+        )
+        return [
+            comps.year ?? 0,
+            comps.month ?? 0,
+            comps.day ?? 0,
+            comps.hour ?? 0,
+            comps.minute ?? 0,
+            comps.second ?? 0,
+            comps.nanosecond ?? 0
+        ]
+    }
+    
 }

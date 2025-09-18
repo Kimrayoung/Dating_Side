@@ -1,26 +1,27 @@
 //
-//  secondMathcingView.swift
+//  MatchingRequestComplete.swift
 //  Dating_Side
 //
-//  Created by 김라영 on 2025/06/15.
+//  Created by 김라영 on 9/12/25.
 //
 
 import SwiftUI
 
-struct SecondMathcingView: View {
+/// 대화하기를 요청하기 완료했을 경우
+struct MatchingRequestComplete: View {
     @State private var showProfileView: Bool = false
     @ObservedObject var viewModel = MatchingViewModel()
     @State private var matchingProfile: PartnerAccount? = nil
+    @State private var showModal = false
+    @State private var bottomSheetStartHeight: CGFloat = 0.6
+    @State private var dragOffset: CGFloat = 0
     
     var body: some View {
-        VStack(content: {
-            Text("질문 주셔서 감사합니다.\n당신에게 딱 맞는 두번쨰 상대입니다.")
-                .multilineTextAlignment(.center)
+        VStack {
+            Text("[\(matchingProfile?.nickName ?? "")] 님에게 대화를 요청했어요.\n상대가 수락하면 채팅이 시작됩니다!")
                 .font(.pixel(20))
-                .foregroundStyle(Color.whiteColor)
-                .padding(.top, 20)
-                .padding(.bottom, 6)
-            Spacer()
+            Text("상대가 24시간 내 수락하지 않으면 대화요청이 종료됩니다.")
+                .font(.pixel(12))
             if let matchingProfile = matchingProfile {
                 ProfileMiniView(isDefault: false, userImageURL: matchingProfile.profileImageURL, userName: matchingProfile.nickName, userType: matchingProfile.keyword)
                     .clipShape(RoundedRectangle(cornerRadius: 8.85))
@@ -33,27 +34,23 @@ struct SecondMathcingView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8.85))
                     .frame(width: 180, height: 180)
             }
-            Spacer()
-        })
-        .task {
-            matchingProfile = await viewModel.matchingRequest()
+            ProfileCheckBottomSheet(
+                showModal: $showModal,
+                currentHeightRatio: $bottomSheetStartHeight
+            )
         }
-        .sheet(isPresented: $showProfileView, content: {
-            PartnerProfileView(profileShow: $showProfileView, needMathcingRequest: .matching, matchingPartnerTempAccount: matchingProfile)
+        .sheet(isPresented: $showModal, onDismiss: {
+            bottomSheetStartHeight = 0.6
+        }) {
+            PartnerProfileView(profileShow: $showModal, needMathcingRequest: .matching)
                 .presentationDetents([.fraction(0.99)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
-        })
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            Image("matchingViewBg")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-        )
+        }
+        
     }
 }
 
 #Preview {
-    SecondMathcingView()
+    MatchingRequestComplete()
 }

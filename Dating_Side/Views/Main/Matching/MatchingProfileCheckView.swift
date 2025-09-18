@@ -34,7 +34,7 @@ struct MatchingProfileCheckView: View {
                     .sheet(isPresented: $showModal, onDismiss: {
                         bottomSheetStartHeight = 0.5
                     }, content: {
-                        // 내 프로필을 통해서 매칭 상대를 찾음
+                        // 내 프로필을 통해서 매칭 가능한 상대를 찾음 
                         PartnerProfileView(profileShow: $showModal, needMathcingRequest: .matching)
                             .presentationDetents([.fraction(0.99)])
                             .presentationCornerRadius(10)

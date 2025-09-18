@@ -44,6 +44,7 @@ enum Onboarding: Hashable {
     case editJob
     case editPreference
     case webView(url: String)
+    case additionalImageEdit
 }
 
 enum Main {
@@ -66,6 +67,7 @@ enum MyPage: Hashable {
     case preferences(beforeKeywords: [String], afterKeywords: [String])
     case susceptible(lifeStyle: LifeStyle)
     case webView(url: String)
+    case additionalImageEdit(profileImageUrl: ProfileImageURLByDay?)
 }
 
 enum Matching: Hashable {
@@ -73,7 +75,7 @@ enum Matching: Hashable {
     case questionList
     /// 오늘의 질문에 답변하기
     case questionAnswer
-    /// 오늘의 질문 완료해서 매칭 상대 받음
+    /// 오늘의 질문 완료해서 매칭 상대 받음(프로필 완성뷰)
     case questionComplete
     /// 매칭 거절
     case matchingFail
@@ -82,6 +84,8 @@ enum Matching: Hashable {
     case answerCompleteMain
     /// 유저가 답변 해서 오늘의 질문에 대한 답변 확인 -> 매칭상대 확인하기 눌렀을때
     case matchingProfileCheckView
+    /// 유저가 대화하기 요청을 보내고 다음 화면
+//    case matchingRequestCompl
 }
 
 enum Path {
@@ -100,5 +104,5 @@ enum OnChatProfilePath: Hashable {
 
 enum Chating: Hashable {
     case chatList
-    case chatRoom(roomId: String)
+    case chatRoom(roomId: String, partnerName: String, partnerImageUrl: String)
 }

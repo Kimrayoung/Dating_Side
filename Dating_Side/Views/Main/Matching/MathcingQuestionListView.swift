@@ -11,6 +11,12 @@ import SwiftUI
 struct  MatchingQuestionListView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var viewModel: QuestionViewModel
+    @AppStorage("matchingStatus") private var matchingStatusRaw: String = MatchingStatusType.UNMATCHED.rawValue
+    
+    private var matchingStatus: MatchingStatusType {
+        get { MatchingStatusType(rawValue: matchingStatusRaw) ?? .UNMATCHED }
+        set { matchingStatusRaw = newValue.rawValue }
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -76,7 +82,7 @@ struct  MatchingQuestionListView: View {
             print(#fileID, #function, #line, "- 답변화면으로 이동")
             appState.matchingPath.append(Matching.questionAnswer)
         } label: {
-            Text("답변하고 매칭받기")
+            Text(matchingStatus == .MATCHED ? "답변하기" : "답변하고 매칭받기")
                 .font(.pixel(16))
                 .foregroundStyle(Color.white)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -7,6 +7,7 @@
 
 import Foundation
 import os
+import Logging 
 
 /// 앱 전역 서브시스템 식별자
 public let LogSubsystem: String = {
@@ -16,15 +17,16 @@ public let LogSubsystem: String = {
 public struct Log {
     // MARK: – iOS 14+ 전용 Logger 인스턴스
     @available(iOS 14.0, *)
-    fileprivate static let debugLogger   = Logger(subsystem: LogSubsystem, category: "Debug")
+    fileprivate static let debugLogger   = LoggingMacroHelper.generateLogger(category: "Debug")
     @available(iOS 14.0, *)
-    fileprivate static let infoLogger    = Logger(subsystem: LogSubsystem, category: "Info")
+    fileprivate static let infoLogger    = LoggingMacroHelper.generateLogger(category: "Info")
     @available(iOS 14.0, *)
-    fileprivate static let networkLogger = Logger(subsystem: LogSubsystem, category: "Network")
+    fileprivate static let networkLogger = LoggingMacroHelper.generateLogger(category: "Network")
     @available(iOS 14.0, *)
-    fileprivate static let errorLogger   = Logger(subsystem: LogSubsystem, category: "Error")
+    fileprivate static let errorLogger   = LoggingMacroHelper.generateLogger(category: "Error")
     @available(iOS 14.0, *)
-    fileprivate static let traceLogger   = Logger(subsystem: LogSubsystem, category: "Trace")
+    fileprivate static let traceLogger   = LoggingMacroHelper.generateLogger(category: "Trace")
+
     
     // MARK: – iOS 13 호환용 Legacy OSLog 인스턴스
     fileprivate static let legacyDebugLog   = OSLog(subsystem: LogSubsystem, category: "Debug")
@@ -220,18 +222,6 @@ public extension Log {
     }
 }
 
-
-enum APILogTypes: String {
-    case postUserData
-    case patchUserData
-    case fetchLocationData
-}
-
-enum httpTimeLog {
-    static let postUserData = OSLog(subsystem: LogSubsystem, category: APILogTypes.postUserData.rawValue)
-    static let patchUserData = OSLog(subsystem: LogSubsystem, category: APILogTypes.patchUserData.rawValue)
-    static let fetchLocationData = OSLog(subsystem: LogSubsystem, category: APILogTypes.fetchLocationData.rawValue)
-}
 
 struct Signpost {
     let log: OSLog

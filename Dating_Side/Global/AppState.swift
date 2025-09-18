@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Logging
 
 // 앱 상태를 관리하는 클래스
 class AppState: ObservableObject {
@@ -139,8 +140,11 @@ class AppState: ObservableObject {
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
         currentScreen = .main
         onboardingPath = NavigationPath()
-        await ProfileViewModel().fetchUserAccountData()
         let accessToken = KeychainManager.shared.getAccessToken()
         Log.debugPrivate("accessToken checking", accessToken)
+//        await ProfileViewModel().fetchUserAccountData()
+        
     }
+    
+    
 }

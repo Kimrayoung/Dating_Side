@@ -10,6 +10,7 @@ import Kingfisher
 
 @MainActor
 struct ChatListView: View {
+    @EnvironmentObject private var appState: AppState
     @StateObject var viewModel = ChatListViewModel()
     
     let columns = [
@@ -17,10 +18,12 @@ struct ChatListView: View {
             GridItem(.flexible())
         ]
     
-    @State var matchingStatus: MatchingStatusType? = nil
-    @State var toMeArr: [PartnerAccount] = []
+    @AppStorage("matchingStatus") private var matchingStatus: String = MatchingStatusType.UNMATCHED.rawValue
+    
+    @AppStorage("username") private var username: String = ""
+    @State var toMeArr: [AttractionPartnerData] = []
     @State var selectedPartner: PartnerAccount? = nil
-    @State var formMeAccount: PartnerAccount? = nil
+    @State var formMeAccount: AttractionPartnerData? = nil
     @State var chattingRoomData: ChattingRoomResponse? = nil
     @State private var showProfile: Bool = false
     @State private var showGoodByeView: Bool = false
@@ -29,12 +32,18 @@ struct ChatListView: View {
     
     var body: some View {
         VStack {
-            if matchingStatus == .UNMATCHED || matchingStatus == .LEFT {
+            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue {
                 formme
                 tome
-            } else if matchingStatus == .MATCHED , let chattingRoomData = chattingRoomData {
+            } else if matchingStatus == MatchingStatusType.MATCHED.rawValue , let chattingRoomData = chattingRoomData {
                 matchingSimpleProfile(chattingRoomData: chattingRoomData)
+                    .padding(.vertical, 32)
+                    .padding(.horizontal, 24)
+                    .onTapGesture {
+                        appState.chatPath.append(Chating.chatRoom(roomId: chattingRoomData.roomId, partnerName: chattingRoomData.partnerNickName, partnerImageUrl: chattingRoomData.partnerProfileImageUrl))
+                    }
                 matchingSuccessImageView
+                Spacer()
             }
         }
         .toolbar(content: {
@@ -54,10 +63,10 @@ struct ChatListView: View {
             selectedPartner = nil
             toMeArr = await viewModel.senderAttraction()
             formMeAccount = await viewModel.receiverAttraction().first
-            matchingStatus = await viewModel.fetchMatchingStauts()
-            if matchingStatus == .MATCHED {
+            print(#fileID, #function, #line, "- matchingStatus: \(matchingStatus)")
+            if matchingStatus == MatchingStatusType.MATCHED.rawValue {
                 chattingRoomData = await viewModel.chattingRoomRequest()
-            } else if matchingStatus == .LEFT {
+            } else if matchingStatus == MatchingStatusType.LEFT.rawValue {
                 showLeaveAlert = true
             }
         }
@@ -95,7 +104,7 @@ struct ChatListView: View {
                 .foregroundStyle(Color.gray3)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if let profile = formMeAccount {
-                simpleProfile(profile)
+                simpleProfile(profile.partnerInfo)
                     .padding(.vertical, 17)
             } else {
                 Text("아직 다가간 사람이 없어요")
@@ -160,7 +169,7 @@ struct ChatListView: View {
                 ScrollView {
                     LazyVGrid(columns: columns, content: {
                         ForEach(toMeArr, id: \.self) { userProfile in
-                            simpleTomeProfile(userProfile)
+                            simpleTomeProfile(userProfile.partnerInfo)
                         }
                     })
                 }
@@ -180,17 +189,21 @@ struct ChatListView: View {
     
     func matchingSimpleProfile(chattingRoomData: ChattingRoomResponse) -> some View {
         return HStack {
-            KFImage(URL(string: "https://picsum.photos/200/300"))
+            KFImage(URL(string: chattingRoomData.partnerProfileImageUrl))
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 72, height: 72)
+                .clipShape(Circle())
             VStack {
                 Text(chattingRoomData.partnerNickName)
                     .font(.pixel(16))
-                Text(chattingRoomData.lastMessage)
+                Text(chattingRoomData.lastMessage ?? "")
                     .font(.system(size: 15))
                     .foregroundStyle(Color.gray3)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             VStack {
-                Text(chattingRoomData.lastMessageTime.hourAndMinuteString)
+                Text(chattingRoomData.timestampDate?.hourAndMinuteString ?? "")
                     .font(.pixel(12))
                     .foregroundStyle(Color.gray3)
                 if chattingRoomData.notReadMessageCount > 0 {
@@ -199,6 +212,7 @@ struct ChatListView: View {
                         .foregroundStyle(Color.whiteColor)
                         .frame(width: 28, height: 28)
                         .background(Color.mainColor)
+                        .clipShape(Circle())
                 }
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -207,7 +221,7 @@ struct ChatListView: View {
     
     var matchingSuccessImageView: some View {
         VStack {
-            Text("윈터님과 매칭 된 지 1일차")
+            Text("\(chattingRoomData?.partnerNickName ?? "")님과 매칭 된 지 1일차")
                 .font(.pixel(20))
                 .foregroundStyle(Color.blackColor)
                 .frame(maxWidth: .infinity, alignment: .leading)

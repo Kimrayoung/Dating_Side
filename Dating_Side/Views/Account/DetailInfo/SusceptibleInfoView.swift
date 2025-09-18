@@ -47,6 +47,11 @@ struct SusceptibleInfoView: View {
         }
         .task {
             await viewModel.fetchLifeStyle(lifeStyle: lifeStyle)
+            //lifeStyle이 있다는 것 -> 마이페이지에서 수정하는 경우
+            if lifeStyle != nil {
+                viewModel.isOnboarding = .mypageEdit
+                possibleNext = true
+            }
         }
         .padding(.horizontal, 24)
         .navigationTitle("")
@@ -58,7 +63,12 @@ struct SusceptibleInfoView: View {
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.onboardingPath.removeLast()
+                    if viewModel.isOnboarding == .mypageEdit {
+                        appState.myPagePath.removeLast()
+                    } else {
+                        appState.onboardingPath.removeLast()
+                    }
+                    
                 } label: {
                     Image("navigationBackBtn")
                 }

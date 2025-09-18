@@ -7,12 +7,19 @@
 
 import SwiftUI
 
+/// 오늘의 질문리스트 답변(질문 작성 뷰)
 struct MatchingAnswerView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject private var viewModel: QuestionViewModel
     @FocusState private var isFocused: Bool
     @State private var answer: String = ""
     @State private var possibleNext: [Int : Bool] = [:]
+    @AppStorage("matchingStatus") private var matchingStatusRaw: String = MatchingStatusType.UNMATCHED.rawValue
+    
+    private var matchingStatus: MatchingStatusType {
+        get { MatchingStatusType(rawValue: matchingStatusRaw) ?? .UNMATCHED }
+        set { matchingStatusRaw = newValue.rawValue }
+    }
     
     var body: some View {
         VStack {
@@ -142,10 +149,14 @@ struct MatchingAnswerView: View {
             viewModel.answers[viewModel.currentIndex] = answer
             
             if viewModel.isLastQuestion {
-                Task {
-                    await viewModel.postTodayQuetionAnswers()
+//                Task {
+//                    await viewModel.postTodayQuetionAnswers()
+//                }
+                if matchingStatus == .MATCHED {
+                    appState.matchingPath.append(Matching.answerCompleteMain)
+                } else {
+                    appState.matchingPath.append(Matching.questionComplete)
                 }
-                appState.matchingPath.append(Matching.questionComplete)
             } else {
                 viewModel.currentIndex += 1
             }

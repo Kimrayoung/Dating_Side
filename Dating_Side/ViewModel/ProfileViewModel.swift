@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Logging
 
 final class ProfileViewModel: ObservableObject {
     let loadingManager = LoadingManager.shared

@@ -46,8 +46,8 @@
             filePath = "Dating_Side/Network/NetworkManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
             landmarkName = "callWithAsync(endpoint:httpCodes:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "Dating_Side/ViewModel/OnboardingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "547"
-            endingLineNumber = "547"
+            startingLineNumber = "544"
+            endingLineNumber = "544"
             landmarkName = "fetchLifeStyle(lifeStyle:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "Dating_Side/ViewModel/OnboardingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "323"
-            endingLineNumber = "323"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "updateEducation()"
             landmarkType = "7">
          </BreakpointContent>
@@ -142,8 +142,8 @@
             filePath = "Dating_Side/Views/Main/Matching/MatchingAnswerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "nextAnswerButton"
             landmarkType = "24">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "Dating_Side/ViewModel/QuestionViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
             landmarkName = "postTodayQuetionAnswers()"
             landmarkType = "7">
          </BreakpointContent>
@@ -174,8 +174,8 @@
             filePath = "Dating_Side/ViewModel/OnboardingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "572"
-            endingLineNumber = "572"
+            startingLineNumber = "569"
+            endingLineNumber = "569"
             landmarkName = "postUserData()"
             landmarkType = "7">
          </BreakpointContent>

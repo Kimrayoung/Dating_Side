@@ -9,12 +9,14 @@ import SwiftUI
 
 struct ChatingView: View {
     @EnvironmentObject private var appState: AppState
-    @StateObject private var vm = ChatViewModel(roomId: "1234") // 실제 서버로 교체
+    @StateObject private var vm: ChatViewModel
 
     let buttonTitles: [String] = ["아주 좋아요", "좋아요", "보통이에요", "별로에요", "최악이에요"]
     let buttonColors: [Color] = [.mainColor, .subColor2, .gray01, .gray2, .gray3]
+    let roomId: String
 
-    @State private var username: String = "user"
+    @State private var partnerName: String = "user"
+    @State private var partnerProfileImageUrl: String = ""
     @State private var showTimestamps = false
     @State private var messageText = ""
     @State private var showProfile: Bool = false
@@ -23,6 +25,14 @@ struct ChatingView: View {
     @State private var showGoodByeView: Bool = false
     
     @GestureState private var dragOffset: CGFloat = 0
+    
+    init(roomId: String, partnerName: String, partnerImageUrl: String) {
+        self.roomId = roomId
+        self.partnerName = partnerName
+        self.partnerProfileImageUrl = partnerImageUrl
+        Log.debugPrivate("roodId", roomId)
+        _vm = StateObject(wrappedValue: ChatViewModel(roomId: roomId))
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,6 +42,7 @@ struct ChatingView: View {
                         ForEach(vm.messages) { message in
                             MessageRow(
                                 message: message,
+                                partnerImageUrl: partnerProfileImageUrl,
                                 showTimestamp: showTimestamps,
                                 showProfile: $showProfile
                             )
@@ -66,12 +77,17 @@ struct ChatingView: View {
 
             sendTextField
         }
-        .onAppear { vm.connect() }
+        .onAppear {
+            Task {
+                await vm.fetchChattingData()
+            }
+            vm.connect()
+        }
         .onDisappear { vm.disconnect() }
         .onTapGesture { UIApplication.shared.hideKeyboard() }
         .sheet(isPresented: $showProfile) {
             PartnerProfileView(profileShow: $showProfile, needMathcingRequest: .matchComplete)
-                .presentationDetents([.fraction(0.99)])
+                .presentationDetents([.fraction(0.8)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
         }
@@ -87,8 +103,10 @@ struct ChatingView: View {
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
         }
+        .navigationTitle(partnerName)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar(content: {
-            ToolbarItem(placement: .navigationBarLeading) {
+            ToolbarItem(placement: .navigationBarTrailing) {
                 navigationTrailingMenu
             }
         })
@@ -118,14 +136,14 @@ struct ChatingView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         let userID = UserDefaults.standard.integer(forKey: "userId")
-        vm.send(content: text, sender: userID)   // 0 = 나
+        vm.send(content: text)   // 0 = 나
         messageText = ""
     }
 
     // (옵션) 하단 만족도 영역 – 필요 시 원하는 곳에 배치
     var afterAssessment: some View {
         VStack {
-            Text("[\(username)님과 대화는 어땠나요?]")
+            Text("[\(partnerName)님과 대화는 어땠나요?]")
                 .font(.pixel(12))
             HStack {
                 ForEach(0..<buttonTitles.count, id: \.self) { index in
@@ -166,9 +184,6 @@ struct ChatingView: View {
     }
 }
 
-#Preview {
-    ChatingView()
-}
 
 struct MyTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {

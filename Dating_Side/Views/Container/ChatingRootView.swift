@@ -16,8 +16,8 @@ struct ChatingRootView: View {
                 .navigationDestination(for: Chating.self) { step in
                     switch step {
                     case .chatList: ChatListView()
-                    case .chatRoom(let roomId):
-                        ChatingView()
+                    case let .chatRoom(roomId, partnerName, partnerImageUrl):
+                        ChatingView(roomId: roomId, partnerName: partnerName, partnerImageUrl: partnerImageUrl)
                     }
                 }
         }

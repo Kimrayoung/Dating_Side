@@ -24,7 +24,11 @@ struct ProfileEditView: View {
                 
             }
             ArrowNextRow(label: "추가 사진 변경", subTitle: nil) {
-                
+                if isOnboarding {
+                    
+                } else {
+                    appState.myPagePath.append(MyPage.additionalImageEdit(profileImageUrl: profileViewModel.userData?.profileImageURLByDay))
+                }
                 
             }
             ArrowNextRow(label: "지역 변경", subTitle: nil) {

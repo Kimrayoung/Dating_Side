@@ -44,6 +44,8 @@ struct MyPageRootView: View {
                     SusceptibleInfoView(viewModel: AccountViewModel(), lifeStyle: lifeStyle)
                 case .webView(let url):
                     WebView(urlString: url)
+                case let .additionalImageEdit(profileImageUrls):
+                    AdditionalImageEditView(isOnboarding: false, profileImageUrl: profileImageUrls)
                 }
             }
     }
