@@ -105,9 +105,17 @@ struct ChatingView: View {
         }
         .navigationTitle(partnerName)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarTrailing) {
                 navigationTrailingMenu
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    appState.chatPath.removeLast()
+                } label: {
+                    Image("navigationBackBtn")
+                }
             }
         })
     }

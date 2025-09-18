@@ -19,7 +19,7 @@ struct ChatListView: View {
         ]
     
     @AppStorage("matchingStatus") private var matchingStatus: String = MatchingStatusType.UNMATCHED.rawValue
-    
+    @AppStorage("matchingDate") private var matchingTimeString: String = ""
     @AppStorage("username") private var username: String = ""
     @State var toMeArr: [AttractionPartnerData] = []
     @State var selectedPartner: PartnerAccount? = nil
@@ -64,9 +64,15 @@ struct ChatListView: View {
             toMeArr = await viewModel.senderAttraction()
             formMeAccount = await viewModel.receiverAttraction().first
             print(#fileID, #function, #line, "- matchingStatus: \(matchingStatus)")
+            // 매칭된 사람이 있음
             if matchingStatus == MatchingStatusType.MATCHED.rawValue {
                 chattingRoomData = await viewModel.chattingRoomRequest()
-            } else if matchingStatus == MatchingStatusType.LEFT.rawValue {
+                guard let matchedAt = matchingTimeString.toDate() else { return }
+                let passedDate = matchedAt.daysSince(matchedAt, in: .current)
+                let checkpassedDate = matchedAt.hasPassed(days: 2, since: Date())
+                Log.debugPublic("몇일이나 지났는지 확인", matchedAt, checkpassedDate, passedDate, matchingTimeString)
+                
+            } else if matchingStatus == MatchingStatusType.LEFT.rawValue { // 매칭된 사람이 떠남
                 showLeaveAlert = true
             }
         }

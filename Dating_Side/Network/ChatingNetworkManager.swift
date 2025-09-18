@@ -21,11 +21,17 @@ struct ChattingNetworkManager {
     func chattingRoom() async throws -> Result<ChattingRoomResponse, Error> {
         return await networkManager.callWithAsync(endpoint: ChatingNetworkManager.chattingRoom, httpCodes: .success)
     }
+    
+    func matchingPartnerPhoto() async throws -> Result<UserImage, Error> {
+        return await networkManager.callWithAsync(endpoint: ChatingNetworkManager.matchingPartnerPhoto, httpCodes: .success)
+    }
 }
 
 enum ChatingNetworkManager {
     case chatting
     case chattingRoom
+    /// 매칭된 상태 일자별 프로필 사진 조회
+    case matchingPartnerPhoto
 }
 
 extension ChatingNetworkManager: APIManager {
@@ -35,6 +41,8 @@ extension ChatingNetworkManager: APIManager {
             return "chatting"
         case .chattingRoom:
             return "chatting/chatroom"
+        case .matchingPartnerPhoto:
+            return "matching/partner/profile-image"
         }
     }
     

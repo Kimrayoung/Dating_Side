@@ -5,6 +5,8 @@
 //  Created by 김라영 on 8/7/25.
 //
 
+import Foundation
+
 struct PartnerRequest: Codable {
     let partnerId: Int
 }
@@ -38,6 +40,22 @@ struct MatchingStatusResponse: Codable {
         default:
             return .UNMATCHED
         }
+    }
+    
+    var timestampDate: Date? {
+        guard let matchedAt = matchedAt else { return nil }
+        guard matchedAt.count >= 6 else { return nil }
+        var comps = DateComponents()
+        comps.year   = matchedAt[0]
+        comps.month  = matchedAt[1]
+        comps.day    = matchedAt[2]
+        comps.hour   = matchedAt[3]
+        comps.minute = matchedAt[4]
+        comps.second = matchedAt[5]
+        if matchedAt.count >= 7 {
+            comps.nanosecond = matchedAt[6]
+        }
+        return Calendar.current.date(from: comps)
     }
 }
 

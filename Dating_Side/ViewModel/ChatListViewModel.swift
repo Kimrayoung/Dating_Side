@@ -114,4 +114,24 @@ extension ChatListViewModel {
         }
         return nil
     }
+    
+    @MainActor
+    func matchingPartnerPhoto() async {
+        loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await chatNetwork.matchingPartnerPhoto()
+            switch result {
+            case .success(let userImage):
+                Log.debugPublic("매칭 사진", userImage)
+            case .failure(let error):
+                Log.errorPublic(error.localizedDescription)
+            }
+        }  catch {
+            Log.errorPublic(error.localizedDescription)
+        }
+    }
 }

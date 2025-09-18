@@ -41,4 +41,38 @@ extension Date {
         ]
     }
     
+    /// 오늘을 기준으로 날짜가 얼마나 지났는지 확인
+    func daysSince(_ from: Date, in timeZone: TimeZone = .current) -> Int {
+        var cal = Calendar.current
+        cal.timeZone = timeZone          // 예: TimeZone(identifier: "Asia/Seoul")
+        let start = cal.startOfDay(for: from)
+        let today = cal.startOfDay(for: Date())
+        return cal.dateComponents([.day], from: start, to: today).day ?? 0
+    }
+
+    /// N일이 지난게 맞는지 체크
+    func hasPassed(days n: Int, since from: Date, in tz: TimeZone = .current) -> Bool {
+        daysSince(from, in: tz) >= n
+    }
+}
+
+enum ISO8601 {
+    // 재사용(성능)용 포매터들
+    static let withFractional: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        f.timeZone = TimeZone(secondsFromGMT: 0)! // "Z" = UTC
+        return f
+    }()
+    static let noFractional: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        f.timeZone = TimeZone(secondsFromGMT: 0)!
+        return f
+    }()
+}
+
+/// "2025-09-18T10:53:22.014Z" 같은 문자열 파싱
+func stringToDate(_ s: String) -> Date? {
+    ISO8601.withFractional.date(from: s) ?? ISO8601.noFractional.date(from: s)
 }

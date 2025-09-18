@@ -31,9 +31,7 @@ struct MatchingNetworkManager {
         return await networkManager.callWithAsync(endpoint: MatchingAPIManager.matchingPartner, httpCodes: .success)
     }
     
-    func matchingPartnerPhoto() async throws -> Result<UserImage, Error> {
-        return await networkManager.callWithAsync(endpoint: MatchingAPIManager.matchingPartnerPhoto, httpCodes: .success)
-    }
+    
 }
 
 enum MatchingAPIManager {
@@ -45,8 +43,7 @@ enum MatchingAPIManager {
     case matchingComplete(attraction: PartnerRequest)
     /// 매칭된 상대 정보 조회
     case matchingPartner
-    /// 매칭된 상태 일자별 프로필 사진 조회
-    case matchingPartnerPhoto
+    
 }
 
 extension MatchingAPIManager: APIManager {
@@ -56,8 +53,6 @@ extension MatchingAPIManager: APIManager {
             return "matching/confirm"
         case .matchingPartner:
             return "matching/partner"
-        case .matchingPartnerPhoto:
-            return "matching/partner/profile-image"
         default :
             return "matching"
         }
@@ -65,7 +60,7 @@ extension MatchingAPIManager: APIManager {
     
     var method: HTTPMethod {
         switch self {
-        case .matchingPartner, .matchingPartnerPhoto:
+        case .matchingPartner:
             return .get
         case .matchingCancel:
             return .delete

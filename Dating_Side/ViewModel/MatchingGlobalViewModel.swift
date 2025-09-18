@@ -25,6 +25,8 @@ class MatchingGlobalViewModel {
             case .success(let matchStatusData):
                 Log.debugPublic("매칭상대 조회 성공",matchStatusData)
                 UserDefaults.standard.set(matchStatusData.matchingStatusType.rawValue, forKey: "matchingStatus")
+                Log.debugPublic("matchingDate", matchStatusData.timestampDate?.toString())
+                UserDefaults.standard.set(matchStatusData.timestampDate?.toString(), forKey: "matchingDate")
                 return
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)

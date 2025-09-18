@@ -116,6 +116,7 @@
 		4D97CCA82E74318500874F99 /* MatchingRequestComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D97CCA72E74318500874F99 /* MatchingRequestComplete.swift */; };
 		4D97CCAA2E754D6900874F99 /* MatchingGlobalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D97CCA92E754D6900874F99 /* MatchingGlobalViewModel.swift */; };
 		4D97CCAC2E75501500874F99 /* MatchingGlobalNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D97CCAB2E75501500874F99 /* MatchingGlobalNetworkManager.swift */; };
+		4D97CCAE2E7C4D3C00874F99 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D97CCAD2E7C4D3C00874F99 /* String+Ext.swift */; };
 		4D9DE9042E366E69003BD47A /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9DE9032E366E69003BD47A /* AlertManager.swift */; };
 		4D9E95182E32853400B007DF /* UIImage+ResizeCompress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E95172E32853400B007DF /* UIImage+ResizeCompress.swift */; };
 		4D9E951C2E365BDF00B007DF /* LoadingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E951B2E365BD500B007DF /* LoadingManager.swift */; };
@@ -295,6 +296,7 @@
 		4D97CCA72E74318500874F99 /* MatchingRequestComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingRequestComplete.swift; sourceTree = "<group>"; };
 		4D97CCA92E754D6900874F99 /* MatchingGlobalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingGlobalViewModel.swift; sourceTree = "<group>"; };
 		4D97CCAB2E75501500874F99 /* MatchingGlobalNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingGlobalNetworkManager.swift; sourceTree = "<group>"; };
+		4D97CCAD2E7C4D3C00874F99 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		4D9DE9032E366E69003BD47A /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		4D9E95172E32853400B007DF /* UIImage+ResizeCompress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+ResizeCompress.swift"; sourceTree = "<group>"; };
 		4D9E951B2E365BD500B007DF /* LoadingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingManager.swift; sourceTree = "<group>"; };
@@ -602,6 +604,7 @@
 				4D6D18692D6343B600698E5D /* Font+Ext.swift */,
 				4D443BA82DCBAB6A00F4B9EB /* Codable+Ext.swift */,
 				4DEB5A702E0ADACB009BE55B /* Date+Ext.swift */,
+				4D97CCAD2E7C4D3C00874F99 /* String+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1044,6 +1047,7 @@
 				4D389C542E2CEF4B00B56F84 /* Question.swift in Sources */,
 				4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */,
 				4DC7DD9B2E4A2C770052FECB /* AnswerCompleteMainView.swift in Sources */,
+				4D97CCAE2E7C4D3C00874F99 /* String+Ext.swift in Sources */,
 				4D95FACF2D5A1DED00D0E4D7 /* Dating_SideApp.swift in Sources */,
 				4DC7E9AB2E5B4F2000823DC3 /* ChatingNetworkManager.swift in Sources */,
 				4D90B83D2E51A9A400323D8B /* SendQuestionModalSheet.swift in Sources */,
