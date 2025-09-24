@@ -33,6 +33,8 @@ struct MatchingStatusResponse: Codable {
     
     var matchingStatusType: MatchingStatusType {
         switch matchingStatus {
+        case "ATTRACTED":
+            return .ATTRACTED
         case "LEFT":
             return .LEFT
         case "MATCHED":
@@ -73,4 +75,5 @@ enum MatchingStatusType: String{
     case UNMATCHED
     case MATCHED
     case LEFT
+    case ATTRACTED
 }

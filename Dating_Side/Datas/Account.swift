@@ -184,11 +184,13 @@ struct PartnerAccount: Codable, Hashable, Identifiable {
     let profileImageURL, introduction: String
     let profile: UserAnswersResponse
     let mannerTemperature: Int
+//    let fcmToken: String
     
     enum CodingKeys: String, CodingKey {
         case id, nickName, birthYear, height, activeRegion, keyword, educationType, educationDetail, jobType, jobDetail, lifeStyle
         case profileImageURL = "profileImageUrl"
         case introduction, profile, mannerTemperature
+//        case fcmToken
     }
 }
 

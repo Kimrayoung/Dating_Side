@@ -142,6 +142,7 @@ class AppState: ObservableObject {
         onboardingPath = NavigationPath()
         let accessToken = KeychainManager.shared.getAccessToken()
         Log.debugPrivate("accessToken checking", accessToken)
+        await MatchingGlobalViewModel().fetchMatchingStauts()
 //        await ProfileViewModel().fetchUserAccountData()
         
     }
