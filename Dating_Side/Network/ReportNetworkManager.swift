@@ -5,7 +5,7 @@
 //  Created by 김라영 on 8/3/25.
 //
 import Foundation
-import Logging
+
 
 struct ReportNetworkManager {
     private let networkManager: NetworkProtocol

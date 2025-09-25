@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Logging
+
 
 struct AttractionNetworkManager {
     private let networkManager: NetworkProtocol

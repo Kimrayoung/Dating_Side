@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Logging
+
 
 // 앱 상태를 관리하는 클래스
 class AppState: ObservableObject {
