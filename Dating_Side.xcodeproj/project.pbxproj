@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,7 +15,6 @@
 		4D2AB0082DB6705E00A4C73B /* GenericDigitTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2AB0072DB6705E00A4C73B /* GenericDigitTextField.swift */; };
 		4D301E932E2E5FC3001FA1A1 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D301E922E2E5FBC001FA1A1 /* PermissionManager.swift */; };
 		4D301E952E2E610E001FA1A1 /* PhotoPickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D301E942E2E6109001FA1A1 /* PhotoPickerButton.swift */; };
-		4D33679A2E65EEC1009A4D97 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 4D3367992E65EEC1009A4D97 /* Logging */; };
 		4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D33EA182E0995B600B2661B /* ChatListViewModel.swift */; };
 		4D389C2A2E1C0ECF00B56F84 /* AppleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C292E1C0EC900B56F84 /* AppleAuth.swift */; };
 		4D389C2C2E1E9DB800B56F84 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D389C2B2E1E9DB600B56F84 /* Account.swift */; };
@@ -363,7 +362,6 @@
 				4D389C412E253DF700B56F84 /* Kingfisher in Frameworks */,
 				4D389C442E253E0E00B56F84 /* NidThirdPartyLogin in Frameworks */,
 				4DB922BA2E5DC98500A87023 /* FirebaseAnalyticsCore in Frameworks */,
-				4D33679A2E65EEC1009A4D97 /* Logging in Frameworks */,
 				4D9E951F2E365CCF00B007DF /* Lottie in Frameworks */,
 				4DB922B82E5DC98500A87023 /* FirebaseAnalytics in Frameworks */,
 				4DB922BC2E5DC98500A87023 /* FirebaseAppCheck in Frameworks */,
@@ -834,7 +832,6 @@
 				4DB922B92E5DC98500A87023 /* FirebaseAnalyticsCore */,
 				4DB922BB2E5DC98500A87023 /* FirebaseAppCheck */,
 				4DB922BD2E5DC98500A87023 /* FirebaseMessaging */,
-				4D3367992E65EEC1009A4D97 /* Logging */,
 			);
 			productName = Dating_Side;
 			productReference = 4D95FACB2D5A1DED00D0E4D7 /* Dating_Side.app */;
@@ -914,7 +911,6 @@
 				4D389C422E253E0E00B56F84 /* XCRemoteSwiftPackageReference "naveridlogin-sdk-ios-swift" */,
 				4D9E951D2E365C8F00B007DF /* XCRemoteSwiftPackageReference "lottie-spm" */,
 				4DB922B62E5DC98500A87023 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				4D3367982E65EEC1009A4D97 /* XCLocalSwiftPackageReference "../Logging" */,
 			);
 			productRefGroup = 4D95FACC2D5A1DED00D0E4D7 /* Products */;
 			projectDirPath = "";
@@ -1306,7 +1302,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Dating_Side/Preview Content\"";
-				DEVELOPMENT_TEAM = DSRQ5VPU2Y;
+				DEVELOPMENT_TEAM = 5664C7G97A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Dating-Side-Info.plist";
@@ -1453,13 +1449,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		4D3367982E65EEC1009A4D97 /* XCLocalSwiftPackageReference "../Logging" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Logging;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		4D389C362E253DE800B56F84 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1504,10 +1493,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4D3367992E65EEC1009A4D97 /* Logging */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Logging;
-		};
 		4D389C372E253DE800B56F84 /* KakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4D389C362E253DE800B56F84 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;

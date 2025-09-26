@@ -21,13 +21,34 @@ struct VerificationNumber: View {
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 36)
             verificationNumberView
+            
+            HStack{
+                if viewModel.timerRunning{
+                    Image("timer")
+                    Text(viewModel.timerString)
+                        .font(.rounded(18))
+                        .foregroundStyle(Color(hex: "FF7878"))
+                }else{
+                    Button {
+                        viewModel.resendVerficationNumber()
+                    } label: {
+                        Image("resend")
+                        Text("재발송")
+                            .font(.rounded(18))
+                            .foregroundStyle(Color.black)
+                    }
+                }
+            }
+            .padding(.top, 4) ///피그마 dev모드가 안돼요.. 정확한 간격을 모르겠어요..
+            
             Spacer()
+            
             Button(action: {
                 if !viewModel.checkVerificationNumber() {
                     return
                 }
                 hideKeyboard()
-                Task {
+                Task{
                     let result = await viewModel.verifySMSCode()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         if result {
@@ -49,6 +70,8 @@ struct VerificationNumber: View {
                 if viewModel.verificationNumber.count == 4 {
                     focusedField = .verificationNumber(viewModel.verificationNumber.count - 1)
                 }
+                
+                await viewModel.timerStart()
             }
         }
         .onChange(of: viewModel.verificationNumber) { oldValue, newValue in

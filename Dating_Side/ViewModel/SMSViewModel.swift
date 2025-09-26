@@ -16,8 +16,14 @@ final class SMSViewModel: ObservableObject {
     
     @Published var phoneFrontNumber: [String] = ["", "", "", ""]
     @Published var phoneBackNumber: [String]
-     = ["", "", "", ""]
+    = ["", "", "", ""]
     @Published var verificationNumber: [String] = ["", "", "", ""]
+    
+    @Published var timerString: String = "3:00"
+    @Published var timerRemaining: Int = 180
+    @Published var timerRunning: Bool = true
+    
+    private var cancellable: AnyCancellable?
     
     
     // 핸드폰 번호에 빈문자열이 들어가져 있는지 확인
@@ -67,7 +73,46 @@ extension SMSViewModel {
                 Log.errorPublic("smsTokenResponse error: \(error)")
             }
         } catch {
-//            Log.errorPublic("smsToken 실패: \(error)")
+            //            Log.errorPublic("smsToken 실패: \(error)")
+        }
+    }
+    
+    ///타이머 시작
+    func timerStart() async {
+        cancellable?.cancel()
+        timerRunning = true
+        cancellable = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                self.timerRemaining -= 1
+                self.updateTimeString()
+                
+                if self.timerRemaining <= 0 {
+                    self.timerStop()
+                }
+            }
+    }
+    
+    ///타이머 업데이트
+    private func updateTimeString() {
+        let minutes = self.timerRemaining / 60
+        let seconds = self.timerRemaining % 60
+        self.timerString = String(format: "%d:%02d", minutes, seconds)
+    }
+    
+    ///타이머 종료
+    func timerStop() {
+        timerRunning = false
+        cancellable?.cancel()
+    }
+    
+    ///인증번호 재전송
+    func resendVerficationNumber(){
+        Task{
+            await requestVerifiactionNumber()
+            await timerStart()
         }
     }
     
@@ -75,15 +120,15 @@ extension SMSViewModel {
     func requestVerifiactionNumber() async {
         if smsBaseToken == "" { return }
         let phoneNumber = getPhoneNumber()
-
-//        let separateDigit = separateDigist(1234)
-//        for i in 0...3 {
-//            verificationNumber[i] = separateDigit[i]
-//        }
-//        if checkPhoneNumbers() {
-//            loginComplete = true
-//        }
-
+        
+        //        let separateDigit = separateDigist(1234)
+        //        for i in 0...3 {
+        //            verificationNumber[i] = separateDigit[i]
+        //        }
+        //        if checkPhoneNumbers() {
+        //            loginComplete = true
+        //        }
+        
         let smsCodeRequest = SMSCodeRequest(phoneNumber: phoneNumber)
         do {
             let result = try await smsNetworkManger.getSmsCode(token: smsBaseToken, smsCodeRequest: smsCodeRequest)
@@ -94,12 +139,12 @@ extension SMSViewModel {
                 for i in 0...3 {
                     verificationNumber[i] = separateDigit[i]
                 }
-//                Log.networkPrivate("코드 수신 성공", code)
+                //                Log.networkPrivate("코드 수신 성공", code)
             case .failure(let error):
                 Log.errorPublic("인증번호 받아오는 거 실패", error)
             }
         } catch {
-//            Log.errorPublic("인증번호 받아오는 거 실패", error)
+            //            Log.errorPublic("인증번호 받아오는 거 실패", error)
         }
     }
     
@@ -107,19 +152,19 @@ extension SMSViewModel {
     func verifySMSCode() async -> Bool {
         let phoneNumber = getPhoneNumber()
         let verificationNumber = getVerificationNumber()
-
+        
         let smsVerifyRequest = SMSVerifyRequest(phoneNumber: phoneNumber, code: verificationNumber)
         do {
             let result = try await smsNetworkManger.verifySmsCode(smsVerifyRequest: smsVerifyRequest)
             switch result {
             case .success:
-//                Log.errorPrivate("검증 성공")
+                //                Log.errorPrivate("검증 성공")
                 return true
             case .failure(let error):
                 Log.errorPublic("검증 실패", error)
             }
         } catch {
-//            Log.errorPublic("검증 실패", error)
+            //            Log.errorPublic("검증 실패", error)
         }
         return false
     }
