@@ -23,6 +23,10 @@ final class SMSViewModel: ObservableObject {
     @Published var timerRemaining: Int = 180
     @Published var timerRunning: Bool = true
     
+    @Published var vertificationCount : Int = 1
+    @Published var vertificationFail : Bool = false
+    @Published var vertificationBlock : Bool = false
+    
     private var cancellable: AnyCancellable?
     
     
@@ -109,10 +113,20 @@ extension SMSViewModel {
     }
     
     ///인증번호 재전송
-    func resendVerficationNumber(){
-        Task{
+    func resendVerficationNumber() {
+        guard !vertificationBlock else {
+            return
+        }
+        
+        Task {
             await requestVerifiactionNumber()
             await timerStart()
+            
+            if self.vertificationCount < 5 {
+                self.vertificationCount += 1
+            } else {
+                self.vertificationBlock = true
+            }
         }
     }
     
@@ -159,9 +173,11 @@ extension SMSViewModel {
             switch result {
             case .success:
                 //                Log.errorPrivate("검증 성공")
+                self.vertificationFail = false
                 return true
             case .failure(let error):
                 Log.errorPublic("검증 실패", error)
+                self.vertificationFail = true
             }
         } catch {
             //            Log.errorPublic("검증 실패", error)

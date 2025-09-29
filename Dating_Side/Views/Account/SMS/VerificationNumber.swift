@@ -22,26 +22,40 @@ struct VerificationNumber: View {
                 .padding(.bottom, 36)
             verificationNumberView
             
-            HStack{
-                if viewModel.timerRunning{
-                    Image("timer")
-                    Text(viewModel.timerString)
-                        .font(.rounded(18))
-                        .foregroundStyle(Color(hex: "FF7878"))
-                }else{
+            HStack {
+                ZStack {
+                    HStack{
+                        Image("timer")
+                        Text(viewModel.timerString)
+                            .font(.rounded(18))
+                            .foregroundStyle(Color(hex: "FF7878"))
+                    }
+                    .opacity(viewModel.timerRunning ? 1 : 0)
+                    
                     Button {
                         viewModel.resendVerficationNumber()
                     } label: {
-                        Image("resend")
-                        Text("재발송")
-                            .font(.rounded(18))
-                            .foregroundStyle(Color.black)
+                        HStack{
+                            Image("resend")
+                            Text("재전송")
+                                .font(.rounded(18))
+                                .foregroundStyle(Color.black)
+                        }
                     }
+                    .opacity(viewModel.timerRunning ? 0 : 1)
+                    .disabled(viewModel.vertificationBlock)
                 }
             }
-            .padding(.top, 4) ///피그마 dev모드가 안돼요.. 정확한 간격을 모르겠어요..
+            .padding(.top, 16)
             
             Spacer()
+            
+            //인증번호가 다름
+            Text("인증번호를 다시 확인해주세요.")
+                .font(.rounded(12))
+                .foregroundStyle(Color(hex: "FA104F"))
+                .padding(.bottom, 8)
+                .opacity(viewModel.vertificationFail == true ? 1 : 0)
             
             Button(action: {
                 if !viewModel.checkVerificationNumber() {
@@ -77,6 +91,9 @@ struct VerificationNumber: View {
         .onChange(of: viewModel.verificationNumber) { oldValue, newValue in
             possibleNext = viewModel.checkVerificationNumber()
         }
+        .customAlert(isPresented: $viewModel.vertificationBlock, title: "반복 인증 실패", message: "5회 이상 발송으로 12시간뒤 다시 인증이 가능합니다.", primaryButtonText: "확인", primaryButtonAction: {
+            viewModel.timerRunning = false
+        })
     }
     
     var verificationNumberView: some View {
