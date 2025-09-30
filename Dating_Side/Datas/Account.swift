@@ -32,6 +32,7 @@ enum PatchUserType: String {
     case secondProfileImage
     case fourthProfileImage
     case sixthProfileImage
+    case fcmToken
 }
 
 /// 유저 온보딩 완료시 회원 등록
