@@ -83,7 +83,11 @@ extension SMSViewModel {
     
     ///타이머 시작
     func timerStart() async {
+        self.timerRemaining = 180
+        updateTimeString()
+        
         cancellable?.cancel()
+        
         timerRunning = true
         cancellable = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
