@@ -123,6 +123,8 @@
 		4D9E951F2E365CCF00B007DF /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 4D9E951E2E365CCF00B007DF /* Lottie */; };
 		4D9E95222E365D3900B007DF /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E95212E365D3900B007DF /* LoadingView.swift */; };
 		4D9E95252E365D7800B007DF /* loading_new.json in Resources */ = {isa = PBXBuildFile; fileRef = 4D9E95242E365D7800B007DF /* loading_new.json */; };
+		4D9ED84E2E8D41C3009D4B63 /* PhoneContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9ED84D2E8D41B9009D4B63 /* PhoneContactViewModel.swift */; };
+		4D9ED8502E8D41E4009D4B63 /* PhoneContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9ED84F2E8D41DE009D4B63 /* PhoneContact.swift */; };
 		4DB5827B2DDB4F87001952D0 /* ProfileSecondDayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5827A2DDB4F87001952D0 /* ProfileSecondDayImageView.swift */; };
 		4DB5827D2DDB5B86001952D0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5827C2DDB5B86001952D0 /* ProfileView.swift */; };
 		4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */; };
@@ -302,6 +304,8 @@
 		4D9E951B2E365BD500B007DF /* LoadingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingManager.swift; sourceTree = "<group>"; };
 		4D9E95212E365D3900B007DF /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		4D9E95242E365D7800B007DF /* loading_new.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loading_new.json; sourceTree = "<group>"; };
+		4D9ED84D2E8D41B9009D4B63 /* PhoneContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneContactViewModel.swift; sourceTree = "<group>"; };
+		4D9ED84F2E8D41DE009D4B63 /* PhoneContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneContact.swift; sourceTree = "<group>"; };
 		4DB5827A2DDB4F87001952D0 /* ProfileSecondDayImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSecondDayImageView.swift; sourceTree = "<group>"; };
 		4DB5827C2DDB5B86001952D0 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolNameInputView.swift; sourceTree = "<group>"; };
@@ -433,6 +437,7 @@
 		4D6119602D75CC8000715B9E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				4D9ED84D2E8D41B9009D4B63 /* PhoneContactViewModel.swift */,
 				4D83532A2E44E9B40031B0ED /* MatchingViewModel.swift */,
 				4D90B8402E51B10200323D8B /* CustomToastPopup.swift */,
 				4D389C332E25330600B56F84 /* Auth */,
@@ -543,6 +548,7 @@
 		4D6D18732D63586200698E5D /* Datas */ = {
 			isa = PBXGroup;
 			children = (
+				4D9ED84F2E8D41DE009D4B63 /* PhoneContact.swift */,
 				4D83532E2E44EEA40031B0ED /* Matching.swift */,
 				4D5E45942E3F2A2300A3B60C /* Report.swift */,
 				4D389C532E2CEF4700B56F84 /* Question.swift */,
@@ -1077,6 +1083,7 @@
 				4DD577542D7EBB4E001B0ED5 /* SusceptibleInfoView.swift in Sources */,
 				4D0122A12DEC812E003E72B0 /* MathcingQuestionListView.swift in Sources */,
 				4D6119542D75B0EB00715B9E /* AppState.swift in Sources */,
+				4D9ED8502E8D41E4009D4B63 /* PhoneContact.swift in Sources */,
 				4D3AD6E82DE4AA2600436A4B /* Profile.swift in Sources */,
 				4D6D18702D63564000698E5D /* NavigationProtocol.swift in Sources */,
 				4D389C4A2E2A46DB00B56F84 /* ProfileSixthDayImageView.swift in Sources */,
@@ -1100,6 +1107,7 @@
 				4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */,
 				4D8353312E4701210031B0ED /* MatchingNetworkManager.swift in Sources */,
 				4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */,
+				4D9ED84E2E8D41C3009D4B63 /* PhoneContactViewModel.swift in Sources */,
 				4D61195D2D75B2A300715B9E /* OnboardingContainerView.swift in Sources */,
 				4DF855772DFEEF6B00D429F6 /* BottomSheet.swift in Sources */,
 				4DC7E9A92E5B462300823DC3 /* ChatingRootView.swift in Sources */,
