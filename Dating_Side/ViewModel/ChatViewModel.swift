@@ -15,7 +15,7 @@ final class ChatViewModel: ObservableObject {
     @Published var messages: [ChatMessage] = []
     @Published var isConnected = false
     @Published var connectionStatus: String = "연결 대기 중..."
-    @Published var reportReason: ReportRequest = ""
+    @Published var reportReason: ReportRequest = ReportRequest(reason: "")
     
     private let client: WebSocketClient
     private var listenTask: Task<Void, Never>?

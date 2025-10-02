@@ -24,6 +24,9 @@ struct ChatingView: View {
     @State private var showLeaveAlert: Bool = false
     @State private var showGoodByeView: Bool = false
     
+    @State private var showReportAlert: Bool = false
+    @State private var showReportView: Bool = false
+    
     @GestureState private var dragOffset: CGFloat = 0
     
     init(roomId: String, partnerName: String, partnerImageUrl: String) {
@@ -91,9 +94,17 @@ struct ChatingView: View {
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
         }
-        .customAlert(isPresented: $showAlert, title: "헤어지시겠어요?\n영영 볼 수 없게 됩니다", message: "더 대화하다 보면 다를 지도 몰라요", primaryButtonText: "헤어질래요", primaryButtonAction: {
+        .customAlert(isPresented: $showAlert, title: "헤어지시겠어요?\n영영 볼 수 없게 됩니다", message: "더 대화하다 보면 다를 지도 몰라요", primaryButtonText: "더 대화 해볼게요", primaryButtonAction: {
+            print("asd")
+        }, secondaryButtonText: "헤어질래요", secondaryButtonAction: {
             showGoodByeView = true
-        }, secondaryButtonText: "더 대화 해볼게요")
+        })
+        .customAlert(isPresented: $showReportAlert, title: "불편함을 겪으셨다면\n 신고하세요!", message: "신고 즉시 차단되며 상대의 매너지수가 감소됩니다.", primaryButtonText: "신고하기", primaryButtonAction: {
+            print("신고하기 누름")
+#warning("신고하기 Primarybuttoncolor -> red로 변경 필요")
+        }, secondaryButtonText: "취소", secondaryButtonAction: {
+            print("신고취소")
+        })
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "", primaryButtonText: "확인", primaryButtonAction: {
             
         })
@@ -174,18 +185,21 @@ struct ChatingView: View {
     
     var navigationTrailingMenu: some View {
         Menu {
+            //헤어지기
             Button(action: {
                 showAlert = true
             }) {
                 Text("헤어지기")
             }
+            
+            //신고하기
             Button(action: {
-                
+                showReportAlert = true
             }) {
-                #warning("신고하기 기능")
                 Text("신고하기")
                     .foregroundStyle(Color.red)
             }
+            
         } label: {
             Image(systemName: "ellipsis")
                 .font(.headline)
@@ -207,5 +221,22 @@ struct MyTextFieldStyle: TextFieldStyle {
                     .fill(Color.gray0)
             )
             .padding(.vertical)
+    }
+}
+
+
+#warning("preview")
+class DummyAppState: ObservableObject {
+    var chatPath = NavigationPath()
+}
+
+#Preview {
+    NavigationStack {
+        ChatingView(
+            roomId: "12",
+            partnerName: "카리나",
+            partnerImageUrl: "https://picsum.photos/200/300"
+        )
+        .environmentObject(DummyAppState())
     }
 }
