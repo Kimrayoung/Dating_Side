@@ -182,6 +182,7 @@ struct ChatingView: View {
             Button(action: {
                 
             }) {
+                #warning("신고하기 기능")
                 Text("신고하기")
                     .foregroundStyle(Color.red)
             }

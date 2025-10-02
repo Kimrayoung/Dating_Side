@@ -15,19 +15,20 @@ final class ChatViewModel: ObservableObject {
     @Published var messages: [ChatMessage] = []
     @Published var isConnected = false
     @Published var connectionStatus: String = "연결 대기 중..."
-
+    @Published var reportReason: ReportRequest = ""
+    
     private let client: WebSocketClient
     private var listenTask: Task<Void, Never>?
     private let roomId: String
     private let jwt: String
-
+    
     init(roomId: String) {
         self.roomId = roomId
         let accessToken = KeychainManager.shared.getAccessToken()
         self.jwt = accessToken ?? ""
         self.client = WebSocketClient(endpoint: "wss://donvolo.shop/api/chat", jwt: accessToken, roomId: roomId)
     }
-
+    
     func connect() {
         guard listenTask == nil else { return } // 이미 연결 중이면 무시
         
@@ -60,7 +61,7 @@ final class ChatViewModel: ObservableObject {
             connectionStatus = "연결 끊김"
         }
     }
-
+    
     func send(content: String) {
         guard isConnected else {
             print("⚠️ Cannot send message: not connected")
@@ -77,13 +78,13 @@ final class ChatViewModel: ObservableObject {
             } catch {
                 print("❌ Send failed: \(error)")
                 // 전송 실패 시 메시지 제거 또는 실패 표시
-//                if let index = messages.firstIndex(where: { $0.id == chat.id }) {
-//                    messages.remove(at: index)
-//                }
+                //                if let index = messages.firstIndex(where: { $0.id == chat.id }) {
+                //                    messages.remove(at: index)
+                //                }
             }
         }
     }
-
+    
     func disconnect() {
         listenTask?.cancel()
         listenTask = nil
@@ -113,6 +114,17 @@ final class ChatViewModel: ObservableObject {
             }
         } catch {
             Log.errorPublic("채팅 방 데이터 요청 에러", error.localizedDescription)
+        }
+    }
+    
+#warning("chatViewModel내 신고하기")
+    func userReport() async{
+        do{
+            Task{
+                let result = try await chatNetwork.userReport(report: reportReason)
+            }
+        }catch{
+            
         }
     }
 }
