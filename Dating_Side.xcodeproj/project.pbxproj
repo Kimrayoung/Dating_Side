@@ -48,6 +48,7 @@
 		4D443BA22DCB954F00F4B9EB /* ChatProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D443BA12DCB954F00F4B9EB /* ChatProfileImageView.swift */; };
 		4D443BA92DCBAB6A00F4B9EB /* Codable+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D443BA82DCBAB6A00F4B9EB /* Codable+Ext.swift */; };
 		4D443BAB2DCCE15F00F4B9EB /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D443BAA2DCCE15F00F4B9EB /* KeychainManager.swift */; };
+		4D58C73A2E8E8FE3003A15E9 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D58C7392E8E8FE3003A15E9 /* PushNotificationManager.swift */; };
 		4D5E45912E3BC3C500A3B60C /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5E45902E3BC3BC00A3B60C /* ProfileEditView.swift */; };
 		4D5E45932E3F298700A3B60C /* ReportNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5E45922E3F297E00A3B60C /* ReportNetworkManager.swift */; };
 		4D5E45952E3F2A2600A3B60C /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5E45942E3F2A2300A3B60C /* Report.swift */; };
@@ -226,6 +227,7 @@
 		4D443BA12DCB954F00F4B9EB /* ChatProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProfileImageView.swift; sourceTree = "<group>"; };
 		4D443BA82DCBAB6A00F4B9EB /* Codable+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Ext.swift"; sourceTree = "<group>"; };
 		4D443BAA2DCCE15F00F4B9EB /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		4D58C7392E8E8FE3003A15E9 /* PushNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationManager.swift; sourceTree = "<group>"; };
 		4D5E45902E3BC3BC00A3B60C /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 		4D5E45922E3F297E00A3B60C /* ReportNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportNetworkManager.swift; sourceTree = "<group>"; };
 		4D5E45942E3F2A2300A3B60C /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
@@ -567,6 +569,7 @@
 		4D6D18742D63587400698E5D /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				4D58C7392E8E8FE3003A15E9 /* PushNotificationManager.swift */,
 				4D9DE9032E366E69003BD47A /* AlertManager.swift */,
 				4D9E951B2E365BD500B007DF /* LoadingManager.swift */,
 				4D3AD28A2E2FD5B10021BA1E /* Log.swift */,
@@ -1012,6 +1015,7 @@
 				4D301E952E2E610E001FA1A1 /* PhotoPickerButton.swift in Sources */,
 				4D0B3BE52DA6B47F006206F1 /* SMSandLogin.swift in Sources */,
 				4D389C522E2CEE3D00B56F84 /* QuestionNetworkManager.swift in Sources */,
+				4D58C73A2E8E8FE3003A15E9 /* PushNotificationManager.swift in Sources */,
 				4D5E45952E3F2A2600A3B60C /* Report.swift in Sources */,
 				4D443B9B2DCB85C600F4B9EB /* AccountNetworkManager.swift in Sources */,
 				4D443BA92DCBAB6A00F4B9EB /* Codable+Ext.swift in Sources */,
