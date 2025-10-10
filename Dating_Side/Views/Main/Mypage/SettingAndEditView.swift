@@ -13,6 +13,7 @@ struct SettingAndEditView: View {
     @EnvironmentObject var appState: AppState
     @Environment(\.scenePhase) private var scenePhase
     @ObservedObject var pushNotificationManager = PushNotificationManager()
+    @ObservedObject var phoneContactVM = PhoneContactsViewModel()
     @AppStorage("PushNotificationEnabled") private var isPushEnabled: Bool = true
     @State var showNotificationAlert: Bool = false
     
@@ -123,6 +124,9 @@ struct SettingAndEditView: View {
                 .foregroundStyle(Color.blackColor)
             Spacer()
             Button(action: {
+                Task {
+                    await phoneContactVM.requestAndLoad()
+                }
             }, label: {
                 Text("ON")
                     .font(.pixel(14))
