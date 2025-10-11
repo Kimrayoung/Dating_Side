@@ -117,14 +117,19 @@ final class ChatViewModel: ObservableObject {
         }
     }
     
-#warning("chatViewModel내 신고하기")
-    func userReport() async{
-        do{
-            Task{
-                let result = try await chatNetwork.userReport(report: reportReason)
+    //MARK: - 신고하기
+    #warning("신고하기 수정필요")
+    func userReport(){
+        Task{
+            do{
+//                try await chatNetwork.userReport(report: reportReason)
+                await MainActor.run {
+                    print("asd")
+                }
+            }catch{
+                Log.debugPublic(error.localizedDescription)
             }
-        }catch{
-            
         }
     }
+    
 }

@@ -100,9 +100,8 @@ struct ChatingView: View {
             showGoodByeView = true
         })
         .customAlert(isPresented: $showReportAlert, title: "불편함을 겪으셨다면\n 신고하세요!", message: "신고 즉시 차단되며 상대의 매너지수가 감소됩니다.", primaryButtonText: "신고하기", primaryButtonAction: {
-            print("신고하기 누름")
-#warning("신고하기 Primarybuttoncolor -> red로 변경 필요")
-        }, secondaryButtonText: "취소", secondaryButtonAction: {
+            vm.userReport()
+        },primaryButtonColor: .red, secondaryButtonText: "취소", secondaryButtonAction: {
             print("신고취소")
         })
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "", primaryButtonText: "확인", primaryButtonAction: {
@@ -190,19 +189,21 @@ struct ChatingView: View {
                 showAlert = true
             }) {
                 Text("헤어지기")
+                    
             }
             
             //신고하기
-            Button(action: {
+            Button(role: .destructive, action: {
                 showReportAlert = true
             }) {
                 Text("신고하기")
-                    .foregroundStyle(Color.red)
+                    .foregroundStyle(.red)
             }
             
         } label: {
             Image(systemName: "ellipsis")
                 .font(.headline)
+                .foregroundStyle(Color.gray3)
         }
     }
 }
