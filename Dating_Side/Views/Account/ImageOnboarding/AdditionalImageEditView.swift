@@ -13,8 +13,17 @@ import PhotosUI
 struct AdditionalImageEditView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: AccountViewModel = AccountViewModel()
-    @State var selectedPickerImage: [PhotosPickerItem] = []
-    @State var isImagePickerPresented: Bool = false
+    
+    //각각 이미지
+    @State private var selectedSecondDayItem: [PhotosPickerItem] = []
+    @State private var selectedFourthDayItem: [PhotosPickerItem] = []
+    @State private var selectedSixthDayItem: [PhotosPickerItem] = []
+
+    //각각 호출 상태
+    @State var isSecondImagePickerPresented: Bool = false
+    @State var isForthImagePickerPresented: Bool = false
+    @State var isSixthImagePickerPresented: Bool = false
+    
     @State var showAlert: Bool = false
     @State private var possibleNext: Bool = true
     /// 온보딩에서 수정하는 건지
@@ -28,6 +37,8 @@ struct AdditionalImageEditView: View {
                 .padding(.top, 30)
             Text("수정하고 싶은 일차의 사진을 클릭해서\n새로운 사진을 등록 해주세요")
                 .font(.pixel(14))
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
             ScrollView(.horizontal) {
                 HStack {
                     secondImageView
@@ -37,12 +48,16 @@ struct AdditionalImageEditView: View {
                         .padding(.trailing, 77)
                 }
             }
+            .scrollIndicators(.hidden)
             
             .padding(.top, 51)
             .padding(.bottom, 85)
             Button(action: {
+                Task{
+                    await viewModel.updateAdditionalImage()
+                }
                 if viewModel.isOnboarding == .mypageEdit {
-                    
+                    appState.myPagePath.removeLast()
                 } else if viewModel.isOnboarding == .onboardingEdit {
                     appState.onboardingPath.removeLast()
                 }
@@ -55,8 +70,8 @@ struct AdditionalImageEditView: View {
     }
     
     func buildImageView(
-        localImage: UIImage?,     // 온보딩일 때 쓸 UIImage
-        urlString: String?        // 온보딩 아닐 때 쓸 URL string
+        localImage: UIImage?,      // ViewModel에서 새로 선택된 UIImage (최우선 표시)
+        urlString: String?         // 서버에서 가져온 기존 이미지 URL
     ) -> some View {
         Group {
             if isOnboarding {
@@ -66,20 +81,31 @@ struct AdditionalImageEditView: View {
                         .frame(width: 240, height: 360)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 } else {
-                    Image("checkmark")
+                    Image("checkerImage")
                         .resizable()
                         .frame(width: 240, height: 360)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             } else {
-                if let urlString = urlString,
-                   let url = URL(string: urlString) {
+                if let uiImage = localImage {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .frame(width: 240, height: 360)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                } else if let urlString = urlString,
+                          let url = URL(string: urlString) {
                     KFImage(url)
+                        .placeholder {
+                            Image("checkerImage")
+                                .resizable()
+                                .frame(width: 240, height: 360)
+                        }
+                        .fade(duration: 0.25)
                         .resizable()
                         .frame(width: 240, height: 360)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 } else {
-                    Image("checkmark")
+                    Image("checkerImage")
                         .resizable()
                         .frame(width: 240, height: 360)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -87,16 +113,17 @@ struct AdditionalImageEditView: View {
             }
         }
     }
-
     
+    //MARK: - 2일차
     var secondImageView: some View {
         VStack {
             Text("2일차")
                 .font(.pixel(24))
                 .foregroundStyle(Color.mainColor)
-            PhotoPickerButton(imageType: .secondDay, isPresented: $isImagePickerPresented, selectedPickerImage: $selectedPickerImage, showAlert: $showAlert) { item in
+            PhotoPickerButton(imageType: .secondDay, isPresented: $isSecondImagePickerPresented, selectedPickerImage: $selectedSecondDayItem, showAlert: $showAlert) { seconditem in
+                print("2일 photoPickerButton tapped")
                 Task {
-                    await viewModel.loadSelectedImage(imageType: .secondDay, pickerItem: item)
+                    await viewModel.loadSelectedImage(imageType: .secondDay, pickerItem: seconditem)
                 }
             } label: {
                 buildImageView(localImage: viewModel.selectedSeconDayImage, urlString: profileImageUrl?.daySecond)
@@ -104,14 +131,16 @@ struct AdditionalImageEditView: View {
         }
     }
     
+    //MARK: - 4일차
     var forthImageView: some View {
         VStack {
             Text("4일차")
                 .font(.pixel(24))
                 .foregroundStyle(Color.mainColor)
-            PhotoPickerButton(imageType: .forthDay, isPresented: $isImagePickerPresented, selectedPickerImage: $selectedPickerImage, showAlert: $showAlert) { item in
+            PhotoPickerButton(imageType: .forthDay, isPresented: $isForthImagePickerPresented, selectedPickerImage: $selectedFourthDayItem, showAlert: $showAlert) { forthitem in
+                print("4일 photoPickerButton tapped")
                 Task {
-                    await viewModel.loadSelectedImage(imageType: .forthDay, pickerItem: item)
+                    await viewModel.loadSelectedImage(imageType: .forthDay, pickerItem: forthitem)
                 }
             } label: {
                 buildImageView(localImage: viewModel.selectedForthDayImage, urlString: profileImageUrl?.dayFourth)
@@ -119,14 +148,16 @@ struct AdditionalImageEditView: View {
         }
     }
     
+    //MARK: - 6일차
     var sixthImageView: some View {
         VStack {
             Text("6일차")
                 .font(.pixel(24))
                 .foregroundStyle(Color.mainColor)
-            PhotoPickerButton(imageType: .sixthDay, isPresented: $isImagePickerPresented, selectedPickerImage: $selectedPickerImage, showAlert: $showAlert) { item in
+            PhotoPickerButton(imageType: .sixthDay, isPresented: $isSixthImagePickerPresented, selectedPickerImage: $selectedSixthDayItem, showAlert: $showAlert) { sixthitem in
+                print("6일 photoPickerButton tapped")
                 Task {
-                    await viewModel.loadSelectedImage(imageType: .sixthDay, pickerItem: item)
+                    await viewModel.loadSelectedImage(imageType: .sixthDay, pickerItem: sixthitem)
                 }
             } label: {
                 buildImageView(localImage: viewModel.selectedSixthDayImage, urlString: profileImageUrl?.daySixth)
@@ -137,5 +168,5 @@ struct AdditionalImageEditView: View {
 }
 
 #Preview {
-    AdditionalImageEditView(profileImageUrl: ProfileImageURLByDay(daySecond: "", dayFourth: "", daySixth: ""))
+    AdditionalImageEditView(profileImageUrl: ProfileImageURLByDay(daySecond: "checkerImage", dayFourth: "checkerImage", daySixth: "checkerImage"))
 }

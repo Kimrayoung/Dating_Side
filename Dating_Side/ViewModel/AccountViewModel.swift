@@ -206,12 +206,16 @@ final class AccountViewModel: ObservableObject {
         switch imageType {
         case .mainProfile:
             self.selectedImage = result.first
+            print("main")
         case .secondDay:
             self.selectedSeconDayImage = result.first
+            print("secondDay")
         case .forthDay:
             self.selectedForthDayImage = result.first
+            print("ForthDay")
         case .sixthDay:
             self.selectedSixthDayImage = result.first
+            print("SixthDay")
         case .additionalImageEdit:
             for (index, image) in result.enumerated() {
                 if index == 0 {
