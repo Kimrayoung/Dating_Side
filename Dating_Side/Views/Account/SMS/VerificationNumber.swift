@@ -79,7 +79,10 @@ struct VerificationNumber: View {
         })
         .onAppear {
             Task {
-                await viewModel.requestVerifiactionNumber()
+                viewModel.checkSMSBlock()
+                if !viewModel.vertificationBlock{
+                    await viewModel.requestVerifiactionNumber()
+                }
                 
                 if viewModel.verificationNumber.count == 4 {
                     focusedField = .verificationNumber(viewModel.verificationNumber.count - 1)

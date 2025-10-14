@@ -20,14 +20,22 @@ final class SMSViewModel: ObservableObject {
     @Published var verificationNumber: [String] = ["", "", "", ""]
     
     @Published var timerString: String = "3:00"
-    @Published var timerRemaining: Int = 180
+    @Published var timerRemaining: Int = 3
     @Published var timerRunning: Bool = true
     
     @Published var vertificationCount : Int = 1
     @Published var vertificationFail : Bool = false
     @Published var vertificationBlock : Bool = false
     
+    private let blockKey = "SMSblock" //userdefault로 12시간 관리
+    
     private var cancellable: AnyCancellable?
+    private var smsCancellable: AnyCancellable?
+    
+    @Published var blockTimeRemaining: Int = 0
+    @Published var blockTimeString: String = ""
+    
+    private var blockTime: Int = 43200
     
     
     // 핸드폰 번호에 빈문자열이 들어가져 있는지 확인
@@ -81,7 +89,8 @@ extension SMSViewModel {
         }
     }
     
-    ///타이머 시작
+    //MARK: - 3분 타이머
+    ///3분 타이머 시작
     func timerStart() async {
         self.timerRemaining = 180
         updateTimeString()
@@ -103,7 +112,7 @@ extension SMSViewModel {
             }
     }
     
-    ///타이머 업데이트
+    ///3분 타이머 업데이트
     private func updateTimeString() {
         let minutes = self.timerRemaining / 60
         let seconds = self.timerRemaining % 60
@@ -116,6 +125,7 @@ extension SMSViewModel {
         cancellable?.cancel()
     }
     
+    //MARK: - network
     ///인증번호 재전송
     func resendVerficationNumber() {
         guard !vertificationBlock else {
@@ -130,6 +140,11 @@ extension SMSViewModel {
                 self.vertificationCount += 1
             } else {
                 self.vertificationBlock = true
+                
+                let blockUntil = Date().addingTimeInterval(TimeInterval(blockTime))
+                UserDefaults.standard.set(blockUntil, forKey: blockKey)
+                
+                self.startSMSBlocktimer(duration: blockTime) // 차단 타이머 시작
             }
         }
     }
@@ -187,5 +202,59 @@ extension SMSViewModel {
             //            Log.errorPublic("검증 실패", error)
         }
         return false
+    }
+    
+    //MARK: - 12시간 타이머
+    
+    func checkSMSBlock(){
+        if let block = UserDefaults.standard.object(forKey: blockKey) as? Date{
+            let remaining = Int(block.timeIntervalSinceNow)
+            
+            if remaining > 0{
+                self.vertificationBlock = true
+                self.startSMSBlocktimer(duration: remaining)
+            }else {
+                self.stopBlockTimer()
+            }
+        }
+    }
+    
+    ///12시간 타이머 시작
+    func startSMSBlocktimer(duration: Int){
+        self.blockTimeRemaining = duration
+        self.updateBlockTimeString()
+        smsCancellable?.cancel()
+        
+        smsCancellable = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                self.blockTimeRemaining -= 1
+                self.updateBlockTimeString()
+                
+                if self.blockTimeRemaining <= 0 {
+                    self.stopBlockTimer()
+                }
+            }
+        
+    }
+    
+    /// 차단 타이머 업데이트
+    private func updateBlockTimeString() {
+        let hours = self.blockTimeRemaining / 3600
+        let minutes = (self.blockTimeRemaining % 3600) / 60
+        let seconds = self.blockTimeRemaining % 60
+        
+        self.blockTimeString = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+    
+    /// 차단 타이머 종료
+    private func stopBlockTimer() {
+        smsCancellable?.cancel()
+        self.vertificationBlock = false
+        self.blockTimeString = ""
+        UserDefaults.standard.removeObject(forKey: blockKey)
+        self.vertificationCount = 0
     }
 }
