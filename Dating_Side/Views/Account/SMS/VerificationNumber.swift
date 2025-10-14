@@ -58,18 +58,21 @@ struct VerificationNumber: View {
                 .opacity(viewModel.vertificationFail == true ? 1 : 0)
             
             Button(action: {
-                if !viewModel.checkVerificationNumber() {
-                    return
-                }
-                hideKeyboard()
-                Task{
-                    let result = await viewModel.verifySMSCode()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        if result {
-                            appState.onboardingPath.append(Onboarding.genderSelect)
-                        }
-                    }
-                }
+#warning("개발을 위해 우선 고정적으로 이동")
+                
+                appState.onboardingPath.append(Onboarding.genderSelect)
+                //                if !viewModel.checkVerificationNumber() {
+                //                    return
+                //                }
+                //                hideKeyboard()
+                //                Task{
+                //                    let result = await viewModel.verifySMSCode()
+                //                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                //                        if result {
+                //                            appState.onboardingPath.append(Onboarding.genderSelect)
+                //                        }
+                //                    }
+                //                }
                 
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "러브웨이 시작하기", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
