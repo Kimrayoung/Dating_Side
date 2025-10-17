@@ -117,6 +117,21 @@ final class ChatViewModel: ObservableObject {
         }
     }
     
+    //MARK: - 헤어지기
+    func leaveChatting(){
+        Task{
+            do{
+//                try await chatNetwork.chattingRoom(leave: true)
+                await MainActor.run {
+                    print("asd")
+                }
+            }catch{
+                Log.debugPublic(error.localizedDescription)
+            }
+        }
+    }
+
+    
     //MARK: - 신고하기
     #warning("신고하기 수정필요")
     func userReport(){

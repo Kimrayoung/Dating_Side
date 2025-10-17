@@ -10,17 +10,18 @@ import SwiftUI
 struct ChatingView: View {
     @EnvironmentObject private var appState: AppState
     @StateObject private var vm: ChatViewModel
-
+    
     let buttonTitles: [String] = ["아주 좋아요", "좋아요", "보통이에요", "별로에요", "최악이에요"]
     let buttonColors: [Color] = [.mainColor, .subColor2, .gray01, .gray2, .gray3]
     let roomId: String
-
+    
     @State private var partnerName: String = "user"
     @State private var partnerProfileImageUrl: String = ""
     @State private var showTimestamps = false
     @State private var messageText = ""
     @State private var showProfile: Bool = false
     @State private var showAlert: Bool = false
+    
     @State private var showLeaveAlert: Bool = false
     @State private var showGoodByeView: Bool = false
     
@@ -36,7 +37,7 @@ struct ChatingView: View {
         Log.debugPrivate("roodId", roomId)
         _vm = StateObject(wrappedValue: ChatViewModel(roomId: roomId))
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
@@ -77,7 +78,7 @@ struct ChatingView: View {
                         withAnimation { showTimestamps = false }
                     }
             )
-
+            
             sendTextField
         }
         .onAppear {
@@ -100,7 +101,7 @@ struct ChatingView: View {
             showGoodByeView = true
         })
         .customAlert(isPresented: $showReportAlert, title: "불편함을 겪으셨다면\n 신고하세요!", message: "신고 즉시 차단되며 상대의 매너지수가 감소됩니다.", primaryButtonText: "신고하기", primaryButtonAction: {
-            vm.userReport()
+            print("신고하기")
         },primaryButtonColor: .red, secondaryButtonText: "취소", secondaryButtonAction: {
             print("신고취소")
         })
@@ -109,8 +110,8 @@ struct ChatingView: View {
         })
         .sheet(isPresented: $showGoodByeView) {
             SayGoodbyeView()
-                .presentationDetents([.height(200)])
-                .presentationCornerRadius(10)
+                .presentationDetents([.height(300)])
+                .presentationCornerRadius(20)
                 .presentationDragIndicator(.visible)
         }
         .navigationTitle(partnerName)
@@ -129,7 +130,7 @@ struct ChatingView: View {
             }
         })
     }
-
+    
     var sendTextField: some View {
         ZStack {
             TextField("메세지 보내기", text: $messageText)
@@ -149,7 +150,7 @@ struct ChatingView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
     }
-
+    
     private func sendMessage() {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
@@ -157,7 +158,7 @@ struct ChatingView: View {
         vm.send(content: text)   // 0 = 나
         messageText = ""
     }
-
+    
     // (옵션) 하단 만족도 영역 – 필요 시 원하는 곳에 배치
     var afterAssessment: some View {
         VStack {
@@ -170,7 +171,7 @@ struct ChatingView: View {
             }
         }
     }
-
+    
     func assessmentBtn(_ title: String, _ index: Int) -> some View {
         Button(action: {
             // TODO: 후속 처리
@@ -189,7 +190,7 @@ struct ChatingView: View {
                 showAlert = true
             }) {
                 Text("헤어지기")
-                    
+                
             }
             
             //신고하기
@@ -197,7 +198,6 @@ struct ChatingView: View {
                 showReportAlert = true
             }) {
                 Text("신고하기")
-                    .foregroundStyle(.red)
             }
             
         } label: {
