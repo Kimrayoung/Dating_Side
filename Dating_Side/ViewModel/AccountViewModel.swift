@@ -60,7 +60,7 @@ final class AccountViewModel: ObservableObject {
     @Published var lifeStyleButtonList: [String : [Bool]] = [:]
     
     @Published var introduceText: String = ""
-    
+        
     @Published var selectedImage: UIImage?
     @Published var selectedSeconDayImage: UIImage?
     @Published var selectedForthDayImage: UIImage?
@@ -206,16 +206,12 @@ final class AccountViewModel: ObservableObject {
         switch imageType {
         case .mainProfile:
             self.selectedImage = result.first
-            print("main")
         case .secondDay:
             self.selectedSeconDayImage = result.first
-            print("secondDay")
         case .forthDay:
             self.selectedForthDayImage = result.first
-            print("ForthDay")
         case .sixthDay:
             self.selectedSixthDayImage = result.first
-            print("SixthDay")
         case .additionalImageEdit:
             for (index, image) in result.enumerated() {
                 if index == 0 {
@@ -600,9 +596,8 @@ extension AccountViewModel {
         let identifier: String = UUID().uuidString
         let boundary: String = "Boundary-\(identifier)"
         
-       
         let patchAccountData = createUploadBody(request: userPatchData, images: [], boundary: boundary)
-        
+                
         do {
             let result = try await accountNetworkManger.patchUserData(requestModel: patchAccountData, boundaryString: boundary)
             
