@@ -49,6 +49,8 @@
 		4D443BA92DCBAB6A00F4B9EB /* Codable+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D443BA82DCBAB6A00F4B9EB /* Codable+Ext.swift */; };
 		4D443BAB2DCCE15F00F4B9EB /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D443BAA2DCCE15F00F4B9EB /* KeychainManager.swift */; };
 		4D58C73A2E8E8FE3003A15E9 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D58C7392E8E8FE3003A15E9 /* PushNotificationManager.swift */; };
+		4D58C73C2E991F6C003A15E9 /* AvoidanceNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D58C73B2E991F6C003A15E9 /* AvoidanceNetworkManager.swift */; };
+		4D58C73E2E9920BD003A15E9 /* Avoidance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D58C73D2E9920B6003A15E9 /* Avoidance.swift */; };
 		4D5E45912E3BC3C500A3B60C /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5E45902E3BC3BC00A3B60C /* ProfileEditView.swift */; };
 		4D5E45932E3F298700A3B60C /* ReportNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5E45922E3F297E00A3B60C /* ReportNetworkManager.swift */; };
 		4D5E45952E3F2A2600A3B60C /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5E45942E3F2A2300A3B60C /* Report.swift */; };
@@ -124,6 +126,7 @@
 		4D9E951F2E365CCF00B007DF /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 4D9E951E2E365CCF00B007DF /* Lottie */; };
 		4D9E95222E365D3900B007DF /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E95212E365D3900B007DF /* LoadingView.swift */; };
 		4D9E95252E365D7800B007DF /* loading_new.json in Resources */ = {isa = PBXBuildFile; fileRef = 4D9E95242E365D7800B007DF /* loading_new.json */; };
+		4D9ED84E2E8D41C3009D4B63 /* PhoneContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9ED84D2E8D41B9009D4B63 /* PhoneContactViewModel.swift */; };
 		4DB5827B2DDB4F87001952D0 /* ProfileSecondDayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5827A2DDB4F87001952D0 /* ProfileSecondDayImageView.swift */; };
 		4DB5827D2DDB5B86001952D0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5827C2DDB5B86001952D0 /* ProfileView.swift */; };
 		4DB5B3132D9036D10060D4C6 /* SchoolNameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */; };
@@ -226,6 +229,8 @@
 		4D443BA82DCBAB6A00F4B9EB /* Codable+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Ext.swift"; sourceTree = "<group>"; };
 		4D443BAA2DCCE15F00F4B9EB /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		4D58C7392E8E8FE3003A15E9 /* PushNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationManager.swift; sourceTree = "<group>"; };
+		4D58C73B2E991F6C003A15E9 /* AvoidanceNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvoidanceNetworkManager.swift; sourceTree = "<group>"; };
+		4D58C73D2E9920B6003A15E9 /* Avoidance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avoidance.swift; sourceTree = "<group>"; };
 		4D5E45902E3BC3BC00A3B60C /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 		4D5E45922E3F297E00A3B60C /* ReportNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportNetworkManager.swift; sourceTree = "<group>"; };
 		4D5E45942E3F2A2300A3B60C /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
@@ -304,6 +309,7 @@
 		4D9E951B2E365BD500B007DF /* LoadingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingManager.swift; sourceTree = "<group>"; };
 		4D9E95212E365D3900B007DF /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		4D9E95242E365D7800B007DF /* loading_new.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loading_new.json; sourceTree = "<group>"; };
+		4D9ED84D2E8D41B9009D4B63 /* PhoneContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneContactViewModel.swift; sourceTree = "<group>"; };
 		4DB5827A2DDB4F87001952D0 /* ProfileSecondDayImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSecondDayImageView.swift; sourceTree = "<group>"; };
 		4DB5827C2DDB5B86001952D0 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		4DB5B3122D9036D10060D4C6 /* SchoolNameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolNameInputView.swift; sourceTree = "<group>"; };
@@ -435,6 +441,7 @@
 		4D6119602D75CC8000715B9E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				4D9ED84D2E8D41B9009D4B63 /* PhoneContactViewModel.swift */,
 				4D83532A2E44E9B40031B0ED /* MatchingViewModel.swift */,
 				4D90B8402E51B10200323D8B /* CustomToastPopup.swift */,
 				4D389C332E25330600B56F84 /* Auth */,
@@ -545,6 +552,7 @@
 		4D6D18732D63586200698E5D /* Datas */ = {
 			isa = PBXGroup;
 			children = (
+				4D58C73D2E9920B6003A15E9 /* Avoidance.swift */,
 				4D83532E2E44EEA40031B0ED /* Matching.swift */,
 				4D5E45942E3F2A2300A3B60C /* Report.swift */,
 				4D389C532E2CEF4700B56F84 /* Question.swift */,
@@ -584,7 +592,6 @@
 				4D8353302E4701170031B0ED /* MatchingNetworkManager.swift */,
 				4D83532C2E44EAB00031B0ED /* AttractionNetworkManager.swift */,
 				4D5E45922E3F297E00A3B60C /* ReportNetworkManager.swift */,
-				4D8762B32E39263E00A9503C /* ProfileNetworkManager.swift */,
 				4D389C512E2CEE3500B56F84 /* QuestionNetworkManager.swift */,
 				4D389C4B2E2A58E100B56F84 /* MultipartFormBuilder.swift */,
 				4D443B9A2DCB85C600F4B9EB /* AccountNetworkManager.swift */,
@@ -593,6 +600,8 @@
 				4D6D18782D6358C700698E5D /* APIManager.swift */,
 				4DC7E9A42E5ADFC500823DC3 /* WebSocketManager.swift */,
 				4D97CCAB2E75501500874F99 /* MatchingGlobalNetworkManager.swift */,
+				4D8762B32E39263E00A9503C /* ProfileNetworkManager.swift */,
+				4D58C73B2E991F6C003A15E9 /* AvoidanceNetworkManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1003,6 +1012,7 @@
 				4D0122A52DEC90B4003E72B0 /* WriteAnswerView.swift in Sources */,
 				4D389C4E2E2A59AA00B56F84 /* Data+Ext.swift in Sources */,
 				4DFAFB972E12CB63006E3B5F /* AccountView.swift in Sources */,
+				4D58C73E2E9920BD003A15E9 /* Avoidance.swift in Sources */,
 				4D0B3BE72DA6B957006206F1 /* LoginView.swift in Sources */,
 				4D33EA192E0995B600B2661B /* ChatListViewModel.swift in Sources */,
 				4DEB5A6F2E0AD56D009BE55B /* Chat.swift in Sources */,
@@ -1048,6 +1058,7 @@
 				4D389C482E2A46CC00B56F84 /* ProfileForthDayImageView.swift in Sources */,
 				4DB5B3152D903B220060D4C6 /* JobSelectView.swift in Sources */,
 				4D301E932E2E5FC3001FA1A1 /* PermissionManager.swift in Sources */,
+				4D58C73C2E991F6C003A15E9 /* AvoidanceNetworkManager.swift in Sources */,
 				4D389C542E2CEF4B00B56F84 /* Question.swift in Sources */,
 				4DF329E92D87ED5300DBB823 /* LoginCotainerView.swift in Sources */,
 				4DC7DD9B2E4A2C770052FECB /* AnswerCompleteMainView.swift in Sources */,
@@ -1104,6 +1115,7 @@
 				4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */,
 				4D8353312E4701210031B0ED /* MatchingNetworkManager.swift in Sources */,
 				4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */,
+				4D9ED84E2E8D41C3009D4B63 /* PhoneContactViewModel.swift in Sources */,
 				4D61195D2D75B2A300715B9E /* OnboardingContainerView.swift in Sources */,
 				4DF855772DFEEF6B00D429F6 /* BottomSheet.swift in Sources */,
 				4DC7E9A92E5B462300823DC3 /* ChatingRootView.swift in Sources */,
