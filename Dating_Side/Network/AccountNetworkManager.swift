@@ -98,7 +98,7 @@ extension AccountAPIManager: APIManager {
     }
     
     var headers: [String : String]? {
-        let accessToken = KeychainManager.shared.getAccessToken()
+        guard let accessToken = KeychainManager.shared.getAccessToken() else { return nil }
         Log.debugPublic("accessToken: ", accessToken)
         
         switch self {
