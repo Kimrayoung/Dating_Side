@@ -60,12 +60,12 @@ final class AccountViewModel: ObservableObject {
     @Published var lifeStyleButtonList: [String : [Bool]] = [:]
     
     @Published var introduceText: String = ""
-    
+        
     @Published var selectedImage: UIImage?
     @Published var selectedSeconDayImage: UIImage?
     @Published var selectedForthDayImage: UIImage?
     @Published var selectedSixthDayImage: UIImage?
-    
+        
     //MARK: - 공통 사용(회원 등록, 회원 수정)
     
     func checkLocationData() -> Bool {
@@ -596,15 +596,15 @@ extension AccountViewModel {
         let identifier: String = UUID().uuidString
         let boundary: String = "Boundary-\(identifier)"
         
-       
-        let patchAccountData = createUploadBody(request: userPatchData, images: [], boundary: boundary)
-        
+        let patchAccountData = createUploadBody(request: userPatchData, images: userImage, boundary: boundary)
+                
         do {
             let result = try await accountNetworkManger.patchUserData(requestModel: patchAccountData, boundaryString: boundary)
             
             switch result {
             case .success(let result):
                 Log.debugPublic("유저 수정 성공", result)
+                appState.myPagePath.removeLast()
             case .failure(let error):
                 Log.errorPublic("유저 수정 실패", error)
             }
@@ -613,4 +613,3 @@ extension AccountViewModel {
         }
     }
 }
-
