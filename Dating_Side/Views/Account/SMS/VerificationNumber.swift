@@ -82,14 +82,15 @@ struct VerificationNumber: View {
         })
         .onAppear {
             Task {
-                viewModel.checkSMSBlock()
-                if !viewModel.vertificationBlock{
-                    await viewModel.requestVerifiactionNumber()
-                }
-                
-                if viewModel.verificationNumber.count == 4 {
-                    focusedField = .verificationNumber(viewModel.verificationNumber.count - 1)
-                }
+#warning("타이머 테스트")
+                //                viewModel.checkSMSBlock()
+                //                if !viewModel.vertificationBlock{
+                //                    await viewModel.requestVerifiactionNumber()
+                //                }
+                //
+                //                if viewModel.verificationNumber.count == 4 {
+                //                    focusedField = .verificationNumber(viewModel.verificationNumber.count - 1)
+                //                }
                 
                 await viewModel.timerStart()
             }
