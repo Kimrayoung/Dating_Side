@@ -168,6 +168,7 @@
 		4DFAFB9E2E1571E7006E3B5F /* PartnerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFAFB9D2E1571E7006E3B5F /* PartnerProfileView.swift */; };
 		4DFAFBA22E16BE7A006E3B5F /* KakaoAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFAFBA12E16BE7A006E3B5F /* KakaoAuth.swift */; };
 		D10A7D002E8CE2E1004B8EEB /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D10A7CFF2E8CE2E1004B8EEB /* Lottie */; };
+		D1753E2C2EAF6E1700F59565 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1753E2B2EAF6E1700F59565 /* ReportView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -344,6 +345,7 @@
 		4DFAFB9D2E1571E7006E3B5F /* PartnerProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartnerProfileView.swift; sourceTree = "<group>"; };
 		4DFAFBA02E16BD2E006E3B5F /* KakaoConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = KakaoConfig.xcconfig; sourceTree = "<group>"; };
 		4DFAFBA12E16BE7A006E3B5F /* KakaoAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoAuth.swift; sourceTree = "<group>"; };
+		D1753E2B2EAF6E1700F59565 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -797,6 +799,7 @@
 				4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */,
 				4DFAFB992E1435AF006E3B5F /* Tempchat.swift */,
 				4DB922BF2E62A3B400A87023 /* SayGoodbyeView.swift */,
+				D1753E2B2EAF6E1700F59565 /* ReportView.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1090,6 +1093,7 @@
 				4D8353252E40F9C80031B0ED /* BeforePreferenceKeywordComponent.swift in Sources */,
 				4DC7E9A72E5AE18800823DC3 /* ChatViewModel.swift in Sources */,
 				4D0B3BE32DA6B05D006206F1 /* LoginNetworkManager.swift in Sources */,
+				D1753E2C2EAF6E1700F59565 /* ReportView.swift in Sources */,
 				4D8353312E4701210031B0ED /* MatchingNetworkManager.swift in Sources */,
 				4D3AD6E42DE4A83100436A4B /* ValuesListView.swift in Sources */,
 				4D61195D2D75B2A300715B9E /* OnboardingContainerView.swift in Sources */,
@@ -1259,10 +1263,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Dating_Side/Dating_Side.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Dating_Side/Preview Content\"";
-				DEVELOPMENT_TEAM = DSRQ5VPU2Y;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = DSRQ5VPU2Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Dating-Side-Info.plist";
@@ -1282,6 +1288,8 @@
 				MARKETING_VERSION = 1.07;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = loveway_dev;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

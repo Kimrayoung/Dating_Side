@@ -101,6 +101,7 @@ struct ChatingView: View {
             showGoodByeView = true
         })
         .customAlert(isPresented: $showReportAlert, title: "불편함을 겪으셨다면\n 신고하세요!", message: "신고 즉시 차단되며 상대의 매너지수가 감소됩니다.", primaryButtonText: "신고하기", primaryButtonAction: {
+            #warning("신고하기 화면 구현")
             print("신고하기")
         },primaryButtonColor: .red, secondaryButtonText: "취소", secondaryButtonAction: {
             print("신고취소")
