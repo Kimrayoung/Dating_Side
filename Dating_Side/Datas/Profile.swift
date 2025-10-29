@@ -21,24 +21,27 @@ struct TomeUserProfile: Hashable, Codable {
 enum ProfileValueType {
     case couple
     case marry
-    case company
+    case work
     case life
+    case etc
     
     var korean: String {
         switch self {
-            case .couple: return "연애관"
-            case .marry: return "혼인관"
-            case .company: return "기업관"
-            case .life: return "생활관"
+            case .couple: return "연애"
+            case .marry: return "결혼"
+            case .work: return "직장"
+            case .life: return "생활"
+            case .etc: return "기타"
         }
     }
     
     var english: String {
         switch self {
             case .couple: return "LOVE"
-            case .marry: return "MARRY"
-            case .company: return "COMPANY"
+            case .marry: return "MARRIAGE"
+            case .work: return "WORK"
             case .life: return "LIFE"
+            case .etc: return "ETC"
         }
     }
 }

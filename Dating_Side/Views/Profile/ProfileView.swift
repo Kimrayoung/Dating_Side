@@ -179,32 +179,41 @@ struct ProfileView: View {
             Text("가치관 기록")
                 .font(.pixel(13))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            HStack {
-                Button {
-                    print(#fileID, #function, #line, "- 연애관으로 이동")
-                    profilePathCheck(valueType: .couple)
-                } label: {
-                   makeValueProfileView(imageString: "loveView", text: "연애")
-                }
-                Button {
-                    print(#fileID, #function, #line, "- 결혼관으로 이동")
-                    profilePathCheck(valueType: .marry)
-                } label: {
-                    makeValueProfileView(imageString: "marryView", text: "결혼")
-                }
-                Button {
-                    print(#fileID, #function, #line, "- 직장관으로 이동")
-                    profilePathCheck(valueType: .company)
-                } label: {
-                    makeValueProfileView(imageString: "workView", text: "직장")
-                }
-                Button {
-                    print(#fileID, #function, #line, "- 생활관으로 이동")
-                    profilePathCheck(valueType: .life)
-                } label: {
-                    makeValueProfileView(imageString: "lifeView", text: "생활")
+            ScrollView(.horizontal) {
+                HStack {
+                    Button {
+                        print(#fileID, #function, #line, "- 연애관으로 이동")
+                        profilePathCheck(valueType: .couple)
+                    } label: {
+                       makeValueProfileView(imageString: "loveView", text: "연애")
+                    }
+                    Button {
+                        print(#fileID, #function, #line, "- 결혼관으로 이동")
+                        profilePathCheck(valueType: .marry)
+                    } label: {
+                        makeValueProfileView(imageString: "marryView", text: "결혼")
+                    }
+                    Button {
+                        print(#fileID, #function, #line, "- 직장관으로 이동")
+                        profilePathCheck(valueType: .work)
+                    } label: {
+                        makeValueProfileView(imageString: "workView", text: "직장")
+                    }
+                    Button {
+                        print(#fileID, #function, #line, "- 생활관으로 이동")
+                        profilePathCheck(valueType: .life)
+                    } label: {
+                        makeValueProfileView(imageString: "lifeView", text: "생활")
+                    }
+                    Button {
+                        print(#fileID, #function, #line, "- 기타으로 이동")
+                        profilePathCheck(valueType: .etc)
+                    } label: {
+                        makeValueProfileView(imageString: "lifeView", text: "기타")
+                    }
                 }
             }
+            
         })
         .padding(.horizontal, 24)
     }
@@ -223,7 +232,7 @@ struct ProfileView: View {
     }
     
     func profilePathCheck(valueType: ProfileValueType) {
-        
+        Log.debugPublic("valueType: \(valueType.english)", valueList[valueType.english])
         if showProfileViewType == .chat {
             appState.onboardingPath.append(OnChatProfilePath.profileValueList(valueType: valueType.korean, valueDataList: valueList[valueType.english] ?? []))
         } else if showProfileViewType == .myPage {
