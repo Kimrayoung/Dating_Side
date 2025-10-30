@@ -27,7 +27,7 @@ struct AccountNetworkManager {
     func fetchAddressData(_ addrCode: String?) async throws -> Result<AddressResponse, Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getAddressData(addrCode: addrCode), httpCodes: .success)
     }
- 
+    
     func fetchJobType() async throws -> Result<JobTypeResponse, Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.getJopTypes, httpCodes: .success)
     }
@@ -76,7 +76,7 @@ extension AccountAPIManager: APIManager {
         case .logout:
             return "account/logout"
         case .postUserProfileData:
-                return "account/signup"
+            return "account/signup"
         case .getAddressData(let addrCode):
             return addrCode == nil ? "address" : "address?code=\(addrCode!)"
         case .getJopTypes:
@@ -98,7 +98,8 @@ extension AccountAPIManager: APIManager {
     }
     
     var headers: [String : String]? {
-        guard let accessToken = KeychainManager.shared.getAccessToken() else { return nil }
+        let accessToken = KeychainManager.shared.getAccessToken() ?? ""
+        
         Log.debugPublic("accessToken: ", accessToken)
         
         switch self {

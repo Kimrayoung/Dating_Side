@@ -12,15 +12,18 @@ struct SayGoodbyeView: View {
     @State private var comment: String = ""
     @State private var score: Int = 0
     let scoreButtonWidth = (UIScreen.main.bounds.width - 48 - 32) / 5
+    
     var body: some View {
         
         VStack {
             Text("상대에게 전하고 싶은 작별인사를 보내주세요.")
                 .font(.pixel(16))
-            Text("상대방은 몇점을 받았는지 알 수 없으니 안심하세요:)")
+                .padding(.top, 30)
+            Text("상대에게는 메시지만 표시됩니다.")
                 .foregroundStyle(Color.gray2)
-                .font(.pixel(12))
-                .padding(.bottom, 20)
+                .font(.rounded(14))
+                .padding(.bottom, 4)
+                .padding(.top, 4)
             HStack(spacing: 8) {
                 veryGoodButton
                 goodButton
@@ -29,7 +32,7 @@ struct SayGoodbyeView: View {
                 veryBadButton
             }
             .padding(.bottom, 24)
-            .padding(.horizontal, 14)
+//            .padding(.horizontal, 14)
             commentTextField
                 .padding(.bottom, 24)
                 .padding(.horizontal, 24)
@@ -120,7 +123,6 @@ struct SayGoodbyeView: View {
         .background(Color.mainColor)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .padding(.horizontal, 24)
-        .padding(.bottom, 109)
     }
 }
 

@@ -8,7 +8,6 @@
 import UIKit
 import Firebase
 import FirebaseMessaging
-import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     
@@ -21,10 +20,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
         
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { granted, error in
-            print("푸시 알림 권한: \(granted)")
+        // 앱 자체 시스템에서 알림 설정할건지 확인
+        Task {
+            await PushNotificationManager().requestAuthorization()
         }
-        
         application.registerForRemoteNotifications()
         
         return true
@@ -54,7 +53,16 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("FCM Token: \(fcmToken ?? "없음")")
-        UserDefaults.standard.set(fcmToken, forKey: "FCMToken")
+        if let originalToken = UserDefaults.standard.string(forKey: "FCMToken") {
+            print("저장된 FCM Token: \(originalToken)")
+            if originalToken != fcmToken {
+                UserDefaults.standard.set(fcmToken, forKey: "FCMToken")
+                UserDefaults.standard.set(true, forKey: "NeedTokenChange")
+            }
+        } else {
+            print("저장된 토큰이 없습니다.")
+        }
+        
     }
 }
 

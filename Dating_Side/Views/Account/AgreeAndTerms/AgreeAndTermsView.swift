@@ -70,9 +70,9 @@ struct AgreeAndTermsView: View {
                 }
                 .disabled(!allRequiredAgreed)
             }
-            .onChange(of: isOver14) { _ in syncAll() }
-            .onChange(of: agreeTerms) { _ in syncAll() }
-            .onChange(of: agreePrivacy) { _ in syncAll() }
+            .onChange(of: isOver14) { _, _ in syncAll() }
+            .onChange(of: agreeTerms) { _, _ in syncAll() }
+            .onChange(of: agreePrivacy) { _, _ in syncAll() }
         }
     }
     
