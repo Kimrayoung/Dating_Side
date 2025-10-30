@@ -21,20 +21,58 @@ struct VerificationNumber: View {
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 36)
             verificationNumberView
-            Spacer()
-            Button(action: {
-                if !viewModel.checkVerificationNumber() {
-                    return
-                }
-                hideKeyboard()
-                Task {
-                    let result = await viewModel.verifySMSCode()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        if result {
-                            appState.onboardingPath.append(Onboarding.genderSelect)
+            
+            HStack {
+                ZStack {
+                    HStack{
+                        Image("timer")
+                        Text(viewModel.timerString)
+                            .font(.rounded(18))
+                            .foregroundStyle(Color(hex: "FF7878"))
+                    }
+                    .opacity(viewModel.timerRunning ? 1 : 0)
+                    
+                    Button {
+                        viewModel.resendVerficationNumber()
+                    } label: {
+                        HStack{
+                            Image("resend")
+                            Text("재전송")
+                                .font(.rounded(18))
+                                .foregroundStyle(Color.black)
                         }
                     }
+                    .opacity(viewModel.timerRunning ? 0 : 1)
+                    .disabled(viewModel.vertificationBlock)
                 }
+            }
+            .padding(.top, 16)
+            
+            Spacer()
+            
+            //인증번호가 다름
+            Text("인증번호를 다시 확인해주세요.")
+                .font(.rounded(12))
+                .foregroundStyle(Color(hex: "FA104F"))
+                .padding(.bottom, 8)
+                .opacity(viewModel.vertificationFail == true ? 1 : 0)
+            
+            Button(action: {
+#warning("개발을 위해 우선 고정적으로 이동")
+                
+                appState.onboardingPath.append(Onboarding.genderSelect)
+                //                if !viewModel.checkVerificationNumber() {
+                //                    return
+                //                }
+                //                hideKeyboard()
+                //                Task{
+                //                    let result = await viewModel.verifySMSCode()
+                //                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                //                        if result {
+                //                            appState.onboardingPath.append(Onboarding.genderSelect)
+                //                        }
+                //                    }
+                //                }
                 
             }, label: {
                 SelectButtonLabel(isSelected: $possibleNext, height: 42, text: "러브웨이 시작하기", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
@@ -44,16 +82,25 @@ struct VerificationNumber: View {
         })
         .onAppear {
             Task {
-                await viewModel.requestVerifiactionNumber()
+#warning("타이머 테스트")
+                //                viewModel.checkSMSBlock()
+                //                if !viewModel.vertificationBlock{
+                //                    await viewModel.requestVerifiactionNumber()
+                //                }
+                //
+                //                if viewModel.verificationNumber.count == 4 {
+                //                    focusedField = .verificationNumber(viewModel.verificationNumber.count - 1)
+                //                }
                 
-                if viewModel.verificationNumber.count == 4 {
-                    focusedField = .verificationNumber(viewModel.verificationNumber.count - 1)
-                }
+                await viewModel.timerStart()
             }
         }
         .onChange(of: viewModel.verificationNumber) { oldValue, newValue in
             possibleNext = viewModel.checkVerificationNumber()
         }
+        .customAlert(isPresented: $viewModel.vertificationBlock, title: "반복 인증 실패", message: "5회 이상 발송으로 12시간뒤 다시 인증이 가능합니다.", primaryButtonText: "확인", primaryButtonAction: {
+            viewModel.timerRunning = false
+        })
     }
     
     var verificationNumberView: some View {

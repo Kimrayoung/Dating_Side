@@ -55,7 +55,8 @@ struct AgreeAndTermsView: View {
                 // 다음 버튼
                 Button {
                     if allRequiredAgreed {
-                        appState.onboardingPath.append(Onboarding.genderSelect)
+                        #warning("genderselected가 아니라 번호선택으로 바꿈")
+                        appState.onboardingPath.append(Onboarding.phoneNumber)
                     }
                 } label: {
                     Text("다음")
