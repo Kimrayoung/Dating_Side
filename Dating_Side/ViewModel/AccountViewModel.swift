@@ -408,6 +408,17 @@ extension AccountViewModel {
         
         await patchUserAccountData(userPatchData: updateDefaultData, userImage: userImageData)
     }
+    
+    func updateFcmToken() async {
+        guard let originalToken = UserDefaults.standard.string(forKey: "FCMToken") else {
+            print("저장된 토큰이 없습니다.")
+            return
+        }
+        print("저장된 FCM Token: \(originalToken)")
+        let updateFcmToken: [String : Any] = [PatchUserType.fcmToken.rawValue : originalToken]
+        await patchUserAccountData(userPatchData: updateFcmToken)
+        UserDefaults.standard.set(false, forKey: "NeedTokenChange")
+    }
 }
 
 //MARK: - 서버 통신 관련

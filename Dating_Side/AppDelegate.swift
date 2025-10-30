@@ -53,7 +53,16 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("FCM Token: \(fcmToken ?? "없음")")
-        UserDefaults.standard.set(fcmToken, forKey: "FCMToken")
+        if let originalToken = UserDefaults.standard.string(forKey: "FCMToken") {
+            print("저장된 FCM Token: \(originalToken)")
+            if originalToken != fcmToken {
+                UserDefaults.standard.set(fcmToken, forKey: "FCMToken")
+                UserDefaults.standard.set(true, forKey: "NeedTokenChange")
+            }
+        } else {
+            print("저장된 토큰이 없습니다.")
+        }
+        
     }
 }
 
