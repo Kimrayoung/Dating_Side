@@ -11,6 +11,12 @@ import Kingfisher
 @MainActor
 struct SettingAndEditView: View {
     @EnvironmentObject var appState: AppState
+    @Environment(\.scenePhase) private var scenePhase
+    @ObservedObject var pushNotificationManager = PushNotificationManager()
+    @ObservedObject var phoneContactVM = PhoneContactsViewModel()
+    @AppStorage("PushNotificationEnabled") private var isPushEnabled: Bool = true
+    @State var showNotificationAlert: Bool = false
+    
     var userImageURL: String?
     
     var body: some View {
@@ -55,6 +61,15 @@ struct SettingAndEditView: View {
             })
             Spacer()
         }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                // 설정에서 돌아왔을 때 여기 들어옴
+                pushNotificationManager.refresh()  // 알림 권한 상태 다시 확인
+            }
+        }
+        .customAlert(isPresented: $showNotificationAlert, title: "알림은 설정에서 변경할 수 있습니다.", message: "설정으로 이동하시겠습니까?", primaryButtonText: "확인", primaryButtonAction: {
+            pushNotificationManager.openNotificationSettings()
+        }, secondaryButtonText: "취소")
     }
     
     var profileEditView: some View {
@@ -86,32 +101,37 @@ struct SettingAndEditView: View {
     }
     
     var pushNoti: some View {
-        Button(action: {
-            
-        }, label: {
-            HStack(content: {
-                Text("푸시 알림 설정")
-                    .font(.pixel(16))
-                    .foregroundStyle(Color.blackColor)
-                Spacer()
-                Image("rightArrow")
+        HStack {
+            Text("푸시 알림 설정")
+                .font(.pixel(16))
+                .foregroundStyle(Color.blackColor)
+            Spacer()
+            Button(action: {
+                showNotificationAlert.toggle()
+            }, label: {
+                Text(isPushEnabled ? "ON" : "OFF")
+                    .foregroundStyle(isPushEnabled ? Color.mainColor : Color.gray3)
+                    .font(.pixel(14))
             })
-        })
+        }
         .padding(.horizontal, 24)
     }
     
     var avoidPerson: some View {
-        Button(action: {
-            
-        }, label: {
-            HStack(content: {
-                Text("지인 피하기")
-                    .font(.pixel(16))
-                    .foregroundStyle(Color.blackColor)
-                Spacer()
-                Image("rightArrow")
+        HStack {
+            Text("지인 피하기")
+                .font(.pixel(16))
+                .foregroundStyle(Color.blackColor)
+            Spacer()
+            Button(action: {
+                Task {
+                    await phoneContactVM.requestAndLoad()
+                }
+            }, label: {
+                Text("ON")
+                    .font(.pixel(14))
             })
-        })
+        }
         .padding(.horizontal, 24)
     }
 }

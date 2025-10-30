@@ -7,6 +7,7 @@
 
 import Photos
 
+/// 사진 관련 유저에게 권한 얻기
 final class PermissionManager {
     static let shared = PermissionManager()
     
