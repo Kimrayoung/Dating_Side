@@ -337,8 +337,6 @@ actor WebSocketClient {
 
     // MARK: Ping / Reconnect
 
-    // MARK: Ping / Reconnect
-
     private func startPing() {
         stopPing()
         // WebSocket ping을 더 자주 전송하여 연결 유지

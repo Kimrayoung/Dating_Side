@@ -18,6 +18,7 @@ struct ChatingRootView: View {
                     case .chatList: ChatListView()
                     case let .chatRoom(roomId, partnerName, partnerImageUrl):
                         ChatingView(roomId: roomId, partnerName: partnerName, partnerImageUrl: partnerImageUrl)
+                    case let .chatReport(roomId): ReportView(roomId: roomId)
                     }
                 }
         }
