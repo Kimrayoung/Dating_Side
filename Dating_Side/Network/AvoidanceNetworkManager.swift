@@ -52,7 +52,7 @@ extension AvoidanceAPIManger: APIManager {
         Log.debugPublic("accessToken: ", accessToken)
         
         return [
-            "Authorization": "Bearer \(accessToken)",
+            "Authorization": "Bearer \(accessToken ?? "")",
             "Content-Type" : "application/json",
         ]
     }
@@ -60,6 +60,7 @@ extension AvoidanceAPIManger: APIManager {
     func body() throws -> Data? {
         switch self {
         case .postAvoidanceList(let avoidanceList):
+            Log.debugPublic("avoidanceList", avoidanceList)
             let jsonEncoder = JSONEncoder()
             return try jsonEncoder.encode(avoidanceList)
         default:

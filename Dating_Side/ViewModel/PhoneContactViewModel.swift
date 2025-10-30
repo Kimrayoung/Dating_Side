@@ -6,6 +6,7 @@
 //
 
 import Contacts
+import UIKit
 
 /// 유저의 연락처 가져오기 관련
 @MainActor
@@ -17,154 +18,225 @@ final class PhoneContactsViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     private let store = CNContactStore()
+    private var isProcessing = false
+    private let contactQueue = DispatchQueue(label: "com.dating.contacts", qos: .userInitiated)
     
-    func requestAndLoad() async {
-        requestContactAuthorization { [weak self] granted, error in
-            Task { @MainActor in
-                guard let self = self else { return }
-                if let error = error {
-                    self.errorMessage = error.localizedDescription
-                    return
-                }
-                
-                // 권한없음
-                if !granted {
-                    self.errorMessage = "설정 > 개인정보 보호 > 연락처에서 권한을 허용해 주세요."
-                    return
-                }
-                
-                guard let originalAuthorization = self.getSavedAuthorizationStatus() else {
-                    await self.saveAuthorizationStatus(granted)
-                    return
-                }
-                
-                // 권한상태 동일함
-                if granted == originalAuthorization {
-                    return
-                } else {
-                    // 권한 상태 갱신
-                    self.authorizationStatus = CNContactStore.authorizationStatus(for: .contacts)
-                    await self.saveAuthorizationStatus(granted)
-                }
+    func openAppSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString),
+              UIApplication.shared.canOpenURL(url) else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+    
+    // 권한만 확인, 로드하지 않음
+    func checkAuthorizationOnly() async {
+        let status = CNContactStore.authorizationStatus(for: .contacts)
+        self.authorizationStatus = status
+        
+        // 이미 저장된 권한 상태 확인
+        let savedStatus = getSavedAuthorizationStatus()
+        
+        switch status {
+        case .authorized, .limited:
+            if savedStatus != true {
+                UserDefaults.standard.set(true, forKey: "PhoneContactsAuthorization")
             }
+        case .denied, .restricted:
+            if savedStatus == true {
+                UserDefaults.standard.set(false, forKey: "PhoneContactsAuthorization")
+            }
+        case .notDetermined:
+            break
+        @unknown default:
+            break
+        }
+    }
+    
+    // ✅ 버튼 클릭 시에만 호출
+    func requestAndLoad() async {
+        guard !isProcessing else {
+            Log.debugPublic("이미 처리 중입니다")
+            return
+        }
+        
+        isProcessing = true
+        defer { isProcessing = false }
+        
+        let granted = await requestContactAuthorization()
+        self.authorizationStatus = CNContactStore.authorizationStatus(for: .contacts)
+        
+        if granted {
+            await loadContacts()
+        } else {
+            UserDefaults.standard.set(false, forKey: "PhoneContactsAuthorization")
+        }
+    }
+    
+    /// 권한 요청
+    func requestContactAuthorization() async -> Bool {
+        let status = CNContactStore.authorizationStatus(for: .contacts)
+
+        switch status {
+        case .authorized, .limited:
+            return true
+
+        case .notDetermined:
+            do {
+                let granted = try await store.requestAccess(for: .contacts)
+                return granted
+            } catch {
+                return false
+            }
+
+        case .denied, .restricted:
+            return false
+
+        @unknown default:
+            return false
         }
     }
 
-    func requestContactAuthorization(completion: @escaping (Bool, Error?) -> Void) {
-        let store = CNContactStore()
-        let status = CNContactStore.authorizationStatus(for: .contacts)
-        
-        switch status {
-        case .authorized:
-            completion(true, nil)
-            
-        case .notDetermined:
-            store.requestAccess(for: .contacts) { granted, error in
-                completion(granted, error)
+    
+    // 백그라운드에서 연락처 로드 -> 로그되면 연락처 서버로 전송
+    func loadContacts() async {
+        // 백그라운드 스레드에서 실행
+        let avoidanceList = await loadContactsInBackground()
+        guard let avoidanceList = avoidanceList else { return }
+        Log.debugPublic("avoidanceList 확인", avoidanceList)
+        await postAvoidanceList(avoidanceList: avoidanceList)
+    }
+    
+    // ✅ 백그라운드 스레드에서 연락처 로드 (블로킹 작업)
+    private func loadContactsInBackground() async -> AvoidanceList? {
+        return await withCheckedContinuation { continuation in
+            contactQueue.async { [weak self] in
+                guard let self = self else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                
+                let result = self.loadContactsOptimized()
+                
+                Task { @MainActor in
+                    continuation.resume(returning: result)
+                }
             }
-            
-        case .denied, .restricted:
-            completion(false, nil)
-            
-        @unknown default:
-            completion(false, nil)
         }
     }
     
-    /// 저장된 권한 상태 가져오기
     func getSavedAuthorizationStatus() -> Bool? {
         return UserDefaults.standard.object(forKey: "PhoneContactsAuthorization") as? Bool
     }
     
-    /// 저장된 권한 상태 저장하기 및 삭제&저장
-    @MainActor
-    func saveAuthorizationStatus(_ status: Bool) async {
-        // true면 지인피하기 기능 on -> 지인들의 핸드폰 번호를 저장
-        if status {
-            guard let avoidanceList = self.loadContacts() else { return }
-            await postAvoidanceList(avoidanceList: avoidanceList)
-        } else { // false이므로 지인피하기 기능 off -> 지인들의 핸드폰 번호 삭제
-            await deleteAvoidanceList()
+    /// 010 번호만 표준 포맷(010-####-####)으로 정규화
+    func normalizeKoreanMobile(_ raw: String) -> String? {
+        var cleaned = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // +82 → 0 치환
+        if cleaned.hasPrefix("+82") {
+            cleaned = "0" + cleaned.dropFirst(3)
+        }
+        // 숫자만 추출
+        cleaned = cleaned.filter { $0.isNumber }
+        
+        // 길이/접두 체크
+        guard cleaned.count == 11 else { return nil }
+        guard cleaned.hasPrefix("010") else { return nil }
+        
+        // 포맷팅
+        let head = cleaned.prefix(3)
+        let mid  = cleaned.dropFirst(3).prefix(4)
+        let tail = cleaned.suffix(4)
+        return "\(head)-\(mid)-\(tail)"
+    }
+
+    /// 연락처 로딩 + 정규화
+    private func loadContactsOptimized() -> AvoidanceList? {
+        // 권한 방어 (authorized 아닐 때 바로 종료)
+        guard CNContactStore.authorizationStatus(for: .contacts) == .authorized else {
+            Log.debugPublic("연락처 권한 없음: authorized가 아님")
+            return nil
         }
         
-        UserDefaults.standard.set(status, forKey: "PhoneContactsAuthorization")
-    }
-    
-    /// 전화번호부에 있는 전화번호들 가져오기
-    private func loadContacts() -> AvoidanceList? {
         let keys: [CNKeyDescriptor] = [
-            CNContactGivenNameKey as CNKeyDescriptor,
-            CNContactFamilyNameKey as CNKeyDescriptor,
             CNContactPhoneNumbersKey as CNKeyDescriptor
         ]
-        
-        // 모든 데이터를 가지고 온다
         let request = CNContactFetchRequest(keysToFetch: keys)
-        request.sortOrder = .familyName
+        request.unifyResults = true
         
-        var items: [String] = []
+        var normalizedSet = Set<String>()   // 중복 제거
+        var contactCount = 0
+        let maxContacts = 10_000            // 안전 한계
+        
         do {
-            try store.enumerateContacts(with: request) { contact, _ in
-                let phones = contact.phoneNumbers.map { $0.value.stringValue }
-                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                    .filter { !$0.isEmpty }
+            try store.enumerateContacts(with: request) { contact, stop in
+                contactCount += 1
+                if contactCount > maxContacts {
+                    stop.pointee = true
+                    Log.debugPublic("연락처 로드 한계 도달: \(maxContacts)개")
+                    return
+                }
                 
-                var phone = String(phones.joined(separator: "-"))
-                guard !phones.isEmpty else { return } // 전화번호 없는 연락처 제외(원하면 제거)
-                let fullName = [contact.familyName, contact.givenName].joined()
-                items.append(phone)
+                for phoneNumber in contact.phoneNumbers {
+                    if let formatted = normalizeKoreanMobile(phoneNumber.value.stringValue) {
+                        normalizedSet.insert(formatted)
+                    }
+                    // normalize 실패한 번호는 버림
+                }
             }
             
-            return AvoidanceList(avoidanceList: items)
+            // 결정적 결과를 위해 정렬
+            let result = Array(normalizedSet).sorted()
+            Log.debugPublic("✅ 연락처 로드 완료: \(result.count)개 / 총 \(contactCount)개 연락처")
+            return AvoidanceList(avoidanceList: result)
+            
         } catch {
-            self.errorMessage = error.localizedDescription
+            Log.errorPublic("❌ 연락처 로딩 실패: \(error.localizedDescription)")
+            return nil
         }
-        
-        return nil
     }
-}
 
+}
 
 extension PhoneContactsViewModel {
     @MainActor
     func postAvoidanceList(avoidanceList: AvoidanceList) async {
         loadingManager.isLoading = true
-        defer {
-            loadingManager.isLoading = false
-        }
+        defer { loadingManager.isLoading = false }
         
         do {
             let result = try await avoidanceNetwork.postAvoidanceList(avoidanceList: avoidanceList)
             
             switch result {
             case .success:
-                Log.debugPublic("지인피하기 리스트 등록 성공")
+                Log.debugPublic("✅ 지인피하기 리스트 등록 성공: \(avoidanceList.avoidanceList.count)개")
             case .failure(let error):
-                Log.errorPublic(error.localizedDescription)
+                Log.errorPublic("❌ 지인피하기 등록 실패: \(error.localizedDescription)")
+                self.errorMessage = error.localizedDescription
             }
         } catch {
-            Log.errorPublic(error.localizedDescription)
+            Log.errorPublic("❌ postAvoidanceList 예외: \(error.localizedDescription)")
+            self.errorMessage = error.localizedDescription
         }
     }
     
     @MainActor
     func deleteAvoidanceList() async {
         loadingManager.isLoading = true
-        defer {
-            loadingManager.isLoading = false
-        }
+        defer { loadingManager.isLoading = false }
         
         do {
             let result = try await avoidanceNetwork.deleteAvoidanceList()
             
             switch result {
             case .success:
-                Log.debugPublic("지인피하기 등록된 리스트 삭제 성공")
+                Log.debugPublic("✅ 지인피하기 리스트 삭제 성공")
             case .failure(let error):
-                Log.errorPublic(error.localizedDescription)
+                Log.errorPublic("❌ 지인피하기 삭제 실패: \(error.localizedDescription)")
+                self.errorMessage = error.localizedDescription
             }
         } catch {
-            Log.errorPublic(error.localizedDescription)
+            Log.errorPublic("❌ deleteAvoidanceList 예외: \(error.localizedDescription)")
+            self.errorMessage = error.localizedDescription
         }
     }
 }
