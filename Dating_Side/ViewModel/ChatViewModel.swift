@@ -70,6 +70,15 @@ final class ChatViewModel: ObservableObject {
         
         let chat = SocketMessage(content: content, roomId: roomId)
         
+        let localMessage = ChatMessage(
+            id: UUID(),
+            content: content,
+            sender: UserDefaults.standard.integer(forKey: "userId"), // 🚨 현재 사용자 ID 사용
+            timestamp: Date().toIntArray
+        )
+        
+        messages.append(localMessage)
+        
         Task {
             do {
                 print("📤 About to call client.sendMessage...")
@@ -121,7 +130,7 @@ final class ChatViewModel: ObservableObject {
     func leaveChatting(){
         Task{
             do{
-//                try await chatNetwork.chattingRoom(leave: true)
+                //                try await chatNetwork.chattingRoom(leave: true)
                 await MainActor.run {
                     print("asd")
                 }
@@ -130,14 +139,14 @@ final class ChatViewModel: ObservableObject {
             }
         }
     }
-
+    
     
     //MARK: - 신고하기
-    #warning("신고하기 수정필요")
+#warning("신고하기 수정필요")
     func userReport(){
         Task{
             do{
-//                try await chatNetwork.userReport(report: reportReason)
+                //                try await chatNetwork.userReport(report: reportReason)
                 await MainActor.run {
                     print("asd")
                 }
