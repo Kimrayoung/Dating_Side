@@ -99,6 +99,7 @@ extension AccountAPIManager: APIManager {
     
     var headers: [String : String]? {
         let accessToken = KeychainManager.shared.getAccessToken() ?? ""
+        
         Log.debugPublic("accessToken: ", accessToken)
         
         switch self {

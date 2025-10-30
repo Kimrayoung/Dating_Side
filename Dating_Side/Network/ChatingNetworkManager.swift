@@ -25,6 +25,10 @@ struct ChattingNetworkManager {
     func matchingPartnerPhoto() async throws -> Result<UserImage, Error> {
         return await networkManager.callWithAsync(endpoint: ChatingNetworkManager.matchingPartnerPhoto, httpCodes: .success)
     }
+    
+    func userReport(report: ReportRequest) async throws -> Result<VoidResponse, Error> {
+        return await networkManager.callWithAsync(endpoint: ChatingNetworkManager.userReport(report: report), httpCodes: .success)
+    }
 }
 
 enum ChatingNetworkManager {
@@ -32,6 +36,7 @@ enum ChatingNetworkManager {
     case chattingRoom
     /// 매칭된 상태 일자별 프로필 사진 조회
     case matchingPartnerPhoto
+    case userReport(report: ReportRequest)
 }
 
 extension ChatingNetworkManager: APIManager {
@@ -43,7 +48,10 @@ extension ChatingNetworkManager: APIManager {
             return "chatting/chatroom"
         case .matchingPartnerPhoto:
             return "matching/partner/profile-image"
+        case .userReport:
+            return "report"
         }
+        
     }
     
     var method: HTTPMethod {
@@ -65,6 +73,16 @@ extension ChatingNetworkManager: APIManager {
     }
     
     func body() throws -> Data? {
-        return nil
+        switch self {
+        case .userReport(let report):
+            let jsonEncoder = JSONEncoder()
+            return try jsonEncoder.encode(report)
+        case .chatting:
+            return nil
+        case .chattingRoom:
+            return nil
+        case .matchingPartnerPhoto:
+            return nil
+        }
     }
 }

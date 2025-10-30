@@ -54,21 +54,23 @@ struct ChattingRoomResponse: Codable {
     let partnerNickName: String
     let partnerProfileImageUrl: String
     let lastMessage: String?
-    let lastMessageTime: [Int]
+    let lastMessageTime: [Int]?
     let notReadMessageCount: Int
     
     var timestampDate: Date? {
-        guard lastMessageTime.count >= 6 else { return nil }
-        var comps = DateComponents()
-        comps.year   = lastMessageTime[0]
-        comps.month  = lastMessageTime[1]
-        comps.day    = lastMessageTime[2]
-        comps.hour   = lastMessageTime[3]
-        comps.minute = lastMessageTime[4]
-        comps.second = lastMessageTime[5]
-        if lastMessageTime.count >= 7 {
-            comps.nanosecond = lastMessageTime[6]
+            guard let timeComponents = lastMessageTime, timeComponents.count >= 6 else { return nil }
+            var comps = DateComponents()
+            comps.year   = timeComponents[0]
+            comps.month  = timeComponents[1]
+            comps.day    = timeComponents[2]
+            comps.hour   = timeComponents[3]
+            comps.minute = timeComponents[4]
+            comps.second = timeComponents[5]
+            
+            if timeComponents.count >= 7 {
+                comps.nanosecond = timeComponents[6]
+            }
+            
+            return Calendar.current.date(from: comps)
         }
-        return Calendar.current.date(from: comps)
-    }
 }
