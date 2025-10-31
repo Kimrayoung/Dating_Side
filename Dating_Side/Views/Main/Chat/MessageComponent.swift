@@ -46,9 +46,9 @@ struct MessageProfile: View {
                 )
                 .foregroundColor(message.sender == userID ? .white : .primary)
         }
-        .onAppear {
-            print(#fileID, #function, #line, "- partnerImage: \(partnerImageUrl)")
-        }
+//        .onAppear {
+//            print(#fileID, #function, #line, "- partnerImage: \(partnerImageUrl)")
+//        }
     }
 }
 

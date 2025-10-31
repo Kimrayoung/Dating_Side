@@ -29,12 +29,14 @@ final class ChatViewModel: ObservableObject {
         self.client = WebSocketClient(endpoint: "wss://donvolo.shop/api/chat", jwt: accessToken, roomId: roomId)
     }
     
+
+    
     func connect() {
         guard listenTask == nil else { return } // 이미 연결 중이면 무시
         
         connectionStatus = "연결 중..."
         Log.debugPublic("connectionStatus",connectionStatus)
-        listenTask = Task {
+        listenTask = Task { @MainActor in
             do {
                 await client.connect(jwt: jwt)
                 await client.waitUntilStompConnected()
@@ -43,6 +45,7 @@ final class ChatViewModel: ObservableObject {
                 // STOMP 연결 완료 대기 시간 단축
                 try await Task.sleep(nanoseconds: 200_000_000) // 0.2초
                 await client.subscribe(roomId: roomId)
+                await client.listen()
                 
                 isConnected = true
                 connectionStatus = "연결됨"
@@ -51,7 +54,11 @@ final class ChatViewModel: ObservableObject {
                 for await msg in await client.messages {
                     messages.append(msg)
                 }
-                
+//                for await msg in await client.messages {
+//                    await MainActor.run {
+//                        messages.append(msg)
+//                    }
+//                }
             } catch {
                 print("❌ Connection failed: \(error)")
                 connectionStatus = "연결 실패: \(error.localizedDescription)"

@@ -83,10 +83,14 @@ struct ChatingView: View {
             sendTextField
         }
         .onAppear {
-            Task {
+//                        Task {
+//                            await vm.fetchChattingData()
+//                        }
+//                        vm.connect()
+            Task { @MainActor in
                 await vm.fetchChattingData()
+                vm.connect()
             }
-            vm.connect()
         }
         .onDisappear { vm.disconnect() }
         .onTapGesture { UIApplication.shared.hideKeyboard() }
@@ -102,7 +106,7 @@ struct ChatingView: View {
             showGoodByeView = true
         })
         .customAlert(isPresented: $showReportAlert, title: "불편함을 겪으셨다면\n 신고하세요!", message: "신고 즉시 차단되며 상대의 매너지수가 감소됩니다.", primaryButtonText: "신고하기", primaryButtonAction: {
-            #warning("신고하기 화면 구현")
+#warning("신고하기 화면 구현")
             showReportAlert = false
             appState.chatPath.append(Chating.chatReport(roomId: roomId))
         },primaryButtonColor: .red, secondaryButtonText: "취소", secondaryButtonAction: {
