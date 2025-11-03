@@ -589,7 +589,6 @@
 				4DC7E9AA2E5B4F1900823DC3 /* ChatingNetworkManager.swift */,
 				4D8353302E4701170031B0ED /* MatchingNetworkManager.swift */,
 				4D83532C2E44EAB00031B0ED /* AttractionNetworkManager.swift */,
-				4D8762B32E39263E00A9503C /* ProfileNetworkManager.swift */,
 				4D389C512E2CEE3500B56F84 /* QuestionNetworkManager.swift */,
 				4D389C4B2E2A58E100B56F84 /* MultipartFormBuilder.swift */,
 				4D443B9A2DCB85C600F4B9EB /* AccountNetworkManager.swift */,
@@ -1302,7 +1301,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.07;
+				MARKETING_VERSION = 1.08;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1323,7 +1322,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Dating_Side/Preview Content\"";
-				DEVELOPMENT_TEAM = 5664C7G97A;
+				DEVELOPMENT_TEAM = DSRQ5VPU2Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Dating-Side-Info.plist";
@@ -1340,7 +1339,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.07;
+				MARKETING_VERSION = 1.08;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rayoung.loveway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
