@@ -73,6 +73,9 @@ struct ProfileEditView: View {
             }
             Spacer()
         }
+        .task {
+            await profileViewModel.fetchUserAccountData()
+        }
         .navigationTitle("프로필 편집")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()

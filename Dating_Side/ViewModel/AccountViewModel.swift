@@ -343,7 +343,7 @@ extension AccountViewModel {
     
     /// 거주지 업데이트
     func updateLocation() async {
-        var location = makeLocation()
+        let location = makeLocation()
         let updateLocation: [String : Any] = [
             PatchUserType.activeRegion.rawValue : location
         ]
@@ -365,9 +365,10 @@ extension AccountViewModel {
     }
     
     func updateLifeStyle() async {
-        guard let lifeStyle = makeLifeStyle() else { return }
+        guard let lifeStyle = makeLifeStyle(), let lifeStyleDic = try? lifeStyle.asPatchJSON() else { return }
+        
         let updateLifeStyle: [String : Any] = [
-            PatchUserType.lifeStyle.rawValue : lifeStyle
+            PatchUserType.lifeStyle.rawValue : lifeStyleDic
         ]
         
         await patchUserAccountData(userPatchData: updateLifeStyle)
