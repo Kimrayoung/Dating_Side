@@ -777,6 +777,7 @@
 				4D6119582D75B21E00715B9E /* MyPageView.swift */,
 				4D909AA62E12C23900F19AD0 /* SettingAndEditView.swift */,
 				4DFAFB962E12CB63006E3B5F /* AccountView.swift */,
+				4D5E45902E3BC3BC00A3B60C /* ProfileEditView.swift */,
 			);
 			path = Mypage;
 			sourceTree = "<group>";
@@ -786,7 +787,6 @@
 			children = (
 				4D3AD6E32DE4A83100436A4B /* ValuesListView.swift */,
 				4D0122A42DEC90B4003E72B0 /* WriteAnswerView.swift */,
-				4D5E45902E3BC3BC00A3B60C /* ProfileEditView.swift */,
 				4DF855762DFEEF6B00D429F6 /* BottomSheet.swift */,
 				4DB5827C2DDB5B86001952D0 /* ProfileView.swift */,
 				4DF8557A2DFF04D200D429F6 /* ProfileMiniView.swift */,
