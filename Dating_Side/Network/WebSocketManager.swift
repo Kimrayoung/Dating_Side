@@ -218,13 +218,13 @@ actor WebSocketClient {
         print("📤 Message sent: \(message.content)")
     }
     
-    func listen() {
-        Task.detached(priority: .background) { [weak self] in
-            guard let self = self else { return }
-            print("👂 WebSocket listen() 시작")
-            await self.receiveLoop()
-        }
-    }
+//    func listen() {
+//        Task.detached(priority: .background) { [weak self] in
+//            guard let self = self else { return }
+//            print("👂 WebSocket listen() 시작")
+//            await self.receiveLoop()
+//        }
+//    }
     
     func disconnect() async {
         isManuallyClosed = true

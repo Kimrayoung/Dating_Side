@@ -10,12 +10,15 @@ import Foundation
 
 @MainActor
 final class ChatViewModel: ObservableObject {
-    let chatNetwork = ChattingNetworkManager()
     
+    let chatNetwork = ChattingNetworkManager()
+    let matchingNetwork = MatchingNetworkManager()
+    let loadingManager = LoadingManager.shared
+    private var appState = AppState.shared
+
     @Published var messages: [ChatMessage] = []
     @Published var isConnected = false
     @Published var connectionStatus: String = "연결 대기 중..."
-    @Published var reportReason: ReportRequest = ReportRequest(reason: "")
     
     private let client: WebSocketClient
     private var listenTask: Task<Void, Never>?
@@ -29,14 +32,14 @@ final class ChatViewModel: ObservableObject {
         self.client = WebSocketClient(endpoint: "wss://donvolo.shop/api/chat", jwt: accessToken, roomId: roomId)
     }
     
-
+    
     
     func connect() {
         guard listenTask == nil else { return } // 이미 연결 중이면 무시
         
         connectionStatus = "연결 중..."
         Log.debugPublic("connectionStatus",connectionStatus)
-        listenTask = Task { @MainActor in
+        listenTask = Task {
             do {
                 await client.connect(jwt: jwt)
                 await client.waitUntilStompConnected()
@@ -45,7 +48,7 @@ final class ChatViewModel: ObservableObject {
                 // STOMP 연결 완료 대기 시간 단축
                 try await Task.sleep(nanoseconds: 200_000_000) // 0.2초
                 await client.subscribe(roomId: roomId)
-                await client.listen()
+                //                await client.listen()
                 
                 isConnected = true
                 connectionStatus = "연결됨"
@@ -54,11 +57,6 @@ final class ChatViewModel: ObservableObject {
                 for await msg in await client.messages {
                     messages.append(msg)
                 }
-//                for await msg in await client.messages {
-//                    await MainActor.run {
-//                        messages.append(msg)
-//                    }
-//                }
             } catch {
                 print("❌ Connection failed: \(error)")
                 connectionStatus = "연결 실패: \(error.localizedDescription)"
@@ -77,14 +75,14 @@ final class ChatViewModel: ObservableObject {
         
         let chat = SocketMessage(content: content, roomId: roomId)
         
-        let localMessage = ChatMessage(
-            id: UUID(),
-            content: content,
-            sender: UserDefaults.standard.integer(forKey: "userId"), // 🚨 현재 사용자 ID 사용
-            timestamp: Date().toIntArray
-        )
-        
-        messages.append(localMessage)
+        //        let localMessage = ChatMessage(
+        //            id: UUID(),
+        //            content: content,
+        //            sender: UserDefaults.standard.integer(forKey: "userId"), // 🚨 현재 사용자 ID 사용
+        //            timestamp: Date().toIntArray
+        //        )
+        //
+        //        messages.append(localMessage)
         
         Task {
             do {
@@ -133,29 +131,46 @@ final class ChatViewModel: ObservableObject {
         }
     }
     
-    //MARK: - 헤어지기
-    func leaveChatting(){
-        Task{
-            do{
-                //                try await chatNetwork.chattingRoom(leave: true)
-                await MainActor.run {
-                    print("asd")
+    //    //MARK: - 헤어지기
+    #warning("헤어지기 수정필요")
+        func leaveChatting(score: Int, comment: String) async {
+            loadingManager.isLoading = true
+            defer {
+                loadingManager.isLoading = false
+            }
+            let score = PartnerScore(socre: score, comment: comment)
+    
+            do {
+                let result = try await matchingNetwork.matchingCancel(score: score)
+                switch result {
+                case .success:
+                    Log.debugPublic("헤어지기 성공")
+                    appState.chatPath.removeLast()
+                case .failure(let error):
+                    Log.errorPublic(error.localizedDescription)
                 }
-            }catch{
-                Log.debugPublic(error.localizedDescription)
+            } catch {
+                Log.errorPublic(error.localizedDescription)
             }
         }
-    }
-    
     
     //MARK: - 신고하기
-#warning("신고하기 수정필요")
-    func userReport(){
+    func userReport(reason: String){
+        loadingManager.isLoading = true
+        defer {
+            loadingManager.isLoading = false
+        }
+        let reason = ReportRequest(reason: reason)
         Task{
             do{
-                //                try await chatNetwork.userReport(report: reportReason)
-                await MainActor.run {
-                    print("asd")
+                let result = try await chatNetwork.userReport(report: reason)
+                switch result {
+                case .success:
+                    Log.debugPublic("신고하기 성공")
+                    appState.chatPath.removeLast()
+                    await leaveChatting(score: 1, comment: reason.reason)
+                case .failure(let error):
+                    Log.errorPublic(error.localizedDescription)
                 }
             }catch{
                 Log.debugPublic(error.localizedDescription)

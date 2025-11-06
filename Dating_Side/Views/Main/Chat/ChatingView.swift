@@ -83,14 +83,10 @@ struct ChatingView: View {
             sendTextField
         }
         .onAppear {
-//                        Task {
-//                            await vm.fetchChattingData()
-//                        }
-//                        vm.connect()
-            Task { @MainActor in
+            Task {
                 await vm.fetchChattingData()
-                vm.connect()
             }
+            vm.connect()
         }
         .onDisappear { vm.disconnect() }
         .onTapGesture { UIApplication.shared.hideKeyboard() }

@@ -55,7 +55,13 @@ extension ChatingNetworkManager: APIManager {
     }
     
     var method: HTTPMethod {
-        return .get
+        switch self {
+        case .userReport:
+            return .post
+        default:
+            return .get
+        }
+        
     }
     
     var headers: [String : String]? {

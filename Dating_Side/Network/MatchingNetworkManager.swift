@@ -14,7 +14,7 @@ struct MatchingNetworkManager {
     init(networkManager: NetworkProtocol = NetworkManager.shared) {
         self.networkManager = networkManager
     }
-
+    
     func matchingRequest() async throws -> Result<MatchingAccountResponse, Error> {
         return await networkManager.callWithAsync(endpoint: MatchingAPIManager.matchingRequest, httpCodes: .success)
     }

@@ -28,7 +28,6 @@ struct MatchingAnswerCompleteView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // 상단 텍스트
                     VStack(spacing: 6) {
                         Text("당신의 답장을 토대로\n프로필이 완성 되었어요")
                             .font(.pixel(20))
@@ -37,8 +36,9 @@ struct MatchingAnswerCompleteView: View {
                         Text("전체 프로필은 마이페이지에서 확인 하세요")
                             .font(.pixel(12))
                     }
-                    .padding(.top, 50)
+                    .padding(.top, 120)
                     .padding(.bottom, 65)
+                    .frame(alignment: .center)
                     
                     ScrollView {
                         Text(profileContent)
@@ -69,14 +69,14 @@ struct MatchingAnswerCompleteView: View {
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
         }
-        .task {
-            let checkingTodayQuestionAnswer = await questionViewModel.checkingTodayQuestionAnswer()
-            if !checkingTodayQuestionAnswer {
-                profileContent = await questionViewModel.postTodayQuetionAnswers()
-            } else {
-                profileContent = questionViewModel.todayQuestionAnswer
-            }
-        }
+//        .task {
+//            let checkingTodayQuestionAnswer = await questionViewModel.checkingTodayQuestionAnswer()
+//            if !checkingTodayQuestionAnswer {
+//                profileContent = await questionViewModel.postTodayQuetionAnswers()
+//            } else {
+//                profileContent = questionViewModel.todayQuestionAnswer
+//            }
+//        }
     }
     
     private func goToMatchingFailView() {

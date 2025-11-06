@@ -96,7 +96,7 @@ struct ChatListView: View {
         }
         .sheet(isPresented: $showGoodByeView) {
             SayGoodbyeView()
-                .presentationDetents([.height(200)])
+                .presentationDetents([.height(300)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
         }

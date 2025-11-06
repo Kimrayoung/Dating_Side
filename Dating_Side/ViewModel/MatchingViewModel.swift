@@ -102,6 +102,8 @@ extension MatchingViewModel {
         
         let score = PartnerScore(socre: score, comment: comment)
         
+        print(score.socre, score.comment)
+        
         do {
             let result = try await matchingNetwork.matchingCancel(score: score)
             switch result {
