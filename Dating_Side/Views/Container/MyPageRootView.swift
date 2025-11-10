@@ -28,12 +28,10 @@ struct MyPageRootView: View {
                         .environmentObject(profileViewModel)
                 case .account:
                     AccountView()
-                case .nicknameInput(let nickname):
-                    NicknameInputView(viewModel: AccountViewModel(), originalNickname: nickname)
-                case .defaultProfileImage:
-                    ChatProfileImageView(viewModel: AccountViewModel())
+                case .introduceImageAndProfielMainImage:
+                    ChatProfileImageView(viewModel: AccountViewModel(), viewType: .mypageEdit)
                 case let .locationSelect(location):
-                    LocationSelectView(viewModel: AccountViewModel(), location: location, isOnboarding: false)
+                    LocationSelectView(viewModel: AccountViewModel(), location: location, viewType: .mypageEdit)
                 case let .job(jobType, jobDetail):
                     JobEditView(viewModel: AccountViewModel(), jobType: jobType, jobDetail: jobDetail)
                 case let .education(educationType, schoolName):

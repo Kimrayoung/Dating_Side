@@ -58,11 +58,13 @@ struct MyPageView: View {
                         if let url = URL(string: imageUrl) {
                             KFImage(url)
                                 .resizable()
+                                .scaledToFill()
                                 .frame(width: 240, height: 360)
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
                         } else {
                             Image("checkerImage")
                                 .resizable()
+                                .scaledToFill()
                                 .frame(width: 240, height: 360)
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
                         }

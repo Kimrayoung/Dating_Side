@@ -59,8 +59,7 @@ enum MyPage: Hashable {
     case profileValueList(valueType: String, valueDataList: [Answer]) // Changed for ProfileView type match
     case profileEdit
     case account
-    case defaultProfileImage
-    case nicknameInput(nickname: String?)
+    case introduceImageAndProfielMainImage
     case locationSelect(location: String?)
     case job(jobType: String?, jobDetail: String?)
     case education(educationType: String?, schoolName: String?)

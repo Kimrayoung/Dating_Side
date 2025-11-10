@@ -28,6 +28,7 @@ struct PhotoPickerButton<Label: View>: View {
             PermissionManager.shared.requestPhotoLibraryAccess { granted in
                 if granted { isPresented = true }
                 else {
+                    Log.debugPublic("여기")
                     showAlert = true
                 }
             }

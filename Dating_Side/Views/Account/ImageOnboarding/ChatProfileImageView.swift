@@ -17,6 +17,7 @@ struct ChatProfileImageView: View {
     @State var isImagePickerPresented: Bool = false
     @FocusState private var isFocused: Bool
     @State private var showAlert: Bool = false
+    @State var viewType: AccountType = .onboarding
     
     var body: some View {
         ZStack {
@@ -29,7 +30,7 @@ struct ChatProfileImageView: View {
             VStack {
                 EmptyView()
                     .padding(.top, 30)
-                if viewModel.isOnboarding == .onboarding {
+                if viewType == .onboarding {
                     CustomRounedGradientProgressBar(currentProgress: 13, total: onboardingPageCnt)
                 }
                 Text("프로필 사진을 등록 해주세요")
@@ -62,7 +63,12 @@ struct ChatProfileImageView: View {
                     if viewModel.isOnboarding == .onboarding {
                         appState.onboardingPath.append(Onboarding.secondDayPhoto)
                     } else if viewModel.isOnboarding == .onboardingEdit {
-                        
+                        #warning("여기 변경된 사진이랑 소개글 제대로 저장되어져 들어가는지 확인필요 -> 확인 후 warning 부분 삭제")
+                        appState.onboardingPath.removeLast()
+                    } else if viewModel.isOnboarding == .mypageEdit {
+                        Task {
+                            await viewModel.updateIntroduceAndDefaultImage()
+                        }
                     }
                     
                 } label: {
@@ -85,6 +91,9 @@ struct ChatProfileImageView: View {
         .onChange(of: viewModel.selectedImage) { _, newValue in
             possibleNext = (newValue != nil)
         }
+        .onAppear(perform: {
+            viewModel.isOnboarding = viewType
+        })
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -94,7 +103,12 @@ struct ChatProfileImageView: View {
                     // 뒤로 가기 전 키보드 내리고
                     isFocused = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        appState.onboardingPath.removeLast()
+                        if viewModel.isOnboarding == .mypageEdit {
+                            appState.myPagePath.removeLast()
+                        } else {
+                            appState.onboardingPath.removeLast()
+                        }
+                        
                     }
                 } label: {
                     Image("navigationBackBtn")

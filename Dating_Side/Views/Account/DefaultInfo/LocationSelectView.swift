@@ -14,7 +14,7 @@ struct LocationSelectView: View {
     @State private var showCityPickerModel: Bool = false
     @State private var showDetailCityPickerModel: Bool = false
     var location: String? = nil
-    var isOnboarding: Bool = true
+    var viewType: AccountType = .onboarding
     
     var body: some View {
         VStack(spacing: 0, content: {
@@ -80,7 +80,7 @@ struct LocationSelectView: View {
                 .presentationCornerRadius(24)
         })
         .onAppear {
-            viewModel.isOnboarding = isOnboarding ? .onboarding : .mypageEdit
+            viewModel.isOnboarding = viewType
             print(#fileID, #function, #line, "- location: \(location)")
         }
         .onChange(of: viewModel.locationSelected, { oldValue, newValue in

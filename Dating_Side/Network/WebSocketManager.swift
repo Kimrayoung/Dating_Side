@@ -173,7 +173,7 @@ actor WebSocketClient {
 
     func subscribe(roomId: String) async {
         guard task != nil, isStompConnected else {
-            print("⚠️ Cannot subscribe: not connected")
+            Log.debugPublic("⚠️ Cannot subscribe: not connected")
             Log.debugPublic("task checking", task)
             Log.debugPublic("isStompConnected", isStompConnected)
             return

@@ -24,7 +24,7 @@ struct AdditionalImageEditView: View {
     @State var isForthImagePickerPresented: Bool = false
     @State var isSixthImagePickerPresented: Bool = false
     
-    @State var showAlert: Bool = false
+    @State var showImagePermissionAlert: Bool = false
     @State private var possibleNext: Bool = true
     /// 온보딩에서 수정하는 건지
     var isOnboarding: Bool = false
@@ -49,7 +49,6 @@ struct AdditionalImageEditView: View {
                 }
             }
             .scrollIndicators(.hidden)
-            
             .padding(.top, 51)
             .padding(.bottom, 85)
             Button(action: {
@@ -62,6 +61,34 @@ struct AdditionalImageEditView: View {
             .padding(.bottom)
             .padding(.horizontal, 24)
         }
+        .onAppear(perform: {
+            if isOnboarding {
+                viewModel.isOnboarding = .onboardingEdit
+            } else {
+                viewModel.isOnboarding = .mypageEdit
+            }
+        })
+        .customAlert(isPresented: $showImagePermissionAlert, title: "오류", message: "설정에서 접근 권한을 허용해주세요", primaryButtonText: "취소", primaryButtonAction: {}, secondaryButtonText: "설정으로 이동", secondaryButtonAction: {})
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    // 뒤로 가기 전 키보드 내리고
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        if viewModel.isOnboarding == .mypageEdit {
+                            appState.myPagePath.removeLast()
+                        } else {
+                            appState.onboardingPath.removeLast()
+                        }
+                        
+                    }
+                } label: {
+                    Image("navigationBackBtn")
+                }
+            }
+        }
     }
     
     func buildImageView(
@@ -73,6 +100,7 @@ struct AdditionalImageEditView: View {
                 if let uiImage = localImage {
                     Image(uiImage: uiImage)
                         .resizable()
+                        .scaledToFill()
                         .frame(width: 240, height: 360)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 } else {
@@ -85,6 +113,7 @@ struct AdditionalImageEditView: View {
                 if let uiImage = localImage {
                     Image(uiImage: uiImage)
                         .resizable()
+                        .scaledToFill()
                         .frame(width: 240, height: 360)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 } else if let urlString = urlString,
@@ -97,6 +126,7 @@ struct AdditionalImageEditView: View {
                         }
                         .fade(duration: 0.25)
                         .resizable()
+                        .scaledToFill()
                         .frame(width: 240, height: 360)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 } else {
@@ -115,7 +145,7 @@ struct AdditionalImageEditView: View {
             Text("2일차")
                 .font(.pixel(24))
                 .foregroundStyle(Color.mainColor)
-            PhotoPickerButton(imageType: .secondDay, isPresented: $isSecondImagePickerPresented, selectedPickerImage: $selectedSecondDayItem, showAlert: $showAlert) { seconditem in
+            PhotoPickerButton(imageType: .secondDay, isPresented: $isSecondImagePickerPresented, selectedPickerImage: $selectedSecondDayItem, showAlert: $showImagePermissionAlert) { seconditem in
                 print("2일 photoPickerButton tapped")
                 Task {
                     await viewModel.loadSelectedImage(imageType: .secondDay, pickerItem: seconditem)
@@ -132,7 +162,7 @@ struct AdditionalImageEditView: View {
             Text("4일차")
                 .font(.pixel(24))
                 .foregroundStyle(Color.mainColor)
-            PhotoPickerButton(imageType: .forthDay, isPresented: $isForthImagePickerPresented, selectedPickerImage: $selectedFourthDayItem, showAlert: $showAlert) { forthitem in
+            PhotoPickerButton(imageType: .forthDay, isPresented: $isForthImagePickerPresented, selectedPickerImage: $selectedFourthDayItem, showAlert: $showImagePermissionAlert) { forthitem in
                 print("4일 photoPickerButton tapped")
                 Task {
                     await viewModel.loadSelectedImage(imageType: .forthDay, pickerItem: forthitem)
@@ -149,7 +179,7 @@ struct AdditionalImageEditView: View {
             Text("6일차")
                 .font(.pixel(24))
                 .foregroundStyle(Color.mainColor)
-            PhotoPickerButton(imageType: .sixthDay, isPresented: $isSixthImagePickerPresented, selectedPickerImage: $selectedSixthDayItem, showAlert: $showAlert) { sixthitem in
+            PhotoPickerButton(imageType: .sixthDay, isPresented: $isSixthImagePickerPresented, selectedPickerImage: $selectedSixthDayItem, showAlert: $showImagePermissionAlert) { sixthitem in
                 print("6일 photoPickerButton tapped")
                 Task {
                     await viewModel.loadSelectedImage(imageType: .sixthDay, pickerItem: sixthitem)
