@@ -99,7 +99,6 @@
 		4D8FBF862D75972F0065BDA4 /* CustomProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8FBF852D75972F0065BDA4 /* CustomProgressBar.swift */; };
 		4D909AA42E0D8A5D00F19AD0 /* MessageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */; };
 		4D909AA72E12C23900F19AD0 /* SettingAndEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D909AA62E12C23900F19AD0 /* SettingAndEditView.swift */; };
-		4D90B83B2E4CA43800323D8B /* ProfileAddImageEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B83A2E4CA43800323D8B /* ProfileAddImageEditView.swift */; };
 		4D90B83D2E51A9A400323D8B /* SendQuestionModalSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B83C2E51A98E00323D8B /* SendQuestionModalSheet.swift */; };
 		4D90B83F2E51ACC000323D8B /* MatchingProfileCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B83E2E51ACC000323D8B /* MatchingProfileCheckView.swift */; };
 		4D90B8412E51B10200323D8B /* CustomToastPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D90B8402E51B10200323D8B /* CustomToastPopup.swift */; };
@@ -280,7 +279,6 @@
 		4D8FBF852D75972F0065BDA4 /* CustomProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressBar.swift; sourceTree = "<group>"; };
 		4D909AA32E0D8A5D00F19AD0 /* MessageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComponent.swift; sourceTree = "<group>"; };
 		4D909AA62E12C23900F19AD0 /* SettingAndEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAndEditView.swift; sourceTree = "<group>"; };
-		4D90B83A2E4CA43800323D8B /* ProfileAddImageEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAddImageEditView.swift; sourceTree = "<group>"; };
 		4D90B83C2E51A98E00323D8B /* SendQuestionModalSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendQuestionModalSheet.swift; sourceTree = "<group>"; };
 		4D90B83E2E51ACC000323D8B /* MatchingProfileCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingProfileCheckView.swift; sourceTree = "<group>"; };
 		4D90B8402E51B10200323D8B /* CustomToastPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToastPopup.swift; sourceTree = "<group>"; };
@@ -420,7 +418,6 @@
 				4D443BA12DCB954F00F4B9EB /* ChatProfileImageView.swift */,
 				4DB5827A2DDB4F87001952D0 /* ProfileSecondDayImageView.swift */,
 				4D9E95172E32853400B007DF /* UIImage+ResizeCompress.swift */,
-				4D90B83A2E4CA43800323D8B /* ProfileAddImageEditView.swift */,
 				4DEF04262E6973D200E75F15 /* AdditionalImageEditView.swift */,
 			);
 			path = ImageOnboarding;
@@ -1078,7 +1075,6 @@
 				4DCB1A682D75A14700676BCE /* UserProfileField.swift in Sources */,
 				4DB5B3172D903D600060D4C6 /* JobDetailInputView.swift in Sources */,
 				4DF329E52D87E9C700DBB823 /* TextWithColoredSubString.swift in Sources */,
-				4D90B83B2E4CA43800323D8B /* ProfileAddImageEditView.swift in Sources */,
 				4D40568E2D64B65300F95ACF /* LocationSelectView.swift in Sources */,
 				4D5E459F2E3F4BFF00A3B60C /* CustomMenuPicker.swift in Sources */,
 				4D389C2A2E1C0ECF00B56F84 /* AppleAuth.swift in Sources */,
