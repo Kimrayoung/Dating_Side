@@ -23,11 +23,9 @@ struct ChatingView: View {
     @State private var showAlert: Bool = false
     
     @State private var showLeaveAlert: Bool = false
-    @State private var showGoodByeView: Bool = false
     
     @State private var showReportAlert: Bool = false
     @State private var showReportView: Bool = false
-    
     
     @GestureState private var dragOffset: CGFloat = 0
     
@@ -99,10 +97,10 @@ struct ChatingView: View {
         .customAlert(isPresented: $showAlert, title: "헤어지시겠어요?\n영영 볼 수 없게 됩니다", message: "더 대화하다 보면 다를 지도 몰라요", primaryButtonText: "더 대화 해볼게요", primaryButtonAction: {
             print("asd")
         }, secondaryButtonText: "헤어질래요", secondaryButtonAction: {
-            showGoodByeView = true
+            vm.showGoodByeView = true
+            //showgoodbyeview <- 지금 하나만 사용중.
         })
         .customAlert(isPresented: $showReportAlert, title: "불편함을 겪으셨다면\n 신고하세요!", message: "신고 즉시 차단되며 상대의 매너지수가 감소됩니다.", primaryButtonText: "신고하기", primaryButtonAction: {
-#warning("신고하기 화면 구현")
             showReportAlert = false
             appState.chatPath.append(Chating.chatReport(roomId: roomId))
         },primaryButtonColor: .red, secondaryButtonText: "취소", secondaryButtonAction: {
@@ -111,8 +109,8 @@ struct ChatingView: View {
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "", primaryButtonText: "확인", primaryButtonAction: {
             
         })
-        .sheet(isPresented: $showGoodByeView) {
-            SayGoodbyeView()
+        .sheet(isPresented: $vm.showGoodByeView) {
+            SayGoodbyeView(ViewModel: vm)
                 .presentationDetents([.height(300)])
                 .presentationCornerRadius(20)
                 .presentationDragIndicator(.visible)
@@ -123,13 +121,14 @@ struct ChatingView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarTrailing) {
                 navigationTrailingMenu
+                    .disabled(showAlert || showReportAlert || showLeaveAlert)
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     appState.chatPath.removeLast()
                 } label: {
                     Image("navigationBackBtn")
-                }
+                }.disabled(showAlert || showReportAlert || showLeaveAlert)
             }
         })
     }
@@ -157,7 +156,7 @@ struct ChatingView: View {
     private func sendMessage() {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
-        let userID = UserDefaults.standard.integer(forKey: "userId")
+        //        let userID = UserDefaults.standard.integer(forKey: "userId")
         vm.send(content: text)   // 0 = 나
         messageText = ""
     }
@@ -227,7 +226,6 @@ struct MyTextFieldStyle: TextFieldStyle {
             .padding(.vertical)
     }
 }
-
 
 #warning("preview")
 class DummyAppState: ObservableObject {

@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct SayGoodbyeView: View {
-    @ObservedObject var viewModel: MatchingViewModel = MatchingViewModel()
+    @ObservedObject var ViewModel: ChatViewModel
+    
     @State private var comment: String = ""
     @State private var score: Int = 0
+    
     let scoreButtonWidth = (UIScreen.main.bounds.width - 48 - 32) / 5
     
     var body: some View {
@@ -111,7 +113,7 @@ struct SayGoodbyeView: View {
     var sendButton: some View {
         Button {
             Task {
-                await viewModel.matchingCancel(score: score, comment: comment)
+                await ViewModel.leaveChatting(score: score, comment: comment)
             }
         } label: {
             Text("전송하기")
@@ -127,5 +129,5 @@ struct SayGoodbyeView: View {
 }
 
 #Preview {
-    SayGoodbyeView()
+    SayGoodbyeView(ViewModel: ChatViewModel(roomId: "123"))
 }

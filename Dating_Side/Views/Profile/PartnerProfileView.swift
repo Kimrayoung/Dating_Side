@@ -100,11 +100,14 @@ struct PartnerProfileView: View {
                 if needMathcingRequest == .chattingRequestMatch { // 내게 다가온 사람이랑 매칭
                     guard let partnerId = matchingPartnerAccount?.id else { return }
                     await matchingViewModel.matchingComplete(partnerId: partnerId)
+                    showAlert = false
+                    
                 } else if needMathcingRequest == .matching { // 내가 다가가기(즉, 매칭 요청)
                     let result = await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
                     if result {
                         
                     }
+                    showAlert = false
                 }
             }
         }, label: {

@@ -76,6 +76,7 @@ actor WebSocketClient {
     
     // 외부 스트림 (ChatMessage)
     private var continuation: AsyncStream<ChatMessage>.Continuation?
+    
     lazy var messages: AsyncStream<ChatMessage> = {
         AsyncStream { continuation in self.continuation = continuation }
     }()
@@ -119,7 +120,6 @@ actor WebSocketClient {
     }
     
     // MARK: Public
-    
     func connect(jwt: String? = nil, hostHeader: String = "donvolo.shop") async {
         switch state {
         case .idle, .disconnected, .failed: break
@@ -158,11 +158,6 @@ actor WebSocketClient {
             "host": hostHeader,
             "heart-beat": "0,0"  // 일단 하트비트 비활성화
         ]
-        
-//        // STOMP 연결에 JWT 포함 (선택적)
-//        if let jwt = jwt {
-//            headers["Authorization"] = "Bearer \(jwt)"
-//        }
         
         let connectFrame = StompFrame(command: .connect, headers: headers, body: "")
         await sendRaw(connectFrame.build())
@@ -218,14 +213,6 @@ actor WebSocketClient {
         print("📤 Message sent: \(message.content)")
     }
     
-//    func listen() {
-//        Task.detached(priority: .background) { [weak self] in
-//            guard let self = self else { return }
-//            print("👂 WebSocket listen() 시작")
-//            await self.receiveLoop()
-//        }
-//    }
-    
     func disconnect() async {
         isManuallyClosed = true
         isStompConnected = false
@@ -247,7 +234,6 @@ actor WebSocketClient {
     }
     
     // MARK: Internal
-    
     private func sendRaw(_ text: String) async {
         guard let t = task else { return }
         do {

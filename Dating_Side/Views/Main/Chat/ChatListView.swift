@@ -14,9 +14,9 @@ struct ChatListView: View {
     @StateObject var viewModel = ChatListViewModel()
     
     let columns = [
-            GridItem(.flexible()),
-            GridItem(.flexible())
-        ]
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     
     @AppStorage("matchingStatus") private var matchingStatus: String = MatchingStatusType.UNMATCHED.rawValue
     @AppStorage("matchingDate") private var matchingTimeString: String = ""
@@ -53,7 +53,7 @@ struct ChatListView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    
+                    appState.chatPath.append(Chating.noticeView)
                 }, label: {
                     Image("bell")
                 })
@@ -94,12 +94,12 @@ struct ChatListView: View {
                 allowGoodbyeDismiss = false
             }
         }
-        .sheet(isPresented: $showGoodByeView) {
-            SayGoodbyeView()
-                .presentationDetents([.height(300)])
-                .presentationCornerRadius(10)
-                .presentationDragIndicator(.visible)
-        }
+        //        .sheet(isPresented: $showGoodByeView) {
+        //            SayGoodbyeView(chatingViewModel: vm)
+        //                .presentationDetents([.height(300)])
+        //                .presentationCornerRadius(10)
+        //                .presentationDragIndicator(.visible)
+        //        }
     }
     
     // 내가 다가간 사람
@@ -264,7 +264,7 @@ struct ChatListView: View {
                 .fill(Color.mainColor)
         )
         .frame(width: 240, height: 360)
-            
+        
     }
     
     var secondDayImage: some View {

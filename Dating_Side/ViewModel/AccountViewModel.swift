@@ -44,7 +44,7 @@ final class AccountViewModel: ObservableObject {
     @Published var isBeforePreferenceTypeComplete: Bool = false
     @Published var isAfterPreferenceTypeComplete: Bool = false
     
-//    var education = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
+    //    var education = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
     var education: [EducationEnglish] = EducationEnglish.allCases
     @Published var isEducationButtonSelected: [Bool] = Array(repeating: false, count: 6)
     @Published var selectedEducationIndex: Int? = nil
@@ -60,12 +60,12 @@ final class AccountViewModel: ObservableObject {
     @Published var lifeStyleButtonList: [String : [Bool]] = [:]
     
     @Published var introduceText: String = ""
-        
+    
     @Published var selectedImage: UIImage?
     @Published var selectedSeconDayImage: UIImage?
     @Published var selectedForthDayImage: UIImage?
     @Published var selectedSixthDayImage: UIImage?
-        
+    
     //MARK: - 공통 사용(회원 등록, 회원 수정)
     
     func checkLocationData() -> Bool {
@@ -278,9 +278,9 @@ extension AccountViewModel {
         let height = makeHeight()
         let selectedBefore = makeBeforePreference()
         let selectedAfter = makeAfterPreference()
-
+        
         guard let educationType = makeEducationType()?.rawValue else { return nil }
-
+        
         guard let jobType = makeJobType()?.type else { return nil }
         
         // 선택된 민감 정보 파악하기
@@ -317,7 +317,7 @@ extension AccountViewModel {
     func updateNickname() async {
         let updateNickname: [String : Any] = [
             PatchUserType.nickName.rawValue : nicknameInput,
-                                                ]
+        ]
         await patchUserAccountData(userPatchData: updateNickname)
     }
     
@@ -327,7 +327,7 @@ extension AccountViewModel {
         let updateEducation: [String : Any] = [
             PatchUserType.educationType.rawValue : educationType.rawValue,
             PatchUserType.educationDetail.rawValue : schoolName
-                                                ]
+        ]
         await patchUserAccountData(userPatchData: updateEducation)
     }
     
@@ -337,7 +337,7 @@ extension AccountViewModel {
         let udpateJobType: [String : Any] = [
             PatchUserType.jobType.rawValue : jobType.type,
             PatchUserType.jobDetail.rawValue : jobDetail
-                                            ]
+        ]
         await patchUserAccountData(userPatchData: udpateJobType)
     }
     
@@ -355,7 +355,7 @@ extension AccountViewModel {
         var updatePreference: [String : Any] = [:]
         let selectedBefore = makeBeforePreference()
         let selectedAfter = makeAfterPreference()
-
+        
         updatePreference = [
             PatchUserType.beforePreferenceTypeList.rawValue: selectedBefore,
             PatchUserType.afterPreferenceTypeList.rawValue: selectedAfter
@@ -451,7 +451,7 @@ extension AccountViewModel {
                     self.detailLocationSelected = data.result.first(where: { $0.addrName == selectedDetailLocation })
                 }
                 print(#fileID, #function, #line, "- self.locationOption: \(self.locationOption )")
-
+                
                 
             case .failure(let error):
                 print(#fileID, #function, #line, "- failure: \(error.localizedDescription)")
@@ -461,7 +461,7 @@ extension AccountViewModel {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
         }
     }
-
+    
     
     /// 러브웨이 키워드 선택 API
     func fetchPreferenceType(preferenceType: PreferenceType, preferences: [String]? = nil) async {
@@ -608,7 +608,7 @@ extension AccountViewModel {
         let boundary: String = "Boundary-\(identifier)"
         
         let patchAccountData = createUploadBody(request: userPatchData, images: userImage, boundary: boundary)
-                
+        
         do {
             let result = try await accountNetworkManger.patchUserData(requestModel: patchAccountData, boundaryString: boundary)
             

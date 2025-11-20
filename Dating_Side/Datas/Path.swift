@@ -106,4 +106,5 @@ enum Chating: Hashable {
     case chatList
     case chatRoom(roomId: String, partnerName: String, partnerImageUrl: String)
     case chatReport(roomId: String)
+    case noticeView
 }

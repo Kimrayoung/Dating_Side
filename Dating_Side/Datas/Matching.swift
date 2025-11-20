@@ -12,7 +12,7 @@ struct PartnerRequest: Codable {
 }
 
 struct PartnerScore: Codable {
-    let socre: Int
+    let score: Int
     let comment: String
 }
 

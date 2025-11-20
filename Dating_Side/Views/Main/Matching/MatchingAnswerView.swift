@@ -60,18 +60,18 @@ struct MatchingAnswerView: View {
     
     var questionText: some View {
         HStack(spacing: 0) {
-            Button {
-                if viewModel.isFirstQuestion {
-                    return
-                } else {
-                    viewModel.nextQuestion()
-                }
-            } label: {
-                Image("leftWhiteArrow")
-                    .frame(width: 24, height: 24)
-                    .background(viewModel.isFirstQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
-                    .clipShape(Circle())
-            }
+//            Button {
+//                if viewModel.isFirstQuestion {
+//                    return
+//                } else {
+//                    viewModel.nextQuestion()
+//                }
+//            } label: {
+//                Image("leftWhiteArrow")
+//                    .frame(width: 24, height: 24)
+//                    .background(viewModel.isFirstQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
+//                    .clipShape(Circle())
+//            }
             VStack(spacing: 0) {
                 Text("질문 \(viewModel.currentQuestion.id)")
                     .font(.pixel(12))
@@ -82,18 +82,18 @@ struct MatchingAnswerView: View {
                     .padding(.horizontal)
             }
             .frame(maxWidth: .infinity)
-            Button {
-                if viewModel.isFirstQuestion {
-                    return
-                } else {
-                    viewModel.previousQuestion()
-                }
-            } label: {
-                Image("rightWhiteArrow")
-                    .frame(width: 24, height: 24)
-                    .background(viewModel.isLastQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
-                    .clipShape(Circle())
-            }
+//            Button {
+//                if viewModel.isFirstQuestion {
+//                    return
+//                } else {
+//                    viewModel.previousQuestion()
+//                }
+//            } label: {
+//                Image("rightWhiteArrow")
+//                    .frame(width: 24, height: 24)
+//                    .background(viewModel.isLastQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
+//                    .clipShape(Circle())
+//            }
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 24)

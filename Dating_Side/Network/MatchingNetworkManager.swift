@@ -37,7 +37,7 @@ struct MatchingNetworkManager {
 enum MatchingAPIManager {
     /// 매칭 요청
     case matchingRequest
-    /// 매칭삭제
+    /// 매칭삭제, 헤어지기
     case matchingCancel(score: PartnerScore)
     /// 매칭 확정
     case matchingComplete(attraction: PartnerRequest)

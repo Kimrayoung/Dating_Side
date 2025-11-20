@@ -44,7 +44,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-                    fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         Messaging.messaging().appDidReceiveMessage(userInfo)
         completionHandler(UIBackgroundFetchResult.newData)
     }
@@ -52,39 +52,42 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("FCM Token: \(fcmToken ?? "없음")")
-        if let originalToken = UserDefaults.standard.string(forKey: "FCMToken") {
-            print("저장된 FCM Token: \(originalToken)")
-            if originalToken != fcmToken {
-                UserDefaults.standard.set(fcmToken, forKey: "FCMToken")
-                UserDefaults.standard.set(true, forKey: "NeedTokenChange")
-            }
-        } else {
-            print("저장된 토큰이 없습니다.")
-        }
+        guard let token = fcmToken else { return }
         
+        print("✅ FCM Registration Token: \(token)")
+        
+        let originalToken = UserDefaults.standard.string(forKey: "FCMToken")
+        
+        if originalToken == nil || originalToken != token {
+            UserDefaults.standard.set(token, forKey: "FCMToken")
+            
+        } else {
+            print("FCM 토큰이 이미 최신입니다.")
+        }
     }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
-                               willPresent notification: UNNotification,
-                               withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         
         // Firebase Analytics 이벤트 전송 (수동 처리)
         Messaging.messaging().appDidReceiveMessage(userInfo)
+        print(userInfo)
         
         completionHandler([.banner, .sound, .badge])
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
-                               didReceive response: UNNotificationResponse,
-                               withCompletionHandler completionHandler: @escaping () -> Void) {
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         
         // Firebase Analytics 이벤트 전송 (수동 처리)
         Messaging.messaging().appDidReceiveMessage(userInfo)
+        print(userInfo)
         
         completionHandler()
     }

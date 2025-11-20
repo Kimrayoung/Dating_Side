@@ -48,7 +48,7 @@ struct MyPageView: View {
         }
         .padding(.leading, 24)
     }
-     
+    
     var myPhoto: some View {
         ScrollView(.horizontal) {
             HStack {
