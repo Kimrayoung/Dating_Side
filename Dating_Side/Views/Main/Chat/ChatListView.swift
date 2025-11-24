@@ -26,7 +26,6 @@ struct ChatListView: View {
     @State var formMeAccount: AttractionPartnerData? = nil
     @State var chattingRoomData: ChattingRoomResponse? = nil
     @State private var showProfile: Bool = false
-    @State private var showGoodByeView: Bool = false
     @State private var showLeaveAlert: Bool = false
     @State private var allowGoodbyeDismiss: Bool = false
     
@@ -78,7 +77,7 @@ struct ChatListView: View {
         }
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "상대에게 마지막 인사를 남겨주세요", primaryButtonText: "확인", primaryButtonAction: {
             allowGoodbyeDismiss = true // 확인 누를 때만 닫히도록
-            showGoodByeView = true
+            viewModel.showGoodByeView = true
         })
         .sheet(item: $selectedPartner) { partner in
             PartnerProfileView(
@@ -94,12 +93,15 @@ struct ChatListView: View {
                 allowGoodbyeDismiss = false
             }
         }
-        //        .sheet(isPresented: $showGoodByeView) {
-        //            SayGoodbyeView(chatingViewModel: vm)
-        //                .presentationDetents([.height(300)])
-        //                .presentationCornerRadius(10)
-        //                .presentationDragIndicator(.visible)
-        //        }
+        .sheet(isPresented: $viewModel.showGoodByeView) {
+            SayGoodbyeView { score, comment in
+                await viewModel.replyGoodbye(score: score, comment: comment)
+                
+            }
+            .presentationDetents([.height(300)])
+            .presentationCornerRadius(10)
+            .presentationDragIndicator(.visible)
+        }
     }
     
     // 내가 다가간 사람

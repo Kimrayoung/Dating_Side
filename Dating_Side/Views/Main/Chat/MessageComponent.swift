@@ -18,23 +18,25 @@ struct MessageProfile: View {
     var body: some View {
         HStack {
             if message.sender != userID { // 상대방 프로필 (본인의 프로필은 보이지 않음)
-                if let partnerImageUrl = partnerImageUrl {
-                    KFImage(URL(string: partnerImageUrl))
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                } else {
-                    Circle()
-                        .fill(Color.gray.opacity(0.3))
-                        .frame(width: 40, height: 40)
-                        .overlay(
-                            Image(systemName: "person.fill")
-                                .foregroundColor(.gray)
-                        )
-                        .onTapGesture {
-                            showProfile.toggle()
-                        }
+                Group {
+                    if let partnerImageUrl = partnerImageUrl {
+                        KFImage(URL(string: partnerImageUrl))
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                    } else {
+                        Circle()
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(width: 40, height: 40)
+                            .overlay(
+                                Image(systemName: "person.fill")
+                                    .foregroundColor(.gray)
+                            )
+                    }
+                }
+                .onTapGesture {
+                    showProfile.toggle()
                 }
             }
             Text(message.content)
@@ -46,9 +48,6 @@ struct MessageProfile: View {
                 )
                 .foregroundColor(message.sender == userID ? .white : .primary)
         }
-//        .onAppear {
-//            print(#fileID, #function, #line, "- partnerImage: \(partnerImageUrl)")
-//        }
     }
 }
 
@@ -67,7 +66,7 @@ struct MessageRow: View {
                 MessageProfile(showProfile: $showProfile, partnerImageUrl: "", message: message)
                     .offset(x: showTimestamp ? -40 : 0)
                     .animation(.easeInOut(duration: 0.2), value: showTimestamp)
-//                    .animation(.easeInOut(duration: 0.2), value: showTimestamp)
+                //                    .animation(.easeInOut(duration: 0.2), value: showTimestamp)
                 if showTimestamp {
                     Text("→ \(message.timestampDate?.hourAndMinuteString ?? Date().hourAndMinuteString)")
                         .font(.pixel(12))
@@ -87,10 +86,10 @@ struct MessageRow: View {
                         .transition(.opacity)
                         .padding(.leading, 4)
                 }
-
+                
             }
         }
         .padding(.horizontal)
     }
-
+    
 }

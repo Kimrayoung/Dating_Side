@@ -549,7 +549,7 @@
 			path = Font;
 			sourceTree = "<group>";
 		};
-		4D6D18732D63586200698E5D /* Datas */ = {
+		4D6D18732D63586200698E5D /* Data */ = {
 			isa = PBXGroup;
 			children = (
 				4D58C73D2E9920B6003A15E9 /* Avoidance.swift */,
@@ -565,7 +565,7 @@
 				4D3AD6E72DE4AA2600436A4B /* Profile.swift */,
 				4DEB5A6E2E0AD56D009BE55B /* Chat.swift */,
 			);
-			path = Datas;
+			path = Data;
 			sourceTree = "<group>";
 		};
 		4D6D18742D63587400698E5D /* Global */ = {
@@ -680,7 +680,7 @@
 				4D6D187C2D63597B00698E5D /* Extensions */,
 				4D6D18752D63589E00698E5D /* Network */,
 				4D6D18742D63587400698E5D /* Global */,
-				4D6D18732D63586200698E5D /* Datas */,
+				4D6D18732D63586200698E5D /* Data */,
 				4D6D185C2D6342F100698E5D /* Resources */,
 				4D95FACE2D5A1DED00D0E4D7 /* Dating_SideApp.swift */,
 				4D389C452E254A0000B56F84 /* AppDelegate.swift */,

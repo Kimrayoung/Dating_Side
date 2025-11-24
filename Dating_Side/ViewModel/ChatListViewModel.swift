@@ -9,11 +9,16 @@ import Foundation
 
 
 final class ChatListViewModel: ObservableObject {
+
     let loadingManager = LoadingManager.shared
     let attractionNetwork = AttractionNetworkManager()
     let chatNetwork = ChattingNetworkManager()
+    let matchingNetwork = MatchingNetworkManager()
     
     @Published var timeString: String = "24:00"
+    
+    var showGoodByeView: Bool = false
+
     var timer: Timer?
     var totalSeconds: Int = 24 * 60 * 60
     
@@ -131,6 +136,31 @@ extension ChatListViewModel {
                 Log.errorPublic(error.localizedDescription)
             }
         }  catch {
+            Log.errorPublic(error.localizedDescription)
+        }
+    }
+    
+    @MainActor
+    func replyGoodbye(score: Int, comment: String) async {
+        loadingManager.isLoading = true
+        
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        let score = PartnerScore(score: score, comment: comment)
+        
+        do {
+            let result = try await matchingNetwork.matchingCancel(score: score)
+            switch result {
+            case .success:
+                Log.debugPublic("답장 성공")
+                self.showGoodByeView = false
+                
+            case .failure(let error):
+                Log.errorPublic(error.localizedDescription)
+            }
+        } catch {
             Log.errorPublic(error.localizedDescription)
         }
     }

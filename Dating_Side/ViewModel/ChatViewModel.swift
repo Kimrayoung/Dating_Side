@@ -34,6 +34,10 @@ final class ChatViewModel: ObservableObject {
         self.client = WebSocketClient(endpoint: "wss://donvolo.shop/api/chat", jwt: accessToken, roomId: roomId)
     }
     
+    deinit {
+        listenTask?.cancel()
+    }
+    
     func connect() {
         guard listenTask == nil else { return } // 이미 연결 중이면 무시
         
@@ -55,7 +59,6 @@ final class ChatViewModel: ObservableObject {
                 
                 for await msg in await client.messages {
                     messages.append(msg)
-                    print(#file,#function,#line,msg)
                 }
                 
             } catch {
@@ -75,15 +78,6 @@ final class ChatViewModel: ObservableObject {
         }
         
         let chat = SocketMessage(content: content, roomId: roomId)
-        
-        //        let localMessage = ChatMessage(
-        //            id: UUID(),
-        //            content: content,
-        //            sender: UserDefaults.standard.integer(forKey: "userId"), // 🚨 현재 사용자 ID 사용
-        //            timestamp: Date().toIntArray
-        //        )
-        //
-        //        messages.append(localMessage)
         
         Task {
             do {
@@ -110,10 +104,6 @@ final class ChatViewModel: ObservableObject {
         
         isConnected = false
         connectionStatus = "연결 종료"
-    }
-    
-    deinit {
-        listenTask?.cancel()
     }
     
     @MainActor
@@ -149,6 +139,7 @@ final class ChatViewModel: ObservableObject {
                 Log.debugPublic("헤어지기 성공")
                 self.showGoodByeView = false
                 appState.chatPath.removeLast()
+                
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)
             }

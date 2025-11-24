@@ -11,6 +11,8 @@ struct ChatingView: View {
     @EnvironmentObject private var appState: AppState
     @StateObject private var vm: ChatViewModel
     
+    @FocusState private var isFocused: Bool //키보드에 따라 입력창 조절
+    
     let buttonTitles: [String] = ["아주 좋아요", "좋아요", "보통이에요", "별로에요", "최악이에요"]
     let buttonColors: [Color] = [.mainColor, .subColor2, .gray01, .gray2, .gray3]
     let roomId: String
@@ -62,6 +64,17 @@ struct ChatingView: View {
                         }
                     }
                 }
+                .onChange(of: isFocused) { _, focused in
+                    if focused {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            if let last = vm.messages.last {
+                                withAnimation {
+                                    proxy.scrollTo(last.id, anchor: .bottom)
+                                }
+                            }
+                        }
+                    }
+                }
             }
             .gesture(
                 DragGesture()
@@ -87,10 +100,13 @@ struct ChatingView: View {
             vm.connect()
         }
         .onDisappear { vm.disconnect() }
-        .onTapGesture { UIApplication.shared.hideKeyboard() }
+        .onTapGesture {
+            UIApplication.shared.hideKeyboard()
+            isFocused = false
+        }
         .sheet(isPresented: $showProfile) {
             PartnerProfileView(profileShow: $showProfile, needMathcingRequest: .matchComplete)
-                .presentationDetents([.fraction(0.8)])
+                .presentationDetents([.fraction(0.9)])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
         }
@@ -98,7 +114,6 @@ struct ChatingView: View {
             print("asd")
         }, secondaryButtonText: "헤어질래요", secondaryButtonAction: {
             vm.showGoodByeView = true
-            //showgoodbyeview <- 지금 하나만 사용중.
         })
         .customAlert(isPresented: $showReportAlert, title: "불편함을 겪으셨다면\n 신고하세요!", message: "신고 즉시 차단되며 상대의 매너지수가 감소됩니다.", primaryButtonText: "신고하기", primaryButtonAction: {
             showReportAlert = false
@@ -110,10 +125,12 @@ struct ChatingView: View {
             
         })
         .sheet(isPresented: $vm.showGoodByeView) {
-            SayGoodbyeView(ViewModel: vm)
-                .presentationDetents([.height(300)])
-                .presentationCornerRadius(20)
-                .presentationDragIndicator(.visible)
+            SayGoodbyeView { score, comment in
+                await vm.leaveChatting(score: score, comment: comment)
+            }
+            .presentationDetents([.height(300)])
+            .presentationCornerRadius(20)
+            .presentationDragIndicator(.visible)
         }
         .navigationTitle(partnerName)
         .navigationBarTitleDisplayMode(.inline)
@@ -137,6 +154,8 @@ struct ChatingView: View {
         ZStack {
             TextField("메세지 보내기", text: $messageText)
                 .textFieldStyle(MyTextFieldStyle())
+                .focused($isFocused)
+            
             Button(action: sendMessage) {
                 Image(systemName: "paperplane.fill")
                     .foregroundColor(.white)

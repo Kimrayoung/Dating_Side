@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct SayGoodbyeView: View {
-    @ObservedObject var ViewModel: ChatViewModel
     
     @State private var comment: String = ""
     @State private var score: Int = 0
+    
+    var onSend: (Int, String) async -> Void?
     
     let scoreButtonWidth = (UIScreen.main.bounds.width - 48 - 32) / 5
     
@@ -21,11 +22,13 @@ struct SayGoodbyeView: View {
             Text("상대에게 전하고 싶은 작별인사를 보내주세요.")
                 .font(.pixel(16))
                 .padding(.top, 30)
+            
             Text("상대에게는 메시지만 표시됩니다.")
                 .foregroundStyle(Color.gray2)
                 .font(.rounded(14))
                 .padding(.bottom, 4)
                 .padding(.top, 4)
+            
             HStack(spacing: 8) {
                 veryGoodButton
                 goodButton
@@ -34,7 +37,8 @@ struct SayGoodbyeView: View {
                 veryBadButton
             }
             .padding(.bottom, 24)
-//            .padding(.horizontal, 14)
+            .buttonStyle(.plain)
+            
             commentTextField
                 .padding(.bottom, 24)
                 .padding(.horizontal, 24)
@@ -47,7 +51,10 @@ struct SayGoodbyeView: View {
         Button {
             score = 5
         } label: {
-            scoreButtonLabel(text: "아주 좋아요", backgrounColor: .mainColor)
+            scoreButtonLabel(
+                text: "아주 좋아요",
+                backgrounColor: score == 5 ? .mainColor : .gray01
+            )
         }
         .frame(width: scoreButtonWidth, height: 36)
     }
@@ -56,8 +63,10 @@ struct SayGoodbyeView: View {
         Button {
             score = 4
         } label: {
-            scoreButtonLabel(text: "좋아요", backgrounColor: .subColor2)
-                            
+            scoreButtonLabel(
+                text: "좋아요",
+                backgrounColor: score == 4 ? .mainColor : .gray01
+            )
         }
         .frame(width: scoreButtonWidth, height: 36)
     }
@@ -66,7 +75,10 @@ struct SayGoodbyeView: View {
         Button {
             score = 3
         } label: {
-            scoreButtonLabel(text: "보통이에요", backgrounColor: .gray01)
+            scoreButtonLabel(
+                text: "보통이에요",
+                backgrounColor: score == 3 ? .mainColor : .gray01
+            )
         }
         .frame(width: scoreButtonWidth, height: 36)
     }
@@ -75,7 +87,10 @@ struct SayGoodbyeView: View {
         Button {
             score = 2
         } label: {
-            scoreButtonLabel(text: "별로에요", backgrounColor: .gray2)
+            scoreButtonLabel(
+                text: "별로에요",
+                backgrounColor: score == 2 ? .mainColor : .gray01
+            )
         }
         .frame(width: scoreButtonWidth, height: 36)
     }
@@ -84,7 +99,10 @@ struct SayGoodbyeView: View {
         Button {
             score = 1
         } label: {
-            scoreButtonLabel(text: "최악이에요", backgrounColor: .gray3)
+            scoreButtonLabel(
+                text: "최악이에요",
+                backgrounColor: score == 1 ? .mainColor : .gray01
+            )
         }
         .frame(width: scoreButtonWidth, height: 36)
     }
@@ -113,7 +131,7 @@ struct SayGoodbyeView: View {
     var sendButton: some View {
         Button {
             Task {
-                await ViewModel.leaveChatting(score: score, comment: comment)
+                await onSend(score, comment)
             }
         } label: {
             Text("전송하기")
@@ -129,5 +147,14 @@ struct SayGoodbyeView: View {
 }
 
 #Preview {
-    SayGoodbyeView(ViewModel: ChatViewModel(roomId: "123"))
+    SayGoodbyeView(onSend: { score, comment in
+        // 버튼을 누르면 이 코드가 실행됩니다.
+        print("---------- 전송 시뮬레이션 ----------")
+        print("⭐️ 점수: \(score)")
+        print("📝 코멘트: \(comment)")
+        
+        // 비동기 작업 흉내 (1초 대기)
+        try? await Task.sleep(nanoseconds: 1 * 1_000_000_000) 
+        print("✅ 전송 완료 처리됨")
+    })
 }
