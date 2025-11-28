@@ -9,16 +9,18 @@ import Foundation
 
 
 final class ChatListViewModel: ObservableObject {
-
+    
     let loadingManager = LoadingManager.shared
     let attractionNetwork = AttractionNetworkManager()
     let chatNetwork = ChattingNetworkManager()
     let matchingNetwork = MatchingNetworkManager()
     
     @Published var timeString: String = "24:00"
+//    @Published var partnerImageURL: String?
+    @Published var matchingImage: UserImage?
     
     var showGoodByeView: Bool = false
-
+    
     var timer: Timer?
     var totalSeconds: Int = 24 * 60 * 60
     
@@ -123,10 +125,10 @@ extension ChatListViewModel {
     @MainActor
     func matchingPartnerPhoto() async {
         loadingManager.isLoading = true
+        
         defer {
             loadingManager.isLoading = false
         }
-        
         do {
             let result = try await chatNetwork.matchingPartnerPhoto()
             switch result {
@@ -164,4 +166,5 @@ extension ChatListViewModel {
             Log.errorPublic(error.localizedDescription)
         }
     }
+    
 }

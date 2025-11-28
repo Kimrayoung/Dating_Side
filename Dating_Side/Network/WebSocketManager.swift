@@ -299,6 +299,7 @@ actor WebSocketClient {
             print("✅ STOMP Connected!")
             startPing()
             resumeStompWaiters()
+            
         case .message:
             if let data = body.data(using: .utf8),
                let chat = try? decoder.decode(ChatPayload.self, from: data) {

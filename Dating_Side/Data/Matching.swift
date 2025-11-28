@@ -18,7 +18,7 @@ struct PartnerScore: Codable {
 
 struct UserImage: Codable {
     let isSuccess: Bool
-    let profileImageURL: String
+    let profileImageURL: String?
 
     enum CodingKeys: String, CodingKey {
         case isSuccess
@@ -29,7 +29,7 @@ struct UserImage: Codable {
 struct MatchingStatusResponse: Codable {
     let matchingStatus: String
     let matchedAt: [Int]?
-    let scoreFromPartner: PartnerEvaluation
+    let scoreFromPartner: PartnerEvaluation?
     
     var matchingStatusType: MatchingStatusType {
         switch matchingStatus {
@@ -47,6 +47,7 @@ struct MatchingStatusResponse: Codable {
     var timestampDate: Date? {
         guard let matchedAt = matchedAt else { return nil }
         guard matchedAt.count >= 6 else { return nil }
+        
         var comps = DateComponents()
         comps.year   = matchedAt[0]
         comps.month  = matchedAt[1]
@@ -54,6 +55,7 @@ struct MatchingStatusResponse: Codable {
         comps.hour   = matchedAt[3]
         comps.minute = matchedAt[4]
         comps.second = matchedAt[5]
+        
         if matchedAt.count >= 7 {
             comps.nanosecond = matchedAt[6]
         }
@@ -70,8 +72,7 @@ struct MatchingAccountResponse: Codable {
     let result: PartnerAccount
 }
 
-
-enum MatchingStatusType: String{
+enum MatchingStatusType: String {
     case UNMATCHED
     case MATCHED
     case LEFT

@@ -149,9 +149,10 @@ struct MatchingAnswerView: View {
             viewModel.answers[viewModel.currentIndex] = answer
             
             if viewModel.isLastQuestion {
-//                Task {
-//                    await viewModel.postTodayQuetionAnswers()
-//                }
+                #warning("오류")
+                Task {
+                    await viewModel.postTodayQuetionAnswers()
+                }
                 if matchingStatus == .MATCHED {
                     appState.matchingPath.append(Matching.answerCompleteMain)
                 } else {

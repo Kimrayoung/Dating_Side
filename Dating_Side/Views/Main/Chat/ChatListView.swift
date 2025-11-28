@@ -21,6 +21,7 @@ struct ChatListView: View {
     @AppStorage("matchingStatus") private var matchingStatus: String = MatchingStatusType.UNMATCHED.rawValue
     @AppStorage("matchingDate") private var matchingTimeString: String = ""
     @AppStorage("username") private var username: String = ""
+    
     @State var toMeArr: [AttractionPartnerData] = []
     @State var selectedPartner: PartnerAccount? = nil
     @State var formMeAccount: AttractionPartnerData? = nil
@@ -28,6 +29,7 @@ struct ChatListView: View {
     @State private var showProfile: Bool = false
     @State private var showLeaveAlert: Bool = false
     @State private var allowGoodbyeDismiss: Bool = false
+    @State private var messageFromLeavePartner: Bool = true
     
     var body: some View {
         VStack {
@@ -71,6 +73,12 @@ struct ChatListView: View {
                 let checkpassedDate = matchedAt.hasPassed(days: 2, since: Date())
                 Log.debugPublic("몇일이나 지났는지 확인", matchedAt, checkpassedDate, passedDate, matchingTimeString)
                 
+#warning("matchingPartnerPhoto 수정 필요")
+                
+                Task {
+                    await viewModel.matchingPartnerPhoto()
+                }
+                
             } else if matchingStatus == MatchingStatusType.LEFT.rawValue { // 매칭된 사람이 떠남
                 showLeaveAlert = true
             }
@@ -96,7 +104,6 @@ struct ChatListView: View {
         .sheet(isPresented: $viewModel.showGoodByeView) {
             SayGoodbyeView { score, comment in
                 await viewModel.replyGoodbye(score: score, comment: comment)
-                
             }
             .presentationDetents([.height(300)])
             .presentationCornerRadius(10)

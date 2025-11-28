@@ -174,6 +174,7 @@
 		D10A7D002E8CE2E1004B8EEB /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D10A7CFF2E8CE2E1004B8EEB /* Lottie */; };
 		D1753E2C2EAF6E1700F59565 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1753E2B2EAF6E1700F59565 /* ReportView.swift */; };
 		D18BFCE02ECEF42D00C9497F /* NoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFCDF2ECEF42D00C9497F /* NoticeView.swift */; };
+		D1E4B9312ED986A10025AB84 /* MessageFromLeavePartnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E4B9302ED986A10025AB84 /* MessageFromLeavePartnerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -356,6 +357,7 @@
 		4DFAFBA12E16BE7A006E3B5F /* KakaoAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoAuth.swift; sourceTree = "<group>"; };
 		D1753E2B2EAF6E1700F59565 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		D18BFCDF2ECEF42D00C9497F /* NoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeView.swift; sourceTree = "<group>"; };
+		D1E4B9302ED986A10025AB84 /* MessageFromLeavePartnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFromLeavePartnerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -815,6 +817,7 @@
 				4DB922BF2E62A3B400A87023 /* SayGoodbyeView.swift */,
 				D1753E2B2EAF6E1700F59565 /* ReportView.swift */,
 				D18BFCDF2ECEF42D00C9497F /* NoticeView.swift */,
+				D1E4B9302ED986A10025AB84 /* MessageFromLeavePartnerView.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1043,6 +1046,7 @@
 				4DF329EC2D87EEE200DBB823 /* VerificationNumber.swift in Sources */,
 				4D97CCAC2E75501500874F99 /* MatchingGlobalNetworkManager.swift in Sources */,
 				4DF329D92D87157F00DBB823 /* CustomRounedGradientProgressBar.swift in Sources */,
+				D1E4B9312ED986A10025AB84 /* MessageFromLeavePartnerView.swift in Sources */,
 				4D83532F2E44EEA80031B0ED /* Matching.swift in Sources */,
 				4D61195B2D75B24300715B9E /* MainContainerView.swift in Sources */,
 				4D6D187B2D6358EE00698E5D /* Error.swift in Sources */,
