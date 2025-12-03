@@ -140,6 +140,7 @@ extension ChatListViewModel {
             switch result {
             case .success(let userImage):
                 Log.debugPublic("매칭 사진", userImage)
+                self.matchingImage = userImage
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)
             }

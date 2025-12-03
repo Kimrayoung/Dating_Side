@@ -32,6 +32,7 @@ struct ChatListView: View {
     @State private var messageFromLeavePartner: Bool = true
     @State private var matchingPassedDate: Int = 1
     
+    
     var body: some View {
         VStack {
             if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue {
@@ -81,6 +82,7 @@ struct ChatListView: View {
                         await viewModel.matchingPartnerPhoto()
                     }
                 }
+                
             } else if matchingStatus == MatchingStatusType.LEFT.rawValue { // 매칭된 사람이 떠남
                 showLeaveAlert = true
             }
@@ -250,67 +252,73 @@ struct ChatListView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.leading, .bottom], 24)
             
+            ///7일이 되어 모든 사진이 보일때
             if matchingPassedDate >= 7 {
                 if let images = viewModel.matchingAllImage, !images.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16.5) {
                             ForEach(0..<images.count, id: \.self){ index in
                                 let images = images[index]
-                                PartnerImageView(imageUrl: images.profileImageURL, locked: false, filledColor: Color.clear)
+                                
+                                PartnerImageView(imageUrl: images.profileImageURL,
+                                                 locked: false,
+                                                 filledColor: Color.clear
+                                )
+                                
                             }
                         }
                         .padding(.horizontal, 24)
                         .padding(.bottom, 20)
                     }
-                    
                 }
+                ///7일이 되기 전까지 1장씩 사진이 보일 때
             }else{
-                #warning("7일이 아닐때")
+                ZStack(alignment: .leading) {
+                    if matchingPassedDate < 7 {
+                        PartnerImageView(
+                            imageUrl: matchingPassedDate >= 6 ? viewModel.matchingImage?.profileImageURL : nil,
+                            locked: false,
+                            filledColor: .subColor2
+                        )
+                        .padding(.leading, 48)
+                        .zIndex(0)
+                    }
+                    
+                    if matchingPassedDate < 6 {
+                        PartnerImageView(
+                            imageUrl: matchingPassedDate >= 4 ? viewModel.matchingImage?.profileImageURL : nil,
+                            locked: false,
+                            filledColor: .subColor1
+                        )
+                        .padding(.leading, 32)
+                        .zIndex(1)
+                    }
+                    
+                    if matchingPassedDate < 4 {
+                        PartnerImageView(
+                            imageUrl: matchingPassedDate >= 2 ? viewModel.matchingImage?.profileImageURL : nil,
+                            locked: false,
+                            filledColor: .subColor
+                        )
+                        .padding(.leading, 16)
+                        .zIndex(2)
+                    }
+                    
+                    if matchingPassedDate == 1 {
+                        PartnerImageView(
+                            imageUrl: nil,
+                            locked: true,
+                            filledColor: .mainColor
+                        )
+                        .padding(.leading, 0)
+                        .zIndex(3)
+                    }
+                }
+                .padding(.horizontal, 24)
+                .frame(maxWidth: .infinity, alignment: .center)
             }
         }
     }
-    
-    //    var firstDayImage: some View {
-    //        ZStack {
-    //            VStack {
-    //                Spacer()
-    //                Text("2일차 부터\n상대의 사진이 보여요")
-    //                    .font(.pixel(16))
-    //                    .foregroundStyle(Color.white)
-    //                    .frame(maxWidth: .infinity)
-    //                    .padding(.trailing, 70)
-    //                Spacer()
-    //            }
-    //            Image("matchingAdditioanlFirstImage")
-    //        }
-    //        .background(
-    //            RoundedRectangle(cornerRadius: 9.57)
-    //                .fill(Color.mainColor)
-    //        )
-    //        .frame(width: 240, height: 360)
-    //
-    //    }
-    //
-    //    var secondDayImage: some View {
-    //        RoundedRectangle(cornerRadius: 9.57)
-    //            .fill(Color.subColor)
-    //            .frame(width: 240, height: 360)
-    //            .padding(.leading, 16)
-    //    }
-    //
-    //    var forthDayImage: some View {
-    //        RoundedRectangle(cornerRadius: 9.57)
-    //            .fill(Color.subColor1)
-    //            .frame(width: 240, height: 360)
-    //            .padding(.leading, 32)
-    //    }
-    //
-    //    var sixthDayImage: some View {
-    //        RoundedRectangle(cornerRadius: 9.57)
-    //            .fill(Color.subColor2)
-    //            .frame(width: 240, height: 360)
-    //            .padding(.leading, 48)
-    //    }
 }
 
 struct PartnerImageView: View {
@@ -321,6 +329,11 @@ struct PartnerImageView: View {
     
     var body: some View {
         ZStack {
+            if let color = filledColor {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(color)
+            }
+            
             if locked {
                 VStack {
                     Spacer()
@@ -333,8 +346,12 @@ struct PartnerImageView: View {
                 }
                 Image("matchingAdditioanlFirstImage")
             } else {
-                if let urlString = imageUrl, let url = URL(string: urlString) {                    KFImage(url)
+                if let urlString = imageUrl, let url = URL(string: urlString) {
+                    KFImage(url)
                         .resizable()
+                        .placeholder {
+                            Image("checkerImage")
+                        }
                         .aspectRatio(contentMode: .fill)
                         .clipped()
                 }
