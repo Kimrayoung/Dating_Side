@@ -30,6 +30,7 @@ struct ChatListView: View {
     @State private var showLeaveAlert: Bool = false
     @State private var allowGoodbyeDismiss: Bool = false
     @State private var messageFromLeavePartner: Bool = true
+    @State private var matchingPassedDate: Int = 1
     
     var body: some View {
         VStack {
@@ -68,17 +69,18 @@ struct ChatListView: View {
             // 매칭된 사람이 있음
             if matchingStatus == MatchingStatusType.MATCHED.rawValue {
                 chattingRoomData = await viewModel.chattingRoomRequest()
-                guard let matchedAt = matchingTimeString.toDate() else { return }
-                let passedDate = matchedAt.daysSince(matchedAt, in: .current)
-                let checkpassedDate = matchedAt.hasPassed(days: 2, since: Date())
-                Log.debugPublic("몇일이나 지났는지 확인", matchedAt, checkpassedDate, passedDate, matchingTimeString)
                 
-#warning("matchingPartnerPhoto 수정 필요")
-                
-                Task {
-                    await viewModel.matchingPartnerPhoto()
+                if let matchedAt = matchingTimeString.toDate() {
+                    let passedDate = matchedAt.daysSince(matchedAt, in: .current)
+                    self.matchingPassedDate = passedDate + 1
+                    Log.debugPublic("매칭일 :\(self.matchingPassedDate)일")
+                    
+                    if self.matchingPassedDate >= 7 {
+                        await viewModel.matchingPartnerAllPhoto()
+                    }else{
+                        await viewModel.matchingPartnerPhoto()
+                    }
                 }
-                
             } else if matchingStatus == MatchingStatusType.LEFT.rawValue { // 매칭된 사람이 떠남
                 showLeaveAlert = true
             }
@@ -236,67 +238,111 @@ struct ChatListView: View {
     
     var matchingSuccessImageView: some View {
         VStack {
-            Text("\(chattingRoomData?.partnerNickName ?? "")님과 매칭 된 지 1일차")
+            Text("\(chattingRoomData?.partnerNickName ?? "")님과 매칭 된 지 \(matchingPassedDate)일차")
                 .font(.pixel(20))
                 .foregroundStyle(Color.blackColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 24)
+            
             Text("상대의 의미있는 순간들 입니다:) 깊은 대화에 도움이 될거에요.")
                 .font(.pixel(12))
                 .foregroundStyle(Color.gray3)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.leading, .bottom], 24)
-            ZStack {
-                sixthDayImage
-                forthDayImage
-                secondDayImage
-                firstDayImage
+            
+            if matchingPassedDate >= 7 {
+                if let images = viewModel.matchingAllImage, !images.isEmpty {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16.5) {
+                            ForEach(0..<images.count, id: \.self){ index in
+                                let images = images[index]
+                                PartnerImageView(imageUrl: images.profileImageURL, locked: false, filledColor: Color.clear)
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 20)
+                    }
+                    
+                }
+            }else{
+                #warning("7일이 아닐때")
             }
         }
     }
     
-    var firstDayImage: some View {
+    //    var firstDayImage: some View {
+    //        ZStack {
+    //            VStack {
+    //                Spacer()
+    //                Text("2일차 부터\n상대의 사진이 보여요")
+    //                    .font(.pixel(16))
+    //                    .foregroundStyle(Color.white)
+    //                    .frame(maxWidth: .infinity)
+    //                    .padding(.trailing, 70)
+    //                Spacer()
+    //            }
+    //            Image("matchingAdditioanlFirstImage")
+    //        }
+    //        .background(
+    //            RoundedRectangle(cornerRadius: 9.57)
+    //                .fill(Color.mainColor)
+    //        )
+    //        .frame(width: 240, height: 360)
+    //
+    //    }
+    //
+    //    var secondDayImage: some View {
+    //        RoundedRectangle(cornerRadius: 9.57)
+    //            .fill(Color.subColor)
+    //            .frame(width: 240, height: 360)
+    //            .padding(.leading, 16)
+    //    }
+    //
+    //    var forthDayImage: some View {
+    //        RoundedRectangle(cornerRadius: 9.57)
+    //            .fill(Color.subColor1)
+    //            .frame(width: 240, height: 360)
+    //            .padding(.leading, 32)
+    //    }
+    //
+    //    var sixthDayImage: some View {
+    //        RoundedRectangle(cornerRadius: 9.57)
+    //            .fill(Color.subColor2)
+    //            .frame(width: 240, height: 360)
+    //            .padding(.leading, 48)
+    //    }
+}
+
+struct PartnerImageView: View {
+    
+    let imageUrl: String?
+    let locked: Bool
+    let filledColor: Color?
+    
+    var body: some View {
         ZStack {
-            VStack {
-                Spacer()
-                Text("2일차 부터\n상대의 사진이 보여요")
-                    .font(.pixel(16))
-                    .foregroundStyle(Color.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.trailing, 70)
-                Spacer()
+            if locked {
+                VStack {
+                    Spacer()
+                    Text("2일차 부터\n상대의 사진이 보여요")
+                        .font(.pixel(16))
+                        .foregroundStyle(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.trailing, 70)
+                    Spacer()
+                }
+                Image("matchingAdditioanlFirstImage")
+            } else {
+                if let urlString = imageUrl, let url = URL(string: urlString) {                    KFImage(url)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .clipped()
+                }
             }
-            Image("matchingAdditioanlFirstImage")
         }
-        .background(
-            RoundedRectangle(cornerRadius: 9.57)
-                .fill(Color.mainColor)
-        )
         .frame(width: 240, height: 360)
-        
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
-    
-    var secondDayImage: some View {
-        RoundedRectangle(cornerRadius: 9.57)
-            .fill(Color.subColor)
-            .frame(width: 240, height: 360)
-            .padding(.leading, 16)
-    }
-    
-    var forthDayImage: some View {
-        RoundedRectangle(cornerRadius: 9.57)
-            .fill(Color.subColor1)
-            .frame(width: 240, height: 360)
-            .padding(.leading, 32)
-    }
-    
-    var sixthDayImage: some View {
-        RoundedRectangle(cornerRadius: 9.57)
-            .fill(Color.subColor2)
-            .frame(width: 240, height: 360)
-            .padding(.leading, 48)
-    }
-    
 }
 
 #Preview {

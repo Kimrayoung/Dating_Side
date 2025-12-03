@@ -16,8 +16,13 @@ final class ChatListViewModel: ObservableObject {
     let matchingNetwork = MatchingNetworkManager()
     
     @Published var timeString: String = "24:00"
-//    @Published var partnerImageURL: String?
+    
+    // 2,4,6일자 별 이미지
     @Published var matchingImage: UserImage?
+    
+    // 모든 이미지
+    @Published var matchingAllImage: [UserImage]?
+    
     
     var showGoodByeView: Bool = false
     
@@ -122,6 +127,7 @@ extension ChatListViewModel {
         return nil
     }
     
+#warning("매칭일자가 7일 미만일시에 하나씩 표시.")
     @MainActor
     func matchingPartnerPhoto() async {
         loadingManager.isLoading = true
@@ -138,6 +144,29 @@ extension ChatListViewModel {
                 Log.errorPublic(error.localizedDescription)
             }
         }  catch {
+            Log.errorPublic(error.localizedDescription)
+        }
+    }
+    
+#warning("매칭 일자가 7일 이상일 경우에만 표시.")
+    @MainActor
+    func matchingPartnerAllPhoto() async {
+        loadingManager.isLoading = true
+        
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await chatNetwork.matchingPartnerAllPhoto()
+            switch result {
+            case .success(let userimages):
+                Log.debugPublic("매칭 사진들", userimages)
+                self.matchingAllImage = userimages
+            case .failure(let error):
+                Log.errorPublic(error.localizedDescription)
+            }
+        } catch {
             Log.errorPublic(error.localizedDescription)
         }
     }
