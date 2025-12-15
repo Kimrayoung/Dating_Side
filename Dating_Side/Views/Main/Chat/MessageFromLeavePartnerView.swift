@@ -9,8 +9,14 @@ import SwiftUI
 
 struct MessageFromLeavePartnerView: View {
     
-    @State private var showModal = false
+    @State private var showReplyModal = false
     @State private var bottomSheetStartHeight: CGFloat = 0.6
+    @AppStorage("matchingStatus") private var matchingStatusRaw: String = MatchingStatusType.UNMATCHED.rawValue
+
+    private var matchingStatus: MatchingStatusType {
+        get { MatchingStatusType(rawValue: matchingStatusRaw) ?? .UNMATCHED }
+        set { matchingStatusRaw = newValue.rawValue }
+    }
     
     var body: some View {
         ZStack {
@@ -19,17 +25,19 @@ struct MessageFromLeavePartnerView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
             
-            VStack(spacing: 0) {
+            VStack(spacing: 60) {
                 VStack(spacing: 6) {
-                    Text("당신의 답장을 토대로\n프로필이 완성 되었어요")
+                    Text("[]님이\n대화를 떠났습니다.")
                         .font(.pixel(20))
+                        .foregroundStyle(Color.white)
                         .multilineTextAlignment(.center)
                     
-                    Text("전체 프로필은 마이페이지에서 확인 하세요")
+                    Text("메세지를 확인하고 상대에게\n 작별인사를 전해주세요.")
                         .font(.pixel(12))
+                        .foregroundStyle(Color.white)
+                        .multilineTextAlignment(.center)
+
                 }
-                .padding(.top, 50)
-                .padding(.bottom, 65)
                 
                 ScrollView {
                     Text("profileContent")
@@ -39,11 +47,36 @@ struct MessageFromLeavePartnerView: View {
                         .padding(.horizontal, 25.5)
                         .padding(.vertical, 25)
                 }
-                .background(Color.white)
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(stops: [
+                            .init(color: Color(hex: "#FDFDFF").opacity(0.1), location: 0.0),   // 0%
+                            .init(color: Color(hex: "#FFFFFF").opacity(0.2), location: 0.51),  // 51%
+                            .init(color: Color(hex: "#FFFFFF").opacity(0.6), location: 1.0)    // 100%
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .strokeBorder(
+                            LinearGradient(
+                                gradient: Gradient(stops: [
+                                    .init(color: Color.white.opacity(0.0), location: 0.0),  // 0%
+                                    .init(color: Color.white.opacity(0.2), location: 0.51), // 51%
+                                    .init(color: Color.white.opacity(0.5), location: 1.0)   // 100%
+                                ]),
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ),
+                            lineWidth: 2
+                        )
+                )
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .frame(width: 316, height: 329)
                 .padding(.horizontal, 38.5)
-                
+                                
                 confirmPartner
             }
         }
@@ -53,14 +86,9 @@ struct MessageFromLeavePartnerView: View {
     /// 매칭상대 확인하기
     var confirmPartner: some View {
         Button {
-            //            if matchingStatus != .MATCHED {
-            //
-            //            } else {
-            //                appState.matchingPath.append(Matching.matchingProfileCheckView)
-            //            }
             
         } label: {
-            Text("매칭 상대 확인하기")
+            Text("답장하기")
                 .font(.pixel(16))
                 .foregroundStyle(Color.white)
                 .frame(maxWidth: .infinity)

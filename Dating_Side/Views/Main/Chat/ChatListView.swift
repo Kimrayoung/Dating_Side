@@ -73,7 +73,7 @@ struct ChatListView: View {
                 
                 if let matchedAt = matchingTimeString.toDate() {
                     let passedDate = matchedAt.daysSince(matchedAt, in: .current)
-                    self.matchingPassedDate = passedDate + 1
+                    self.matchingPassedDate = passedDate
                     Log.debugPublic("매칭일 :\(self.matchingPassedDate)일")
                     
                     if self.matchingPassedDate >= 7 {
@@ -260,9 +260,10 @@ struct ChatListView: View {
                             ForEach(0..<images.count, id: \.self){ index in
                                 let images = images[index]
                                 
-                                PartnerImageView(imageUrl: images.profileImageURL,
-                                                 locked: false,
-                                                 filledColor: Color.clear
+                                PartnerImageView(
+                                    imageUrl: images.profileImageURL,
+                                    locked: false,
+                                    filledColor: Color.clear
                                 )
                                 
                             }
@@ -280,7 +281,8 @@ struct ChatListView: View {
                             locked: false,
                             filledColor: .subColor2
                         )
-                        .padding(.leading, 48)
+//                        .padding(.leading, 48)
+                        .padding(.leading, matchingPassedDate == 1 ? 72 : (matchingPassedDate >= 6 ? 0 : (matchingPassedDate >= 4 ? 24 : 48)))
                         .zIndex(0)
                     }
                     
@@ -290,7 +292,8 @@ struct ChatListView: View {
                             locked: false,
                             filledColor: .subColor1
                         )
-                        .padding(.leading, 32)
+//                        .padding(.leading, 32)
+                        .padding(.leading, matchingPassedDate == 1 ? 48 : (matchingPassedDate >= 4 ? 0 : 24))
                         .zIndex(1)
                     }
                     
@@ -300,7 +303,8 @@ struct ChatListView: View {
                             locked: false,
                             filledColor: .subColor
                         )
-                        .padding(.leading, 16)
+//                        .padding(.leading, 16)
+                        .padding(.leading, matchingPassedDate == 1 ? 24 : 0)
                         .zIndex(2)
                     }
                     
@@ -314,7 +318,7 @@ struct ChatListView: View {
                         .zIndex(3)
                     }
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal/*, 24*/)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
@@ -322,7 +326,6 @@ struct ChatListView: View {
 }
 
 struct PartnerImageView: View {
-    
     let imageUrl: String?
     let locked: Bool
     let filledColor: Color?

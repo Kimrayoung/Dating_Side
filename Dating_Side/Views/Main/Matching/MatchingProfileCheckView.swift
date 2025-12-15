@@ -74,6 +74,7 @@ struct MatchingProfileCheckView: View {
             Task {
                 matchingProfile = await viewModel.matchingRequest()
             }
+            self.showModal = false
         } label: {
             Text("프로필 받기")
                 .font(.pixel(16))

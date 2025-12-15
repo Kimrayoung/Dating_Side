@@ -148,13 +148,8 @@ struct SayGoodbyeView: View {
 
 #Preview {
     SayGoodbyeView(onSend: { score, comment in
-        // 버튼을 누르면 이 코드가 실행됩니다.
-        print("---------- 전송 시뮬레이션 ----------")
-        print("⭐️ 점수: \(score)")
-        print("📝 코멘트: \(comment)")
         
         // 비동기 작업 흉내 (1초 대기)
-        try? await Task.sleep(nanoseconds: 1 * 1_000_000_000) 
-        print("✅ 전송 완료 처리됨")
+        try? await Task.sleep(nanoseconds: 1 * 1_000_000_000)
     })
 }
