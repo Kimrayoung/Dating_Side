@@ -235,3 +235,8 @@ enum AccountType {
 struct AttractionAccountResponse: Codable {
     let result: [AttractionPartnerData]
 }
+
+struct NotificationResponse: Codable {
+    let title, body: String
+    let sentAt: [Int]
+}

@@ -66,6 +66,8 @@ final class AccountViewModel: ObservableObject {
     @Published var selectedForthDayImage: UIImage?
     @Published var selectedSixthDayImage: UIImage?
     
+    @Published var userNotificationList: [NotificationResponse] = []
+    
     //MARK: - 공통 사용(회원 등록, 회원 수정)
     
     func checkLocationData() -> Bool {
@@ -622,5 +624,29 @@ extension AccountViewModel {
         } catch {
             Log.errorPublic("유저 수정 실패", error)
         }
+    }
+    
+    @MainActor
+    func getNotificationLog() async {
+        loadingManager.isLoading = true
+        
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        Log.debugPublic("유저 알람 목록 조회")
+        do{
+            let result = try await accountNetworkManger.getNotificationLog()
+            switch result {
+            case .success(let result):
+                self.userNotificationList = result
+                print(self.userNotificationList)
+            case .failure(let error):
+                Log.errorPublic("알람 목록 조회 실패", error)
+            }
+        }catch{
+            Log.errorPublic("알람 목록 조회 실패", error)
+        }
+
     }
 }
