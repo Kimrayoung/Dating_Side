@@ -88,7 +88,6 @@ struct AnswerCompleteMainView: View {
         .customToastPopup(isPresented: $showToastPopup, title: "오늘은 이미 질문을 작성했어요", message: "")
         .sheet(isPresented: $showQuestionModal, content: {
             SendQuestionModalSheet(viewModel: viewModel, showQuestionModal: $showQuestionModal, selectCategory: $selectCategory, questionContent: $questionContent, sendQuestion: $sendQuestion)
-            //                .presentationDetents([.fraction(0.99)])
                 .presentationDetents([.medium])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
@@ -134,16 +133,21 @@ struct AnswerCompleteMainView: View {
     var confirmPartner: some View {
         Button {
             if matchingStatus != .MATCHED {
-                
-            } else {
                 appState.matchingPath.append(Matching.matchingProfileCheckView)
             }
             
         } label: {
-            Text("매칭 상대 확인하기")
-                .font(.pixel(16))
-                .foregroundStyle(Color.white)
-                .frame(maxWidth: .infinity)
+            if matchingStatus != .MATCHED {
+                Text("매칭 상대 확인하기")
+                    .font(.pixel(16))
+                    .foregroundStyle(Color.white)
+                    .frame(maxWidth: .infinity)
+            }else{
+                Text("전체카드는 마이페이지에서 확인할 수 있습니다.")
+                    .font(.pixel(16))
+                    .foregroundStyle(Color.white)
+                    .frame(maxWidth: .infinity)
+            }
         }
         .frame(height: 48)
         .background(Color.mainColor)

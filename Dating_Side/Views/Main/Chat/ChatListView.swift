@@ -54,6 +54,7 @@ struct ChatListView: View {
                 Text("채팅")
                     .font(.pixel(20))
             }
+            
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
                     appState.chatPath.append(Chating.noticeView)
@@ -67,6 +68,7 @@ struct ChatListView: View {
             toMeArr = await viewModel.senderAttraction()
             formMeAccount = await viewModel.receiverAttraction().first
             print(#fileID, #function, #line, "- matchingStatus: \(matchingStatus)")
+            
             // 매칭된 사람이 있음
             if matchingStatus == MatchingStatusType.MATCHED.rawValue {
                 chattingRoomData = await viewModel.chattingRoomRequest()
@@ -82,9 +84,10 @@ struct ChatListView: View {
                         await viewModel.matchingPartnerPhoto()
                     }
                 }
-                
             } else if matchingStatus == MatchingStatusType.LEFT.rawValue { // 매칭된 사람이 떠남
                 showLeaveAlert = true
+            } else if matchingStatus == MatchingStatusType.DELETE.rawValue {
+                print("상대가 탈퇴했음")
             }
         }
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "상대에게 마지막 인사를 남겨주세요", primaryButtonText: "확인", primaryButtonAction: {
@@ -281,7 +284,6 @@ struct ChatListView: View {
                             locked: false,
                             filledColor: .subColor2
                         )
-//                        .padding(.leading, 48)
                         .padding(.leading, matchingPassedDate == 1 ? 72 : (matchingPassedDate >= 6 ? 0 : (matchingPassedDate >= 4 ? 24 : 48)))
                         .zIndex(0)
                     }
@@ -292,7 +294,6 @@ struct ChatListView: View {
                             locked: false,
                             filledColor: .subColor1
                         )
-//                        .padding(.leading, 32)
                         .padding(.leading, matchingPassedDate == 1 ? 48 : (matchingPassedDate >= 4 ? 0 : 24))
                         .zIndex(1)
                     }
@@ -303,12 +304,11 @@ struct ChatListView: View {
                             locked: false,
                             filledColor: .subColor
                         )
-//                        .padding(.leading, 16)
                         .padding(.leading, matchingPassedDate == 1 ? 24 : 0)
                         .zIndex(2)
                     }
                     
-                    if matchingPassedDate == 1 {
+                    if matchingPassedDate <= 1 {
                         PartnerImageView(
                             imageUrl: nil,
                             locked: true,
@@ -318,7 +318,7 @@ struct ChatListView: View {
                         .zIndex(3)
                     }
                 }
-                .padding(.horizontal/*, 24*/)
+                .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }

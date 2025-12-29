@@ -86,7 +86,6 @@ struct MessageFromLeavePartnerView: View {
     /// 매칭상대 확인하기
     var confirmPartner: some View {
         Button {
-            
         } label: {
             Text("답장하기")
                 .font(.pixel(16))

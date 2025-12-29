@@ -23,8 +23,7 @@ final class ChatListViewModel: ObservableObject {
     // 모든 이미지
     @Published var matchingAllImage: [UserImage]?
     
-    
-    var showGoodByeView: Bool = false
+    @Published var showGoodByeView: Bool = false
     
     var timer: Timer?
     var totalSeconds: Int = 24 * 60 * 60
@@ -179,9 +178,7 @@ extension ChatListViewModel {
         defer {
             loadingManager.isLoading = false
         }
-        
         let score = PartnerScore(score: score, comment: comment)
-        
         do {
             let result = try await matchingNetwork.matchingCancel(score: score)
             switch result {

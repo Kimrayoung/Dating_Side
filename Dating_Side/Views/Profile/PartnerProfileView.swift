@@ -96,18 +96,33 @@ struct PartnerProfileView: View {
     
     var okButton: some View {
         Button(action: {
+            //            Task {
+            //                if needMathcingRequest == .chattingRequestMatch { // 내게 다가온 사람이랑 매칭
+            //                    guard let partnerId = matchingPartnerAccount?.id else { return }
+            //                    await matchingViewModel.matchingComplete(partnerId: partnerId)
+            //                    showAlert = false
+            //
+            //                } else if needMathcingRequest == .matching { // 내가 다가가기(즉, 매칭 요청)
+            //                    let result = await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
+            //                    if result {
+            //
+            //                    }
+            //                    showAlert = false
+            //                }
+            //            }
             Task {
-                if needMathcingRequest == .chattingRequestMatch { // 내게 다가온 사람이랑 매칭
+                if needMathcingRequest == .chattingRequestMatch { // 내게 다가온 사람 수락
                     guard let partnerId = matchingPartnerAccount?.id else { return }
                     await matchingViewModel.matchingComplete(partnerId: partnerId)
-                    showAlert = false
+                    showToastPopup = true
+                    try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5초
+                    profileShow = false
                     
-                } else if needMathcingRequest == .matching { // 내가 다가가기(즉, 매칭 요청)
+                } else if needMathcingRequest == .matching { // 내가 다가가기 (좋아요 보내기)
                     let result = await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
                     if result {
-                        
+
                     }
-                    showAlert = false
                 }
             }
         }, label: {

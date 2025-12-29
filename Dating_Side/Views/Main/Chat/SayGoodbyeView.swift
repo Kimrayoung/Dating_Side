@@ -148,8 +148,7 @@ struct SayGoodbyeView: View {
 
 #Preview {
     SayGoodbyeView(onSend: { score, comment in
-        
-        // 비동기 작업 흉내 (1초 대기)
+
         try? await Task.sleep(nanoseconds: 1 * 1_000_000_000)
     })
 }

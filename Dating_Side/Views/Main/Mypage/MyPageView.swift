@@ -25,16 +25,17 @@ struct MyPageView: View {
             await profileViewModel.fetchUserAnswerList()
         }
         .toolbar(content: {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     appState.myPagePath.append(MyPage.settingProfile(userImageURL: profileViewModel.userData?.profileImageURL))
                 } label: {
                     Image("myPageToast")
                 }
             }
-            ToolbarItem(placement: .navigationBarLeading) {
+            ToolbarItem(placement: .topBarLeading) {
                 Text("마이페이지")
                     .font(.pixel(20))
+                    .fixedSize(horizontal: true, vertical: false)
             }
         })
     }

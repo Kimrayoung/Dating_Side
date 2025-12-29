@@ -56,7 +56,7 @@ enum Main {
 enum MyPage: Hashable {
     case mypage
     case settingProfile(userImageURL: String?)
-    case profileValueList(valueType: String, valueDataList: [Answer]) // Changed for ProfileView type match
+    case profileValueList(valueType: String, valueDataList: [Answer])
     case profileEdit
     case account
     case defaultProfileImage

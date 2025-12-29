@@ -77,4 +77,5 @@ enum MatchingStatusType: String {
     case MATCHED
     case LEFT
     case ATTRACTED
+    case DELETE
 }
