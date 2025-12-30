@@ -28,6 +28,7 @@ struct ChatListView: View {
     @State var chattingRoomData: ChattingRoomResponse? = nil
     @State private var showProfile: Bool = false
     @State private var showLeaveAlert: Bool = false
+    @State private var showDeleteAlert: Bool = false
     @State private var allowGoodbyeDismiss: Bool = false
     @State private var messageFromLeavePartner: Bool = true
     @State private var matchingPassedDate: Int = 1
@@ -35,7 +36,7 @@ struct ChatListView: View {
     
     var body: some View {
         VStack {
-            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue {
+            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue || matchingStatus == MatchingStatusType.DELETE.rawValue{
                 formme
                 tome
             } else if matchingStatus == MatchingStatusType.MATCHED.rawValue , let chattingRoomData = chattingRoomData {
@@ -64,35 +65,49 @@ struct ChatListView: View {
             }
         })
         .task {
-            selectedPartner = nil
-            toMeArr = await viewModel.senderAttraction()
-            formMeAccount = await viewModel.receiverAttraction().first
-            print(#fileID, #function, #line, "- matchingStatus: \(matchingStatus)")
-            
-            // 매칭된 사람이 있음
+            await viewModel.fetchMatchingStatus()
+    
             if matchingStatus == MatchingStatusType.MATCHED.rawValue {
                 chattingRoomData = await viewModel.chattingRoomRequest()
                 
                 if let matchedAt = matchingTimeString.toDate() {
-                    let passedDate = matchedAt.daysSince(matchedAt, in: .current)
-                    self.matchingPassedDate = passedDate
-                    Log.debugPublic("매칭일 :\(self.matchingPassedDate)일")
+                    self.matchingPassedDate = matchedAt.daysSince(matchedAt, in: .current)
                     
                     if self.matchingPassedDate >= 7 {
                         await viewModel.matchingPartnerAllPhoto()
-                    }else{
+                    } else {
                         await viewModel.matchingPartnerPhoto()
                     }
                 }
-            } else if matchingStatus == MatchingStatusType.LEFT.rawValue { // 매칭된 사람이 떠남
-                showLeaveAlert = true
-            } else if matchingStatus == MatchingStatusType.DELETE.rawValue {
-                print("상대가 탈퇴했음")
+                
+            } else {
+                selectedPartner = nil
+                chattingRoomData = nil
+                toMeArr = await viewModel.senderAttraction()
+                formMeAccount = await viewModel.receiverAttraction().first
+                if matchingStatus == MatchingStatusType.LEFT.rawValue {
+                    showLeaveAlert = true
+                } else if matchingStatus == MatchingStatusType.DELETE.rawValue {
+                    showDeleteAlert = true
+                }
             }
         }
+        
+//        .onChange(of: matchingStatus) { _, newStatus in
+//            if newStatus == MatchingStatusType.UNMATCHED.rawValue {
+//                Task {
+//                    chattingRoomData = nil
+//                    toMeArr = await viewModel.senderAttraction()
+//                    formMeAccount = await viewModel.receiverAttraction().first
+//                }
+//            }
+//        }
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "상대에게 마지막 인사를 남겨주세요", primaryButtonText: "확인", primaryButtonAction: {
             allowGoodbyeDismiss = true // 확인 누를 때만 닫히도록
             viewModel.showGoodByeView = true
+        })
+        .customAlert(isPresented: $showDeleteAlert, title: "상대가 대화중 탈퇴하였습니다.", message: "탈퇴한 회원과의 채팅방은 사라집니다.", primaryButtonText: "확인", primaryButtonAction: {
+            showDeleteAlert = false
         })
         .sheet(item: $selectedPartner) { partner in
             PartnerProfileView(
@@ -111,11 +126,13 @@ struct ChatListView: View {
         .sheet(isPresented: $viewModel.showGoodByeView) {
             SayGoodbyeView { score, comment in
                 await viewModel.replyGoodbye(score: score, comment: comment)
+                matchingStatus = MatchingStatusType.UNMATCHED.rawValue
             }
             .presentationDetents([.height(300)])
             .presentationCornerRadius(10)
             .presentationDragIndicator(.visible)
         }
+        
     }
     
     // 내가 다가간 사람

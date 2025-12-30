@@ -44,6 +44,8 @@ final class ChatViewModel: ObservableObject {
         connectionStatus = "연결 중..."
         Log.debugPublic("connectionStatus",connectionStatus)
         
+        loadingManager.isLoading = true
+        
         listenTask = Task {
             do {
                 await client.connect(jwt: jwt)
@@ -57,6 +59,8 @@ final class ChatViewModel: ObservableObject {
                 isConnected = true
                 connectionStatus = "연결됨"
                 
+                loadingManager.isLoading = false
+                
                 for await msg in await client.messages {
                     messages.append(msg)
                 }
@@ -64,6 +68,8 @@ final class ChatViewModel: ObservableObject {
             } catch {
                 print("❌ Connection failed: \(error)")
                 connectionStatus = "연결 실패: \(error.localizedDescription)"
+                
+                loadingManager.isLoading = false
             }
             
             isConnected = false
@@ -86,10 +92,6 @@ final class ChatViewModel: ObservableObject {
                 print("📤 client.sendMessage completed")
             } catch {
                 print("❌ Send failed: \(error)")
-                // 전송 실패 시 메시지 제거 또는 실패 표시
-                //                if let index = messages.firstIndex(where: { $0.id == chat.id }) {
-                //                    messages.remove(at: index)
-                //                }
             }
         }
     }
@@ -108,6 +110,12 @@ final class ChatViewModel: ObservableObject {
     
     @MainActor
     func fetchChattingData() async {
+        loadingManager.isLoading = true
+        
+        defer {
+            loadingManager.isLoading = false
+        }
+        
         do {
             let result = try await chatNetwork.chatting()
             switch result {
@@ -151,6 +159,7 @@ final class ChatViewModel: ObservableObject {
     //MARK: - 신고하기
     func userReport(reason: String){
         loadingManager.isLoading = true
+        
         defer {
             loadingManager.isLoading = false
         }

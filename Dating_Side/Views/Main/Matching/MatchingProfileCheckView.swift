@@ -12,7 +12,7 @@ struct MatchingProfileCheckView: View {
     @ObservedObject var viewModel = MatchingViewModel()
     @State private var matchingProfile: PartnerAccount? = nil
     @State private var showModal = false
-    @State private var bottomSheetStartHeight: CGFloat = 0.45
+    @State private var bottomSheetStartHeight: CGFloat = 0.65
     @State private var dragOffset: CGFloat = 0
     
     var body: some View {

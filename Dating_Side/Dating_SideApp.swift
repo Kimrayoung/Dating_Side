@@ -25,7 +25,7 @@ struct Dating_SideApp: App {
         }
         NidOAuth.shared.initialize()
         Task {
-            await MatchingGlobalViewModel().fetchMatchingStauts()
+            await MatchingGlobalViewModel().fetchMatchingStatus()
         }
     }
     

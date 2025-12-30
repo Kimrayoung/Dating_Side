@@ -73,9 +73,10 @@ struct MatchingAccountResponse: Codable {
 }
 
 enum MatchingStatusType: String {
-    case UNMATCHED
-    case MATCHED
-    case LEFT
-    case ATTRACTED
-    case DELETE
+    case UNMATCHED //매칭 안됨
+    case MATCHED //매칭 됨
+    case LEFT //상대가 나감
+    case ATTRACTED // 나한테 다가옴
+    case ATTRACTING //내가 다가감
+    case DELETE //상대가 탈퇴함
 }

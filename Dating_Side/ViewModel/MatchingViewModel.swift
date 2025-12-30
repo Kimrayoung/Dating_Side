@@ -72,7 +72,9 @@ extension MatchingViewModel {
     /// 매칭 요청 -> 매칭 시도(프로필 완성 뷰)
     @MainActor
     func matchingRequest() async -> PartnerAccount? {
+        
         loadingManager.isLoading = true
+        
         defer {
             loadingManager.isLoading = false
         }

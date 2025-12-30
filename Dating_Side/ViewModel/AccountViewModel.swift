@@ -69,7 +69,6 @@ final class AccountViewModel: ObservableObject {
     @Published var userNotificationList: [NotificationResponse] = []
     
     //MARK: - 공통 사용(회원 등록, 회원 수정)
-    
     func checkLocationData() -> Bool {
         return locationSelected != nil && detailLocationSelected != nil ? true : false
     }
@@ -291,7 +290,7 @@ extension AccountViewModel {
         let tempPhoneNumber2 = makeRandomNumber()
         let fcmToken = UserDefaults.standard.string(forKey: "FCMToken") ?? ""
         
-        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-\(tempPhoneNumber1)-\(tempPhoneNumber2)", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, districtRegion: locationSelected.addrName, cityRegion: detailLocationSelected.addrName, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: fcmToken)
+        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-\(tempPhoneNumber1)-\(tempPhoneNumber2)", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, districtRegion: detailLocationSelected.addrName, cityRegion: locationSelected.addrName, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: fcmToken)
         
         return signUpRequest
     }
@@ -345,7 +344,7 @@ extension AccountViewModel {
     
     /// 거주지 업데이트
     func updateLocation() async {
-        var location = makeLocation()
+        let location = makeLocation()
         let updateLocation: [String : Any] = [
             PatchUserType.activeRegion.rawValue : location
         ]
@@ -647,6 +646,6 @@ extension AccountViewModel {
         }catch{
             Log.errorPublic("알람 목록 조회 실패", error)
         }
-
+        
     }
 }

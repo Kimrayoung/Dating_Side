@@ -14,7 +14,8 @@ final class ChatListViewModel: ObservableObject {
     let attractionNetwork = AttractionNetworkManager()
     let chatNetwork = ChattingNetworkManager()
     let matchingNetwork = MatchingNetworkManager()
-    
+    let matchingGlobalNetowork = MatchingGlobalNetworkManager()
+
     @Published var timeString: String = "24:00"
     
     // 2,4,6일자 별 이미지
@@ -22,6 +23,7 @@ final class ChatListViewModel: ObservableObject {
     
     // 모든 이미지
     @Published var matchingAllImage: [UserImage]?
+    
     
     @Published var showGoodByeView: Bool = false
     
@@ -58,6 +60,34 @@ final class ChatListViewModel: ObservableObject {
 }
 
 extension ChatListViewModel {
+    
+    @MainActor
+    /// 매칭 상태 조회
+    func fetchMatchingStatus() async {
+//        loadingManager.isLoading = true
+//        
+//        defer {
+//            loadingManager.isLoading = false
+//        }
+        
+        do {
+            let result = try await matchingGlobalNetowork.fetchMatchingStatus()
+            switch result {
+            case .success(let matchStatusData):
+                Log.debugPublic("매칭상대 조회 성공",matchStatusData)
+                UserDefaults.standard.set(matchStatusData.matchingStatusType.rawValue, forKey: "matchingStatus")
+                UserDefaults.standard.set(matchStatusData.timestampDate?.toString(), forKey: "matchingDate")
+                return
+            case .failure(let error):
+                Log.errorPublic(error.localizedDescription)
+            }
+        } catch {
+            Log.errorPublic(error.localizedDescription)
+        }
+        UserDefaults.standard.set(MatchingStatusType.UNMATCHED.rawValue, forKey: "matchingStatus")
+    }
+    
+    
     @MainActor
     /// 내게 다가온 사람 조회
     func senderAttraction() async -> [AttractionPartnerData] {

@@ -31,16 +31,6 @@ class QuestionViewModel: ObservableObject {
     var isFirstQuestion: Bool {
         currentIndex == 0
     }
-    
-    //    func nextQuestion() {
-    //        guard !isLastQuestion else { return }
-    //        currentIndex += 1
-    //    }
-    //
-    //    func previousQuestion() {
-    //        guard !isFirstQuestion else { return }
-    //        currentIndex -= 1
-    //    }
 }
 
 
