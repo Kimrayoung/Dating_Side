@@ -36,10 +36,10 @@ struct ChatListView: View {
     
     var body: some View {
         VStack {
-            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue || matchingStatus == MatchingStatusType.DELETE.rawValue{
+            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue || matchingStatus == MatchingStatusType.DELETED.rawValue{
                 formme
                 tome
-            } else if matchingStatus == MatchingStatusType.MATCHED.rawValue , let chattingRoomData = chattingRoomData {
+            } else if matchingStatus == MatchingStatusType.MATCHED.rawValue, let chattingRoomData = chattingRoomData {
                 matchingSimpleProfile(chattingRoomData: chattingRoomData)
                     .padding(.vertical, 32)
                     .padding(.horizontal, 24)
@@ -64,44 +64,15 @@ struct ChatListView: View {
                 })
             }
         })
-        .task {
-            await viewModel.fetchMatchingStatus()
-    
-            if matchingStatus == MatchingStatusType.MATCHED.rawValue {
-                chattingRoomData = await viewModel.chattingRoomRequest()
-                
-                if let matchedAt = matchingTimeString.toDate() {
-                    self.matchingPassedDate = matchedAt.daysSince(matchedAt, in: .current)
-                    
-                    if self.matchingPassedDate >= 7 {
-                        await viewModel.matchingPartnerAllPhoto()
-                    } else {
-                        await viewModel.matchingPartnerPhoto()
-                    }
-                }
-                
-            } else {
-                selectedPartner = nil
-                chattingRoomData = nil
-                toMeArr = await viewModel.senderAttraction()
-                formMeAccount = await viewModel.receiverAttraction().first
-                if matchingStatus == MatchingStatusType.LEFT.rawValue {
-                    showLeaveAlert = true
-                } else if matchingStatus == MatchingStatusType.DELETE.rawValue {
-                    showDeleteAlert = true
-                }
+        .onChange(of: matchingStatus) { _, _ in
+            Task {
+                await updateStatus()
             }
         }
-        
-//        .onChange(of: matchingStatus) { _, newStatus in
-//            if newStatus == MatchingStatusType.UNMATCHED.rawValue {
-//                Task {
-//                    chattingRoomData = nil
-//                    toMeArr = await viewModel.senderAttraction()
-//                    formMeAccount = await viewModel.receiverAttraction().first
-//                }
-//            }
-//        }
+        .task {
+            await viewModel.fetchMatchingStatus()
+            await updateStatus()
+        }
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "상대에게 마지막 인사를 남겨주세요", primaryButtonText: "확인", primaryButtonAction: {
             allowGoodbyeDismiss = true // 확인 누를 때만 닫히도록
             viewModel.showGoodByeView = true
@@ -126,7 +97,6 @@ struct ChatListView: View {
         .sheet(isPresented: $viewModel.showGoodByeView) {
             SayGoodbyeView { score, comment in
                 await viewModel.replyGoodbye(score: score, comment: comment)
-                matchingStatus = MatchingStatusType.UNMATCHED.rawValue
             }
             .presentationDetents([.height(300)])
             .presentationCornerRadius(10)
@@ -255,6 +225,35 @@ struct ChatListView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+    }
+    
+    ///status에 따른 화면 전환
+    func updateStatus() async {
+        if matchingStatus == MatchingStatusType.MATCHED.rawValue {
+            chattingRoomData = await viewModel.chattingRoomRequest()
+            
+            if let matchedAt = matchingTimeString.toDate() {
+                self.matchingPassedDate = matchedAt.daysSince(matchedAt, in: .current)
+                if self.matchingPassedDate >= 7 {
+                    await viewModel.matchingPartnerAllPhoto()
+                } else {
+                    await viewModel.matchingPartnerPhoto()
+                }
+            }
+            
+        } else {
+            chattingRoomData = nil
+            selectedPartner = nil
+            
+            toMeArr = await viewModel.senderAttraction()
+            formMeAccount = await viewModel.receiverAttraction().first
+            
+            if matchingStatus == MatchingStatusType.LEFT.rawValue {
+                showLeaveAlert = true
+            } else if matchingStatus == MatchingStatusType.DELETED.rawValue {
+                showDeleteAlert = true
+            }
         }
     }
     

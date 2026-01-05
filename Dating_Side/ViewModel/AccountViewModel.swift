@@ -74,6 +74,7 @@ final class AccountViewModel: ObservableObject {
     }
     
     /// 위치 정보 만들기
+    #warning("위치 수정 대기")
     func makeLocation() -> String {
         guard let locationSelected = locationSelected, let detailLocationSelected = detailLocationSelected else { return "" }
         return locationSelected.addrName + "/" + detailLocationSelected.addrName

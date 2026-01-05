@@ -39,6 +39,8 @@ struct MatchingStatusResponse: Codable {
             return .LEFT
         case "MATCHED":
             return .MATCHED
+        case "DELETED":
+            return .DELETED
         default:
             return .UNMATCHED
         }
@@ -78,5 +80,5 @@ enum MatchingStatusType: String {
     case LEFT //상대가 나감
     case ATTRACTED // 나한테 다가옴
     case ATTRACTING //내가 다가감
-    case DELETE //상대가 탈퇴함
+    case DELETED //상대가 탈퇴함
 }

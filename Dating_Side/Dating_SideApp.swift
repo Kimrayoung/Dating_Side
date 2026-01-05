@@ -24,9 +24,9 @@ struct Dating_SideApp: App {
             KakaoSDK.initSDK(appKey:"\(kakaoAppKey)")
         }
         NidOAuth.shared.initialize()
-        Task {
-            await MatchingGlobalViewModel().fetchMatchingStatus()
-        }
+//        Task {
+//            await MatchingGlobalViewModel().fetchMatchingStatus()
+//        }
     }
     
     var body: some Scene {
