@@ -1,5 +1,5 @@
 //
-//  BottomSheet.swift
+//  ProfileCheckBottomSheet.swift
 //  Dating_Side
 //
 //  Created by 김라영 on 2025/06/15.
@@ -11,15 +11,15 @@ struct ProfileCheckBottomSheet: View {
     @Binding var showModal: Bool
     @State private var dragOffset: CGFloat = 0.0
     @Binding var currentHeightRatio: CGFloat // 시작 높이: 화면 높이의 20%
-
+    
     let minHeightRatio: CGFloat = 0.45
     let maxHeightRatio: CGFloat = 0.6
-
+    
     var body: some View {
         GeometryReader { geometry in
             let totalHeight = geometry.size.height
             let height = totalHeight * currentHeightRatio + dragOffset
-
+            
             VStack {
                 Image("upArrow")
                     .resizable()
@@ -29,7 +29,7 @@ struct ProfileCheckBottomSheet: View {
                     .multilineTextAlignment(.center)
                     .font(.pixel(20))
                     .foregroundStyle(Color.mainColor)
-
+                
                 Spacer()
             }
             .frame(width: geometry.size.width,

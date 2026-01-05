@@ -44,7 +44,7 @@ final class AccountViewModel: ObservableObject {
     @Published var isBeforePreferenceTypeComplete: Bool = false
     @Published var isAfterPreferenceTypeComplete: Bool = false
     
-//    var education = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
+    //    var education = ["고등학교", "대학교 재학 중", "대학 졸업", "석사", "박사", "기타"]
     var education: [EducationEnglish] = EducationEnglish.allCases
     @Published var isEducationButtonSelected: [Bool] = Array(repeating: false, count: 6)
     @Published var selectedEducationIndex: Int? = nil
@@ -60,19 +60,21 @@ final class AccountViewModel: ObservableObject {
     @Published var lifeStyleButtonList: [String : [Bool]] = [:]
     
     @Published var introduceText: String = ""
-        
+    
     @Published var selectedImage: UIImage?
     @Published var selectedSeconDayImage: UIImage?
     @Published var selectedForthDayImage: UIImage?
     @Published var selectedSixthDayImage: UIImage?
-        
-    //MARK: - 공통 사용(회원 등록, 회원 수정)
     
+    @Published var userNotificationList: [NotificationResponse] = []
+    
+    //MARK: - 공통 사용(회원 등록, 회원 수정)
     func checkLocationData() -> Bool {
         return locationSelected != nil && detailLocationSelected != nil ? true : false
     }
     
     /// 위치 정보 만들기
+    #warning("위치 수정 대기")
     func makeLocation() -> String {
         guard let locationSelected = locationSelected, let detailLocationSelected = detailLocationSelected else { return "" }
         return locationSelected.addrName + "/" + detailLocationSelected.addrName
@@ -278,9 +280,9 @@ extension AccountViewModel {
         let height = makeHeight()
         let selectedBefore = makeBeforePreference()
         let selectedAfter = makeAfterPreference()
-
+        
         guard let educationType = makeEducationType()?.rawValue else { return nil }
-
+        
         guard let jobType = makeJobType()?.type else { return nil }
         
         // 선택된 민감 정보 파악하기
@@ -289,7 +291,7 @@ extension AccountViewModel {
         let tempPhoneNumber2 = makeRandomNumber()
         let fcmToken = UserDefaults.standard.string(forKey: "FCMToken") ?? ""
         
-        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-\(tempPhoneNumber1)-\(tempPhoneNumber2)", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, districtRegion: locationSelected.addrName, cityRegion: detailLocationSelected.addrName, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: fcmToken)
+        let signUpRequest = SignUpRequest(socialType: socialType, socialAccessToken: socialId, phoneNumber: "010-\(tempPhoneNumber1)-\(tempPhoneNumber2)", genderType: genderSelectedIndex == 0 ? "FEMALE" : "MALE", nickName: nicknameInput, birthDate: birthDate, height: height, districtRegion: detailLocationSelected.addrName, cityRegion: locationSelected.addrName, beforePreferenceTypeList: selectedBefore, afterPreferenceTypeList: selectedAfter, educationType: educationType, educationDetail: schoolName, jobType: jobType, jobDetail: jobDetail, lifeStyle: lifeStyle, introduction: "", fcmToken: fcmToken)
         
         return signUpRequest
     }
@@ -317,7 +319,7 @@ extension AccountViewModel {
     func updateNickname() async {
         let updateNickname: [String : Any] = [
             PatchUserType.nickName.rawValue : nicknameInput,
-                                                ]
+        ]
         await patchUserAccountData(userPatchData: updateNickname)
     }
     
@@ -327,7 +329,7 @@ extension AccountViewModel {
         let updateEducation: [String : Any] = [
             PatchUserType.educationType.rawValue : educationType.rawValue,
             PatchUserType.educationDetail.rawValue : schoolName
-                                                ]
+        ]
         await patchUserAccountData(userPatchData: updateEducation)
     }
     
@@ -337,13 +339,13 @@ extension AccountViewModel {
         let udpateJobType: [String : Any] = [
             PatchUserType.jobType.rawValue : jobType.type,
             PatchUserType.jobDetail.rawValue : jobDetail
-                                            ]
+        ]
         await patchUserAccountData(userPatchData: udpateJobType)
     }
     
     /// 거주지 업데이트
     func updateLocation() async {
-        var location = makeLocation()
+        let location = makeLocation()
         let updateLocation: [String : Any] = [
             PatchUserType.activeRegion.rawValue : location
         ]
@@ -355,7 +357,7 @@ extension AccountViewModel {
         var updatePreference: [String : Any] = [:]
         let selectedBefore = makeBeforePreference()
         let selectedAfter = makeAfterPreference()
-
+        
         updatePreference = [
             PatchUserType.beforePreferenceTypeList.rawValue: selectedBefore,
             PatchUserType.afterPreferenceTypeList.rawValue: selectedAfter
@@ -451,7 +453,7 @@ extension AccountViewModel {
                     self.detailLocationSelected = data.result.first(where: { $0.addrName == selectedDetailLocation })
                 }
                 print(#fileID, #function, #line, "- self.locationOption: \(self.locationOption )")
-
+                
                 
             case .failure(let error):
                 print(#fileID, #function, #line, "- failure: \(error.localizedDescription)")
@@ -461,7 +463,7 @@ extension AccountViewModel {
             print(#fileID, #function, #line, "- error: \(error.localizedDescription)")
         }
     }
-
+    
     
     /// 러브웨이 키워드 선택 API
     func fetchPreferenceType(preferenceType: PreferenceType, preferences: [String]? = nil) async {
@@ -608,7 +610,7 @@ extension AccountViewModel {
         let boundary: String = "Boundary-\(identifier)"
         
         let patchAccountData = createUploadBody(request: userPatchData, images: userImage, boundary: boundary)
-                
+        
         do {
             let result = try await accountNetworkManger.patchUserData(requestModel: patchAccountData, boundaryString: boundary)
             
@@ -622,5 +624,29 @@ extension AccountViewModel {
         } catch {
             Log.errorPublic("유저 수정 실패", error)
         }
+    }
+    
+    @MainActor
+    func getNotificationLog() async {
+        loadingManager.isLoading = true
+        
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        Log.debugPublic("유저 알람 목록 조회")
+        do{
+            let result = try await accountNetworkManger.getNotificationLog()
+            switch result {
+            case .success(let result):
+                self.userNotificationList = result
+                print(self.userNotificationList)
+            case .failure(let error):
+                Log.errorPublic("알람 목록 조회 실패", error)
+            }
+        }catch{
+            Log.errorPublic("알람 목록 조회 실패", error)
+        }
+        
     }
 }

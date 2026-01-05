@@ -22,14 +22,15 @@ extension Date {
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter.string(from: Date())
     }
-
+    
     /// [Int] → Date
-        /// 입력: [year, month, day, hour, minute, second, nanosecond]
+    /// 입력: [year, month, day, hour, minute, second, nanosecond]
     var toIntArray: [Int] {
         let comps = Calendar.current.dateComponents(
             [.year, .month, .day, .hour, .minute, .second, .nanosecond],
             from: self
         )
+        
         return [
             comps.year ?? 0,
             comps.month ?? 0,
@@ -49,11 +50,26 @@ extension Date {
         let today = cal.startOfDay(for: Date())
         return cal.dateComponents([.day], from: start, to: today).day ?? 0
     }
-
+    
     /// N일이 지난게 맞는지 체크
     func hasPassed(days n: Int, since from: Date, in tz: TimeZone = .current) -> Bool {
         daysSince(from, in: tz) >= n
     }
+    
+    
+    var relativeString: String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.unitsStyle = .short
+        return formatter.localizedString(for: self, relativeTo: Date()).replacingOccurrences(of: " 전", with: "")
+    }
+    
+    var sectionCategory: String {
+        if Calendar.current.isDateInToday(self) { return "오늘" }
+        if self > Calendar.current.date(byAdding: .day, value: -7, to: Date())! { return "7일" }
+        return "이전"
+    }
+    
 }
 
 enum ISO8601 {

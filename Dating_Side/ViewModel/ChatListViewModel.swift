@@ -9,11 +9,24 @@ import Foundation
 
 
 final class ChatListViewModel: ObservableObject {
+    
     let loadingManager = LoadingManager.shared
     let attractionNetwork = AttractionNetworkManager()
     let chatNetwork = ChattingNetworkManager()
-    
+    let matchingNetwork = MatchingNetworkManager()
+    let matchingGlobalNetowork = MatchingGlobalNetworkManager()
+
     @Published var timeString: String = "24:00"
+    
+    // 2,4,6일자 별 이미지
+    @Published var matchingImage: UserImage?
+    
+    // 모든 이미지
+    @Published var matchingAllImage: [UserImage]?
+    
+    
+    @Published var showGoodByeView: Bool = false
+    
     var timer: Timer?
     var totalSeconds: Int = 24 * 60 * 60
     
@@ -47,6 +60,34 @@ final class ChatListViewModel: ObservableObject {
 }
 
 extension ChatListViewModel {
+    
+    @MainActor
+    /// 매칭 상태 조회
+    func fetchMatchingStatus() async {
+//        loadingManager.isLoading = true
+//        
+//        defer {
+//            loadingManager.isLoading = false
+//        }
+        
+        do {
+            let result = try await matchingGlobalNetowork.fetchMatchingStatus()
+            switch result {
+            case .success(let matchStatusData):
+                Log.debugPublic("매칭상대 조회 성공",matchStatusData)
+                UserDefaults.standard.set(matchStatusData.matchingStatusType.rawValue, forKey: "matchingStatus")
+                UserDefaults.standard.set(matchStatusData.timestampDate?.toString(), forKey: "matchingDate")
+                return
+            case .failure(let error):
+                Log.errorPublic(error.localizedDescription)
+            }
+        } catch {
+            Log.errorPublic(error.localizedDescription)
+        }
+        UserDefaults.standard.set(MatchingStatusType.UNMATCHED.rawValue, forKey: "matchingStatus")
+    }
+    
+    
     @MainActor
     /// 내게 다가온 사람 조회
     func senderAttraction() async -> [AttractionPartnerData] {
@@ -115,18 +156,20 @@ extension ChatListViewModel {
         return nil
     }
     
+#warning("매칭일자가 7일 미만일시에 하나씩 표시.")
     @MainActor
     func matchingPartnerPhoto() async {
         loadingManager.isLoading = true
+        
         defer {
             loadingManager.isLoading = false
         }
-        
         do {
             let result = try await chatNetwork.matchingPartnerPhoto()
             switch result {
             case .success(let userImage):
                 Log.debugPublic("매칭 사진", userImage)
+                self.matchingImage = userImage
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)
             }
@@ -134,4 +177,51 @@ extension ChatListViewModel {
             Log.errorPublic(error.localizedDescription)
         }
     }
+    
+#warning("매칭 일자가 7일 이상일 경우에만 표시.")
+    @MainActor
+    func matchingPartnerAllPhoto() async {
+        loadingManager.isLoading = true
+        
+        defer {
+            loadingManager.isLoading = false
+        }
+        
+        do {
+            let result = try await chatNetwork.matchingPartnerAllPhoto()
+            switch result {
+            case .success(let userimages):
+                Log.debugPublic("매칭 사진들", userimages)
+                self.matchingAllImage = userimages
+            case .failure(let error):
+                Log.errorPublic(error.localizedDescription)
+            }
+        } catch {
+            Log.errorPublic(error.localizedDescription)
+        }
+    }
+    
+    @MainActor
+    func replyGoodbye(score: Int, comment: String) async {
+        loadingManager.isLoading = true
+        
+        defer {
+            loadingManager.isLoading = false
+        }
+        let score = PartnerScore(score: score, comment: comment)
+        do {
+            let result = try await matchingNetwork.matchingCancel(score: score)
+            switch result {
+            case .success:
+                Log.debugPublic("답장 성공")
+                self.showGoodByeView = false
+                
+            case .failure(let error):
+                Log.errorPublic(error.localizedDescription)
+            }
+        } catch {
+            Log.errorPublic(error.localizedDescription)
+        }
+    }
+    
 }

@@ -91,17 +91,6 @@ struct ProfileEditView: View {
             }
         })
     }
-
-    var saveButton: some View {
-        Button(action: {
-            
-        }, label: {
-            Text("저장")
-                .font(.pixel(14))
-                .foregroundStyle(Color.mainColor)
-        })
-    }
-
 }
 
 #Preview {

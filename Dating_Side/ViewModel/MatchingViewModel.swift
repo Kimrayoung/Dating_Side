@@ -7,9 +7,9 @@
 
 import Combine
 
-
 /// 매칭 및 매칭 상대 확인
 final class MatchingViewModel: ObservableObject {
+    
     let loadingManager = LoadingManager.shared
     let attractionNetwork = AttractionNetworkManager()
     let matchingNetwork = MatchingNetworkManager()
@@ -72,7 +72,9 @@ extension MatchingViewModel {
     /// 매칭 요청 -> 매칭 시도(프로필 완성 뷰)
     @MainActor
     func matchingRequest() async -> PartnerAccount? {
+        
         loadingManager.isLoading = true
+        
         defer {
             loadingManager.isLoading = false
         }
@@ -100,8 +102,8 @@ extension MatchingViewModel {
             loadingManager.isLoading = false
         }
         
-        let score = PartnerScore(socre: score, comment: comment)
-        
+        let score = PartnerScore(score: score, comment: comment)
+                
         do {
             let result = try await matchingNetwork.matchingCancel(score: score)
             switch result {
@@ -128,7 +130,7 @@ extension MatchingViewModel {
             let result = try await matchingNetwork.matchingComplete(partner: partnerId)
             switch result {
             case .success:
-                Log.debugPublic("매칭 삭제 성공")
+                Log.debugPublic("매칭 확정 성공")
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)
             }

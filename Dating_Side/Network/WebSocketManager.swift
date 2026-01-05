@@ -19,7 +19,7 @@ private struct StompFrame {
     let command: StompCommand
     var headers: [String: String] = [:]
     var body: String = ""
-
+    
     func build() -> String {
         var lines = [command.rawValue]
         for (k, v) in headers {
@@ -29,7 +29,7 @@ private struct StompFrame {
         lines.append(body)
         return lines.joined(separator: "\n") + "\0" // 널 종결자
     }
-
+    
     static func parse(_ raw: String) -> (StompCommand, [String:String], String)? {
         // 널 종결자 제거
         let cleanRaw = raw.hasSuffix("\0") ? String(raw.dropLast()) : raw
@@ -37,11 +37,11 @@ private struct StompFrame {
         guard let split = cleanRaw.range(of: "\n\n") else { return nil }
         let headerPart = String(cleanRaw[..<split.lowerBound])
         let body = String(cleanRaw[split.upperBound...])
-
+        
         let headerLines = headerPart.components(separatedBy: "\n")
         guard let cmdStr = headerLines.first,
               let cmd = StompCommand(rawValue: cmdStr) else { return nil }
-
+        
         var headers: [String:String] = [:]
         for line in headerLines.dropFirst() {
             if let idx = line.firstIndex(of: ":") {
@@ -56,13 +56,13 @@ private struct StompFrame {
 
 actor WebSocketClient {
     enum State { case idle, connecting, connected, disconnected, failed(Error) }
-
+    
     private(set) var state: State = .idle
-
+    
     private let session: URLSession
     private let endpointURL: URL
     private var task: URLSessionWebSocketTask?
-
+    
     // STOMP 보조 상태
     private var buffer = ""
     private var subIdSeed = 0
@@ -73,15 +73,16 @@ actor WebSocketClient {
     private var isStompConnected = false
     private var roomId: String = ""
     private var stompWaiters: [CheckedContinuation<Void, Never>] = []
-
+    
     // 외부 스트림 (ChatMessage)
     private var continuation: AsyncStream<ChatMessage>.Continuation?
+    
     lazy var messages: AsyncStream<ChatMessage> = {
         AsyncStream { continuation in self.continuation = continuation }
     }()
-
+    
     private let wsDelegate = WSDelegate()
-
+    
     init(endpoint: String, jwt: String? = nil, roomId: String) {
         let config = URLSessionConfiguration.default
         config.waitsForConnectivity = true
@@ -90,7 +91,7 @@ actor WebSocketClient {
         config.allowsCellularAccess = true
         config.allowsConstrainedNetworkAccess = true
         config.allowsExpensiveNetworkAccess = true
-
+        
         var headers: [AnyHashable: Any] = [:]
         if let jwt {
             headers["Authorization"] = "Bearer \(jwt)"
@@ -98,28 +99,27 @@ actor WebSocketClient {
         headers["Origin"] = "https://donvolo.shop"
         headers["Sec-WebSocket-Protocol"] = "v12.stomp,v11.stomp,v10.stomp"
         config.httpAdditionalHeaders = headers
-
+        
         self.session = URLSession(configuration: config, delegate: wsDelegate, delegateQueue: .main)
         self.endpointURL = URL(string: endpoint)!.forcingWebSocketScheme()
         self.roomId = roomId
     }
     
     /// STOMP CONNECTED 될 때까지 suspend
-        func waitUntilStompConnected() async {
-            if isStompConnected { return }
-            await withCheckedContinuation { cont in
-                stompWaiters.append(cont)
-            }
+    func waitUntilStompConnected() async {
+        if isStompConnected { return }
+        await withCheckedContinuation { cont in
+            stompWaiters.append(cont)
         }
+    }
     
     private func resumeStompWaiters() {
-            let waiters = stompWaiters
-            stompWaiters.removeAll()
-            for w in waiters { w.resume() }
-        }
-
+        let waiters = stompWaiters
+        stompWaiters.removeAll()
+        for w in waiters { w.resume() }
+    }
+    
     // MARK: Public
-
     func connect(jwt: String? = nil, hostHeader: String = "donvolo.shop") async {
         switch state {
         case .idle, .disconnected, .failed: break
@@ -129,17 +129,17 @@ actor WebSocketClient {
         isManuallyClosed = false
         isStompConnected = false
         state = .connecting
-
+        
         let url = endpointURL
         print("🔗 Connecting to: \(url.absoluteString)")
-
+        
         let t = session.webSocketTask(
             with: url,
             protocols: ["v12.stomp", "v11.stomp", "v10.stomp", "stomp"]
         )
         task = t
         t.resume()
-
+        
         // WebSocket 연결 대기 (타임아웃 처리)
         do {
             try await withTimeout(seconds: 10) {
@@ -151,26 +151,21 @@ actor WebSocketClient {
             state = .failed(error)
             return
         }
-
+        
         // STOMP CONNECT 프레임 전송 (STOMP 명령어 대신 CONNECT 사용)
-        var headers: [String: String] = [
+        let headers: [String: String] = [
             "accept-version": "1.0,1.1,1.2",
             "host": hostHeader,
             "heart-beat": "0,0"  // 일단 하트비트 비활성화
         ]
         
-        // STOMP 연결에 JWT 포함 (선택적)
-        if let jwt = jwt {
-            headers["Authorization"] = "Bearer \(jwt)"
-        }
-
         let connectFrame = StompFrame(command: .connect, headers: headers, body: "")
         await sendRaw(connectFrame.build())
         print("📤 STOMP CONNECT sent")
-
+        
         Task { await receiveLoop() }
     }
-
+    
     func subscribe(roomId: String) async {
         guard task != nil, isStompConnected else {
             print("⚠️ Cannot subscribe: not connected")
@@ -193,7 +188,7 @@ actor WebSocketClient {
         await sendRaw(f.build())
         print("📤 SUBSCRIBE sent for room: \(roomId)")
     }
-
+    
     func sendMessage(_ message: SocketMessage) async throws {
         guard isStompConnected else {
             throw NSError(domain: "STOMP", code: -1, userInfo: [NSLocalizedDescriptionKey: "Not connected"])
@@ -204,7 +199,7 @@ actor WebSocketClient {
         encoder.dateEncodingStrategy = .iso8601
         let data = try encoder.encode(message)
         let body = String(data: data, encoding: .utf8) ?? "{}"
-
+        
         let f = StompFrame(
             command: .send,
             headers: [
@@ -217,7 +212,7 @@ actor WebSocketClient {
         await sendRaw(f.build())
         print("📤 Message sent: \(message.content)")
     }
-
+    
     func disconnect() async {
         isManuallyClosed = true
         isStompConnected = false
@@ -237,9 +232,8 @@ actor WebSocketClient {
         state = .disconnected
         continuation?.finish()
     }
-
+    
     // MARK: Internal
-
     private func sendRaw(_ text: String) async {
         guard let t = task else { return }
         do {
@@ -249,14 +243,14 @@ actor WebSocketClient {
             print("❌ Send error: \(error)")
         }
     }
-
+    
     private func receiveLoop() async {
         guard let t = task else { return }
         state = .connected
-
+        
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-
+        
         while !isManuallyClosed {
             do {
                 let msg = try await t.receive()
@@ -278,7 +272,7 @@ actor WebSocketClient {
             }
         }
     }
-
+    
     private func processBuffer(decoder: JSONDecoder) async {
         while let nullIndex = buffer.firstIndex(of: "\0") {
             let frameString = String(buffer[..<nullIndex])
@@ -290,7 +284,7 @@ actor WebSocketClient {
             }
         }
     }
-
+    
     private func handleRawFrame(_ raw: String, decoder: JSONDecoder) async {
         guard let (cmd, headers, body) = StompFrame.parse(raw) else {
             print("❌ Failed to parse STOMP frame: \(raw)")
@@ -305,6 +299,7 @@ actor WebSocketClient {
             print("✅ STOMP Connected!")
             startPing()
             resumeStompWaiters()
+            
         case .message:
             if let data = body.data(using: .utf8),
                let chat = try? decoder.decode(ChatPayload.self, from: data) {
@@ -334,9 +329,9 @@ actor WebSocketClient {
             print("📥 Unhandled STOMP command: \(cmd.rawValue)")
         }
     }
-
+    
     // MARK: Ping / Reconnect
-
+    
     private func startPing() {
         stopPing()
         // WebSocket ping을 더 자주 전송하여 연결 유지
@@ -357,19 +352,19 @@ actor WebSocketClient {
             RunLoop.main.add(pingTimer, forMode: .common)
         }
     }
-
+    
     private func stopPing() {
         pingTimer?.invalidate()
         pingTimer = nil
     }
-
+    
     private func handleError(_ error: Error) async {
         print("❌ Connection error: \(error)")
         stopPing()
         isStompConnected = false
         state = .failed(error)
         guard !isManuallyClosed else { return }
-
+        
         reconnectAttempts += 1
         let maxAttempts = 5
         if reconnectAttempts <= maxAttempts {
@@ -432,7 +427,7 @@ private struct TimeoutError: Error, LocalizedError {
 final class WSDelegate: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate {
     private var openCont: CheckedContinuation<Void, Error>?
     private var isOpened = false
-
+    
     func waitUntilOpen() async throws {
         if isOpened { return } // 이미 열린 경우
         

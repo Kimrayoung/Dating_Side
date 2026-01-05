@@ -25,15 +25,14 @@ struct ReportView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Text("신고 사유를 선택해주세요.")
-                    .font(.system(size: 16))
-                    .foregroundStyle(Color.gray)
-                Spacer()
-            }
-            .padding(.horizontal, 24)
-            .padding(.top, 16)
-            .padding(.bottom, 8)
+            
+            Text("신고 사유를 선택해주세요.")
+                .font(.rounded(15))
+                .foregroundStyle(Color.gray3)
+                .multilineTextAlignment(.center)
+                .padding(.top, 16)
+                .padding(.bottom, 22)
+                .frame(alignment: .center)
             
             reportReasonList
             
@@ -79,34 +78,35 @@ struct ReportView: View {
             selectedReason = reason
         } label: {
             Text(reason)
-                .font(.system(size: 16))
-                .fontWeight(.medium)
-                .foregroundStyle(selectedReason == reason ? Color.blue : Color.gray)
+                .font(.rounded(15))
+                .foregroundStyle(Color.black)
                 .frame(maxWidth: .infinity)
-                .frame(height: 48)
-                .background(selectedReason == reason ? Color.blue : Color.white)
+                .frame(height: 52)
+                .background(selectedReason == reason ? Color.subColor : Color.white)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(selectedReason == reason ? Color.blue : Color.gray.opacity(0.3), lineWidth: 1)
+                        .stroke(selectedReason == reason ? Color.mainColor : Color.gray0, lineWidth: 2)
                 )
         }
     }
     
     // MARK: - 텍스트 입력 영역 ('기타' 선택 시)
     var commentInputView: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("사유를 입력해주세요.")
-                .font(.system(size: 14))
-                .foregroundStyle(Color.gray)
-                .padding(.leading, 8)
+        ZStack(alignment: .topLeading) {
             
             TextEditor(text: $commentText)
-                .frame(height: 120)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                )
+                .scrollContentBackground(.hidden)
+                .frame(height: 180)
+                .padding(EdgeInsets(top: 4, leading: 5, bottom: 0, trailing: 0))
+                .background(Color(hex: "#eaeff6"))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            
+            Text("사유를 입력해주세요.")
+                .font(.rounded(15))
+                .foregroundStyle(Color.gray01)
+                .padding(EdgeInsets(top: 13, leading: 13, bottom: 0, trailing: 0))
+                .opacity(commentText.isEmpty ? 1 : 0)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -116,9 +116,10 @@ struct ReportView: View {
         Button(action: {
             // TODO: API 호출 로직 구현 (신고 사유와 코멘트 전송)
             print("신고 사유: \(selectedReason ?? "선택 안됨"), 코멘트: \(commentText)")
+            vm.userReport(reason: selectedReason ?? commentText)
         }) {
             Text("신고하기")
-                .font(.system(size: 18))
+                .font(.rounded(16))
                 .fontWeight(.bold)
                 .foregroundStyle(Color.white)
                 .frame(maxWidth: 250)
@@ -126,7 +127,7 @@ struct ReportView: View {
                 .background(Color.red)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         }
-        .disabled(selectedReason == nil) // 사유를 선택하지 않으면 비활성화
+        .disabled(selectedReason == nil)
         .padding(.horizontal, 24)
     }
 }

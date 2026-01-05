@@ -51,6 +51,9 @@ struct AccountNetworkManager {
     func deleteAccount() async throws -> Result<VoidResponse, Error> {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.accountDelete, httpCodes: .success)
     }
+    func getNotificationLog() async throws -> Result<[NotificationResponse], Error> {
+        return await networkManager.callWithAsync(endpoint: AccountAPIManager.notificationLog, httpCodes: .success)
+    }
 }
 
 enum AccountAPIManager {
@@ -64,6 +67,7 @@ enum AccountAPIManager {
     case login(userSocialId: LoginRequest)
     case logout
     case accountDelete
+    case notificationLog
 }
 
 extension AccountAPIManager: APIManager {
@@ -85,12 +89,14 @@ extension AccountAPIManager: APIManager {
             return "account/lifestyle-type"
         case .getPreferenceTypes(let preferenceType):
             return "account/preference-type?preferenceType=\(preferenceType)"
+        case .notificationLog:
+            return "account/notification-log"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .getAddressData, .getJopTypes, .getLifeStyleDatas, .getPreferenceTypes: return .get
+        case .getAddressData, .getJopTypes, .getLifeStyleDatas, .getPreferenceTypes, .notificationLog: return .get
         case .postUserProfileData, .login, .logout: return .post
         case .patchUserProfileData: return .patch
         case .accountDelete: return .delete
@@ -112,7 +118,7 @@ extension AccountAPIManager: APIManager {
                 "Content-Type" : "multipart/form-data; boundary=\(boundaryString)",
                 "Authorization": "Bearer \(accessToken)"
             ]
-        case .logout, .accountDelete:
+        case .logout, .accountDelete, .notificationLog:
             return [
                 "Authorization": "Bearer \(accessToken)",
                 "Content-Type" : "application/json",

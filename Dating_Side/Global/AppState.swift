@@ -142,11 +142,10 @@ class AppState: ObservableObject {
         onboardingPath = NavigationPath()
         let accessToken = KeychainManager.shared.getAccessToken()
         Log.debugPrivate("accessToken checking", accessToken)
-        await MatchingGlobalViewModel().fetchMatchingStauts()
+        await MatchingGlobalViewModel().fetchMatchingStatus()
         if UserDefaults.standard.bool(forKey: "NeedTokenChange") {
             await AccountViewModel().updateFcmToken()
         }
-//        await ProfileViewModel().fetchUserAccountData()
         
     }
     

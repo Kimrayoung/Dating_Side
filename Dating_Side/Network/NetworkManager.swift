@@ -32,17 +32,19 @@ final class NetworkManager: NetworkProtocol {
     ///   - httpCodes: 반드시 특정 httpCode가 들어와야 할 경우에 작성(ex, 203만 들어와야 할 경우)
     /// - Returns: 필요한 데이터의 형태로 나감
     func callWithAsync<Value>(endpoint: APIManager, httpCodes: HTTPCodes = .success) async -> Result<Value, Error> where Value: Decodable {
-        Log.debugPublic("accessToken checking", endpoint.headers?["Authorization"])
+        Log.debugPublic("accessToken checking", endpoint.headers?["Authorization"] ?? "")
+        
         do {
             let request = try endpoint.urlRequest(baseURL: BASE_URL)
-            let (data, response) = try await session.data(for: request)
             
+            let (data, response) = try await session.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse,
                   let code = httpResponse.statusCode as Int? else {
                 throw APIError.unexpectedResponse(nil)
             }
             
             Log.debugPublic("http code 결과", code)
+            
             // ✅ HTTP 상태코드 체크
             guard httpCodes.contains(code) else {
                 if code == HTTPCodes.loginExpired { // 로그인 만료
