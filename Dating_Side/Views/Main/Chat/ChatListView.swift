@@ -14,28 +14,32 @@ struct ChatListView: View {
     @StateObject var viewModel = ChatListViewModel()
     
     let columns = [
-            GridItem(.flexible()),
-            GridItem(.flexible())
-        ]
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     
     @AppStorage("matchingStatus") private var matchingStatus: String = MatchingStatusType.UNMATCHED.rawValue
     @AppStorage("matchingDate") private var matchingTimeString: String = ""
     @AppStorage("username") private var username: String = ""
+    
     @State var toMeArr: [AttractionPartnerData] = []
     @State var selectedPartner: PartnerAccount? = nil
     @State var formMeAccount: AttractionPartnerData? = nil
     @State var chattingRoomData: ChattingRoomResponse? = nil
     @State private var showProfile: Bool = false
-    @State private var showGoodByeView: Bool = false
     @State private var showLeaveAlert: Bool = false
+    @State private var showDeleteAlert: Bool = false
     @State private var allowGoodbyeDismiss: Bool = false
+    @State private var messageFromLeavePartner: Bool = true
+    @State private var matchingPassedDate: Int = 1
+    
     
     var body: some View {
         VStack {
-            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue {
+            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue || matchingStatus == MatchingStatusType.DELETED.rawValue{
                 formme
                 tome
-            } else if matchingStatus == MatchingStatusType.MATCHED.rawValue , let chattingRoomData = chattingRoomData {
+            } else if matchingStatus == MatchingStatusType.MATCHED.rawValue, let chattingRoomData = chattingRoomData {
                 matchingSimpleProfile(chattingRoomData: chattingRoomData)
                     .padding(.vertical, 32)
                     .padding(.horizontal, 24)
@@ -51,34 +55,30 @@ struct ChatListView: View {
                 Text("채팅")
                     .font(.pixel(20))
             }
+            
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    
+                    appState.chatPath.append(Chating.noticeView)
                 }, label: {
                     Image("bell")
                 })
             }
         })
-        .task {
-            selectedPartner = nil
-            toMeArr = await viewModel.senderAttraction()
-            formMeAccount = await viewModel.receiverAttraction().first
-            print(#fileID, #function, #line, "- matchingStatus: \(matchingStatus)")
-            // 매칭된 사람이 있음
-            if matchingStatus == MatchingStatusType.MATCHED.rawValue {
-                chattingRoomData = await viewModel.chattingRoomRequest()
-                guard let matchedAt = matchingTimeString.toDate() else { return }
-                let passedDate = matchedAt.daysSince(matchedAt, in: .current)
-                let checkpassedDate = matchedAt.hasPassed(days: 2, since: Date())
-                Log.debugPublic("몇일이나 지났는지 확인", matchedAt, checkpassedDate, passedDate, matchingTimeString)
-                
-            } else if matchingStatus == MatchingStatusType.LEFT.rawValue { // 매칭된 사람이 떠남
-                showLeaveAlert = true
+        .onChange(of: matchingStatus) { _, _ in
+            Task {
+                await updateStatus()
             }
+        }
+        .task {
+            await viewModel.fetchMatchingStatus()
+            await updateStatus()
         }
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "상대에게 마지막 인사를 남겨주세요", primaryButtonText: "확인", primaryButtonAction: {
             allowGoodbyeDismiss = true // 확인 누를 때만 닫히도록
-            showGoodByeView = true
+            viewModel.showGoodByeView = true
+        })
+        .customAlert(isPresented: $showDeleteAlert, title: "상대가 대화중 탈퇴하였습니다.", message: "탈퇴한 회원과의 채팅방은 사라집니다.", primaryButtonText: "확인", primaryButtonAction: {
+            showDeleteAlert = false
         })
         .sheet(item: $selectedPartner) { partner in
             PartnerProfileView(
@@ -94,12 +94,15 @@ struct ChatListView: View {
                 allowGoodbyeDismiss = false
             }
         }
-        .sheet(isPresented: $showGoodByeView) {
-            SayGoodbyeView()
-                .presentationDetents([.height(200)])
-                .presentationCornerRadius(10)
-                .presentationDragIndicator(.visible)
+        .sheet(isPresented: $viewModel.showGoodByeView) {
+            SayGoodbyeView { score, comment in
+                await viewModel.replyGoodbye(score: score, comment: comment)
+            }
+            .presentationDetents([.height(300)])
+            .presentationCornerRadius(10)
+            .presentationDragIndicator(.visible)
         }
+        
     }
     
     // 내가 다가간 사람
@@ -225,69 +228,157 @@ struct ChatListView: View {
         }
     }
     
+    ///status에 따른 화면 전환
+    func updateStatus() async {
+        if matchingStatus == MatchingStatusType.MATCHED.rawValue {
+            chattingRoomData = await viewModel.chattingRoomRequest()
+            
+            if let matchedAt = matchingTimeString.toDate() {
+                self.matchingPassedDate = matchedAt.daysSince(matchedAt, in: .current)
+                if self.matchingPassedDate >= 7 {
+                    await viewModel.matchingPartnerAllPhoto()
+                } else {
+                    await viewModel.matchingPartnerPhoto()
+                }
+            }
+            
+        } else {
+            chattingRoomData = nil
+            selectedPartner = nil
+            
+            toMeArr = await viewModel.senderAttraction()
+            formMeAccount = await viewModel.receiverAttraction().first
+            
+            if matchingStatus == MatchingStatusType.LEFT.rawValue {
+                showLeaveAlert = true
+            } else if matchingStatus == MatchingStatusType.DELETED.rawValue {
+                showDeleteAlert = true
+            }
+        }
+    }
+    
     var matchingSuccessImageView: some View {
         VStack {
-            Text("\(chattingRoomData?.partnerNickName ?? "")님과 매칭 된 지 1일차")
+            Text("\(chattingRoomData?.partnerNickName ?? "")님과 매칭 된 지 \(matchingPassedDate)일차")
                 .font(.pixel(20))
                 .foregroundStyle(Color.blackColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 24)
+            
             Text("상대의 의미있는 순간들 입니다:) 깊은 대화에 도움이 될거에요.")
                 .font(.pixel(12))
                 .foregroundStyle(Color.gray3)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.leading, .bottom], 24)
-            ZStack {
-                sixthDayImage
-                forthDayImage
-                secondDayImage
-                firstDayImage
-            }
-        }
-    }
-    
-    var firstDayImage: some View {
-        ZStack {
-            VStack {
-                Spacer()
-                Text("2일차 부터\n상대의 사진이 보여요")
-                    .font(.pixel(16))
-                    .foregroundStyle(Color.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.trailing, 70)
-                Spacer()
-            }
-            Image("matchingAdditioanlFirstImage")
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 9.57)
-                .fill(Color.mainColor)
-        )
-        .frame(width: 240, height: 360)
             
+            ///7일이 되어 모든 사진이 보일때
+            if matchingPassedDate >= 7 {
+                if let images = viewModel.matchingAllImage, !images.isEmpty {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16.5) {
+                            ForEach(0..<images.count, id: \.self){ index in
+                                let images = images[index]
+                                
+                                PartnerImageView(
+                                    imageUrl: images.profileImageURL,
+                                    locked: false,
+                                    filledColor: Color.clear
+                                )
+                                
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 20)
+                    }
+                }
+                ///7일이 되기 전까지 1장씩 사진이 보일 때
+            }else{
+                ZStack(alignment: .leading) {
+                    if matchingPassedDate < 7 {
+                        PartnerImageView(
+                            imageUrl: matchingPassedDate >= 6 ? viewModel.matchingImage?.profileImageURL : nil,
+                            locked: false,
+                            filledColor: .subColor2
+                        )
+                        .padding(.leading, matchingPassedDate == 1 ? 72 : (matchingPassedDate >= 6 ? 0 : (matchingPassedDate >= 4 ? 24 : 48)))
+                        .zIndex(0)
+                    }
+                    
+                    if matchingPassedDate < 6 {
+                        PartnerImageView(
+                            imageUrl: matchingPassedDate >= 4 ? viewModel.matchingImage?.profileImageURL : nil,
+                            locked: false,
+                            filledColor: .subColor1
+                        )
+                        .padding(.leading, matchingPassedDate == 1 ? 48 : (matchingPassedDate >= 4 ? 0 : 24))
+                        .zIndex(1)
+                    }
+                    
+                    if matchingPassedDate < 4 {
+                        PartnerImageView(
+                            imageUrl: matchingPassedDate >= 2 ? viewModel.matchingImage?.profileImageURL : nil,
+                            locked: false,
+                            filledColor: .subColor
+                        )
+                        .padding(.leading, matchingPassedDate == 1 ? 24 : 0)
+                        .zIndex(2)
+                    }
+                    
+                    if matchingPassedDate <= 1 {
+                        PartnerImageView(
+                            imageUrl: nil,
+                            locked: true,
+                            filledColor: .mainColor
+                        )
+                        .padding(.leading, 0)
+                        .zIndex(3)
+                    }
+                }
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .center)
+            }
+        }
     }
+}
+
+struct PartnerImageView: View {
+    let imageUrl: String?
+    let locked: Bool
+    let filledColor: Color?
     
-    var secondDayImage: some View {
-        RoundedRectangle(cornerRadius: 9.57)
-            .fill(Color.subColor)
-            .frame(width: 240, height: 360)
-            .padding(.leading, 16)
+    var body: some View {
+        ZStack {
+            if let color = filledColor {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(color)
+            }
+            
+            if locked {
+                VStack {
+                    Spacer()
+                    Text("2일차 부터\n상대의 사진이 보여요")
+                        .font(.pixel(16))
+                        .foregroundStyle(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.trailing, 70)
+                    Spacer()
+                }
+                Image("matchingAdditioanlFirstImage")
+            } else {
+                if let urlString = imageUrl, let url = URL(string: urlString) {
+                    KFImage(url)
+                        .resizable()
+                        .placeholder {
+                            Image("checkerImage")
+                        }
+                        .aspectRatio(contentMode: .fill)
+                        .clipped()
+                }
+            }
+        }
+        .frame(width: 240, height: 360)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
-    
-    var forthDayImage: some View {
-        RoundedRectangle(cornerRadius: 9.57)
-            .fill(Color.subColor1)
-            .frame(width: 240, height: 360)
-            .padding(.leading, 32)
-    }
-    
-    var sixthDayImage: some View {
-        RoundedRectangle(cornerRadius: 9.57)
-            .fill(Color.subColor2)
-            .frame(width: 240, height: 360)
-            .padding(.leading, 48)
-    }
-    
 }
 
 #Preview {

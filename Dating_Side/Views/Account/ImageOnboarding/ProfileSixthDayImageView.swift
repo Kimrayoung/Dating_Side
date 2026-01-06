@@ -11,7 +11,7 @@ import PhotosUI
 struct ProfileSixthImageView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: AccountViewModel
-
+    
     @State var sixthDayImageComplete: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
     @State var isImagePickerPresented: Bool = false

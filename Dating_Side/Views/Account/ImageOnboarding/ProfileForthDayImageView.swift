@@ -91,8 +91,7 @@ struct ProfileForthImageView: View {
                             .frame(width: 240, height: 360)
                             .clipShape(RoundedRectangle(cornerRadius: 9.57))
                     } else {
-                        RoundedRectangle(cornerRadius: 9.57)
-                            .fill(Color.subColor)
+                        Image("checkerImage")
                             .frame(width: 240, height: 360)
                     }
                 }

@@ -31,8 +31,10 @@ struct AnswerCompleteMainView: View {
                 .multilineTextAlignment(.center)
                 .font(.pixel(20))
                 .padding(.top, 50)
+                .foregroundStyle(Color.white)
             Text("전체 카드는 마이페이지에서 확인 하세요")
                 .font(.pixel(12))
+                .foregroundStyle(Color.white)
             ScrollView {
                 VStack {
                     Text("[\(viewModel.category)]")
@@ -40,7 +42,6 @@ struct AnswerCompleteMainView: View {
                         .padding(.bottom, 16)
                     Text(viewModel.todayQuestionAnswer)
                         .font(.pixel(16))
-                        
                 }
             }
             .frame(height: 330)
@@ -49,14 +50,14 @@ struct AnswerCompleteMainView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .background(
                 LinearGradient(
-                        gradient: Gradient(stops: [
-                            .init(color: Color(hex: "#FDFDFF").opacity(0.1), location: 0.0),   // 0%
-                            .init(color: Color(hex: "#FFFFFF").opacity(0.2), location: 0.51),  // 51%
-                            .init(color: Color(hex: "#FFFFFF").opacity(0.6), location: 1.0)    // 100%
-                        ]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
+                    gradient: Gradient(stops: [
+                        .init(color: Color(hex: "#FDFDFF").opacity(0.1), location: 0.0),   // 0%
+                        .init(color: Color(hex: "#FFFFFF").opacity(0.2), location: 0.51),  // 51%
+                        .init(color: Color(hex: "#FFFFFF").opacity(0.6), location: 1.0)    // 100%
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
             )
             .overlay( // 그라데이션 보더
                 RoundedRectangle(cornerRadius: 8)
@@ -87,7 +88,6 @@ struct AnswerCompleteMainView: View {
         .customToastPopup(isPresented: $showToastPopup, title: "오늘은 이미 질문을 작성했어요", message: "")
         .sheet(isPresented: $showQuestionModal, content: {
             SendQuestionModalSheet(viewModel: viewModel, showQuestionModal: $showQuestionModal, selectCategory: $selectCategory, questionContent: $questionContent, sendQuestion: $sendQuestion)
-//                .presentationDetents([.fraction(0.99)])
                 .presentationDetents([.medium])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
@@ -133,16 +133,21 @@ struct AnswerCompleteMainView: View {
     var confirmPartner: some View {
         Button {
             if matchingStatus != .MATCHED {
-                
-            } else {
                 appState.matchingPath.append(Matching.matchingProfileCheckView)
             }
             
         } label: {
-            Text("매칭 상대 확인하기")
-                .font(.pixel(16))
-                .foregroundStyle(Color.white)
-                .frame(maxWidth: .infinity)
+            if matchingStatus != .MATCHED {
+                Text("매칭 상대 확인하기")
+                    .font(.pixel(16))
+                    .foregroundStyle(Color.white)
+                    .frame(maxWidth: .infinity)
+            }else{
+                Text("전체카드는 마이페이지에서 확인할 수 있습니다.")
+                    .font(.pixel(16))
+                    .foregroundStyle(Color.white)
+                    .frame(maxWidth: .infinity)
+            }
         }
         .frame(height: 48)
         .background(Color.mainColor)

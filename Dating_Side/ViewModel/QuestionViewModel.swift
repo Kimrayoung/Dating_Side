@@ -31,16 +31,6 @@ class QuestionViewModel: ObservableObject {
     var isFirstQuestion: Bool {
         currentIndex == 0
     }
-    
-    func nextQuestion() {
-        guard !isLastQuestion else { return }
-        currentIndex += 1
-    }
-    
-    func previousQuestion() {
-        guard !isFirstQuestion else { return }
-        currentIndex -= 1
-    }
 }
 
 
@@ -73,11 +63,14 @@ extension QuestionViewModel {
     func postTodayQuetionAnswers() async -> String {
         let answerList = self.answers.map { $0.value }
         let todayQuestionAnswers = TodayQuestionAnswer(answerList: answerList)
+        
         loadingManager.isLoading = true
         defer {
             self.loadingManager.isLoading = false
         }
+        
         Log.debugPublic("today question checking answer: \(answerList)")
+        
         do {
             let result = try await questionNetworkmanager.postTodayQuestionAnswer(answer: todayQuestionAnswers)
             switch result {
@@ -119,6 +112,7 @@ extension QuestionViewModel {
     /// 추가 매칭을 위한 오늘 질문 보내기를 했는지
     func alreadySendTodayQuestion() async -> Bool {
         loadingManager.isLoading = true
+        
         defer {
             self.loadingManager.isLoading = false
         }
@@ -160,12 +154,13 @@ extension QuestionViewModel {
                 userAnswerList.profileList.forEach { profile in
                     answerList[profile.categoryType] = profile.profileList
                 }
-                Log.debugPublic("오늘 질문들에 답변했는지 : ", userAnswerList)
+                
                 for category in answerList {
                     for item in category.value {
                         if item.dateString == today {
                             self.category = category.key.korean
                             todayQuestionAnswer = item.content
+                            Log.debugPublic("오늘 질문들에 답변했는지 : ", todayQuestionAnswer)
                             return true
                         }
                     }

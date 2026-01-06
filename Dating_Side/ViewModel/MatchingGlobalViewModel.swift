@@ -13,7 +13,7 @@ class MatchingGlobalViewModel {
     
     @MainActor
     /// 매칭 상태 조회
-    func fetchMatchingStauts() async {
+    func fetchMatchingStatus() async {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false

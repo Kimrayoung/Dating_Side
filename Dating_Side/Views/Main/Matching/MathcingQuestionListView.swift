@@ -31,6 +31,7 @@ struct  MatchingQuestionListView: View {
                 .foregroundStyle(Color.white)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 48)
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 14, content: {
                     ForEach(viewModel.questionList, id: \.self) { question in
@@ -41,6 +42,7 @@ struct  MatchingQuestionListView: View {
             .padding(.leading, 24)
             .padding(.bottom, 56)
             answerQuestion
+            
         }
         .task {
             await viewModel.fetchTodayQuestions()

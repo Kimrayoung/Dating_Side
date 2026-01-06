@@ -1,5 +1,5 @@
 //
-//  secondMathcingView.swift
+//  SecondMathcingView.swift
 //  Dating_Side
 //
 //  Created by 김라영 on 2025/06/15.

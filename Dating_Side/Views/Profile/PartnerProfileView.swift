@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PartnerProfileView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var matchingViewModel: MatchingViewModel = MatchingViewModel()
     @State private var showAlert: Bool = false
     @State private var valueList: [String : [Answer]] = [:]
@@ -77,7 +78,6 @@ struct PartnerProfileView: View {
                 }
             }
         }
-        
     }
     
     var skipButton: some View {
@@ -97,13 +97,16 @@ struct PartnerProfileView: View {
     var okButton: some View {
         Button(action: {
             Task {
-                if needMathcingRequest == .chattingRequestMatch { // 내게 다가온 사람이랑 매칭
+                if needMathcingRequest == .chattingRequestMatch { // 내게 다가온 사람 수락
                     guard let partnerId = matchingPartnerAccount?.id else { return }
                     await matchingViewModel.matchingComplete(partnerId: partnerId)
-                } else if needMathcingRequest == .matching { // 내가 다가가기(즉, 매칭 요청)
+                    profileShow = false
+                    try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5초
+                    dismiss()
+                } else if needMathcingRequest == .matching { // 내가 다가가기 (좋아요 보내기)
                     let result = await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
-                    if result {
-                        
+                    if result { //다가가기 성공
+                        dismiss()
                     }
                 }
             }

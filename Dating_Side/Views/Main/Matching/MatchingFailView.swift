@@ -87,12 +87,6 @@ struct MatchingFailView: View {
         .background(Color.mainColor)
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
-    
-    
-    
-    
-    
-    
 }
 
 #Preview {
