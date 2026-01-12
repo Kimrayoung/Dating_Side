@@ -8,26 +8,23 @@ import SwiftUI
 
 struct MatchingRootView: View {
     @StateObject private var questionViewModel = QuestionViewModel()
-    @State private var isLoading = true
-    @State private var alreadyAnswer: Bool? = nil
-
+    @State private var isLoading: Bool = false
     var body: some View {
         ZStack {
             Image("matchingViewBg")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
-
+            
             if isLoading {
                 ProgressView()
-            } else if let alreadyAnswer {
+            } else if let alreadyAnswer = questionViewModel.alreadyAnswer {
                 if !alreadyAnswer {
                     MatchingQuestionListView()
                 } else {
                     AnswerCompleteMainView()
                 }
             } else {
-                // 네트워크 실패 등 예외 처리 (선택)
                 Text("불러오기에 실패했어요. 다시 시도해주세요.")
             }
         }
@@ -35,22 +32,22 @@ struct MatchingRootView: View {
             isLoading = true
             let result = await questionViewModel.checkingTodayQuestionAnswer()
             await MainActor.run {
-                alreadyAnswer = result
+                questionViewModel.alreadyAnswer = result
                 isLoading = false
             }
         }
         .environmentObject(questionViewModel)
         .navigationDestination(for: Matching.self) { step in
             switch step {
-            ///오늘의 질문 리스트 확인
+                ///오늘의 질문 리스트 확인
             case .questionList:
                 MatchingQuestionListView()
                     .environmentObject(questionViewModel)
-            /// 답변하고 매칭받기
+                /// 답변하고 매칭받기
             case .questionAnswer:
                 MatchingAnswerView()
                     .environmentObject(questionViewModel)
-            ///질문 보내기 완료
+                ///질문 보내기 완료
             case .questionComplete:
                 MatchingAnswerCompleteView()
                     .environmentObject(questionViewModel)

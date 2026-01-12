@@ -10,13 +10,16 @@ import Foundation
 
 
 class QuestionViewModel: ObservableObject {
+    @Published var alreadyAnswer: Bool? = nil
+    
     @Published var category: String = ""
     /// 이미 오늘의 질문 리스트에 답변을 전부 했을 경우
-    @Published var questionComplete: Bool = false
+    @Published var questionComplete: Bool = false 
     @Published var todayQuestionAnswer: String = ""
     @Published var questionList: [Question] = []
     @Published var answers: [Int: String] = [:] // [question.id: 답변]
     @Published var currentIndex: Int = 0        // 현재 질문 인덱스
+    
     let loadingManager = LoadingManager.shared
     var questionNetworkmanager = QuestionNetworkManager()
     
@@ -135,7 +138,6 @@ extension QuestionViewModel {
     @MainActor
     /// 오늘의 질문들에 답변했는지(기본으로 오는 오늘의 질문에)
     func checkingTodayQuestionAnswer() async -> Bool {
-        Log.debugPublic("오늘 질문들에 답변했는지 : ")
         let profileNetworkManager = ProfileNetworkManager()
         
         loadingManager.isLoading = true

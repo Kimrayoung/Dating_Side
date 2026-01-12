@@ -18,6 +18,7 @@ struct AnswerCompleteMainView: View {
     @State private var questionContent: String = ""
     @State private var sendQuestion: Bool = false
     @State private var showToastPopup: Bool = false
+    
     @AppStorage("matchingStatus") private var matchingStatusRaw: String = MatchingStatusType.UNMATCHED.rawValue
     
     private var matchingStatus: MatchingStatusType {
@@ -77,6 +78,7 @@ struct AnswerCompleteMainView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .padding(.horizontal, 49)
             .padding(.top, 51)
+            
             if matchingStatus != .MATCHED {
                 sendQuestionBtn
                     .padding(.top, 43)
@@ -88,6 +90,7 @@ struct AnswerCompleteMainView: View {
         .customToastPopup(isPresented: $showToastPopup, title: "오늘은 이미 질문을 작성했어요", message: "")
         .sheet(isPresented: $showQuestionModal, content: {
             SendQuestionModalSheet(viewModel: viewModel, showQuestionModal: $showQuestionModal, selectCategory: $selectCategory, questionContent: $questionContent, sendQuestion: $sendQuestion)
+            //                .presentationDetents([.fraction(0.99)])
                 .presentationDetents([.medium])
                 .presentationCornerRadius(10)
                 .presentationDragIndicator(.visible)
@@ -135,15 +138,9 @@ struct AnswerCompleteMainView: View {
             if matchingStatus != .MATCHED {
                 appState.matchingPath.append(Matching.matchingProfileCheckView)
             }
-            
         } label: {
             if matchingStatus != .MATCHED {
                 Text("매칭 상대 확인하기")
-                    .font(.pixel(16))
-                    .foregroundStyle(Color.white)
-                    .frame(maxWidth: .infinity)
-            }else{
-                Text("전체카드는 마이페이지에서 확인할 수 있습니다.")
                     .font(.pixel(16))
                     .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
@@ -155,6 +152,7 @@ struct AnswerCompleteMainView: View {
         .padding(.horizontal, 25.5)
     }
 }
+
 
 #Preview {
     AnswerCompleteMainView()
