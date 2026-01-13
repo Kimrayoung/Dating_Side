@@ -116,7 +116,6 @@ struct MatchingAnswerView: View {
         .padding(.horizontal, 24)
     }
     
-#warning("스택이 모두 정리 됐는지 확인이 필요할 듯")
     var nextAnswerButton: some View {
         Button {
             if answer == "" {
