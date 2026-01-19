@@ -10,8 +10,6 @@ import Foundation
 
 
 class QuestionViewModel: ObservableObject {
-    @Published var alreadyAnswer: Bool? = nil
-    
     @Published var category: String = ""
     /// 이미 오늘의 질문 리스트에 답변을 전부 했을 경우
     @Published var questionComplete: Bool = false
@@ -138,22 +136,22 @@ extension QuestionViewModel {
     @MainActor
     /// 오늘의 질문들에 답변했는지(기본으로 오는 오늘의 질문에)
     func checkingTodayQuestionAnswer() async -> Bool {
-        loadingManager.isLoading = true
+        Log.debugPublic("오늘 질문들에 답변했는지 : ")
+        let profileNetworkManager = ProfileNetworkManager()
         
+        loadingManager.isLoading = true
         defer {
             self.loadingManager.isLoading = false
         }
-        
-        let profileNetworkManager = ProfileNetworkManager()
         
         do {
             let result = try await profileNetworkManager.getUserAnswerList()
             
             switch result {
             case .success(let userAnswerList):
+                
                 let today = Date().todayString
                 var answerList: [UserAnswerCategory : [Answer]] = [:]
-                
                 userAnswerList.profileList.forEach { profile in
                     answerList[profile.categoryType] = profile.profileList
                 }
@@ -162,25 +160,20 @@ extension QuestionViewModel {
                     for item in category.value {
                         if item.dateString == today {
                             self.category = category.key.korean
-                            self.todayQuestionAnswer = item.content
-                            
+                            todayQuestionAnswer = item.content
                             Log.debugPublic("오늘 질문들에 답변했는지 : ", todayQuestionAnswer)
-                            
-                            self.alreadyAnswer = true
                             return true
                         }
                     }
                 }
                 
-                self.alreadyAnswer = false
-                
+                return false
             case .failure(let error):
                 Log.errorPublic("오늘 질문들에 답변했는지 ", error.localizedDescription)
-                self.alreadyAnswer = false // 에러 시 기본값 처리 (필요에 따라 nil 유지)
+                return false
             }
         } catch {
             Log.errorPublic("유저 가치관 정보 가져오기 오류", error.localizedDescription)
-            self.alreadyAnswer = false
         }
         
         return false

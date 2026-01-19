@@ -124,10 +124,10 @@ struct MatchingAnswerView: View {
             viewModel.answers[viewModel.currentIndex] = answer
             
             if viewModel.isLastQuestion {
-
-                Task {
-                    await viewModel.postTodayQuetionAnswers()
-                }
+#warning("오늘의 카드 받기")
+//                Task {
+//                    await viewModel.postTodayQuetionAnswers()
+//                }
                 
                 var newPath = NavigationPath()
                 
@@ -149,7 +149,6 @@ struct MatchingAnswerView: View {
             ), height: 42, text: "다음 답변", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
         }
         .padding(.horizontal, 24)
-        
     }
 }
 

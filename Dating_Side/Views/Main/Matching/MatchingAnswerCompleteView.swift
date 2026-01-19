@@ -21,14 +21,12 @@ struct MatchingAnswerCompleteView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // 배경 이미지
                 Image("matchingViewBg")
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // 상단 텍스트
                     VStack(spacing: 6) {
                         Text("당신의 답장을 토대로\n프로필이 완성 되었어요")
                             .font(.pixel(20))

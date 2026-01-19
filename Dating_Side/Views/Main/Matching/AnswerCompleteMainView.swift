@@ -78,7 +78,6 @@ struct AnswerCompleteMainView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .padding(.horizontal, 49)
             .padding(.top, 51)
-            
             if matchingStatus != .MATCHED {
                 sendQuestionBtn
                     .padding(.top, 43)
@@ -132,12 +131,32 @@ struct AnswerCompleteMainView: View {
         .padding(.horizontal, 25.5)
     }
     
+    //    /// 매칭상대 확인하기
+    //    var confirmPartner: some View {
+    //        Button {
+    //            if matchingStatus != .MATCHED {
+    //
+    //            } else {
+    //                appState.matchingPath.append(Matching.matchingProfileCheckView)
+    //            }
+    //        } label: {
+    //            Text("매칭 상대 확인하기")
+    //                .font(.pixel(16))
+    //                .foregroundStyle(Color.white)
+    //                .frame(maxWidth: .infinity)
+    //        }
+    //        .frame(height: 48)
+    //        .background(Color.mainColor)
+    //        .clipShape(RoundedRectangle(cornerRadius: 8))
+    //        .padding(.horizontal, 25.5)
+    //    }
     /// 매칭상대 확인하기
     var confirmPartner: some View {
         Button {
             if matchingStatus != .MATCHED {
                 appState.matchingPath.append(Matching.matchingProfileCheckView)
             }
+            
         } label: {
             if matchingStatus != .MATCHED {
                 Text("매칭 상대 확인하기")
@@ -152,7 +171,6 @@ struct AnswerCompleteMainView: View {
         .padding(.horizontal, 25.5)
     }
 }
-
 
 #Preview {
     AnswerCompleteMainView()

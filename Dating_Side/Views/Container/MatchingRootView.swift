@@ -8,6 +8,9 @@ import SwiftUI
 
 struct MatchingRootView: View {
     @StateObject private var questionViewModel = QuestionViewModel()
+    @State private var alreadyAnswer: Bool? = nil
+    @State private var isLoading = true
+    
     var body: some View {
         ZStack {
             Image("matchingViewBg")
@@ -15,7 +18,9 @@ struct MatchingRootView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
             
-            if let alreadyAnswer = questionViewModel.alreadyAnswer {
+            if isLoading {
+                ProgressView()
+            } else if let alreadyAnswer {
                 if !alreadyAnswer {
                     MatchingQuestionListView()
                 } else {
@@ -26,7 +31,12 @@ struct MatchingRootView: View {
             }
         }
         .task {
-            await questionViewModel.checkingTodayQuestionAnswer()
+            isLoading = true
+            let result = await questionViewModel.checkingTodayQuestionAnswer()
+            await MainActor.run {
+                alreadyAnswer = result
+                isLoading = false
+            }
         }
         .environmentObject(questionViewModel)
         .navigationDestination(for: Matching.self) { step in
