@@ -124,10 +124,9 @@ struct MatchingAnswerView: View {
             viewModel.answers[viewModel.currentIndex] = answer
             
             if viewModel.isLastQuestion {
-#warning("오늘의 카드 받기")
-//                Task {
-//                    await viewModel.postTodayQuetionAnswers()
-//                }
+                Task {
+                    await viewModel.postTodayQuetionAnswers()
+                }
                 
                 var newPath = NavigationPath()
                 
