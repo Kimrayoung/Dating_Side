@@ -18,6 +18,7 @@ struct AnswerCompleteMainView: View {
     @State private var questionContent: String = ""
     @State private var sendQuestion: Bool = false
     @State private var showToastPopup: Bool = false
+//    @State private var answerString: String = ""
     
     @AppStorage("matchingStatus") private var matchingStatusRaw: String = MatchingStatusType.UNMATCHED.rawValue
     
@@ -41,6 +42,7 @@ struct AnswerCompleteMainView: View {
                     Text("[\(viewModel.category)]")
                         .font(.pixel(12))
                         .padding(.bottom, 16)
+                    
                     Text(viewModel.todayQuestionAnswer)
                         .font(.pixel(16))
                 }

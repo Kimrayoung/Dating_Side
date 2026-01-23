@@ -77,6 +77,9 @@ extension QuestionViewModel {
             switch result {
             case .success(let answer):
                 Log.debugPublic("postTodayQuetionAnswres success")
+                
+                _ = await self.checkingTodayQuestionAnswer()
+                
                 return answer.result
             case .failure(let error):
                 Log.errorPublic("postTodayQuetionAnswres error: \(error)")
@@ -160,7 +163,7 @@ extension QuestionViewModel {
                     for item in category.value {
                         if item.dateString == today {
                             self.category = category.key.korean
-                            todayQuestionAnswer = item.content
+                            self.todayQuestionAnswer = item.content
                             Log.debugPublic("오늘 질문들에 답변했는지 : ", todayQuestionAnswer)
                             return true
                         }
