@@ -38,7 +38,7 @@ struct MainContainerView: View {
                 MyPageRootView()
             }
             .tabItem {
-                Label("마이페이지", image: selection == 2 ? "myPageSelected" : "mypageNotSelected")
+                Label("마이페이지", image: selection == 2 ? "mypageSelected" : "mypageNotSelected")
                     .font(.pixel(8))
             }
             .tag(2)

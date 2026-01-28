@@ -37,7 +37,7 @@ struct ChatListView: View {
     var body: some View {
         VStack {
             if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue || matchingStatus == MatchingStatusType.DELETED.rawValue{
-                formme
+                fromme
                 tome
             } else if matchingStatus == MatchingStatusType.MATCHED.rawValue, let chattingRoomData = chattingRoomData {
                 matchingSimpleProfile(chattingRoomData: chattingRoomData)
@@ -106,7 +106,7 @@ struct ChatListView: View {
     }
     
     // 내가 다가간 사람
-    var formme: some View {
+    var fromme: some View {
         VStack(content: {
             Text("내가 다가간 사람")
                 .font(.pixel(12))
@@ -125,7 +125,6 @@ struct ChatListView: View {
             }
         })
         .padding(.horizontal, 24)
-        
     }
     
     func simpleProfile(_ userAccount: PartnerAccount) -> some View {
