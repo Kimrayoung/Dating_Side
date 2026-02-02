@@ -70,12 +70,9 @@ extension AppDelegate: MessagingDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     
     ///willpresent
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         
-        // Firebase Analytics 이벤트 전송 (수동 처리)
         Messaging.messaging().appDidReceiveMessage(userInfo)
         print(userInfo)
         
@@ -83,9 +80,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
     
     ///didreceive
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         
         // Firebase Analytics 이벤트 전송 (수동 처리)

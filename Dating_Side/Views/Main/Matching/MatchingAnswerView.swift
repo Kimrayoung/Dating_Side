@@ -60,18 +60,6 @@ struct MatchingAnswerView: View {
     
     var questionText: some View {
         HStack(spacing: 0) {
-//            Button {
-//                if viewModel.isFirstQuestion {
-//                    return
-//                } else {
-//                    viewModel.nextQuestion()
-//                }
-//            } label: {
-//                Image("leftWhiteArrow")
-//                    .frame(width: 24, height: 24)
-//                    .background(viewModel.isFirstQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
-//                    .clipShape(Circle())
-//            }
             VStack(spacing: 0) {
                 Text("질문 \(viewModel.currentQuestion.id)")
                     .font(.pixel(12))
@@ -82,18 +70,6 @@ struct MatchingAnswerView: View {
                     .padding(.horizontal)
             }
             .frame(maxWidth: .infinity)
-//            Button {
-//                if viewModel.isFirstQuestion {
-//                    return
-//                } else {
-//                    viewModel.previousQuestion()
-//                }
-//            } label: {
-//                Image("rightWhiteArrow")
-//                    .frame(width: 24, height: 24)
-//                    .background(viewModel.isLastQuestion ? Color.init(hex: "B8B8B8") : Color.mainColor)
-//                    .clipShape(Circle())
-//            }
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 24)
@@ -120,7 +96,6 @@ struct MatchingAnswerView: View {
                     .foregroundStyle(Color.gray01)
                     .padding([.top, .leading], 16)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                
             }
         })
         .onSubmit {
@@ -141,6 +116,7 @@ struct MatchingAnswerView: View {
         .padding(.horizontal, 24)
     }
     
+#warning("스택이 모두 정리 됐는지 확인이 필요할 듯")
     var nextAnswerButton: some View {
         Button {
             if answer == "" {
@@ -149,15 +125,21 @@ struct MatchingAnswerView: View {
             viewModel.answers[viewModel.currentIndex] = answer
             
             if viewModel.isLastQuestion {
-                #warning("오류")
+
                 Task {
                     await viewModel.postTodayQuetionAnswers()
                 }
+                
+                var newPath = NavigationPath()
+                
                 if matchingStatus == .MATCHED {
-                    appState.matchingPath.append(Matching.answerCompleteMain)
+                    newPath.append(Matching.answerCompleteMain)
                 } else {
-                    appState.matchingPath.append(Matching.questionComplete)
+                    newPath.append(Matching.questionComplete)
                 }
+                
+                appState.matchingPath = newPath
+                
             } else {
                 viewModel.currentIndex += 1
             }
@@ -165,10 +147,10 @@ struct MatchingAnswerView: View {
             SelectButtonLabel(isSelected: Binding(
                 get: { possibleNext[viewModel.currentIndex] ?? false },  // nil일 때 false로 반환
                 set: { possibleNext[viewModel.currentIndex] = $0 }     // 값 업데이트
-            ), height: 42, text: "다음답변", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+            ), height: 42, text: "다음 답변", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
         }
         .padding(.horizontal, 24)
-
+        
     }
 }
 
