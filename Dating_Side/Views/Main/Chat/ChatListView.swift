@@ -36,7 +36,7 @@ struct ChatListView: View {
     
     var body: some View {
         VStack {
-            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue || matchingStatus == MatchingStatusType.DELETED.rawValue{
+            if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue || matchingStatus == MatchingStatusType.DELETED.rawValue || matchingStatus == MatchingStatusType.PRE_MATCHED.rawValue {
                 fromme
                 tome
             } else if matchingStatus == MatchingStatusType.MATCHED.rawValue, let chattingRoomData = chattingRoomData {
@@ -80,7 +80,12 @@ struct ChatListView: View {
         .customAlert(isPresented: $showDeleteAlert, title: "상대가 대화중 탈퇴하였습니다.", message: "탈퇴한 회원과의 채팅방은 사라집니다.", primaryButtonText: "확인", primaryButtonAction: {
             showDeleteAlert = false
         })
-        .sheet(item: $selectedPartner) { partner in
+        .sheet(item: $selectedPartner, onDismiss: {
+            Task {
+                await viewModel.fetchMatchingStatus()
+                await updateStatus()
+            }
+        }) { partner in
             PartnerProfileView(
                 profileShow: .constant(false),
                 needMathcingRequest: .chattingRequestMatch,
@@ -160,7 +165,7 @@ struct ChatListView: View {
     }
     
     var tome: some View {
-        VStack(spacing: 0, content: {
+        VStack(spacing: 16, content: {
             Text("내게 다가온 사람")
                 .font(.pixel(12))
                 .foregroundStyle(Color.gray3)
@@ -175,17 +180,22 @@ struct ChatListView: View {
                 Spacer()
             } else {
                 ScrollView {
-                    LazyVGrid(columns: columns, content: {
+                    LazyVGrid(columns: columns) {
                         ForEach(toMeArr, id: \.self) { userProfile in
                             simpleTomeProfile(userProfile.partnerInfo)
+                                .padding(-4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .strokeBorder(Color.gray01, lineWidth: 0.4)
+                                )
                         }
-                    })
+                    }
                 }
             }
-            
         })
         .padding(.horizontal, 24)
     }
+    
     
     func simpleTomeProfile(_ partnerAccount: PartnerAccount) -> some View {
         return Button(action: {

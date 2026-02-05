@@ -125,13 +125,14 @@ struct MatchingAnswerView: View {
             
             if viewModel.isLastQuestion {
                 
-                Task {
-                    await viewModel.postTodayQuetionAnswers()
-                }
-                
                 var newPath = NavigationPath()
                 
                 if matchingStatus == .MATCHED {
+                    
+                    Task {
+                        await viewModel.postTodayQuetionAnswers()
+                    }
+                    
                     newPath.append(Matching.answerCompleteMain)
                 } else {
                     newPath.append(Matching.questionComplete)

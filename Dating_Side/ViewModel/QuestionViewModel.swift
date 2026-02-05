@@ -139,7 +139,6 @@ extension QuestionViewModel {
     @MainActor
     /// 오늘의 질문들에 답변했는지(기본으로 오는 오늘의 질문에)
     func checkingTodayQuestionAnswer() async -> Bool {
-        Log.debugPublic("오늘 질문들에 답변했는지 : ")
         let profileNetworkManager = ProfileNetworkManager()
         
         loadingManager.isLoading = true

@@ -29,7 +29,7 @@ struct PartnerProfileView: View {
                     location: matchingPartnerAccount?.activeRegion ?? "",
                     lifeStyle: matchingPartnerAccount?.lifeStyle,
                     keyword: matchingPartnerAccount?.keyword,
-                    valueList: valueList,
+                    valueList: valueList, // 여기에 상대방 정보를 넘겨줘야하는건가 싶음
                     defaultImageUrl: matchingPartnerAccount?.profileImageURL,
                     introduceText: matchingPartnerAccount?.introduction,
                     showProfileViewType: .chat)
@@ -56,6 +56,7 @@ struct PartnerProfileView: View {
                     matchingPartnerAccount = matchingPartnerTempAccount
                     Log.debugPublic("matching partner checking", matchingPartnerTempAccount)
                 }
+                
                 
                 if matchingPartnerAccount == nil {
                     profileShow = false

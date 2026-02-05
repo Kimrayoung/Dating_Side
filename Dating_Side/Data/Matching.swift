@@ -19,11 +19,21 @@ struct PartnerScore: Codable {
 struct UserImage: Codable {
     let isSuccess: Bool
     let profileImageURL: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case isSuccess
         case profileImageURL = "profileImageUrl"
     }
+}
+
+enum MatchingStatusType: String {
+    case UNMATCHED //매칭 안됨
+    case PRE_MATCHED //매칭 신청 됨
+    case MATCHED //매칭 됨
+    case LEFT //상대가 나감
+    case ATTRACTED // 나한테 다가옴
+    case ATTRACTING //내가 다가감
+    case DELETED //상대가 탈퇴함
 }
 
 struct MatchingStatusResponse: Codable {
@@ -35,6 +45,8 @@ struct MatchingStatusResponse: Codable {
         switch matchingStatus {
         case "ATTRACTED":
             return .ATTRACTED
+        case "PRE_MATCHED":
+            return .PRE_MATCHED
         case "LEFT":
             return .LEFT
         case "MATCHED":
@@ -72,13 +84,4 @@ struct PartnerEvaluation: Codable {
 
 struct MatchingAccountResponse: Codable {
     let result: PartnerAccount
-}
-
-enum MatchingStatusType: String {
-    case UNMATCHED //매칭 안됨
-    case MATCHED //매칭 됨
-    case LEFT //상대가 나감
-    case ATTRACTED // 나한테 다가옴
-    case ATTRACTING //내가 다가감
-    case DELETED //상대가 탈퇴함
 }

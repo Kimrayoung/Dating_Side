@@ -54,9 +54,9 @@ final class ChatListViewModel: ObservableObject {
     private func updateTimeString() {
         let hours = totalSeconds / 3600
         let minutes = (totalSeconds % 3600) / 60
-        
         timeString = String(format: "%02d:%02d", hours, minutes)
     }
+    
 }
 
 extension ChatListViewModel {
@@ -64,11 +64,6 @@ extension ChatListViewModel {
     @MainActor
     /// 매칭 상태 조회
     func fetchMatchingStatus() async {
-//        loadingManager.isLoading = true
-//        
-//        defer {
-//            loadingManager.isLoading = false
-//        }
         
         do {
             let result = try await matchingGlobalNetowork.fetchMatchingStatus()
@@ -84,6 +79,7 @@ extension ChatListViewModel {
         } catch {
             Log.errorPublic(error.localizedDescription)
         }
+        
         UserDefaults.standard.set(MatchingStatusType.UNMATCHED.rawValue, forKey: "matchingStatus")
     }
     
@@ -223,5 +219,4 @@ extension ChatListViewModel {
             Log.errorPublic(error.localizedDescription)
         }
     }
-    
 }
