@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 final class ChatListViewModel: ObservableObject {
     
     let loadingManager = LoadingManager.shared
@@ -15,7 +14,7 @@ final class ChatListViewModel: ObservableObject {
     let chatNetwork = ChattingNetworkManager()
     let matchingNetwork = MatchingNetworkManager()
     let matchingGlobalNetowork = MatchingGlobalNetworkManager()
-
+    
     @Published var timeString: String = "24:00"
     
     // 2,4,6일자 별 이미지
@@ -24,11 +23,20 @@ final class ChatListViewModel: ObservableObject {
     // 모든 이미지
     @Published var matchingAllImage: [UserImage]?
     
-    
     @Published var showGoodByeView: Bool = false
+    
+    @Published var chattingRoomData: ChattingRoomResponse?
     
     var timer: Timer?
     var totalSeconds: Int = 24 * 60 * 60
+    
+    init() {
+        setupSocketObserver()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     func startTimer() {
         if let timer = timer, timer.isValid {
@@ -57,6 +65,23 @@ final class ChatListViewModel: ObservableObject {
         timeString = String(format: "%02d:%02d", hours, minutes)
     }
     
+    //노티센터로 오는거마다 받아야할듯
+    func setupSocketObserver() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleNewMessage),
+            name: NSNotification.Name("NewChatMessageReceived"),
+            object: nil
+        )
+    }
+    
+    //메세지는 올때마다 업로드 ㅇㅇ
+    @objc func handleNewMessage() {
+        Task { @MainActor in
+            _ = await chattingRoomRequest()
+        }
+    }
+    
 }
 
 extension ChatListViewModel {
@@ -64,7 +89,6 @@ extension ChatListViewModel {
     @MainActor
     /// 매칭 상태 조회
     func fetchMatchingStatus() async {
-        
         do {
             let result = try await matchingGlobalNetowork.fetchMatchingStatus()
             switch result {
@@ -131,17 +155,18 @@ extension ChatListViewModel {
     }
     
     @MainActor
+    ///읽지 않은 메세지 확인
     func chattingRoomRequest() async -> ChattingRoomResponse? {
-        loadingManager.isLoading = true
-        defer {
-            loadingManager.isLoading = false
-        }
-        
         do {
             let result = try await chatNetwork.chattingRoom()
             switch result {
             case .success(let chattingRomData):
                 Log.debugPublic("채팅방 데이터", chattingRomData)
+                self.chattingRoomData = chattingRomData
+                
+                let jwt = KeychainManager.shared.getAccessToken() ?? ""
+                WebSocketManager.shared.connect(jwt: jwt, roomId: chattingRomData.roomId)
+                
                 return chattingRomData
             case .failure(let error):
                 Log.errorPublic("채팅 방 데이터 요청 에러", error.localizedDescription)
@@ -152,7 +177,6 @@ extension ChatListViewModel {
         return nil
     }
     
-#warning("매칭일자가 7일 미만일시에 하나씩 표시.")
     @MainActor
     func matchingPartnerPhoto() async {
         loadingManager.isLoading = true
@@ -174,7 +198,6 @@ extension ChatListViewModel {
         }
     }
     
-#warning("매칭 일자가 7일 이상일 경우에만 표시.")
     @MainActor
     func matchingPartnerAllPhoto() async {
         loadingManager.isLoading = true

@@ -97,9 +97,7 @@ struct ChatingView: View {
             Task {
                 await vm.fetchChattingData()
             }
-            vm.connect()
         }
-        .onDisappear { vm.disconnect() }
         .onTapGesture {
             UIApplication.shared.hideKeyboard()
             isFocused = false

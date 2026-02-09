@@ -25,7 +25,7 @@ struct ChatListView: View {
     @State var toMeArr: [AttractionPartnerData] = []
     @State var selectedPartner: PartnerAccount? = nil
     @State var formMeAccount: AttractionPartnerData? = nil
-    @State var chattingRoomData: ChattingRoomResponse? = nil
+    
     @State private var showProfile: Bool = false
     @State private var showLeaveAlert: Bool = false
     @State private var showDeleteAlert: Bool = false
@@ -39,7 +39,7 @@ struct ChatListView: View {
             if matchingStatus == MatchingStatusType.UNMATCHED.rawValue || matchingStatus == MatchingStatusType.LEFT.rawValue || matchingStatus == MatchingStatusType.DELETED.rawValue || matchingStatus == MatchingStatusType.PRE_MATCHED.rawValue {
                 fromme
                 tome
-            } else if matchingStatus == MatchingStatusType.MATCHED.rawValue, let chattingRoomData = chattingRoomData {
+            } else if matchingStatus == MatchingStatusType.MATCHED.rawValue, let chattingRoomData = viewModel.chattingRoomData {
                 matchingSimpleProfile(chattingRoomData: chattingRoomData)
                     .padding(.vertical, 32)
                     .padding(.horizontal, 24)
@@ -69,9 +69,11 @@ struct ChatListView: View {
                 await updateStatus()
             }
         }
-        .task {
-            await viewModel.fetchMatchingStatus()
-            await updateStatus()
+        .onAppear {
+            Task {
+                await viewModel.fetchMatchingStatus()
+                await updateStatus()
+            }
         }
         .customAlert(isPresented: $showLeaveAlert, title: "상대가 채팅방을 떠났습니다", message: "상대에게 마지막 인사를 남겨주세요", primaryButtonText: "확인", primaryButtonAction: {
             allowGoodbyeDismiss = true // 확인 누를 때만 닫히도록
@@ -240,7 +242,7 @@ struct ChatListView: View {
     ///status에 따른 화면 전환
     func updateStatus() async {
         if matchingStatus == MatchingStatusType.MATCHED.rawValue {
-            chattingRoomData = await viewModel.chattingRoomRequest()
+            viewModel.chattingRoomData = await viewModel.chattingRoomRequest()
             
             if let matchedAt = matchingTimeString.toDate() {
                 self.matchingPassedDate = matchedAt.daysSince(matchedAt, in: .current)
@@ -252,7 +254,7 @@ struct ChatListView: View {
             }
             
         } else {
-            chattingRoomData = nil
+            viewModel.chattingRoomData = nil
             selectedPartner = nil
             
             toMeArr = await viewModel.senderAttraction()
@@ -268,7 +270,7 @@ struct ChatListView: View {
     
     var matchingSuccessImageView: some View {
         VStack {
-            Text("\(chattingRoomData?.partnerNickName ?? "")님과 매칭 된 지 \(matchingPassedDate)일차")
+            Text("\(viewModel.chattingRoomData?.partnerNickName ?? "")님과 매칭 된 지 \(matchingPassedDate)일차")
                 .font(.pixel(20))
                 .foregroundStyle(Color.blackColor)
                 .frame(maxWidth: .infinity, alignment: .leading)

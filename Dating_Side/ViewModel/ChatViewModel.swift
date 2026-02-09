@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Combine
 
 @MainActor
 final class ChatViewModel: ObservableObject {
@@ -22,106 +22,41 @@ final class ChatViewModel: ObservableObject {
     @Published var showGoodByeView: Bool = false
     
     
-    private let client: WebSocketClient
-    private var listenTask: Task<Void, Never>?
     private let roomId: String
-    private let jwt: String
+    private var cancellables = Set<AnyCancellable>()
     
     init(roomId: String) {
         self.roomId = roomId
-        let accessToken = KeychainManager.shared.getAccessToken()
-        self.jwt = accessToken ?? ""
-        self.client = WebSocketClient(endpoint: "wss://donvolo.shop/api/chat", jwt: accessToken, roomId: roomId)
+        SocketSubscriber()
     }
     
-    deinit {
-        listenTask?.cancel()
-    }
-    
-    func connect() {
-        guard listenTask == nil else { return } // 이미 연결 중이면 무시
-        
-        connectionStatus = "연결 중..."
-        Log.debugPublic("connectionStatus",connectionStatus)
-        
-        loadingManager.isLoading = true
-        
-        listenTask = Task {
-            do {
-                await client.connect(jwt: jwt)
-                await client.waitUntilStompConnected()
-                connectionStatus = "구독 중..."
+    //실시간 채팅 구독
+    private func SocketSubscriber() {
+        WebSocketManager.shared.messageSubject
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] newMsg in
+                self?.messages.append(newMsg)
                 
-                // STOMP 연결 완료 대기 시간 단축
-                try await Task.sleep(nanoseconds: 200_000_000) // 0.2초
-                await client.subscribe(roomId: roomId)
-                
-                isConnected = true
-                connectionStatus = "연결됨"
-                
-                loadingManager.isLoading = false
-                
-                for await msg in await client.messages {
-                    messages.append(msg)
+                Task{
+                    await self?.fetchChattingData()
                 }
-                
-            } catch {
-                print("❌ Connection failed: \(error)")
-                connectionStatus = "연결 실패: \(error.localizedDescription)"
-                
-                loadingManager.isLoading = false
             }
-            
-            isConnected = false
-            connectionStatus = "연결 끊김"
-        }
+            .store(in: &cancellables)
     }
     
     func send(content: String) {
-        guard isConnected else {
-            print("⚠️ Cannot send message: not connected")
-            return
-        }
-        
-        let chat = SocketMessage(content: content, roomId: roomId)
-        
-        Task {
-            do {
-                print("📤 About to call client.sendMessage...")
-                try await client.sendMessage(chat)
-                print("📤 client.sendMessage completed")
-            } catch {
-                print("❌ Send failed: \(error)")
-            }
-        }
+        WebSocketManager.shared.send(content: content, roomId: roomId)
     }
     
-    func disconnect() {
-        listenTask?.cancel()
-        listenTask = nil
-        
-        Task {
-            await client.disconnect()
-        }
-        
-        isConnected = false
-        connectionStatus = "연결 종료"
-    }
-    
+    //MARK: - 모든 내용 확인하기
     @MainActor
     func fetchChattingData() async {
-        loadingManager.isLoading = true
-        
-        defer {
-            loadingManager.isLoading = false
-        }
-        
         do {
             let result = try await chatNetwork.chatting()
             switch result {
             case .success(let chatData):
-                Log.debugPublic("채팅 기록", chatData)
-                messages.append(contentsOf: chatData)
+                self.messages = chatData
+                
             case .failure(let error):
                 Log.errorPublic("채팅 방 데이터 요청 에러", error.localizedDescription)
             }
@@ -147,7 +82,7 @@ final class ChatViewModel: ObservableObject {
                 Log.debugPublic("헤어지기 성공")
                 self.showGoodByeView = false
                 appState.chatPath.removeLast()
-                
+                WebSocketManager.shared.disconnect()
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)
             }
@@ -172,7 +107,8 @@ final class ChatViewModel: ObservableObject {
                 case .success:
                     Log.debugPublic("신고하기 성공")
                     appState.chatPath.removeLast()
-                    await leaveChatting(score: 1, comment: reason.reason)
+                    await leaveChatting(score: 1, comment: reason.reason) //신고할 정도면 1점이 맞지 ㄹㅇㅋㅋ
+                    WebSocketManager.shared.disconnect()
                 case .failure(let error):
                     Log.errorPublic(error.localizedDescription)
                 }
