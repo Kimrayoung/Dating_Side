@@ -116,7 +116,6 @@ struct MatchingAnswerView: View {
         .padding(.horizontal, 24)
     }
     
-#warning("스택이 모두 정리 됐는지 확인이 필요할 듯")
     var nextAnswerButton: some View {
         Button {
             if answer == "" {
@@ -125,14 +124,15 @@ struct MatchingAnswerView: View {
             viewModel.answers[viewModel.currentIndex] = answer
             
             if viewModel.isLastQuestion {
-
-                Task {
-                    await viewModel.postTodayQuetionAnswers()
-                }
                 
                 var newPath = NavigationPath()
                 
                 if matchingStatus == .MATCHED {
+                    
+                    Task {
+                        await viewModel.postTodayQuetionAnswers()
+                    }
+                    
                     newPath.append(Matching.answerCompleteMain)
                 } else {
                     newPath.append(Matching.questionComplete)
@@ -150,7 +150,6 @@ struct MatchingAnswerView: View {
             ), height: 42, text: "다음 답변", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
         }
         .padding(.horizontal, 24)
-        
     }
 }
 

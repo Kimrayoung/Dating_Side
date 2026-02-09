@@ -57,14 +57,25 @@ struct PartnerProfileView: View {
                     Log.debugPublic("matching partner checking", matchingPartnerTempAccount)
                 }
                 
+                
                 if matchingPartnerAccount == nil {
                     profileShow = false
                     appState.matchingPath.append(Matching.matchingProfileCheckView)
                 }
+                
+                var newValueList: [String : [Answer]] = [:]
+                
+                if let userAnswers = matchingPartnerAccount?.profile.profileList {
+                    for answerData in userAnswers {
+                        newValueList[answerData.category] = answerData.profileList
+                    }
+                }
+                
+                self.valueList = newValueList
             }
             .customAlert(isPresented: $showAlert, title: "이 분을 다시 만나지 못할 수 있어요", message: "상대방의 매력을 다시 확인해볼까요?", primaryButtonText: "괜찮아요", primaryButtonAction: {
                 showAlert = false
-                profileShow = false // 프로필 모달 자체를 내림
+                profileShow = false
                 appState.matchingPath.append(Matching.matchingFail)
             }, secondaryButtonText: "다시 봐볼께요", secondaryButtonAction: {
                 showAlert = false

@@ -8,7 +8,9 @@ import SwiftUI
 
 struct MatchingRootView: View {
     @StateObject private var questionViewModel = QuestionViewModel()
-    @State private var isLoading: Bool = false
+    @State private var alreadyAnswer: Bool? = nil
+    @State private var isLoading = true
+    
     var body: some View {
         ZStack {
             Image("matchingViewBg")
@@ -18,7 +20,7 @@ struct MatchingRootView: View {
             
             if isLoading {
                 ProgressView()
-            } else if let alreadyAnswer = questionViewModel.alreadyAnswer {
+            } else if let alreadyAnswer {
                 if !alreadyAnswer {
                     MatchingQuestionListView()
                 } else {
@@ -32,7 +34,7 @@ struct MatchingRootView: View {
             isLoading = true
             let result = await questionViewModel.checkingTodayQuestionAnswer()
             await MainActor.run {
-                questionViewModel.alreadyAnswer = result
+                alreadyAnswer = result
                 isLoading = false
             }
         }
