@@ -19,7 +19,7 @@ struct ProfileEditView: View {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.chatProfileImage)
                 } else {
-                    appState.myPagePath.append(MyPage.introduceImageAndProfielMainImage)
+                    appState.myPagePath.append(MyPage.introduceImageAndProfielMainImage(profileImageURL: profileViewModel.userData?.profileImageURL, introduceText: profileViewModel.userData?.introduction ?? ""))
                 }
                 
             }

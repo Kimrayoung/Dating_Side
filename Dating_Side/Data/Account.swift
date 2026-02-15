@@ -26,7 +26,8 @@ enum PatchUserType: String {
     case beforePreferenceTypeList
     case lifeStyle
     case introduction
-    case activeRegion
+    case cityRegion
+    case districtRegion
     case phoneNumber
     case profileDefaultImage
     case secondProfileImage
@@ -240,3 +241,4 @@ struct NotificationResponse: Codable {
     let title, body: String
     let sentAt: [Int]
 }
+

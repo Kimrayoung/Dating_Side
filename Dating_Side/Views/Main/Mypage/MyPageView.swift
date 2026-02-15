@@ -27,7 +27,7 @@ struct MyPageView: View {
         .toolbar(content: {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    appState.myPagePath.append(MyPage.settingProfile(userImageURL: profileViewModel.userData?.profileImageURL))
+                    appState.myPagePath.append(MyPage.settingProfile)
                 } label: {
                     Image("myPageToast")
                 }

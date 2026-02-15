@@ -345,9 +345,11 @@ extension AccountViewModel {
     
     /// 거주지 업데이트
     func updateLocation() async {
-        let location = makeLocation()
+        guard let locationSelected = locationSelected, let detailLocationSelected = detailLocationSelected else { return }
+        
         let updateLocation: [String : Any] = [
-            PatchUserType.activeRegion.rawValue : location
+            PatchUserType.cityRegion.rawValue : locationSelected.addrName,
+            PatchUserType.districtRegion.rawValue : detailLocationSelected.addrName
         ]
         await patchUserAccountData(userPatchData: updateLocation)
     }
@@ -585,7 +587,7 @@ extension AccountViewModel {
         let boundary: String = "Boundary-\(identifier)"
         
         let signupData = createUploadBody(request: signupRequest, images: userImageData, boundary: boundary)
-        
+
         do {
             let result = try await accountNetworkManger.postUserData(requestModel: signupData, boundaryString: boundary)
             switch result {
@@ -600,8 +602,13 @@ extension AccountViewModel {
         }
     }
     
+    /// 유저 정보 수정
+    /// - Parameters:
+    ///   - userPatchData: 수정할 유저 정보
+    ///   - userImage: 수정할 유저 이미지(이미지 수정시에만 값이 들어고고 평소에는 빈배열)
+    ///   - isProfileImageChange: 기본 프로필 이미지 수정시에만 true이고 다른 경우에는 false
     @MainActor
-    func patchUserAccountData(userPatchData: [String : Any], userImage: [AccountImage] = []) async {
+    func patchUserAccountData(userPatchData: [String : Any], userImage: [AccountImage] = [], isProfileImageChange: Bool = false) async {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -617,10 +624,10 @@ extension AccountViewModel {
             
             switch result {
             case .success(let result):
-                Log.debugPublic("유저 수정 성공", result)
+                Log.debugPublic("유저 수정 성공", result.profileImageURL)
                 appState.myPagePath.removeLast()
             case .failure(let error):
-                Log.errorPublic("유저 수정 실패", error)
+                Log.errorPublic("유저 수정 실패", error.localizedDescription)
             }
         } catch {
             Log.errorPublic("유저 수정 실패", error)

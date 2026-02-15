@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Kingfisher
 
 /// 프로필 사진 등록 및 자기소개 등록
 struct ChatProfileImageView: View {
@@ -18,6 +19,9 @@ struct ChatProfileImageView: View {
     @FocusState private var isFocused: Bool
     @State private var showAlert: Bool = false
     @State var viewType: AccountType = .onboarding
+    // profileOriginalImage랑 profileIntroduce는 mypageEdit, onboardingEdit에서만 사용한다
+    var profileOriginalImageURL: String? = nil
+    var profileIntroduce: String? = nil
     
     var body: some View {
         ZStack {
@@ -93,6 +97,9 @@ struct ChatProfileImageView: View {
         }
         .onAppear(perform: {
             viewModel.isOnboarding = viewType
+            if viewType == .mypageEdit {
+                viewModel.introduceText = profileIntroduce ?? ""
+            }
         })
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
@@ -126,6 +133,11 @@ struct ChatProfileImageView: View {
                     .frame(width: 72, height: 72)
                     .clipShape(Circle())
                     .padding(.bottom, 12)
+            } else if let imageURL = profileOriginalImageURL {
+                KFImage(URL(string: imageURL))
+                    .resizable()
+                    .frame(width: 72, height: 72)
+                    .clipShape(Circle())
             } else {
                 Image("defaultProfileImage")
                     .frame(width: 72, height: 72)

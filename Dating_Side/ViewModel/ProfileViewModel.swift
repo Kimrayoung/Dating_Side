@@ -56,7 +56,7 @@ final class ProfileViewModel: ObservableObject {
 extension ProfileViewModel {
     /// 유저 정보 가져오기
     @MainActor
-    func fetchUserAccountData() async {
+    func fetchUserAccountData(file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) async {
         loadingManager.isLoading = true
         defer {
             loadingManager.isLoading = false
@@ -70,7 +70,7 @@ extension ProfileViewModel {
                 self.userData = userData
                 UserDefaults.standard.set(userData.id, forKey: "userId")
                 Log.debugPrivate("유저 정보: ", userData)
-                
+                print("TEST:: CALL File: \(file), Function: \(function), Line: \(line), Column: \(column)")
             case .failure(let error):
                 Log.errorPublic("유저 정보 가져오기 오류", error.localizedDescription)
             }
