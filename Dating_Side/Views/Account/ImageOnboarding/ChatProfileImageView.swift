@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Kingfisher
 
 /// 프로필 사진 등록 및 자기소개 등록
 struct ChatProfileImageView: View {
@@ -17,6 +18,10 @@ struct ChatProfileImageView: View {
     @State var isImagePickerPresented: Bool = false
     @FocusState private var isFocused: Bool
     @State private var showAlert: Bool = false
+    @State var viewType: AccountType = .onboarding
+    // profileOriginalImage랑 profileIntroduce는 mypageEdit, onboardingEdit에서만 사용한다
+    var profileOriginalImageURL: String? = nil
+    var profileIntroduce: String? = nil
     
     var body: some View {
         ZStack {
@@ -29,7 +34,7 @@ struct ChatProfileImageView: View {
             VStack {
                 EmptyView()
                     .padding(.top, 30)
-                if viewModel.isOnboarding == .onboarding {
+                if viewType == .onboarding {
                     CustomRounedGradientProgressBar(currentProgress: 13, total: onboardingPageCnt)
                 }
                 Text("프로필 사진을 등록 해주세요")
@@ -58,11 +63,26 @@ struct ChatProfileImageView: View {
                 Spacer()
                 
                 Button {
-                    guard viewModel.selectedImage != nil else { return }
+                    let isEditMode = viewModel.isOnboarding == .mypageEdit || viewModel.isOnboarding == .onboardingEdit
+                    let canProceed = isEditMode
+                        ? !(viewModel.introduceText.isEmpty && viewModel.selectedImage == nil)
+                        : viewModel.selectedImage != nil
+
+                    guard canProceed else { return }
+
                     if viewModel.isOnboarding == .onboarding {
                         appState.onboardingPath.append(Onboarding.secondDayPhoto)
                     } else if viewModel.isOnboarding == .onboardingEdit {
-                        
+                        #warning("여기 변경된 사진이랑 소개글 제대로 저장되어져 들어가는지 확인필요 -> 확인 후 warning 부분 삭제")
+                        appState.onboardingPath.removeLast()
+                    } else if viewModel.isOnboarding == .mypageEdit {
+                        Task {
+                            if viewModel.selectedImage == nil {
+                                await viewModel.updateIntroduce()
+                            } else {
+                                await viewModel.updateIntroduceAndDefaultImage()
+                            }
+                        }
                     }
                     
                 } label: {
@@ -85,6 +105,16 @@ struct ChatProfileImageView: View {
         .onChange(of: viewModel.selectedImage) { _, newValue in
             possibleNext = (newValue != nil)
         }
+        .onChange(of: viewModel.introduceText, { _, newValue in
+            if viewModel.isOnboarding == .onboarding { return }
+            possibleNext = (newValue != "")
+        })
+        .onAppear(perform: {
+            viewModel.isOnboarding = viewType
+            if viewType == .mypageEdit || viewType == .onboardingEdit {
+                viewModel.introduceText = profileIntroduce ?? ""
+            }
+        })
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -94,7 +124,12 @@ struct ChatProfileImageView: View {
                     // 뒤로 가기 전 키보드 내리고
                     isFocused = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        appState.onboardingPath.removeLast()
+                        if viewModel.isOnboarding == .mypageEdit {
+                            appState.myPagePath.removeLast()
+                        } else {
+                            appState.onboardingPath.removeLast()
+                        }
+                        
                     }
                 } label: {
                     Image("navigationBackBtn")
@@ -112,6 +147,11 @@ struct ChatProfileImageView: View {
                     .frame(width: 72, height: 72)
                     .clipShape(Circle())
                     .padding(.bottom, 12)
+            } else if let imageURL = profileOriginalImageURL {
+                KFImage(URL(string: imageURL))
+                    .resizable()
+                    .frame(width: 72, height: 72)
+                    .clipShape(Circle())
             } else {
                 Image("defaultProfileImage")
                     .frame(width: 72, height: 72)
@@ -181,4 +221,3 @@ struct ChatProfileImageView: View {
 #Preview {
     ChatProfileImageView(viewModel: AccountViewModel())
 }
-

@@ -18,8 +18,8 @@ struct MyPageRootView: View {
                 case .mypage:
                     MyPageView()
                         .environmentObject(profileViewModel)
-                case .settingProfile(let userImageURL):
-                    SettingAndEditView(userImageURL: userImageURL)
+                case .settingProfile:
+                    SettingAndEditView()
                         .environmentObject(profileViewModel)
                 case .profileValueList(let valueType, let valueDataList):
                     ValuesListView(valueType: valueType, valueDataList: valueDataList)
@@ -28,12 +28,10 @@ struct MyPageRootView: View {
                         .environmentObject(profileViewModel)
                 case .account:
                     AccountView()
-                case .nicknameInput(let nickname):
-                    NicknameInputView(viewModel: AccountViewModel(), originalNickname: nickname)
-                case .defaultProfileImage:
-                    ChatProfileImageView(viewModel: AccountViewModel())
+                case let .introduceImageAndProfielMainImage(profileImageURL, introduceText):
+                    ChatProfileImageView(viewModel: AccountViewModel(), viewType: .mypageEdit, profileOriginalImageURL: profileImageURL, profileIntroduce: introduceText)
                 case let .locationSelect(location):
-                    LocationSelectView(viewModel: AccountViewModel(), location: location, isOnboarding: false)
+                    LocationSelectView(viewModel: AccountViewModel(), location: location, viewType: .mypageEdit)
                 case let .job(jobType, jobDetail):
                     JobEditView(viewModel: AccountViewModel(), jobType: jobType, jobDetail: jobDetail)
                 case let .education(educationType, schoolName):

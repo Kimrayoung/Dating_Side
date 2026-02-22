@@ -10,7 +10,7 @@ import SwiftUI
 struct JobEditView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var viewModel: AccountViewModel
-    @FocusState var focusedSchoolName: Bool
+    @FocusState var focusedJobDetail: Bool
     @State private var possibleNext: Bool = true
     var jobType: String?
     var jobDetail: String?
@@ -22,8 +22,8 @@ struct JobEditView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 32)
                 .padding(.bottom, 48)
-            schoolSelectView
-            schoolNameView
+            jobSelectView
+            jobDetailView
                 
             Spacer()
             Button(action: {
@@ -68,7 +68,7 @@ struct JobEditView: View {
         })
     }
     
-    var schoolSelectView: some View {
+    var jobSelectView: some View {
         VStack {
             CustomMenuPicker(
                 title: "세부 직무",
@@ -80,11 +80,10 @@ struct JobEditView: View {
         .padding(.horizontal, 52)
     }
     
-    var schoolNameView: some View {
+    var jobDetailView: some View {
         CustomInputField(
-                text: $viewModel.schoolName,
-                isFocused: $focusedSchoolName
-            )
+                text: $viewModel.jobDetail,
+                isFocused: $focusedJobDetail)
     }
 }
 

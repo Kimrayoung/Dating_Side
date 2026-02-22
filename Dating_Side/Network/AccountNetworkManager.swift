@@ -20,7 +20,7 @@ struct AccountNetworkManager {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.postUserProfileData(signupData: requestModel, boundaryString: boundaryString), httpCodes: .success)
     }
     
-    func patchUserData(requestModel: Data, boundaryString: String) async throws -> Result<VoidResponse, Error>  {
+    func patchUserData(requestModel: Data, boundaryString: String) async throws -> Result<UserAccount, Error>  {
         return await networkManager.callWithAsync(endpoint: AccountAPIManager.patchUserProfileData(userData: requestModel, boundaryString: boundaryString), httpCodes: .success)
     }
     
@@ -138,12 +138,6 @@ extension AccountAPIManager: APIManager {
         case .postUserProfileData(let signupData, _):
             return signupData
         case .patchUserProfileData(let userData, _):
-            if let userStringData = String(data: userData, encoding: .utf8) {
-                Log.debugPrivate("patchUserProfileData", userStringData)
-            } else {
-                Log.debugPrivate("patchUserProfileData 실패")
-            }
-            
             return userData
         default: return nil
         }

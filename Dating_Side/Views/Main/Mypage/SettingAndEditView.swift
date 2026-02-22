@@ -4,6 +4,7 @@ import Kingfisher
 @MainActor
 struct SettingAndEditView: View {
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var profileViewModel: ProfileViewModel
     @StateObject var pushNotificationManager = PushNotificationManager()
     @StateObject var phoneContactVM = PhoneContactsViewModel()
     @AppStorage("PushNotificationEnabled") private var isPushEnabled: Bool = true
@@ -11,8 +12,6 @@ struct SettingAndEditView: View {
     @AppStorage("AvoidanceEnable") private var avoidanceEnable: Bool = false
     @State var showNotificationAlert: Bool = false
     @State var showPhoneContactsAlert: Bool = false
-    
-    var userImageURL: String?
     
     var body: some View {
         VStack {
@@ -86,7 +85,7 @@ struct SettingAndEditView: View {
     
     var profileEditView: some View {
         HStack {
-            if let imageURL = userImageURL {
+            if let imageURL = profileViewModel.userData?.profileImageURL {
                 KFImage(URL(string: imageURL))
                     .resizable()
                     .frame(width: 72, height: 72)
@@ -160,7 +159,7 @@ struct SettingAndEditView: View {
 }
 
 #Preview {
-    SettingAndEditView(userImageURL: "https://picsum.photos/200/300")
+    SettingAndEditView()
         .environmentObject(AppState())
 }
 

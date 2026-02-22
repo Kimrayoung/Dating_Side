@@ -55,12 +55,11 @@ enum Main {
 
 enum MyPage: Hashable {
     case mypage
-    case settingProfile(userImageURL: String?)
+    case settingProfile
     case profileValueList(valueType: String, valueDataList: [Answer])
     case profileEdit
     case account
-    case defaultProfileImage
-    case nicknameInput(nickname: String?)
+    case introduceImageAndProfielMainImage(profileImageURL: String?, introduceText: String)
     case locationSelect(location: String?)
     case job(jobType: String?, jobDetail: String?)
     case education(educationType: String?, schoolName: String?)

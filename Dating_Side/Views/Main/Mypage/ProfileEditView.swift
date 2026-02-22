@@ -19,7 +19,7 @@ struct ProfileEditView: View {
                 if isOnboarding {
                     appState.onboardingPath.append(Onboarding.chatProfileImage)
                 } else {
-                    
+                    appState.myPagePath.append(MyPage.introduceImageAndProfielMainImage(profileImageURL: profileViewModel.userData?.profileImageURL, introduceText: profileViewModel.userData?.introduction ?? ""))
                 }
                 
             }
@@ -72,6 +72,9 @@ struct ProfileEditView: View {
                 }
             }
             Spacer()
+        }
+        .task {
+            await profileViewModel.fetchUserAccountData()
         }
         .navigationTitle("프로필 편집")
         .navigationBarTitleDisplayMode(.inline)
