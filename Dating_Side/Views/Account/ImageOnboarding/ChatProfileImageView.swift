@@ -63,7 +63,13 @@ struct ChatProfileImageView: View {
                 Spacer()
                 
                 Button {
-                    guard viewModel.selectedImage != nil else { return }
+                    let isEditMode = viewModel.isOnboarding == .mypageEdit || viewModel.isOnboarding == .onboardingEdit
+                    let canProceed = isEditMode
+                        ? !(viewModel.introduceText.isEmpty && viewModel.selectedImage == nil)
+                        : viewModel.selectedImage != nil
+
+                    guard canProceed else { return }
+
                     if viewModel.isOnboarding == .onboarding {
                         appState.onboardingPath.append(Onboarding.secondDayPhoto)
                     } else if viewModel.isOnboarding == .onboardingEdit {
@@ -71,7 +77,11 @@ struct ChatProfileImageView: View {
                         appState.onboardingPath.removeLast()
                     } else if viewModel.isOnboarding == .mypageEdit {
                         Task {
-                            await viewModel.updateIntroduceAndDefaultImage()
+                            if viewModel.selectedImage == nil {
+                                await viewModel.updateIntroduce()
+                            } else {
+                                await viewModel.updateIntroduceAndDefaultImage()
+                            }
                         }
                     }
                     
@@ -95,9 +105,13 @@ struct ChatProfileImageView: View {
         .onChange(of: viewModel.selectedImage) { _, newValue in
             possibleNext = (newValue != nil)
         }
+        .onChange(of: viewModel.introduceText, { _, newValue in
+            if viewModel.isOnboarding == .onboarding { return }
+            possibleNext = (newValue != "")
+        })
         .onAppear(perform: {
             viewModel.isOnboarding = viewType
-            if viewType == .mypageEdit {
+            if viewType == .mypageEdit || viewType == .onboardingEdit {
                 viewModel.introduceText = profileIntroduce ?? ""
             }
         })
@@ -207,4 +221,3 @@ struct ChatProfileImageView: View {
 #Preview {
     ChatProfileImageView(viewModel: AccountViewModel())
 }
-

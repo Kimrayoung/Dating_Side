@@ -378,6 +378,15 @@ extension AccountViewModel {
         await patchUserAccountData(userPatchData: updateLifeStyle)
     }
     
+    // 자기소개 업데이트
+    func updateIntroduce() async {
+        let updateIntroduceText: [String : Any] = [
+            PatchUserType.introduction.rawValue : introduceText
+        ]
+        
+        await patchUserAccountData(userPatchData: updateIntroduceText)
+    }
+    
     /// 자기소개 및 기본 이미지 업데이트
     func updateIntroduceAndDefaultImage() async {
         
