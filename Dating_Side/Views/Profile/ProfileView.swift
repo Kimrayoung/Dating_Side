@@ -234,7 +234,7 @@ struct ProfileView: View {
     func profilePathCheck(valueType: ProfileValueType) {
         Log.debugPublic("valueType: \(valueType.english)", valueList[valueType.english])
         if showProfileViewType == .chat {
-            appState.onboardingPath.append(OnChatProfilePath.profileValueList(valueType: valueType.korean, valueDataList: valueList[valueType.english] ?? []))
+            appState.onChatProfilePath.append(OnChatProfilePath.profileValueList(valueType: valueType.korean, valueDataList: valueList[valueType.english] ?? []))
         } else if showProfileViewType == .myPage {
             appState.myPagePath.append(MyPage.profileValueList(valueType: valueType.korean, valueDataList: valueList[valueType.english] ?? []))
         }

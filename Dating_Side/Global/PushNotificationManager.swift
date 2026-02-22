@@ -15,6 +15,7 @@ final class PushNotificationManager: ObservableObject {
     private let center = UNUserNotificationCenter.current()
     
     /// 상태 새로고침 (UI 바인딩용)
+    #warning("refresh를 Push를 사용하는거 같은데, push를 끈 상태에서도 처리를 해야하는데?")
     func refresh() {
         center.getNotificationSettings { [weak self] s in
             guard let self = self else { return }

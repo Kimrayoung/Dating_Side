@@ -18,6 +18,7 @@ struct AnswerCompleteMainView: View {
     @State private var questionContent: String = ""
     @State private var sendQuestion: Bool = false
     @State private var showToastPopup: Bool = false
+//    @State private var answerString: String = ""
     
     @AppStorage("matchingStatus") private var matchingStatusRaw: String = MatchingStatusType.UNMATCHED.rawValue
     
@@ -41,6 +42,7 @@ struct AnswerCompleteMainView: View {
                     Text("[\(viewModel.category)]")
                         .font(.pixel(12))
                         .padding(.bottom, 16)
+                    
                     Text(viewModel.todayQuestionAnswer)
                         .font(.pixel(16))
                 }
@@ -132,15 +134,22 @@ struct AnswerCompleteMainView: View {
         .padding(.horizontal, 25.5)
     }
     
-    /// 매칭상대 확인하기
+    // 매칭상대 확인하기
     var confirmPartner: some View {
         Button {
             if matchingStatus != .MATCHED {
                 appState.matchingPath.append(Matching.matchingProfileCheckView)
+            } else {
+                appState.selectedTab = .myPage
             }
         } label: {
             if matchingStatus != .MATCHED {
                 Text("매칭 상대 확인하기")
+                    .font(.pixel(16))
+                    .foregroundStyle(Color.white)
+                    .frame(maxWidth: .infinity)
+            }else{
+                Text("전체 카드 보러가기")
                     .font(.pixel(16))
                     .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
@@ -152,7 +161,6 @@ struct AnswerCompleteMainView: View {
         .padding(.horizontal, 25.5)
     }
 }
-
 
 #Preview {
     AnswerCompleteMainView()

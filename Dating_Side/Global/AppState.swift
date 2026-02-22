@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+enum TabType: Int {
+    case chat = 0
+    case matching = 1
+    case myPage = 2
+}
 
 // 앱 상태를 관리하는 클래스
 class AppState: ObservableObject {
@@ -14,6 +19,7 @@ class AppState: ObservableObject {
     let loadingManager = LoadingManager.shared
     let accountNetworkManger = AccountNetworkManager()
     
+    @Published var selectedTab: TabType = .chat
     @Published var currentScreen: AppScreen
     @Published var isFirstLaunch: Bool
     @Published var isLoggedIn: Bool

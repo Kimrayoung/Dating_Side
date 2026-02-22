@@ -151,7 +151,7 @@ extension MatchingViewModel {
             let result = try await matchingNetwork.matchingPartner()
             switch result {
             case .success(let userAccount):
-                Log.debugPublic("매칭 요청 성공", userAccount)
+                Log.debugPublic("매칭 상대 조회 성공", userAccount)
                 return userAccount.result
             case .failure(let error):
                 Log.errorPublic(error.localizedDescription)

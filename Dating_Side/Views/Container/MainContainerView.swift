@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainContainerView: View {
     @EnvironmentObject private var appState: AppState
-    @State private var selection = 0
+//    @State private var selection = 0
     
     init() {
         UITabBar.appearance().unselectedItemTintColor = UIColor.init(hex: "#CBD8FB")
@@ -17,31 +17,31 @@ struct MainContainerView: View {
     }
     
     var body: some View {
-        TabView(selection: $selection) {
+        TabView(selection: $appState.selectedTab) {
             NavigationStack(path: $appState.chatPath) {
                 ChatingRootView()
             }
             .tabItem {
-                Label("채팅", image: selection == 0 ? "chatSelected" : "chatNotSelected")
+                Label("채팅", image: appState.selectedTab == .chat ? "chatSelected" : "chatNotSelected")
                     .font(.pixel(8))
             }
-            .tag(0)
+            .tag(TabType.chat)
             NavigationStack(path: $appState.matchingPath) {
                 MatchingRootView()
             }
             .tabItem {
-                Label("매칭", image: selection == 1 ? "matchSelected" : "matchNotSelected")
+                Label("매칭", image: appState.selectedTab == .matching ? "matchSelected" : "matchNotSelected")
                     .font(.pixel(8))
             }
-            .tag(1)
+            .tag(TabType.matching)
             NavigationStack(path: $appState.myPagePath) {
                 MyPageRootView()
             }
             .tabItem {
-                Label("마이페이지", image: selection == 2 ? "mypageSelected" : "mypageNotSelected")
+                Label("마이페이지", image: appState.selectedTab == .myPage ? "mypageSelected" : "mypageNotSelected")
                     .font(.pixel(8))
             }
-            .tag(2)
+            .tag(TabType.myPage)
         }
         .tint(.mainColor)
     }

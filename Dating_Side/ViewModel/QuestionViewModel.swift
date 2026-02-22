@@ -10,11 +10,9 @@ import Foundation
 
 
 class QuestionViewModel: ObservableObject {
-    @Published var alreadyAnswer: Bool? = nil
-    
     @Published var category: String = ""
     /// 이미 오늘의 질문 리스트에 답변을 전부 했을 경우
-    @Published var questionComplete: Bool = false 
+    @Published var questionComplete: Bool = false
     @Published var todayQuestionAnswer: String = ""
     @Published var questionList: [Question] = []
     @Published var answers: [Int: String] = [:] // [question.id: 답변]
@@ -79,6 +77,9 @@ extension QuestionViewModel {
             switch result {
             case .success(let answer):
                 Log.debugPublic("postTodayQuetionAnswres success")
+                
+                _ = await self.checkingTodayQuestionAnswer()
+                
                 return answer.result
             case .failure(let error):
                 Log.errorPublic("postTodayQuetionAnswres error: \(error)")
@@ -161,7 +162,7 @@ extension QuestionViewModel {
                     for item in category.value {
                         if item.dateString == today {
                             self.category = category.key.korean
-                            todayQuestionAnswer = item.content
+                            self.todayQuestionAnswer = item.content
                             Log.debugPublic("오늘 질문들에 답변했는지 : ", todayQuestionAnswer)
                             return true
                         }
