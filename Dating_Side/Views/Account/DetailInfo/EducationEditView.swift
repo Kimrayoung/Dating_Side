@@ -23,6 +23,9 @@ struct EducationEditView: View {
                 .padding(.top, 32)
                 .padding(.bottom, 48)
             schoolSelectView
+            #warning("학교 이름")
+            Text("학교 이름")
+                
             schoolNameView
             Spacer()
             Button(action: {
@@ -68,7 +71,7 @@ struct EducationEditView: View {
     var schoolSelectView: some View {
         VStack {
             CustomMenuPicker(
-                title: "학교 이름",
+                title: "최종학력",
                 options: viewModel.education,
                 selectedIndex: $viewModel.selectedEducationIndex
             )
