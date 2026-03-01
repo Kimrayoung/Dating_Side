@@ -114,6 +114,7 @@ struct PartnerProfileView: View {
                     profileShow = false
                     try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5초
                     dismiss()
+                    #warning("asd")
                 } else if needMathcingRequest == .matching { // 내가 다가가기 (좋아요 보내기)
                     let result = await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
                     if result { //다가가기 성공
