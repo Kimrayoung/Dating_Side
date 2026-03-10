@@ -147,7 +147,7 @@ enum EducationEnglish: String, CaseIterable {
     case universityEnrolled   = "UNIVERSITY_ENROLLED"
     case universityGraduated  = "UNIVERSITY_GRADUATED"
     case master               = "MASTER"
-    case doctoral             = "DOCTORAL"
+    case doctor               = "DOCTOR"
     case etc                  = "ETC"
     
     /// 한글 표현
@@ -161,7 +161,7 @@ enum EducationEnglish: String, CaseIterable {
             return "대학 졸업"
         case .master:
             return "석사"
-        case .doctoral:
+        case .doctor:
             return "박사"
         case .etc:
             return "기타"

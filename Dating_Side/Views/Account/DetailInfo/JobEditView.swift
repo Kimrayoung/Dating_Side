@@ -71,7 +71,7 @@ struct JobEditView: View {
     var jobSelectView: some View {
         VStack {
             CustomMenuPicker(
-                title: "세부 직무",
+                title: "직무",
                 options: viewModel.jobItmes,
                 selectedIndex: $viewModel.selectedJobIndex
             )
