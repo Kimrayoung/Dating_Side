@@ -604,7 +604,7 @@ extension AccountViewModel {
                 Log.debugPublic("유저 정보 저장 성공", result)
                 await appState.onAuthenticated()
             case .failure(let error):
-                Log.networkPublic("유저 정보 저장 실패", error)
+                Log.networkPublic("유저 정보 저장 실패", error.localizedDescription)
             }
         } catch {
             Log.errorPublic("유저 정보 저장 실패", error.localizedDescription)

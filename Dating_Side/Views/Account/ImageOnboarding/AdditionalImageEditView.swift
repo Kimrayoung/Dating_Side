@@ -12,6 +12,7 @@ import PhotosUI
 /// 추가 사진 변경
 struct AdditionalImageEditView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel = AccountViewModel()
     
     //각각 이미지
@@ -75,15 +76,7 @@ struct AdditionalImageEditView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    // 뒤로 가기 전 키보드 내리고
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        if viewModel.isOnboarding == .mypageEdit {
-                            appState.myPagePath.removeLast()
-                        } else {
-                            appState.onboardingPath.removeLast()
-                        }
-                        
-                    }
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

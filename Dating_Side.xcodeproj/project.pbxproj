@@ -82,6 +82,7 @@
 		4D6D18802D635A7C00698E5D /* GenderSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6D187F2D635A7C00698E5D /* GenderSelectView.swift */; };
 		4D6D18822D637EAF00698E5D /* CustomPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6D18812D637EAF00698E5D /* CustomPicker.swift */; };
 		4D6FC5282E56183D00049128 /* UIApplication+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FC5272E56183000049128 /* UIApplication+Ext.swift */; };
+		4D7ADC3C2F605D1400F1946E /* UINavigationController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7ADC3B2F605D1300F1946E /* UINavigationController+Ext.swift */; };
 		4D8353232E3F8A230031B0ED /* OnboardingCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8353222E3F8A230031B0ED /* OnboardingCompleteView.swift */; };
 		4D8353252E40F9C80031B0ED /* BeforePreferenceKeywordComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8353242E40F9B50031B0ED /* BeforePreferenceKeywordComponent.swift */; };
 		4D8353272E40FCA20031B0ED /* AfterPreferenceKeywordComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8353262E40FCA20031B0ED /* AfterPreferenceKeywordComponent.swift */; };
@@ -266,6 +267,7 @@
 		4D6D187F2D635A7C00698E5D /* GenderSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenderSelectView.swift; sourceTree = "<group>"; };
 		4D6D18812D637EAF00698E5D /* CustomPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPicker.swift; sourceTree = "<group>"; };
 		4D6FC5272E56183000049128 /* UIApplication+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Ext.swift"; sourceTree = "<group>"; };
+		4D7ADC3B2F605D1300F1946E /* UINavigationController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Ext.swift"; sourceTree = "<group>"; };
 		4D8353222E3F8A230031B0ED /* OnboardingCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCompleteView.swift; sourceTree = "<group>"; };
 		4D8353242E40F9B50031B0ED /* BeforePreferenceKeywordComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforePreferenceKeywordComponent.swift; sourceTree = "<group>"; };
 		4D8353262E40FCA20031B0ED /* AfterPreferenceKeywordComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfterPreferenceKeywordComponent.swift; sourceTree = "<group>"; };
@@ -614,6 +616,7 @@
 			children = (
 				D17659832EF408FE001D0E05 /* Array+Ext.swift */,
 				4D6FC5272E56183000049128 /* UIApplication+Ext.swift */,
+				4D7ADC3B2F605D1300F1946E /* UINavigationController+Ext.swift */,
 				4D90B8432E51B1AB00323D8B /* View+Ext.swift */,
 				4D389C4D2E2A59A400B56F84 /* Data+Ext.swift */,
 				4D6D185A2D63408F00698E5D /* Color+Ext.swift */,
@@ -989,6 +992,7 @@
 				4D8FBF862D75972F0065BDA4 /* CustomProgressBar.swift in Sources */,
 				4D8353332E48C0EF0031B0ED /* WebView.swift in Sources */,
 				4D443B9D2DCB8B5F00F4B9EB /* Methods.swift in Sources */,
+				4D7ADC3C2F605D1400F1946E /* UINavigationController+Ext.swift in Sources */,
 				4DB5B3192D9045AF0060D4C6 /* CustomAlert.swift in Sources */,
 				4D909AA42E0D8A5D00F19AD0 /* MessageComponent.swift in Sources */,
 				4D5E45912E3BC3C500A3B60C /* ProfileEditView.swift in Sources */,

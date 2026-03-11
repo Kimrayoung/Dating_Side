@@ -19,6 +19,7 @@ struct Dating_SideApp: App {
     @StateObject private var alertManager = AlertManager.shared
     
     init() {
+        UINavigationController.enableGlobalSwipeBack()
         // Kakao SDK 초기화
         if let kakaoAppKey = Bundle.main.object(forInfoDictionaryKey: "KAKAO_NATIVE_APP_KEY") as? String {
             KakaoSDK.initSDK(appKey:"\(kakaoAppKey)")
