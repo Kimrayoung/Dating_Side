@@ -26,7 +26,7 @@ struct HeightInputView: View {
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 48)
-            Text("생일은 이후 변경이 불가능합니다.")
+            Text("키는 이후 변경이 불가능합니다.")
                 .foregroundStyle(Color.mainColor)
                 .font(.pixel(14))
                 .frame(maxWidth: .infinity, alignment: .center)

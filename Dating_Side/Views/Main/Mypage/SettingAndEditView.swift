@@ -5,6 +5,7 @@ import Kingfisher
 struct SettingAndEditView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var profileViewModel: ProfileViewModel
+    @Environment(\.dismiss) private var dismiss
     @StateObject var pushNotificationManager = PushNotificationManager()
     @StateObject var phoneContactVM = PhoneContactsViewModel()
     @AppStorage("PushNotificationEnabled") private var isPushEnabled: Bool = true
@@ -81,6 +82,18 @@ struct SettingAndEditView: View {
                 }
             }
         }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image("navigationBackBtn")
+                }
+            }
+        })
     }
     
     var profileEditView: some View {

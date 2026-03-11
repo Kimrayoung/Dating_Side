@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AccountView: View {
     @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @State private var showAccountDeleteAlert: Bool = false
     @State private var showLogoutAlert: Bool = false
     
@@ -30,8 +31,15 @@ struct AccountView: View {
         })
         .navigationTitle("계정")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
         .toolbar(content: {
-            
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image("navigationBackBtn")
+                }
+            }
         })
         .customAlert(isPresented: $showAccountDeleteAlert, title: "회원 탈퇴 시\n모든 정보가 삭제됩니다", message: "정말 러브웨이를 떠나시겠습니까?", primaryButtonText: "취소", primaryButtonAction: {}, primaryButtonColor: .red, secondaryButtonText: "회원탈퇴", secondaryButtonAction: {
             Task {

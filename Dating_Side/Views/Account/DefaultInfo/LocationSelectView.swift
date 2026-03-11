@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct LocationSelectView: View {
     @EnvironmentObject private var appState: AppState
@@ -98,14 +99,18 @@ struct LocationSelectView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    if viewModel.isOnboarding != .onboarding {
+                    if viewType != .onboarding {
                         dismiss()
                     }
                 } label: {
-                    viewModel.isOnboarding != .onboarding ? Image("navigationBackBtn") : nil
+                    viewType != .onboarding ? Image("navigationBackBtn") : nil
                 }
             }
         })
+        // 온보딩에서는 뒤로가기를 막고, 편집 흐름에서는 스와이프 뒤로가기를 허용한다.
+        .background(
+            NavigationSwipeBackControl(isEnabled: viewType != .onboarding)
+        )
     }
     
     var locationView: some View {
@@ -145,6 +150,21 @@ struct LocationSelectView: View {
     }
     
     
+}
+
+private struct NavigationSwipeBackControl: UIViewControllerRepresentable {
+    let isEnabled: Bool
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        UIViewController()
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        DispatchQueue.main.async {
+            uiViewController.parent?.ds_disableSwipeBack = !isEnabled
+            uiViewController.navigationController?.interactivePopGestureRecognizer?.isEnabled = isEnabled
+        }
+    }
 }
 
 #Preview {

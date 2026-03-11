@@ -8,6 +8,19 @@
 import UIKit
 import ObjectiveC.runtime
 
+private var dsDisableSwipeBackKey: UInt8 = 0
+
+extension UIViewController {
+    var ds_disableSwipeBack: Bool {
+        get {
+            (objc_getAssociatedObject(self, &dsDisableSwipeBackKey) as? Bool) ?? false
+        }
+        set {
+            objc_setAssociatedObject(self, &dsDisableSwipeBackKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+}
+
 extension UINavigationController: UIGestureRecognizerDelegate {
     /// Enables interactive pop gesture globally even when custom back buttons are used.
     static func enableGlobalSwipeBack() {
@@ -53,6 +66,7 @@ extension UINavigationController: UIGestureRecognizerDelegate {
         
         let canPop = viewControllers.count > 1
         let notTransitioning = transitionCoordinator == nil
-        return canPop && notTransitioning
+        let isDisabledOnTopViewController = topViewController?.ds_disableSwipeBack ?? false
+        return canPop && notTransitioning && !isDisabledOnTopViewController
     }
 }
