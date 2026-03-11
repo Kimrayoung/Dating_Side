@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NoticeView: View {
-    @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = AccountViewModel()
     
     var body: some View {
@@ -46,7 +46,7 @@ struct NoticeView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.chatPath.removeLast()
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

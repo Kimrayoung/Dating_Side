@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JobEditView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @FocusState var focusedJobDetail: Bool
     @State private var possibleNext: Bool = true
@@ -55,12 +56,7 @@ struct JobEditView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    if viewModel.isOnboarding == .onboarding || viewModel.isOnboarding == .onboardingEdit {
-                        appState.onboardingPath.removeLast()
-                    } else {
-                        appState.myPagePath.removeLast()
-                    }
-                    
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

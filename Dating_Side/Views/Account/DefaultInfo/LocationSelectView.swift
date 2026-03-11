@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LocationSelectView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = false
     @State private var showCityPickerModel: Bool = false
@@ -97,14 +98,8 @@ struct LocationSelectView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    if location != nil {
-                        if viewModel.isOnboarding == .mypageEdit {
-                            appState.myPagePath.removeLast()
-                        } else if viewModel.isOnboarding == .onboardingEdit {
-                            appState.onboardingPath.removeLast()
-                        } else {
-                            
-                        }
+                    if viewModel.isOnboarding != .onboarding {
+                        dismiss()
                     }
                 } label: {
                     viewModel.isOnboarding != .onboarding ? Image("navigationBackBtn") : nil

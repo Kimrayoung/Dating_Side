@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JobSelectView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     
     let columns = [
@@ -58,7 +59,7 @@ struct JobSelectView: View {
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.onboardingPath.removeLast()
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserProfileInputView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     
     let titles: [String] = ["어떻게 당신을 불러드릴까요?", "생일을 알려주세요", "키를 알려주세요"]
@@ -60,7 +61,7 @@ struct UserProfileInputView: View {
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.onboardingPath.removeLast()
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

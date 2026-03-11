@@ -11,7 +11,6 @@ import PhotosUI
 
 /// 추가 사진 변경
 struct AdditionalImageEditView: View {
-    @EnvironmentObject private var appState: AppState
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel = AccountViewModel()
     

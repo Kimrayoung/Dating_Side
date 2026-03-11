@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileEditView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var profileViewModel: ProfileViewModel
+    @Environment(\.dismiss) private var dismiss
     var userData: ProfileEditUserAccount?
     var isOnboarding: Bool
     
@@ -82,12 +83,7 @@ struct ProfileEditView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    if isOnboarding {
-                        appState.onboardingPath.removeLast()
-                    } else {
-                        appState.myPagePath.removeLast()
-                    }
-                    
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

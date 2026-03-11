@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NicknameInputView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = false
     @FocusState private var nicknameFocusField: Bool
@@ -85,12 +86,7 @@ struct NicknameInputView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     nicknameFocusField = false
-                    if viewModel.isOnboarding == .onboarding || viewModel.isOnboarding == .onboardingEdit {
-                        appState.onboardingPath.removeLast()
-                    } else {
-                        appState.myPagePath.removeLast()
-                    }
-                    
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

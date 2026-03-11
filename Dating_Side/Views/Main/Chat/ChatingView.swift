@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatingView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var vm: ChatViewModel
     
     @FocusState private var isFocused: Bool //키보드에 따라 입력창 조절
@@ -140,7 +141,7 @@ struct ChatingView: View {
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.chatPath.removeLast()
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }.disabled(showAlert || showReportAlert || showLeaveAlert)

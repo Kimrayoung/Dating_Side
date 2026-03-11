@@ -10,6 +10,7 @@ import PhotosUI
 
 struct ProfileSecondImageView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @State var secondDayImageComplete: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
@@ -64,7 +65,7 @@ struct ProfileSecondImageView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.onboardingPath.removeLast()
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

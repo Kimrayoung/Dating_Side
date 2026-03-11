@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SusceptibleInfoView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @State var possibleNext: Bool = false
     let screenWidth = UIScreen.main.bounds.width
@@ -63,12 +64,7 @@ struct SusceptibleInfoView: View {
 //            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    if viewModel.isOnboarding == .mypageEdit {
-                        appState.myPagePath.removeLast()
-                    } else {
-                        appState.onboardingPath.removeLast()
-                    }
-                    
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

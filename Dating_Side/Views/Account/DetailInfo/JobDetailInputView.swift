@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JobDetailInputView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @FocusState var focusedJobDetail: Bool
     @State var possibleNext: Bool = true
@@ -45,9 +46,7 @@ struct JobDetailInputView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     hideKeyboard()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                        appState.onboardingPath.removeLast()
-                    })
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

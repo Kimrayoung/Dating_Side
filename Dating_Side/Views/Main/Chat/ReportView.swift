@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ReportView: View {
     
-    @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var vm: ChatViewModel
     
     let reasons : [String] = ["불쾌한 언행", "불쾌한 이미지", "음란물 게시", "욕설/비방", "홍보 마케팅 등", "기타"]
@@ -53,7 +53,7 @@ struct ReportView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.chatPath.removeLast()
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EducationEditView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @FocusState var focusedSchoolName: Bool
     @State private var possibleNext: Bool = true
@@ -55,12 +56,7 @@ struct EducationEditView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    if viewModel.isOnboarding == .onboarding || viewModel.isOnboarding == .onboardingEdit {
-                        appState.onboardingPath.removeLast()
-                    } else {
-                        appState.myPagePath.removeLast()
-                    }
-                    
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

@@ -12,6 +12,7 @@ import Kingfisher
 /// 프로필 사진 등록 및 자기소개 등록
 struct ChatProfileImageView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @State var possibleNext: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
@@ -123,14 +124,7 @@ struct ChatProfileImageView: View {
                 Button {
                     // 뒤로 가기 전 키보드 내리고
                     isFocused = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        if viewModel.isOnboarding == .mypageEdit {
-                            appState.myPagePath.removeLast()
-                        } else {
-                            appState.onboardingPath.removeLast()
-                        }
-                        
-                    }
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

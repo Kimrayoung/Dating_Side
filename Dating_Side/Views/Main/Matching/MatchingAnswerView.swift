@@ -11,6 +11,7 @@ import SwiftUI
 struct MatchingAnswerView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject private var viewModel: QuestionViewModel
+    @Environment(\.dismiss) private var dismiss
     @FocusState private var isFocused: Bool
     @State private var answer: String = ""
     @State private var possibleNext: [Int : Bool] = [:]
@@ -47,7 +48,7 @@ struct MatchingAnswerView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     if viewModel.currentIndex == 0 {
-                        appState.matchingPath.removeLast()
+                        dismiss()
                     } else {
                         viewModel.currentIndex -= 1
                     }

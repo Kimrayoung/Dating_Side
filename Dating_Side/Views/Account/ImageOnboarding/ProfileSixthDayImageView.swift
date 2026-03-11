@@ -10,6 +10,7 @@ import PhotosUI
 
 struct ProfileSixthImageView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     
     @State var sixthDayImageComplete: Bool = false
@@ -66,7 +67,7 @@ struct ProfileSixthImageView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.onboardingPath.removeLast()
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

@@ -11,6 +11,7 @@ import PhotosUI
 /// 4일차에 상대방에게 보여줄 사진
 struct ProfileForthImageView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @State var forthDayImageComplete: Bool = false
     @State var selectedPickerImage: [PhotosPickerItem] = []
@@ -64,7 +65,7 @@ struct ProfileForthImageView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    appState.onboardingPath.removeLast()
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

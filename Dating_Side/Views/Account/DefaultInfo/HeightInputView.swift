@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HeightInputView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @State private var possibleNext: Bool = false
     
@@ -62,9 +63,7 @@ struct HeightInputView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     hideKeyboard()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                        appState.onboardingPath.removeLast()
-                    })
+                    dismiss()
                 } label: {
                     Image("navigationBackBtn")
                 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GenderSelectView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AccountViewModel
     @State private var womanSelected: Bool = true
     @State private var manSelected: Bool = false
@@ -60,7 +61,7 @@ struct GenderSelectView: View {
                 })
             }
         })
-        .customAlert(isPresented: $showAlert, title: "회원가입을 중단하고\n시작화면으로 나갈까요?", message: "나가면 입력한 정보가 저장되지 않아요", primaryButtonText: "나가기", primaryButtonAction: {}, secondaryButtonText: "취소", secondaryButtonAction: {appState.onboardingPath.removeLast()})
+        .customAlert(isPresented: $showAlert, title: "회원가입을 중단하고\n시작화면으로 나갈까요?", message: "나가면 입력한 정보가 저장되지 않아요", primaryButtonText: "나가기", primaryButtonAction: {}, secondaryButtonText: "취소", secondaryButtonAction: { dismiss() })
     }
     
     var genderButton: some View {
@@ -104,5 +105,4 @@ struct GenderSelectView: View {
 #Preview {
     GenderSelectView(viewModel: AccountViewModel())
 }
-
 
