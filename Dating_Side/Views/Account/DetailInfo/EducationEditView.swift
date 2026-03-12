@@ -17,31 +17,36 @@ struct EducationEditView: View {
     var schoolName: String? = nil
     
     var body: some View {
-        VStack {
-            Text("수정할 최종학력를 알려주세요")
-                .font(.pixel(20))
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 32)
-                .padding(.bottom, 48)
-            schoolSelectView
-            #warning("학교 이름")
-            Text("학교 이름")
-                
-            schoolNameView
-            Spacer()
-            Button(action: {
-                if viewModel.isOnboarding == .mypageEdit {
-                    Task {
-                        await viewModel.updateEducation()
-                    }
-                } else if viewModel.isOnboarding == .onboardingEdit {
-                    appState.onboardingPath.removeLast()
+        ZStack {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    focusedSchoolName = false
                 }
-            }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
-            })
-            .padding(.bottom)
-            .padding(.horizontal, 24)
+            
+            VStack {
+                Text("수정할 최종학력를 알려주세요")
+                    .font(.pixel(20))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 32)
+                    .padding(.bottom, 48)
+                schoolSelectView
+                schoolNameView
+                Spacer()
+                Button(action: {
+                    if viewModel.isOnboarding == .mypageEdit {
+                        Task {
+                            await viewModel.updateEducation()
+                        }
+                    } else if viewModel.isOnboarding == .onboardingEdit {
+                        appState.onboardingPath.removeLast()
+                    }
+                }, label: {
+                    SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                })
+                .padding(.bottom)
+                .padding(.horizontal, 24)
+            }
         }
         .task {
             if let educationType = educationType, let schoolName = schoolName {
@@ -77,10 +82,17 @@ struct EducationEditView: View {
     }
     
     var schoolNameView: some View {
-        CustomInputField(
+        VStack {
+            Text("학교 이름")
+                .font(.pixel(17))
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 52)
+            CustomInputField(
                 text: $viewModel.schoolName,
                 isFocused: $focusedSchoolName
             )
+        }
     }
 }
 

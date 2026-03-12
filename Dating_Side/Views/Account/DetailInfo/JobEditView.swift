@@ -17,31 +17,39 @@ struct JobEditView: View {
     var jobDetail: String?
     
     var body: some View {
-        VStack {
-            Text("직무 분야")
-                .font(.pixel(20))
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 32)
-                .padding(.bottom, 48)
-            jobSelectView
-            jobDetailView
-                
-            Spacer()
-            Button(action: {
-                if viewModel.isOnboarding == .mypageEdit {
-                    guard let jobType = viewModel.makeJobType()?.type else { return }
-                    
-                    Task {
-                        await viewModel.updateJob(jobType: jobType, jobDetail: viewModel.jobDetail)
-                    }
-                } else if viewModel.isOnboarding == .onboardingEdit {
-                    appState.onboardingPath.removeLast()
+        ZStack {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    focusedJobDetail = false
                 }
-            }, label: {
-                SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
-            })
-            .padding(.bottom)
-            .padding(.horizontal, 24)
+            
+            VStack {
+                Text("직무 분야")
+                    .font(.pixel(20))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 32)
+                    .padding(.bottom, 48)
+                jobSelectView
+                jobDetailView
+                    
+                Spacer()
+                Button(action: {
+                    if viewModel.isOnboarding == .mypageEdit {
+                        guard let jobType = viewModel.makeJobType()?.type else { return }
+                        
+                        Task {
+                            await viewModel.updateJob(jobType: jobType, jobDetail: viewModel.jobDetail)
+                        }
+                    } else if viewModel.isOnboarding == .onboardingEdit {
+                        appState.onboardingPath.removeLast()
+                    }
+                }, label: {
+                    SelectButtonLabel(isSelected: $possibleNext, height: 48, text: "저장", backgroundColor: .gray0, selectedBackgroundColor: .mainColor, textColor: Color.gray2, cornerRounded: 8, font: .pixel(14), strokeBorderLineWidth: 0, selectedStrokeBorderLineWidth: 0)
+                })
+                .padding(.bottom)
+                .padding(.horizontal, 24)
+            }
         }
         .task {
             if let jobType = jobType, let jobDetail = jobDetail {
