@@ -79,6 +79,7 @@ struct PartnerProfileView: View {
                 appState.matchingPath.append(Matching.matchingFail)
             }, secondaryButtonText: "다시 봐볼께요", secondaryButtonAction: {
                 showAlert = false
+                profileShow = false
             })
             .customToastPopup(isPresented: $showToastPopup, title: "\(matchingPartnerAccount?.nickName ?? "")과 매칭에 성공했습니다", message: "채팅방이 열렸습니다.")
             .navigationDestination(for: OnChatProfilePath.self) { step in
@@ -108,17 +109,18 @@ struct PartnerProfileView: View {
     var okButton: some View {
         Button(action: {
             Task {
-                if needMathcingRequest == .chattingRequestMatch { // 내게 다가온 사람 수락
+                if needMathcingRequest == .chattingRequestMatch {
                     guard let partnerId = matchingPartnerAccount?.id else { return }
                     await matchingViewModel.matchingComplete(partnerId: partnerId)
                     profileShow = false
                     try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5초
                     dismiss()
-                    #warning("asd")
-                } else if needMathcingRequest == .matching { // 내가 다가가기 (좋아요 보내기)
+                } else if needMathcingRequest == .matching {
                     let result = await matchingViewModel.attraction(matchingPartnerAccount: matchingPartnerAccount)
                     if result { //다가가기 성공
                         dismiss()
+                        try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5초
+                        appState.matchingPath.removeLast()
                     }
                 }
             }

@@ -43,6 +43,7 @@ struct ChatListView: View {
                 matchingSimpleProfile(chattingRoomData: chattingRoomData)
                     .padding(.vertical, 32)
                     .padding(.horizontal, 24)
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         appState.chatPath.append(Chating.chatRoom(roomId: chattingRoomData.roomId, partnerName: chattingRoomData.partnerNickName, partnerImageUrl: chattingRoomData.partnerProfileImageUrl))
                     }
@@ -214,15 +215,19 @@ struct ChatListView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 72, height: 72)
                 .clipShape(Circle())
-            VStack {
+            VStack(alignment: .leading) {
                 Text(chattingRoomData.partnerNickName)
                     .font(.pixel(16))
+                
                 Text(chattingRoomData.lastMessage ?? "")
                     .font(.system(size: 15))
                     .foregroundStyle(Color.gray3)
+                    .lineLimit(1)
+                    .truncationMode(.tail) //끝을 ...로 처리되게함.
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            VStack {
+            
+            VStack(alignment: .trailing) {
                 Text(chattingRoomData.timestampDate?.hourAndMinuteString ?? "")
                     .font(.pixel(12))
                     .foregroundStyle(Color.gray3)
@@ -235,7 +240,7 @@ struct ChatListView: View {
                         .clipShape(Circle())
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .trailing)
+            .fixedSize(horizontal: true, vertical: false)
         }
     }
     
